@@ -10,29 +10,24 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.world.World;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.world.ITreeGenData;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TreeBlockTypeLeaf implements ITreeBlockType {
 
-	private final GameProfile owner;
+    private final GameProfile owner;
 
-	public TreeBlockTypeLeaf(GameProfile owner) {
-		this.owner = owner;
-	}
+    public TreeBlockTypeLeaf(GameProfile owner) {
+        this.owner = owner;
+    }
 
-	@Override
-	public void setDirection(ForgeDirection facing) {
+    @Override
+    public void setDirection(ForgeDirection facing) {}
 
-	}
-
-	@Override
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
-		tree.setLeaves(world, owner, x, y, z);
-	}
+    @Override
+    public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
+        tree.setLeaves(world, owner, x, y, z);
+    }
 }

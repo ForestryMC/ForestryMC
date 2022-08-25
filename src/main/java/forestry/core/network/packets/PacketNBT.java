@@ -10,36 +10,33 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
+import java.io.IOException;
+import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class PacketNBT extends ForestryPacket {
 
-	private NBTTagCompound nbttagcompound;
+    private NBTTagCompound nbttagcompound;
 
-	protected PacketNBT() {
-	}
+    protected PacketNBT() {}
 
-	protected PacketNBT(NBTTagCompound nbttagcompound) {
-		this.nbttagcompound = nbttagcompound;
-	}
+    protected PacketNBT(NBTTagCompound nbttagcompound) {
+        this.nbttagcompound = nbttagcompound;
+    }
 
-	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
-		data.writeNBTTagCompound(nbttagcompound);
-	}
+    @Override
+    public void writeData(DataOutputStreamForestry data) throws IOException {
+        data.writeNBTTagCompound(nbttagcompound);
+    }
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		this.nbttagcompound = data.readNBTTagCompound();
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {
+        this.nbttagcompound = data.readNBTTagCompound();
+    }
 
-	protected NBTTagCompound getTagCompound() {
-		return this.nbttagcompound;
-	}
+    protected NBTTagCompound getTagCompound() {
+        return this.nbttagcompound;
+    }
 }

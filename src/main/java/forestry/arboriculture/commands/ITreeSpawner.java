@@ -15,6 +15,5 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface ITreeSpawner {
 
-	boolean spawn(ICommandSender sender, String treeName, EntityPlayer player);
-
+    boolean spawn(ICommandSender sender, String treeName, EntityPlayer player);
 }

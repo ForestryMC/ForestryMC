@@ -10,50 +10,49 @@
  ******************************************************************************/
 package forestry.farming.tiles;
 
+import forestry.core.fluids.ITankManager;
+import forestry.core.tiles.ILiquidTankTile;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import forestry.core.fluids.ITankManager;
-import forestry.core.tiles.ILiquidTankTile;
-
 public class TileFarmValve extends TileFarm implements ILiquidTankTile, IFluidHandler {
 
-	/* ILIQUIDTANKCONTAINER */
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return getTankManager().fill(from, resource, doFill);
-	}
+    /* ILIQUIDTANKCONTAINER */
+    @Override
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+        return getTankManager().fill(from, resource, doFill);
+    }
 
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return getTankManager().drain(from, resource, doDrain);
-	}
+    @Override
+    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+        return getTankManager().drain(from, resource, doDrain);
+    }
 
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return getTankManager().drain(from, maxDrain, doDrain);
-	}
+    @Override
+    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+        return getTankManager().drain(from, maxDrain, doDrain);
+    }
 
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return getTankManager().canFill(from, fluid);
-	}
+    @Override
+    public boolean canFill(ForgeDirection from, Fluid fluid) {
+        return getTankManager().canFill(from, fluid);
+    }
 
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return getTankManager().canDrain(from, fluid);
-	}
+    @Override
+    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+        return getTankManager().canDrain(from, fluid);
+    }
 
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return getTankManager().getTankInfo(from);
-	}
+    @Override
+    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+        return getTankManager().getTankInfo(from);
+    }
 
-	@Override
-	public ITankManager getTankManager() {
-		return getMultiblockLogic().getController().getTankManager();
-	}
+    @Override
+    public ITankManager getTankManager() {
+        return getMultiblockLogic().getController().getTankManager();
+    }
 }

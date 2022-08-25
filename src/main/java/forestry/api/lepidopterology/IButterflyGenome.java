@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.lepidopterology;
@@ -10,33 +10,32 @@ import forestry.api.genetics.IFlowerProvider;
 import forestry.api.genetics.IGenome;
 
 public interface IButterflyGenome extends IGenome {
-	
-	IAlleleButterflySpecies getPrimary();
 
-	IAlleleButterflySpecies getSecondary();
+    IAlleleButterflySpecies getPrimary();
 
-	float getSize();
+    IAlleleButterflySpecies getSecondary();
 
-	int getLifespan();
+    float getSize();
 
-	int getMetabolism();
-	
-	int getFertility();
+    int getLifespan();
 
-	float getSpeed();
+    int getMetabolism();
 
-	EnumTolerance getToleranceTemp();
+    int getFertility();
 
-	EnumTolerance getToleranceHumid();
+    float getSpeed();
 
-	boolean getNocturnal();
+    EnumTolerance getToleranceTemp();
 
-	boolean getTolerantFlyer();
+    EnumTolerance getToleranceHumid();
 
-	boolean getFireResist();
+    boolean getNocturnal();
 
-	IFlowerProvider getFlowerProvider();
+    boolean getTolerantFlyer();
 
-	IAlleleButterflyEffect getEffect();
+    boolean getFireResist();
 
+    IFlowerProvider getFlowerProvider();
+
+    IAlleleButterflyEffect getEffect();
 }

@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerAlvearySwarmer extends ContainerTile<TileAlvearySwarmer> {
 
-	public ContainerAlvearySwarmer(InventoryPlayer player, TileAlvearySwarmer tile) {
-		super(tile, player, 8, 87);
+    public ContainerAlvearySwarmer(InventoryPlayer player, TileAlvearySwarmer tile) {
+        super(tile, player, 8, 87);
 
-		this.addSlotToContainer(new SlotFiltered(tile, 0, 79, 52));
-		this.addSlotToContainer(new SlotFiltered(tile, 1, 100, 39));
-		this.addSlotToContainer(new SlotFiltered(tile, 2, 58, 39));
-		this.addSlotToContainer(new SlotFiltered(tile, 3, 79, 26));
-	}
+        this.addSlotToContainer(new SlotFiltered(tile, 0, 79, 52));
+        this.addSlotToContainer(new SlotFiltered(tile, 1, 100, 39));
+        this.addSlotToContainer(new SlotFiltered(tile, 2, 58, 39));
+        this.addSlotToContainer(new SlotFiltered(tile, 3, 79, 26));
+    }
 }

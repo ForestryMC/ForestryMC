@@ -10,41 +10,39 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import forestry.api.world.ITreeGenData;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
-import forestry.api.world.ITreeGenData;
-
 public class WorldGenIpe extends WorldGenTree {
 
-	public WorldGenIpe(ITreeGenData tree) {
-		super(tree, 6, 4);
-	}
+    public WorldGenIpe(ITreeGenData tree) {
+        super(tree, 6, 4);
+    }
 
-	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
+    @Override
+    public void generate(World world) {
+        generateTreeTrunk(world, height, girth);
 
-		int leafSpawn = height + 1;
-		float adjustedGirth = girth * .65f;
+        int leafSpawn = height + 1;
+        float adjustedGirth = girth * .65f;
 
-		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 0.2f * adjustedGirth, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 0.2f * adjustedGirth, 1, leaf);
+        generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+        generateAdjustedCylinder(world, leafSpawn--, 0.2f * adjustedGirth, 1, leaf);
+        generateAdjustedCylinder(world, leafSpawn--, 0.2f * adjustedGirth, 1, leaf);
 
-		List<ChunkCoordinates> branchCoords = new ArrayList<>();
-		while (leafSpawn > 2) {
-			int radius = Math.round(adjustedGirth * (height - leafSpawn) / 1.5f);
-			branchCoords.addAll(generateBranches(world, leafSpawn, 0, 0, 0.25f, 0.25f, radius, 2));
-			leafSpawn -= 2;
-		}
+        List<ChunkCoordinates> branchCoords = new ArrayList<>();
+        while (leafSpawn > 2) {
+            int radius = Math.round(adjustedGirth * (height - leafSpawn) / 1.5f);
+            branchCoords.addAll(generateBranches(world, leafSpawn, 0, 0, 0.25f, 0.25f, radius, 2));
+            leafSpawn -= 2;
+        }
 
-		for (ChunkCoordinates branchEnd : branchCoords) {
-			generateAdjustedCylinder(world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 2.0f, 2, leaf, EnumReplaceMode.NONE);
-		}
-	}
-
+        for (ChunkCoordinates branchEnd : branchCoords) {
+            generateAdjustedCylinder(
+                    world, branchEnd.posY, branchEnd.posX, branchEnd.posZ, 2.0f, 2, leaf, EnumReplaceMode.NONE);
+        }
+    }
 }

@@ -14,8 +14,7 @@ import forestry.api.world.ITreeGenData;
 
 public class WorldGenGiganteum extends WorldGenSequoia {
 
-	public WorldGenGiganteum(ITreeGenData tree) {
-		super(tree, 35, 15);
-	}
-
+    public WorldGenGiganteum(ITreeGenData tree) {
+        super(tree, 35, 15);
+    }
 }

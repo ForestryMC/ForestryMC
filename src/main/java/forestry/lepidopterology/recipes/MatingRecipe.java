@@ -10,76 +10,79 @@
  ******************************************************************************/
 package forestry.lepidopterology.recipes;
 
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
-
 public class MatingRecipe implements IRecipe {
 
-	private final ItemStack unknown;
-	private ItemStack cached;
-	
-	public MatingRecipe() {
-		unknown = ButterflyManager.butterflyRoot.getMemberStack(ButterflyManager.butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY.ordinal());
-	}
-	
-	@Override
-	public boolean matches(InventoryCrafting crafting, World world) {
-		
-		boolean mated = true;
-		int butterflies = 0;
-		int sera = 0;
-		
-		for (int i = 0; i < crafting.getSizeInventory(); i++) {
-			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
-				butterflies++;
-				mated = ButterflyManager.butterflyRoot.isMated(crafting.getStackInSlot(i));
-				cached = crafting.getStackInSlot(i);
-			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
-				sera++;
-			}
-		}
-		
-		return !mated && butterflies == 1 && sera == 1;
-	}
+    private final ItemStack unknown;
+    private ItemStack cached;
 
-	@Override
-	public ItemStack getRecipeOutput() {
-		if (cached != null) {
-			return cached;
-		} else {
-			return unknown;
-		}
-	}
+    public MatingRecipe() {
+        unknown = ButterflyManager.butterflyRoot.getMemberStack(
+                ButterflyManager.butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY.ordinal());
+    }
 
-	@Override
-	public ItemStack getCraftingResult(InventoryCrafting crafting) {
-		IButterfly butterfly = null;
-		IButterfly serum = null;
-		for (int i = 0; i < crafting.getSizeInventory(); i++) {
-			if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
-				butterfly = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
-			} else if (ButterflyManager.butterflyRoot.isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
-				serum = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
-			}
-		}
-		if (butterfly == null || serum == null) {
-			return null;
-		}
-		
-		IButterfly mated = butterfly.copy();
-		mated.mate(serum);
-		return ButterflyManager.butterflyRoot.getMemberStack(mated, EnumFlutterType.BUTTERFLY.ordinal());
-	}
+    @Override
+    public boolean matches(InventoryCrafting crafting, World world) {
 
-	@Override
-	public int getRecipeSize() {
-		return 2;
-	}
+        boolean mated = true;
+        int butterflies = 0;
+        int sera = 0;
 
+        for (int i = 0; i < crafting.getSizeInventory(); i++) {
+            if (ButterflyManager.butterflyRoot.isMember(
+                    crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
+                butterflies++;
+                mated = ButterflyManager.butterflyRoot.isMated(crafting.getStackInSlot(i));
+                cached = crafting.getStackInSlot(i);
+            } else if (ButterflyManager.butterflyRoot.isMember(
+                    crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
+                sera++;
+            }
+        }
+
+        return !mated && butterflies == 1 && sera == 1;
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        if (cached != null) {
+            return cached;
+        } else {
+            return unknown;
+        }
+    }
+
+    @Override
+    public ItemStack getCraftingResult(InventoryCrafting crafting) {
+        IButterfly butterfly = null;
+        IButterfly serum = null;
+        for (int i = 0; i < crafting.getSizeInventory(); i++) {
+            if (ButterflyManager.butterflyRoot.isMember(
+                    crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
+                butterfly = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
+            } else if (ButterflyManager.butterflyRoot.isMember(
+                    crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
+                serum = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
+            }
+        }
+        if (butterfly == null || serum == null) {
+            return null;
+        }
+
+        IButterfly mated = butterfly.copy();
+        mated.mate(serum);
+        return ButterflyManager.butterflyRoot.getMemberStack(mated, EnumFlutterType.BUTTERFLY.ordinal());
+    }
+
+    @Override
+    public int getRecipeSize() {
+        return 2;
+    }
 }

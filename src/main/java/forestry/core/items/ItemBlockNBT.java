@@ -11,24 +11,23 @@
 package forestry.core.items;
 
 import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockNBT extends ItemBlockForestry {
 
-	public ItemBlockNBT(Block block) {
-		super(block);
-	}
+    public ItemBlockNBT(Block block) {
+        super(block);
+    }
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List info, boolean par4) {
-		if (!itemstack.hasTagCompound()) {
-			return;
-		}
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Override
+    public void addInformation(ItemStack itemstack, EntityPlayer player, List info, boolean par4) {
+        if (!itemstack.hasTagCompound()) {
+            return;
+        }
 
-		info.add("There are still some scribbles on this.");
-	}
+        info.add("There are still some scribbles on this.");
+    }
 }

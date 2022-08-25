@@ -10,26 +10,19 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacket;
+import java.io.IOException;
 
 public abstract class PacketDummy implements IForestryPacket {
-	protected PacketDummy() {
+    protected PacketDummy() {}
 
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {}
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-
-	}
-
-	@Override
-	public FMLProxyPacket getPacket() {
-		return null;
-	}
-
+    @Override
+    public FMLProxyPacket getPacket() {
+        return null;
+    }
 }

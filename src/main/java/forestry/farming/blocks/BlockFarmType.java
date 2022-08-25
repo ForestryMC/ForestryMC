@@ -11,12 +11,12 @@
 package forestry.farming.blocks;
 
 public enum BlockFarmType {
-	BASIC,
-	BAND,
-	GEARBOX,
-	HATCH,
-	VALVE,
-	CONTROL;
+    BASIC,
+    BAND,
+    GEARBOX,
+    HATCH,
+    VALVE,
+    CONTROL;
 
-	public static final BlockFarmType[] VALUES = values();
+    public static final BlockFarmType[] VALUES = values();
 }

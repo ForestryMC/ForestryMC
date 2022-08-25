@@ -10,36 +10,35 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public abstract class ItemStackWidgetBase extends Widget {
-	public ItemStackWidgetBase(WidgetManager widgetManager, int xPos, int yPos) {
-		super(widgetManager, xPos, yPos);
-	}
+    public ItemStackWidgetBase(WidgetManager widgetManager, int xPos, int yPos) {
+        super(widgetManager, xPos, yPos);
+    }
 
-	protected abstract ItemStack getItemStack();
+    protected abstract ItemStack getItemStack();
 
-	@Override
-	public void draw(int startX, int startY) {
-		ItemStack itemStack = getItemStack();
-		if (itemStack != null) {
-			GuiUtil.drawItemStack(manager.gui, itemStack, xPos + startX, yPos + startY);
-		}
-	}
+    @Override
+    public void draw(int startX, int startY) {
+        ItemStack itemStack = getItemStack();
+        if (itemStack != null) {
+            GuiUtil.drawItemStack(manager.gui, itemStack, xPos + startX, yPos + startY);
+        }
+    }
 
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		EntityPlayer player = Proxies.common.getPlayer();
-		ItemStack itemStack = getItemStack();
-		ToolTip tip = new ToolTip();
-		if (itemStack != null) {
-			tip.add(itemStack.getTooltip(player, false));
-		}
-		return tip;
-	}
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        EntityPlayer player = Proxies.common.getPlayer();
+        ItemStack itemStack = getItemStack();
+        ToolTip tip = new ToolTip();
+        if (itemStack != null) {
+            tip.add(itemStack.getTooltip(player, false));
+        }
+        return tip;
+    }
 }

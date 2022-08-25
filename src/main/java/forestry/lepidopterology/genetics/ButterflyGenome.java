@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleFlowers;
@@ -29,106 +26,108 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ButterflyGenome extends Genome implements IButterflyGenome {
 
-	/* CONSTRUCTOR */
-	public ButterflyGenome(NBTTagCompound nbttagcompound) {
-		super(nbttagcompound);
-	}
+    /* CONSTRUCTOR */
+    public ButterflyGenome(NBTTagCompound nbttagcompound) {
+        super(nbttagcompound);
+    }
 
-	public ButterflyGenome(IChromosome[] chromosomes) {
-		super(chromosomes);
-	}
+    public ButterflyGenome(IChromosome[] chromosomes) {
+        super(chromosomes);
+    }
 
-	// NBT RETRIEVAL
-	public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
-		if (!ButterflyManager.butterflyRoot.isMember(itemStack)) {
-			return null;
-		}
-		
-		IAlleleSpecies species = getSpeciesDirectly(itemStack);
-		if (species instanceof IAlleleButterflySpecies) {
-			return (IAlleleButterflySpecies) species;
-		}
+    // NBT RETRIEVAL
+    public static IAlleleButterflySpecies getSpecies(ItemStack itemStack) {
+        if (!ButterflyManager.butterflyRoot.isMember(itemStack)) {
+            return null;
+        }
 
-		return (IAlleleButterflySpecies) getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, ButterflyManager.butterflyRoot);
-	}
+        IAlleleSpecies species = getSpeciesDirectly(itemStack);
+        if (species instanceof IAlleleButterflySpecies) {
+            return (IAlleleButterflySpecies) species;
+        }
 
-	/* SPECIES */
-	@Override
-	public IAlleleButterflySpecies getPrimary() {
-		return (IAlleleButterflySpecies) getActiveAllele(EnumButterflyChromosome.SPECIES);
-	}
+        return (IAlleleButterflySpecies)
+                getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, ButterflyManager.butterflyRoot);
+    }
 
-	@Override
-	public IAlleleButterflySpecies getSecondary() {
-		return (IAlleleButterflySpecies) getInactiveAllele(EnumButterflyChromosome.SPECIES);
-	}
+    /* SPECIES */
+    @Override
+    public IAlleleButterflySpecies getPrimary() {
+        return (IAlleleButterflySpecies) getActiveAllele(EnumButterflyChromosome.SPECIES);
+    }
 
-	@Override
-	public float getSize() {
-		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SIZE)).getValue();
-	}
-	
-	@Override
-	public int getLifespan() {
-		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.LIFESPAN)).getValue();
-	}
-	
-	@Override
-	public float getSpeed() {
-		return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SPEED)).getValue();
-	}
+    @Override
+    public IAlleleButterflySpecies getSecondary() {
+        return (IAlleleButterflySpecies) getInactiveAllele(EnumButterflyChromosome.SPECIES);
+    }
 
-	@Override
-	public int getMetabolism() {
-		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.METABOLISM)).getValue();
-	}
+    @Override
+    public float getSize() {
+        return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SIZE)).getValue();
+    }
 
-	@Override
-	public int getFertility() {
-		return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.FERTILITY)).getValue();
-	}
+    @Override
+    public int getLifespan() {
+        return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.LIFESPAN)).getValue();
+    }
 
-	@Override
-	public EnumTolerance getToleranceTemp() {
-		return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE)).getValue();
-	}
+    @Override
+    public float getSpeed() {
+        return ((IAlleleFloat) getActiveAllele(EnumButterflyChromosome.SPEED)).getValue();
+    }
 
-	@Override
-	public EnumTolerance getToleranceHumid() {
-		return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE)).getValue();
-	}
+    @Override
+    public int getMetabolism() {
+        return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.METABOLISM)).getValue();
+    }
 
-	@Override
-	public boolean getNocturnal() {
-		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue();
-	}
+    @Override
+    public int getFertility() {
+        return ((IAlleleInteger) getActiveAllele(EnumButterflyChromosome.FERTILITY)).getValue();
+    }
 
-	@Override
-	public boolean getTolerantFlyer() {
-		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.TOLERANT_FLYER)).getValue();
-	}
+    @Override
+    public EnumTolerance getToleranceTemp() {
+        return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE)).getValue();
+    }
 
-	@Override
-	public boolean getFireResist() {
-		return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.FIRE_RESIST)).getValue();
-	}
+    @Override
+    public EnumTolerance getToleranceHumid() {
+        return ((AlleleTolerance) getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE)).getValue();
+    }
 
-	@Override
-	public IFlowerProvider getFlowerProvider() {
-		return ((IAlleleFlowers) getActiveAllele(EnumButterflyChromosome.FLOWER_PROVIDER)).getProvider();
-	}
+    @Override
+    public boolean getNocturnal() {
+        return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.NOCTURNAL)).getValue();
+    }
 
-	@Override
-	public IAlleleButterflyEffect getEffect() {
-		return (IAlleleButterflyEffect) getActiveAllele(EnumButterflyChromosome.EFFECT);
-	}
+    @Override
+    public boolean getTolerantFlyer() {
+        return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.TOLERANT_FLYER)).getValue();
+    }
 
-	@Override
-	public ISpeciesRoot getSpeciesRoot() {
-		return ButterflyManager.butterflyRoot;
-	}
+    @Override
+    public boolean getFireResist() {
+        return ((AlleleBoolean) getActiveAllele(EnumButterflyChromosome.FIRE_RESIST)).getValue();
+    }
 
+    @Override
+    public IFlowerProvider getFlowerProvider() {
+        return ((IAlleleFlowers) getActiveAllele(EnumButterflyChromosome.FLOWER_PROVIDER)).getProvider();
+    }
+
+    @Override
+    public IAlleleButterflyEffect getEffect() {
+        return (IAlleleButterflyEffect) getActiveAllele(EnumButterflyChromosome.EFFECT);
+    }
+
+    @Override
+    public ISpeciesRoot getSpeciesRoot() {
+        return ButterflyManager.butterflyRoot;
+    }
 }

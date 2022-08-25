@@ -1,59 +1,56 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.mail;
 
+import forestry.api.core.INBTTagable;
 import java.util.List;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import forestry.api.core.INBTTagable;
-
 public interface ILetter extends IInventory, INBTTagable {
 
-	ItemStack[] getPostage();
+    ItemStack[] getPostage();
 
-	void setProcessed(boolean flag);
+    void setProcessed(boolean flag);
 
-	boolean isProcessed();
+    boolean isProcessed();
 
-	boolean isMailable();
+    boolean isMailable();
 
-	void setSender(IMailAddress address);
+    void setSender(IMailAddress address);
 
-	IMailAddress getSender();
+    IMailAddress getSender();
 
-	boolean hasRecipient();
+    boolean hasRecipient();
 
-	void setRecipient(IMailAddress address);
+    void setRecipient(IMailAddress address);
 
-	IMailAddress[] getRecipients();
+    IMailAddress[] getRecipients();
 
-	String getRecipientString();
+    String getRecipientString();
 
-	void setText(String text);
+    void setText(String text);
 
-	String getText();
+    String getText();
 
-	void addTooltip(List<String> list);
+    void addTooltip(List<String> list);
 
-	boolean isPostPaid();
+    boolean isPostPaid();
 
-	int requiredPostage();
+    int requiredPostage();
 
-	void invalidatePostage();
+    void invalidatePostage();
 
-	ItemStack[] getAttachments();
+    ItemStack[] getAttachments();
 
-	void addAttachment(ItemStack itemstack);
+    void addAttachment(ItemStack itemstack);
 
-	void addAttachments(ItemStack[] itemstacks);
+    void addAttachments(ItemStack[] itemstacks);
 
-	int countAttachments();
+    int countAttachments();
 
-	void addStamps(ItemStack stamps);
-
+    void addStamps(ItemStack stamps);
 }

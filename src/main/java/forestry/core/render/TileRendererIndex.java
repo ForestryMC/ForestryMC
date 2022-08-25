@@ -13,25 +13,25 @@ package forestry.core.render;
 import net.minecraft.block.Block;
 
 public class TileRendererIndex {
-	private final Block block;
-	private final int meta;
+    private final Block block;
+    private final int meta;
 
-	public TileRendererIndex(Block block, int meta) {
-		this.block = block;
-		this.meta = meta;
-	}
+    public TileRendererIndex(Block block, int meta) {
+        this.block = block;
+        this.meta = meta;
+    }
 
-	public int hashCode() {
-		return block.hashCode() + meta;
-	}
+    public int hashCode() {
+        return block.hashCode() + meta;
+    }
 
-	public boolean equals(Object obj) {
-		if (!(obj instanceof TileRendererIndex)) {
-			return false;
-		}
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TileRendererIndex)) {
+            return false;
+        }
 
-		TileRendererIndex index = (TileRendererIndex) obj;
+        TileRendererIndex index = (TileRendererIndex) obj;
 
-		return index.block == block && index.meta == meta;
-	}
+        return index.block == block && index.meta == meta;
+    }
 }

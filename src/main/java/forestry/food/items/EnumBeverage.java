@@ -10,94 +10,99 @@
  ******************************************************************************/
 package forestry.food.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.render.TextureManager;
 import java.awt.Color;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.render.TextureManager;
-
 public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
-	MEAD_SHORT("meadShort", "glass", new Color(0xec9a19), new Color(0xffffff), 1, 0.2f, true),
-	MEAD_CURATIVE("meadCurative", "glass", new Color(0xc5feff), new Color(0xffffff), 1, 0.2f, true),
-	MEAD("mead", "glass", new Color(0xcc6600), new Color(0xffffff), 10, 0.1f, true);
-	public static final EnumBeverage[] VALUES = values();
+    MEAD_SHORT("meadShort", "glass", new Color(0xec9a19), new Color(0xffffff), 1, 0.2f, true),
+    MEAD_CURATIVE("meadCurative", "glass", new Color(0xc5feff), new Color(0xffffff), 1, 0.2f, true),
+    MEAD("mead", "glass", new Color(0xcc6600), new Color(0xffffff), 10, 0.1f, true);
+    public static final EnumBeverage[] VALUES = values();
 
-	private final String name;
-	private final String iconType;
-	private final int primaryColor;
-	private final int secondaryColor;
+    private final String name;
+    private final String iconType;
+    private final int primaryColor;
+    private final int secondaryColor;
 
-	@SideOnly(Side.CLIENT)
-	private IIcon iconBottle;
-	@SideOnly(Side.CLIENT)
-	private IIcon iconContents;
+    @SideOnly(Side.CLIENT)
+    private IIcon iconBottle;
 
-	private final int heal;
-	private final float saturation;
-	private final boolean isAlwaysEdible;
+    @SideOnly(Side.CLIENT)
+    private IIcon iconContents;
 
-	EnumBeverage(String name, String iconType, Color primaryColor, Color secondaryColor, int heal, float saturation, boolean isAlwaysEdible) {
-		this.name = name;
-		this.iconType = iconType;
-		this.primaryColor = primaryColor.getRGB();
-		this.secondaryColor = secondaryColor.getRGB();
-		this.heal = heal;
-		this.saturation = saturation;
-		this.isAlwaysEdible = isAlwaysEdible;
-	}
+    private final int heal;
+    private final float saturation;
+    private final boolean isAlwaysEdible;
 
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		iconBottle = TextureManager.registerTex(register, "liquids/" + iconType + ".bottle");
-		iconContents = TextureManager.registerTex(register, "liquids/" + iconType + ".contents");
-	}
+    EnumBeverage(
+            String name,
+            String iconType,
+            Color primaryColor,
+            Color secondaryColor,
+            int heal,
+            float saturation,
+            boolean isAlwaysEdible) {
+        this.name = name;
+        this.iconType = iconType;
+        this.primaryColor = primaryColor.getRGB();
+        this.secondaryColor = secondaryColor.getRGB();
+        this.heal = heal;
+        this.saturation = saturation;
+        this.isAlwaysEdible = isAlwaysEdible;
+    }
 
-	@Override
-	public int getHeal() {
-		return heal;
-	}
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister register) {
+        iconBottle = TextureManager.registerTex(register, "liquids/" + iconType + ".bottle");
+        iconContents = TextureManager.registerTex(register, "liquids/" + iconType + ".contents");
+    }
 
-	@Override
-	public float getSaturation() {
-		return saturation;
-	}
+    @Override
+    public int getHeal() {
+        return heal;
+    }
 
-	@Override
-	public boolean isAlwaysEdible() {
-		return isAlwaysEdible;
-	}
+    @Override
+    public float getSaturation() {
+        return saturation;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @Override
+    public boolean isAlwaysEdible() {
+        return isAlwaysEdible;
+    }
 
-	@Override
-	public int getPrimaryColor() {
-		return primaryColor;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	@Override
-	public int getSecondaryColor() {
-		return secondaryColor;
-	}
+    @Override
+    public int getPrimaryColor() {
+        return primaryColor;
+    }
 
-	@Override
-	public boolean isSecret() {
-		return false;
-	}
+    @Override
+    public int getSecondaryColor() {
+        return secondaryColor;
+    }
 
-	@Override
-	public IIcon getIconBottle() {
-		return iconBottle;
-	}
+    @Override
+    public boolean isSecret() {
+        return false;
+    }
 
-	@Override
-	public IIcon getIconContents() {
-		return iconContents;
-	}
+    @Override
+    public IIcon getIconBottle() {
+        return iconBottle;
+    }
+
+    @Override
+    public IIcon getIconContents() {
+        return iconContents;
+    }
 }

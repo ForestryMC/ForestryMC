@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.food.BeverageManager;
 import forestry.apiculture.items.EnumPollenCluster;
 import forestry.apiculture.items.ItemRegistryApiculture;
@@ -25,51 +22,63 @@ import forestry.food.InfuserIngredientManager;
 import forestry.food.InfuserMixtureManager;
 import forestry.food.items.EnumBeverage;
 import forestry.food.items.ItemRegistryFood;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
-@Plugin(pluginID = "Food", name = "Food", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.food.description")
+@Plugin(
+        pluginID = "Food",
+        name = "Food",
+        author = "SirSengir",
+        url = Constants.URL,
+        unlocalizedDescription = "for.plugin.food.description")
 public class PluginFood extends ForestryPlugin {
 
-	public static ItemRegistryFood items;
+    public static ItemRegistryFood items;
 
-	@Override
-	protected void setupAPI() {
-		super.setupAPI();
+    @Override
+    protected void setupAPI() {
+        super.setupAPI();
 
-		// Init seasoner
-		BeverageManager.infuserManager = new InfuserMixtureManager();
-		BeverageManager.ingredientManager = new InfuserIngredientManager();
-	}
+        // Init seasoner
+        BeverageManager.infuserManager = new InfuserMixtureManager();
+        BeverageManager.ingredientManager = new InfuserIngredientManager();
+    }
 
-	@Override
-	protected void registerItemsAndBlocks() {
-		items = new ItemRegistryFood();
-	}
+    @Override
+    protected void registerItemsAndBlocks() {
+        items = new ItemRegistryFood();
+    }
 
-	@Override
-	protected void preInit() {
-		super.preInit();
+    @Override
+    protected void preInit() {
+        super.preInit();
 
-		LiquidRegistryHelper.registerLiquidContainer(Fluids.SHORT_MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD_SHORT, 1), new ItemStack(Items.glass_bottle));
-		LiquidRegistryHelper.registerLiquidContainer(Fluids.MEAD, Constants.BUCKET_VOLUME, items.beverage.get(EnumBeverage.MEAD, 1), new ItemStack(Items.glass_bottle));
+        LiquidRegistryHelper.registerLiquidContainer(
+                Fluids.SHORT_MEAD,
+                Constants.BUCKET_VOLUME,
+                items.beverage.get(EnumBeverage.MEAD_SHORT, 1),
+                new ItemStack(Items.glass_bottle));
+        LiquidRegistryHelper.registerLiquidContainer(
+                Fluids.MEAD,
+                Constants.BUCKET_VOLUME,
+                items.beverage.get(EnumBeverage.MEAD, 1),
+                new ItemStack(Items.glass_bottle));
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems != null) {
-			ItemStack normalPollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.NORMAL, 1);
-			ItemStack crystallinePollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1);
+        ItemRegistryApiculture beeItems = PluginApiculture.items;
+        if (beeItems != null) {
+            ItemStack normalPollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.NORMAL, 1);
+            ItemStack crystallinePollenCluster = beeItems.pollenCluster.get(EnumPollenCluster.CRYSTALLINE, 1);
 
-			BeverageManager.ingredientManager.addIngredient(normalPollenCluster, "Strong Curative");
-			BeverageManager.ingredientManager.addIngredient(crystallinePollenCluster, "Weak Curative");
-			BeverageManager.infuserManager.addMixture(1, normalPollenCluster, BeverageEffect.strongAntidote);
-			BeverageManager.infuserManager.addMixture(1, crystallinePollenCluster, BeverageEffect.weakAntidote);
-		}
-	}
+            BeverageManager.ingredientManager.addIngredient(normalPollenCluster, "Strong Curative");
+            BeverageManager.ingredientManager.addIngredient(crystallinePollenCluster, "Weak Curative");
+            BeverageManager.infuserManager.addMixture(1, normalPollenCluster, BeverageEffect.strongAntidote);
+            BeverageManager.infuserManager.addMixture(1, crystallinePollenCluster, BeverageEffect.weakAntidote);
+        }
+    }
 
-	@Override
-	protected void registerRecipes() {
-		// INFUSER
-		RecipeUtil.addRecipe(items.infuser.getItemStack(),
-				"X", "#", "X",
-				'#', "ingotIron",
-				'X', "ingotBronze");
-	}
+    @Override
+    protected void registerRecipes() {
+        // INFUSER
+        RecipeUtil.addRecipe(items.infuser.getItemStack(), "X", "#", "X", '#', "ingotIron", 'X', "ingotBronze");
+    }
 }

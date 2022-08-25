@@ -13,5 +13,5 @@ package forestry.core.gui;
 import java.util.List;
 
 public interface IHintSource {
-	List<String> getHints();
+    List<String> getHints();
 }

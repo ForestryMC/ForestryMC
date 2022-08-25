@@ -14,6 +14,5 @@ import forestry.core.fluids.ITankManager;
 
 public interface ILiquidTankTile extends ILocatable {
 
-	ITankManager getTankManager();
-
+    ITankManager getTankManager();
 }

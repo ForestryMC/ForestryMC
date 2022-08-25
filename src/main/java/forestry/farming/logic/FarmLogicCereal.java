@@ -10,34 +10,31 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.farming.Farmables;
+import forestry.api.farming.IFarmHousing;
 import net.minecraft.init.Items;
 import net.minecraft.util.IIcon;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.farming.Farmables;
-import forestry.api.farming.IFarmHousing;
-
 public class FarmLogicCereal extends FarmLogicCrops {
 
-	public FarmLogicCereal(IFarmHousing housing) {
-		super(housing, Farmables.farmables.get(FarmableReference.Wheat.get()));
-	}
+    public FarmLogicCereal(IFarmHousing housing) {
+        super(housing, Farmables.farmables.get(FarmableReference.Wheat.get()));
+    }
 
-	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Farm";
-		} else {
-			return "Managed Farm";
-		}
-	}
+    @Override
+    public String getName() {
+        if (isManual) {
+            return "Manual Farm";
+        } else {
+            return "Managed Farm";
+        }
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Items.wheat.getIconFromDamage(0);
-	}
-
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon() {
+        return Items.wheat.getIconFromDamage(0);
+    }
 }

@@ -11,20 +11,20 @@
 package forestry.core.items;
 
 public enum EnumContainerType {
-	GLASS("glass"),
-	JAR("jar"),
-	CAN("can"),
-	CAPSULE("waxCapsule"),
-	REFRACTORY("refractory"),
-	BUCKET("bucket");
+    GLASS("glass"),
+    JAR("jar"),
+    CAN("can"),
+    CAPSULE("waxCapsule"),
+    REFRACTORY("refractory"),
+    BUCKET("bucket");
 
-	private final String name;
+    private final String name;
 
-	EnumContainerType(String name) {
-		this.name = name;
-	}
+    EnumContainerType(String name) {
+        this.name = name;
+    }
 
-	public String getContainerNameKey() {
-		return name;
-	}
+    public String getContainerNameKey() {
+        return name;
+    }
 }

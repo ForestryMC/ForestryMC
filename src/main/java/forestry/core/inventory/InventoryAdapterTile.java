@@ -10,32 +10,31 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import forestry.core.access.IRestrictedAccess;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-import forestry.core.access.IRestrictedAccess;
-
 public class InventoryAdapterTile<T extends TileEntity & IRestrictedAccess> extends InventoryAdapterRestricted {
 
-	protected final T tile;
+    protected final T tile;
 
-	public InventoryAdapterTile(T tile, int size, String name) {
-		this(tile, size, name, 64);
-	}
+    public InventoryAdapterTile(T tile, int size, String name) {
+        this(tile, size, name, 64);
+    }
 
-	public InventoryAdapterTile(T tile, int size, String name, int stackLimit) {
-		super(size, name, stackLimit, tile.getAccessHandler());
-		this.tile = tile;
-	}
+    public InventoryAdapterTile(T tile, int size, String name, int stackLimit) {
+        super(size, name, stackLimit, tile.getAccessHandler());
+        this.tile = tile;
+    }
 
-	@Override
-	public void markDirty() {
-		super.markDirty();
-		tile.markDirty();
-	}
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        tile.markDirty();
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-		return false;
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+        return false;
+    }
 }

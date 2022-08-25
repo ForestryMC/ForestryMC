@@ -17,46 +17,45 @@ import forestry.energy.EnergyManager;
 
 public class PowerLedger extends Ledger {
 
-	private final IPowerHandler tile;
+    private final IPowerHandler tile;
 
-	public PowerLedger(LedgerManager manager, IPowerHandler tile) {
-		super(manager, "power");
-		this.tile = tile;
-		maxHeight = 94;
-	}
+    public PowerLedger(LedgerManager manager, IPowerHandler tile) {
+        super(manager, "power");
+        this.tile = tile;
+        maxHeight = 94;
+    }
 
-	@Override
-	public void draw(int x, int y) {
-		// Draw background
-		drawBackground(x, y);
+    @Override
+    public void draw(int x, int y) {
+        // Draw background
+        drawBackground(x, y);
 
-		// Draw icon
-		drawIcon(TextureManager.getInstance().getDefault("misc/energy"), x + 3, y + 4);
+        // Draw icon
+        drawIcon(TextureManager.getInstance().getDefault("misc/energy"), x + 3, y + 4);
 
-		if (!isFullyOpened()) {
-			return;
-		}
+        if (!isFullyOpened()) {
+            return;
+        }
 
-		int xHeader = x + 22;
-		int xBody = x + 12;
+        int xHeader = x + 22;
+        int xBody = x + 12;
 
-		EnergyManager energyManager = tile.getEnergyManager();
+        EnergyManager energyManager = tile.getEnergyManager();
 
-		drawHeader(StringUtil.localize("gui.energy"), xHeader, y + 8);
+        drawHeader(StringUtil.localize("gui.energy"), xHeader, y + 8);
 
-		drawSubheader(StringUtil.localize("gui.stored") + ':', xBody, y + 20);
-		drawText(energyManager.getTotalEnergyStored() + " RF", xBody, y + 32);
+        drawSubheader(StringUtil.localize("gui.stored") + ':', xBody, y + 20);
+        drawText(energyManager.getTotalEnergyStored() + " RF", xBody, y + 32);
 
-		drawSubheader(StringUtil.localize("gui.maxenergy") + ':', xBody, y + 44);
-		drawText(energyManager.getMaxEnergyStored() + " RF", xBody, y + 56);
+        drawSubheader(StringUtil.localize("gui.maxenergy") + ':', xBody, y + 44);
+        drawText(energyManager.getMaxEnergyStored() + " RF", xBody, y + 56);
 
-		drawSubheader(StringUtil.localize("gui.maxenergyreceive") + ':', xBody, y + 68);
-		drawText(energyManager.getMaxEnergyReceived() + " RF", xBody, y + 80);
-	}
+        drawSubheader(StringUtil.localize("gui.maxenergyreceive") + ':', xBody, y + 68);
+        drawText(energyManager.getMaxEnergyReceived() + " RF", xBody, y + 80);
+    }
 
-	@Override
-	public String getTooltip() {
-		return tile.getEnergyManager().getTotalEnergyStored() + " RF";
-	}
-
+    @Override
+    public String getTooltip() {
+        return tile.getEnergyManager().getTotalEnergyStored() + " RF";
+    }
 }

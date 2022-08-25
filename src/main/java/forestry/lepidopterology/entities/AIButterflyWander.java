@@ -12,28 +12,28 @@ package forestry.lepidopterology.entities;
 
 public class AIButterflyWander extends AIButterflyMovement {
 
-	public AIButterflyWander(EntityButterfly entity) {
-		super(entity);
-		setMutexBits(1);
-	}
+    public AIButterflyWander(EntityButterfly entity) {
+        super(entity);
+        setMutexBits(1);
+    }
 
-	@Override
-	public boolean shouldExecute() {
+    @Override
+    public boolean shouldExecute() {
 
-		if (entity.getDestination() != null) {
-			return false;
-		}
+        if (entity.getDestination() != null) {
+            return false;
+        }
 
-		flightTarget = getRandomDestination();
-		if (flightTarget == null) {
-			if (entity.getState().doesMovement) {
-				entity.setState(EnumButterflyState.HOVER);
-			}
-			return false;
-		}
+        flightTarget = getRandomDestination();
+        if (flightTarget == null) {
+            if (entity.getState().doesMovement) {
+                entity.setState(EnumButterflyState.HOVER);
+            }
+            return false;
+        }
 
-		entity.setDestination(flightTarget);
-		entity.setState(EnumButterflyState.FLYING);
-		return true;
-	}
+        entity.setDestination(flightTarget);
+        entity.setState(EnumButterflyState.FLYING);
+        return true;
+    }
 }

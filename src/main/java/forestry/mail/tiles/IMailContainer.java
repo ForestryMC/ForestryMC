@@ -11,5 +11,5 @@
 package forestry.mail.tiles;
 
 public interface IMailContainer {
-	boolean hasMail();
+    boolean hasMail();
 }

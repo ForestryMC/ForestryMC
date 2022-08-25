@@ -12,7 +12,6 @@ package forestry.core.commands;
 
 import java.util.List;
 import java.util.SortedSet;
-
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 
@@ -21,14 +20,14 @@ import net.minecraft.command.ICommandSender;
  */
 public interface IForestryCommand extends ICommand {
 
-	String getFullCommandString();
+    String getFullCommandString();
 
-	@Override
-	List<String> getCommandAliases();
+    @Override
+    List<String> getCommandAliases();
 
-	int getPermissionLevel();
+    int getPermissionLevel();
 
-	SortedSet<SubCommand> getChildren();
+    SortedSet<SubCommand> getChildren();
 
-	void printHelp(ICommandSender sender);
+    void printHelp(ICommandSender sender);
 }

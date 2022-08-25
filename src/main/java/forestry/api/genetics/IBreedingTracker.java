@@ -1,106 +1,104 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.genetics;
 
+import forestry.api.apiculture.IBeekeepingMode;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.api.apiculture.IBeekeepingMode;
-
 /**
  * Keeps track of who bred, discovered, and researched which species in a world.
- * 
+ *
  * @author SirSengir
  */
 public interface IBreedingTracker {
 
-	/**
-	 * @return Name of the current {@link IBeekeepingMode}.
-	 */
-	String getModeName();
+    /**
+     * @return Name of the current {@link IBeekeepingMode}.
+     */
+    String getModeName();
 
-	/**
-	 * Set the current {@link IBeekeepingMode}.
-	 */
-	void setModeName(String name);
+    /**
+     * Set the current {@link IBeekeepingMode}.
+     */
+    void setModeName(String name);
 
-	/**
-	 * @return Amount of species discovered.
-	 */
-	int getSpeciesBred();
+    /**
+     * @return Amount of species discovered.
+     */
+    int getSpeciesBred();
 
-	/**
-	 * Register the birth of an individual. Will mark it as discovered.
-	 * 
-	 * @param individual
-	 */
-	void registerBirth(IIndividual individual);
+    /**
+     * Register the birth of an individual. Will mark it as discovered.
+     *
+     * @param individual
+     */
+    void registerBirth(IIndividual individual);
 
-	/**
-	 * Register the pickup of an individual.
-	 * 
-	 * @param individual
-	 */
-	void registerPickup(IIndividual individual);
-	
-	/**
-	 * Marks a species as discovered. Should only be called from registerIndividual normally.
-	 * 
-	 * @param species
-	 */
-	void registerSpecies(IAlleleSpecies species);
+    /**
+     * Register the pickup of an individual.
+     *
+     * @param individual
+     */
+    void registerPickup(IIndividual individual);
 
-	/**
-	 * Register a successful mutation. Will mark it as discovered.
-	 * 
-	 * @param mutation
-	 */
-	void registerMutation(IMutation mutation);
+    /**
+     * Marks a species as discovered. Should only be called from registerIndividual normally.
+     *
+     * @param species
+     */
+    void registerSpecies(IAlleleSpecies species);
 
-	/**
-	 * Queries the tracker for discovered species.
-	 * 
-	 * @param mutation
-	 *            Mutation to query for.
-	 * @return true if the mutation has been discovered.
-	 */
-	boolean isDiscovered(IMutation mutation);
+    /**
+     * Register a successful mutation. Will mark it as discovered.
+     *
+     * @param mutation
+     */
+    void registerMutation(IMutation mutation);
 
-	/**
-	 * Queries the tracker for discovered species.
-	 * 
-	 * @param species
-	 *            Species to check.
-	 * @return true if the species has been bred.
-	 */
-	boolean isDiscovered(IAlleleSpecies species);
+    /**
+     * Queries the tracker for discovered species.
+     *
+     * @param mutation
+     *            Mutation to query for.
+     * @return true if the mutation has been discovered.
+     */
+    boolean isDiscovered(IMutation mutation);
 
-	/**
-	 * Register a successfully researched mutation.
-	 * Mutations are normally researched in the Escritoire.
-	 * Researched mutations may have bonuses such as occurring at a higher rate.
-	 * Researched mutations count as discovered.
-	 */
-	void researchMutation(IMutation mutation);
+    /**
+     * Queries the tracker for discovered species.
+     *
+     * @param species
+     *            Species to check.
+     * @return true if the species has been bred.
+     */
+    boolean isDiscovered(IAlleleSpecies species);
 
-	/**
-	 * @return true if the mutation has been researched.
-	 */
-	boolean isResearched(IMutation mutation);
+    /**
+     * Register a successfully researched mutation.
+     * Mutations are normally researched in the Escritoire.
+     * Researched mutations may have bonuses such as occurring at a higher rate.
+     * Researched mutations count as discovered.
+     */
+    void researchMutation(IMutation mutation);
 
-	/**
-	 * Synchronizes the tracker to the client side.
-	 * Before Forestry 4.2.1: Should be called before opening any gui needing that information.
-	 * Since Forestry 4.2.1: Breeding tracker should be automatically synced, only Forestry should need to call this.
-	 */
-	void synchToPlayer(EntityPlayer player);
+    /**
+     * @return true if the mutation has been researched.
+     */
+    boolean isResearched(IMutation mutation);
 
-	/* LOADING & SAVING */
-	void decodeFromNBT(NBTTagCompound nbttagcompound);
+    /**
+     * Synchronizes the tracker to the client side.
+     * Before Forestry 4.2.1: Should be called before opening any gui needing that information.
+     * Since Forestry 4.2.1: Breeding tracker should be automatically synced, only Forestry should need to call this.
+     */
+    void synchToPlayer(EntityPlayer player);
 
-	void encodeToNBT(NBTTagCompound nbttagcompound);
+    /* LOADING & SAVING */
+    void decodeFromNBT(NBTTagCompound nbttagcompound);
 
+    void encodeToNBT(NBTTagCompound nbttagcompound);
 }

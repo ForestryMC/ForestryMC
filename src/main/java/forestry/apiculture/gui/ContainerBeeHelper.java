@@ -10,39 +10,39 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.inventory.IInventory;
-
 import forestry.apiculture.InventoryBeeHousing;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.core.gui.ContainerForestry;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.core.tiles.IFilterSlotDelegate;
+import net.minecraft.inventory.IInventory;
 
 public abstract class ContainerBeeHelper {
-	public static <T extends IInventory & IFilterSlotDelegate> void addSlots(ContainerForestry container, T inventory, boolean hasFrames) {
-		// Queen/Princess
-		container.addSlotToContainer(new SlotFiltered(inventory, InventoryBeeHousing.SLOT_QUEEN, 29, 39));
+    public static <T extends IInventory & IFilterSlotDelegate> void addSlots(
+            ContainerForestry container, T inventory, boolean hasFrames) {
+        // Queen/Princess
+        container.addSlotToContainer(new SlotFiltered(inventory, InventoryBeeHousing.SLOT_QUEEN, 29, 39));
 
-		// Drone
-		container.addSlotToContainer(new SlotFiltered(inventory, InventoryBeeHousing.SLOT_DRONE, 29, 65));
+        // Drone
+        container.addSlotToContainer(new SlotFiltered(inventory, InventoryBeeHousing.SLOT_DRONE, 29, 65));
 
-		// Frames
-		if (hasFrames) {
-			int slotFrames = InventoryApiary.SLOT_FRAMES_1;
-			container.addSlotToContainer(new SlotFiltered(inventory, slotFrames++, 66, 23));
-			container.addSlotToContainer(new SlotFiltered(inventory, slotFrames++, 66, 52));
-			container.addSlotToContainer(new SlotFiltered(inventory, slotFrames, 66, 81));
-		}
+        // Frames
+        if (hasFrames) {
+            int slotFrames = InventoryApiary.SLOT_FRAMES_1;
+            container.addSlotToContainer(new SlotFiltered(inventory, slotFrames++, 66, 23));
+            container.addSlotToContainer(new SlotFiltered(inventory, slotFrames++, 66, 52));
+            container.addSlotToContainer(new SlotFiltered(inventory, slotFrames, 66, 81));
+        }
 
-		// Product Inventory
-		int slotProduct = InventoryBeeHousing.SLOT_PRODUCT_1;
-		container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 116, 52));
-		container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 137, 39));
-		container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 137, 65));
-		container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 116, 78));
-		container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 95, 65));
-		container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 95, 39));
-		container.addSlotToContainer(new SlotOutput(inventory, slotProduct, 116, 26));
-	}
+        // Product Inventory
+        int slotProduct = InventoryBeeHousing.SLOT_PRODUCT_1;
+        container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 116, 52));
+        container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 137, 39));
+        container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 137, 65));
+        container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 116, 78));
+        container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 95, 65));
+        container.addSlotToContainer(new SlotOutput(inventory, slotProduct++, 95, 39));
+        container.addSlotToContainer(new SlotOutput(inventory, slotProduct, 116, 26));
+    }
 }

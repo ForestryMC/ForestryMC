@@ -10,33 +10,30 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChunkCoordinates;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.packets.PacketCoordinates;
 import forestry.core.proxy.Proxies;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChunkCoordinates;
 
 public class PacketHabitatBiomePointer extends PacketCoordinates implements IForestryPacketClient {
 
-	public PacketHabitatBiomePointer() {
-	}
+    public PacketHabitatBiomePointer() {}
 
-	public PacketHabitatBiomePointer(ChunkCoordinates coordinates) {
-		super(coordinates);
-	}
+    public PacketHabitatBiomePointer(ChunkCoordinates coordinates) {
+        super(coordinates);
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.HABITAT_BIOME_POINTER;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.HABITAT_BIOME_POINTER;
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Proxies.render.setHabitatLocatorTexture(player, getCoordinates());
-	}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+        Proxies.render.setHabitatLocatorTexture(player, getCoordinates());
+    }
 }

@@ -5,30 +5,28 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 
 /**
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public interface IErrorState {
-	
-	short getID();
-	
-	String getUniqueName();
 
-	String getDescription();
+    short getID();
 
-	String getHelp();
+    String getUniqueName();
 
-	@SideOnly(Side.CLIENT)
-	void registerIcons(IIconRegister register);
+    String getDescription();
 
-	@SideOnly(value = Side.CLIENT)
-	IIcon getIcon();
+    String getHelp();
 
+    @SideOnly(Side.CLIENT)
+    void registerIcons(IIconRegister register);
+
+    @SideOnly(value = Side.CLIENT)
+    IIcon getIcon();
 }

@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
@@ -21,45 +17,46 @@ import forestry.core.network.ForestryPacket;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdServer;
 import forestry.mail.gui.ContainerLetter;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class PacketLetterInfoRequest extends ForestryPacket implements IForestryPacketServer {
 
-	private String recipientName;
-	private EnumAddressee addressType;
+    private String recipientName;
+    private EnumAddressee addressType;
 
-	public PacketLetterInfoRequest() {
-	}
+    public PacketLetterInfoRequest() {}
 
-	public PacketLetterInfoRequest(String recipientName, EnumAddressee addressType) {
-		this.recipientName = recipientName;
-		this.addressType = addressType;
-	}
+    public PacketLetterInfoRequest(String recipientName, EnumAddressee addressType) {
+        this.recipientName = recipientName;
+        this.addressType = addressType;
+    }
 
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeUTF(recipientName);
-		data.writeByte(addressType.ordinal());
-	}
+    @Override
+    protected void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        data.writeUTF(recipientName);
+        data.writeByte(addressType.ordinal());
+    }
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		recipientName = data.readUTF();
-		addressType = EnumAddressee.values()[data.readByte()];
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {
+        super.readData(data);
+        recipientName = data.readUTF();
+        addressType = EnumAddressee.values()[data.readByte()];
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		if (!(player.openContainer instanceof ContainerLetter)) {
-			return;
-		}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+        if (!(player.openContainer instanceof ContainerLetter)) {
+            return;
+        }
 
-		((ContainerLetter) player.openContainer).handleRequestLetterInfo(player, recipientName, addressType);
-	}
+        ((ContainerLetter) player.openContainer).handleRequestLetterInfo(player, recipientName, addressType);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.LETTER_INFO_REQUEST;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.LETTER_INFO_REQUEST;
+    }
 }

@@ -10,60 +10,45 @@
  ******************************************************************************/
 package forestry.apiculture;
 
+import forestry.api.apiculture.IBeekeepingLogic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
-import forestry.api.apiculture.IBeekeepingLogic;
-
 public class FakeBeekeepingLogic implements IBeekeepingLogic {
-	public static final FakeBeekeepingLogic instance = new FakeBeekeepingLogic();
+    public static final FakeBeekeepingLogic instance = new FakeBeekeepingLogic();
 
-	private FakeBeekeepingLogic() {
+    private FakeBeekeepingLogic() {}
 
-	}
+    @Override
+    public boolean canWork() {
+        return false;
+    }
 
-	@Override
-	public boolean canWork() {
-		return false;
-	}
+    @Override
+    public void doWork() {}
 
-	@Override
-	public void doWork() {
+    @Override
+    public void syncToClient() {}
 
-	}
+    @Override
+    public void syncToClient(EntityPlayerMP player) {}
 
-	@Override
-	public void syncToClient() {
+    @Override
+    public int getBeeProgressPercent() {
+        return 0;
+    }
 
-	}
+    @Override
+    public boolean canDoBeeFX() {
+        return false;
+    }
 
-	@Override
-	public void syncToClient(EntityPlayerMP player) {
+    @Override
+    public void doBeeFX() {}
 
-	}
+    @Override
+    public void readFromNBT(NBTTagCompound nbttagcompound) {}
 
-	@Override
-	public int getBeeProgressPercent() {
-		return 0;
-	}
-
-	@Override
-	public boolean canDoBeeFX() {
-		return false;
-	}
-
-	@Override
-	public void doBeeFX() {
-
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbttagcompound) {}
 }

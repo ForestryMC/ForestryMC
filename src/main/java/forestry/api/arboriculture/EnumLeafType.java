@@ -6,5 +6,10 @@
 package forestry.api.arboriculture;
 
 public enum EnumLeafType {
-	DECIDUOUS, CONIFERS, JUNGLE, WILLOW, MAPLE, PALM
+    DECIDUOUS,
+    CONIFERS,
+    JUNGLE,
+    WILLOW,
+    MAPLE,
+    PALM
 }

@@ -8,28 +8,32 @@ package forestry.api.farming;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public enum FarmDirection {
-	NORTH(ForgeDirection.NORTH),
-	EAST(ForgeDirection.EAST),
-	SOUTH(ForgeDirection.SOUTH),
-	WEST(ForgeDirection.WEST);
+    NORTH(ForgeDirection.NORTH),
+    EAST(ForgeDirection.EAST),
+    SOUTH(ForgeDirection.SOUTH),
+    WEST(ForgeDirection.WEST);
 
-	private final ForgeDirection forgeDirection;
+    private final ForgeDirection forgeDirection;
 
-	FarmDirection(ForgeDirection forgeDirection) {
-		this.forgeDirection = forgeDirection;
-	}
+    FarmDirection(ForgeDirection forgeDirection) {
+        this.forgeDirection = forgeDirection;
+    }
 
-	public ForgeDirection getForgeDirection() {
-		return forgeDirection;
-	}
+    public ForgeDirection getForgeDirection() {
+        return forgeDirection;
+    }
 
-	public static FarmDirection getFarmDirection(ForgeDirection forgeDirection) {
-		switch (forgeDirection) {
-			case NORTH: return NORTH;
-			case EAST: return EAST;
-			case SOUTH: return SOUTH;
-			case WEST: return WEST;
-		}
-		return null;
-	}
+    public static FarmDirection getFarmDirection(ForgeDirection forgeDirection) {
+        switch (forgeDirection) {
+            case NORTH:
+                return NORTH;
+            case EAST:
+                return EAST;
+            case SOUTH:
+                return SOUTH;
+            case WEST:
+                return WEST;
+        }
+        return null;
+    }
 }

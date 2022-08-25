@@ -10,41 +10,39 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
-
 public class ItemForestryMultiPass extends ItemForestry {
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
+    /* ICONS */
+    @SideOnly(Side.CLIENT)
+    private IIcon[] icons;
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		icons = new IIcon[2];
-		icons[0] = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		icons[1] = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerIcons(IIconRegister register) {
+        icons = new IIcon[2];
+        icons[0] = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
+        icons[1] = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int i, int pass) {
-		if (pass > 0) {
-			return icons[0];
-		} else {
-			return icons[1];
-		}
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIconFromDamageForRenderPass(int i, int pass) {
+        if (pass > 0) {
+            return icons[0];
+        } else {
+            return icons[1];
+        }
+    }
 
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
+    @Override
+    public boolean requiresMultipleRenderPasses() {
+        return true;
+    }
 }

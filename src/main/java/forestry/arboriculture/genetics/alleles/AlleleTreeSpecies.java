@@ -10,17 +10,8 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.IAlleleTreeSpeciesCustom;
 import forestry.api.arboriculture.IGermlingIconProvider;
@@ -33,102 +24,116 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.render.TextureManager;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.EnumPlantType;
 
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, IIconProvider {
-	private final ITreeGenerator generator;
-	private final IGermlingIconProvider germlingIconProvider;
-	private final ILeafIconProvider leafIconProvider;
-	private final List<IFruitFamily> fruits = new ArrayList<>();
+    private final ITreeGenerator generator;
+    private final IGermlingIconProvider germlingIconProvider;
+    private final ILeafIconProvider leafIconProvider;
+    private final List<IFruitFamily> fruits = new ArrayList<>();
 
-	private EnumPlantType nativeType = EnumPlantType.Plains;
+    private EnumPlantType nativeType = EnumPlantType.Plains;
 
-	public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription, boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider, IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
-		super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
+    public AlleleTreeSpecies(
+            String uid,
+            String unlocalizedName,
+            String authority,
+            String unlocalizedDescription,
+            boolean isDominant,
+            IClassification branch,
+            String binomial,
+            ILeafIconProvider leafIconProvider,
+            IGermlingIconProvider germlingIconProvider,
+            ITreeGenerator generator) {
+        super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
-		this.generator = generator;
-		this.germlingIconProvider = germlingIconProvider;
-		this.leafIconProvider = leafIconProvider;
-	}
+        this.generator = generator;
+        this.germlingIconProvider = germlingIconProvider;
+        this.leafIconProvider = leafIconProvider;
+    }
 
-	@Override
-	public ITreeRoot getRoot() {
-		return TreeManager.treeRoot;
-	}
+    @Override
+    public ITreeRoot getRoot() {
+        return TreeManager.treeRoot;
+    }
 
-	@Override
-	public AlleleTreeSpecies setPlantType(EnumPlantType type) {
-		nativeType = type;
-		return this;
-	}
+    @Override
+    public AlleleTreeSpecies setPlantType(EnumPlantType type) {
+        nativeType = type;
+        return this;
+    }
 
-	@Override
-	public AlleleTreeSpecies addFruitFamily(IFruitFamily family) {
-		fruits.add(family);
-		return this;
-	}
+    @Override
+    public AlleleTreeSpecies addFruitFamily(IFruitFamily family) {
+        fruits.add(family);
+        return this;
+    }
 
-	/* OTHER */
-	@Override
-	public EnumPlantType getPlantType() {
-		return nativeType;
-	}
+    /* OTHER */
+    @Override
+    public EnumPlantType getPlantType() {
+        return nativeType;
+    }
 
-	@Override
-	public List<IFruitFamily> getSuitableFruit() {
-		return fruits;
-	}
+    @Override
+    public List<IFruitFamily> getSuitableFruit() {
+        return fruits;
+    }
 
-	@Override
-	public ITreeGenerator getGenerator() {
-		return generator;
-	}
+    @Override
+    public ITreeGenerator getGenerator() {
+        return generator;
+    }
 
-	@Override
-	public IIcon getLeafIcon(boolean pollinated, boolean fancy) {
-		return leafIconProvider.getIcon(pollinated, fancy);
-	}
+    @Override
+    public IIcon getLeafIcon(boolean pollinated, boolean fancy) {
+        return leafIconProvider.getIcon(pollinated, fancy);
+    }
 
-	@Override
-	public int getLeafColour(boolean pollinated) {
-		return leafIconProvider.getColor(pollinated);
-	}
+    @Override
+    public int getLeafColour(boolean pollinated) {
+        return leafIconProvider.getColor(pollinated);
+    }
 
-	@Override
-	public int getIconColour(int renderPass) {
-		return leafIconProvider.getColor(false);
-	}
+    @Override
+    public int getIconColour(int renderPass) {
+        return leafIconProvider.getColor(false);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		germlingIconProvider.registerIcons(register);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister register) {
+        germlingIconProvider.registerIcons(register);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getGermlingIcon(EnumGermlingType type, int renderPass) {
-		return germlingIconProvider.getIcon(type, renderPass);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getGermlingIcon(EnumGermlingType type, int renderPass) {
+        return germlingIconProvider.getIcon(type, renderPass);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getGermlingColour(EnumGermlingType type, int renderPass) {
-		if (type == EnumGermlingType.SAPLING) {
-			return 0xFFFFFF;
-		}
-		return getLeafColour(false);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getGermlingColour(EnumGermlingType type, int renderPass) {
+        if (type == EnumGermlingType.SAPLING) {
+            return 0xFFFFFF;
+        }
+        return getLeafColour(false);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIconProvider getIconProvider() {
-		return this;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIconProvider getIconProvider() {
+        return this;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(short texUID) {
-		return TextureManager.getInstance().getIcon(texUID);
-	}
-
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(short texUID) {
+        return TextureManager.getInstance().getIcon(texUID);
+    }
 }

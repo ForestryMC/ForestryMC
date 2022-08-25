@@ -10,41 +10,38 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import java.util.List;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.DamageSource;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
+import java.util.List;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.DamageSource;
 
 public class AlleleEffectAggressive extends AlleleEffectThrottled {
-	private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
+    private static final DamageSource damageSourceBeeAggressive = new DamageSourceForestry("bee.aggressive");
 
-	public AlleleEffectAggressive() {
-		super("aggressive", true, 40, false, false);
-	}
+    public AlleleEffectAggressive() {
+        super("aggressive", true, 40, false, false);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<EntityLivingBase> entities = getEntitiesInRange(genome, housing, EntityLivingBase.class);
-		for (EntityLivingBase entity : entities) {
-			int damage = 4;
+    @Override
+    public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+        List<EntityLivingBase> entities = getEntitiesInRange(genome, housing, EntityLivingBase.class);
+        for (EntityLivingBase entity : entities) {
+            int damage = 4;
 
-			// Entities are not attacked if they wear a full set of apiarist's armor.
-			int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
-			damage -= count;
-			if (damage <= 0) {
-				continue;
-			}
+            // Entities are not attacked if they wear a full set of apiarist's armor.
+            int count = BeeManager.armorApiaristHelper.wearsItems(entity, getUID(), true);
+            damage -= count;
+            if (damage <= 0) {
+                continue;
+            }
 
-			entity.attackEntityFrom(damageSourceBeeAggressive, damage);
-		}
+            entity.attackEntityFrom(damageSourceBeeAggressive, damage);
+        }
 
-		return storedData;
-	}
-
+        return storedData;
+    }
 }

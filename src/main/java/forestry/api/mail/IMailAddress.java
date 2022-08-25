@@ -6,18 +6,19 @@
 package forestry.api.mail;
 
 import com.mojang.authlib.GameProfile;
-
 import forestry.api.core.INBTTagable;
 
 public interface IMailAddress extends INBTTagable {
 
-	EnumAddressee getType();
-	String getName();
+    EnumAddressee getType();
 
-	boolean isValid();
+    String getName();
 
-	boolean isPlayer();
-	boolean isTrader();
+    boolean isValid();
 
-	GameProfile getPlayerProfile();
+    boolean isPlayer();
+
+    boolean isTrader();
+
+    GameProfile getPlayerProfile();
 }

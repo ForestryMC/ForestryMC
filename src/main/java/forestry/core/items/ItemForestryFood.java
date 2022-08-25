@@ -10,49 +10,46 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.CreativeTabForestry;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
-
 public class ItemForestryFood extends ItemFood {
 
-	private boolean isDrink = false;
+    private boolean isDrink = false;
 
-	public ItemForestryFood(int heal) {
-		this(heal, 0.6f);
-	}
+    public ItemForestryFood(int heal) {
+        this(heal, 0.6f);
+    }
 
-	public ItemForestryFood(int heal, float saturation) {
-		super(heal, saturation, false);
-		setCreativeTab(CreativeTabForestry.tabForestry);
-	}
+    public ItemForestryFood(int heal, float saturation) {
+        super(heal, saturation, false);
+        setCreativeTab(CreativeTabForestry.tabForestry);
+    }
 
-	@Override
-	public EnumAction getItemUseAction(ItemStack itemstack) {
-		if (isDrink) {
-			return EnumAction.drink;
-		} else {
-			return EnumAction.eat;
-		}
-	}
+    @Override
+    public EnumAction getItemUseAction(ItemStack itemstack) {
+        if (isDrink) {
+            return EnumAction.drink;
+        } else {
+            return EnumAction.eat;
+        }
+    }
 
-	public ItemForestryFood setIsDrink() {
-		isDrink = true;
-		return this;
-	}
+    public ItemForestryFood setIsDrink() {
+        isDrink = true;
+        return this;
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		itemIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this));
-	}
-
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerIcons(IIconRegister register) {
+        itemIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this));
+    }
 }

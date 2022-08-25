@@ -7,6 +7,4 @@ package forestry.api.arboriculture;
 
 import forestry.api.genetics.IMutationCustom;
 
-public interface ITreeMutationCustom extends ITreeMutation, IMutationCustom {
-
-}
+public interface ITreeMutationCustom extends ITreeMutation, IMutationCustom {}

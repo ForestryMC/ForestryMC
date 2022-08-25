@@ -10,35 +10,34 @@
  ******************************************************************************/
 package forestry.energy.gui.widgets;
 
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.gui.widgets.ReservoirWidget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.utils.StringUtil;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 
 public class BiogasSlot extends ReservoirWidget {
-	public BiogasSlot(WidgetManager manager, int xPos, int yPos, int slot) {
-		super(manager, xPos, yPos, slot);
-	}
+    public BiogasSlot(WidgetManager manager, int xPos, int yPos, int slot) {
+        super(manager, xPos, yPos, slot);
+    }
 
-	@Override
-	public ToolTip getToolTip(int mouseX, int mouseY) {
-		IFluidTank tank = getTank();
-		ToolTip toolTip = new ToolTip();
-		FluidStack fluid = tank.getFluid();
-		if (fluid == null) {
-			toolTip.add(StringUtil.localize("gui.empty"));
-		} else {
-			toolTip.add(fluid.getLocalizedName());
-		}
+    @Override
+    public ToolTip getToolTip(int mouseX, int mouseY) {
+        IFluidTank tank = getTank();
+        ToolTip toolTip = new ToolTip();
+        FluidStack fluid = tank.getFluid();
+        if (fluid == null) {
+            toolTip.add(StringUtil.localize("gui.empty"));
+        } else {
+            toolTip.add(fluid.getLocalizedName());
+        }
 
-		return toolTip;
-	}
+        return toolTip;
+    }
 
-	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-		// do not allow pipette
-	}
+    @Override
+    public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+        // do not allow pipette
+    }
 }

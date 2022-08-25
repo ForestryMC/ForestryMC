@@ -11,14 +11,10 @@
 package forestry.core.network;
 
 public class PacketRegistryDummy implements IPacketRegistry {
-	public static final PacketRegistryDummy instance = new PacketRegistryDummy();
+    public static final PacketRegistryDummy instance = new PacketRegistryDummy();
 
-	private PacketRegistryDummy() {
+    private PacketRegistryDummy() {}
 
-	}
-
-	@Override
-	public void registerPackets() {
-
-	}
+    @Override
+    public void registerPackets() {}
 }

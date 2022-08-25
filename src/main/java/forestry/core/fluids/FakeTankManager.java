@@ -10,79 +10,66 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import forestry.core.fluids.tanks.FakeTank;
 import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
-
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidTank;
 
-import forestry.core.fluids.tanks.FakeTank;
-
 public class FakeTankManager implements ITankManager {
-	public static final FakeTankManager instance = new FakeTankManager();
+    public static final FakeTankManager instance = new FakeTankManager();
 
-	private FakeTankManager() {
+    private FakeTankManager() {}
 
-	}
+    @Override
+    public void containerAdded(Container container, ICrafting player) {}
 
-	@Override
-	public void containerAdded(Container container, ICrafting player) {
+    @Override
+    public void updateGuiData(Container container, List<EntityPlayerMP> crafters) {}
 
-	}
+    @Override
+    public void containerRemoved(Container container) {}
 
-	@Override
-	public void updateGuiData(Container container, List<EntityPlayerMP> crafters) {
+    @Override
+    public IFluidTank getTank(int tankIndex) {
+        return FakeTank.INSTANCE;
+    }
 
-	}
+    @Override
+    public void processTankUpdate(int tankIndex, FluidStack contents) {}
 
-	@Override
-	public void containerRemoved(Container container) {
+    @Override
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+        return FakeTank.INSTANCE.fill(resource, doFill);
+    }
 
-	}
+    @Override
+    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+        return FakeTank.INSTANCE.drain(resource.amount, doDrain);
+    }
 
-	@Override
-	public IFluidTank getTank(int tankIndex) {
-		return FakeTank.INSTANCE;
-	}
+    @Override
+    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+        return FakeTank.INSTANCE.drain(maxDrain, doDrain);
+    }
 
-	@Override
-	public void processTankUpdate(int tankIndex, FluidStack contents) {
+    @Override
+    public boolean canFill(ForgeDirection from, Fluid fluid) {
+        return false;
+    }
 
-	}
+    @Override
+    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+        return false;
+    }
 
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return FakeTank.INSTANCE.fill(resource, doFill);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return FakeTank.INSTANCE.drain(resource.amount, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return FakeTank.INSTANCE.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return FakeTank.INFO;
-	}
+    @Override
+    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+        return FakeTank.INFO;
+    }
 }

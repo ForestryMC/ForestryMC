@@ -15,30 +15,30 @@ import net.minecraft.world.World;
 
 public class HiveGenTree extends HiveGen {
 
-	@Override
-	public boolean isValidLocation(World world, int x, int y, int z) {
-		Block blockAbove = world.getBlock(x, y + 1, z);
-		if (!blockAbove.isLeaves(world, x, y + 1, z)) {
-			return false;
-		}
+    @Override
+    public boolean isValidLocation(World world, int x, int y, int z) {
+        Block blockAbove = world.getBlock(x, y + 1, z);
+        if (!blockAbove.isLeaves(world, x, y + 1, z)) {
+            return false;
+        }
 
-		// not a good location if right on top of something
-		return canReplace(world, x, y - 1, z);
-	}
+        // not a good location if right on top of something
+        return canReplace(world, x, y - 1, z);
+    }
 
-	@Override
-	public int getYForHive(World world, int x, int z) {
-		// get top leaf block
-		int y = world.getHeightValue(x, z) - 1;
-		if (!world.getBlock(x, y, z).isLeaves(world, x, y, z)) {
-			return -1;
-		}
+    @Override
+    public int getYForHive(World world, int x, int z) {
+        // get top leaf block
+        int y = world.getHeightValue(x, z) - 1;
+        if (!world.getBlock(x, y, z).isLeaves(world, x, y, z)) {
+            return -1;
+        }
 
-		// get to the bottom of the leaves
-		do {
-			y--;
-		} while (world.getBlock(x, y, z).isLeaves(world, x, y, z));
+        // get to the bottom of the leaves
+        do {
+            y--;
+        } while (world.getBlock(x, y, z).isLeaves(world, x, y, z));
 
-		return y;
-	}
+        return y;
+    }
 }

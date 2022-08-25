@@ -14,9 +14,9 @@ import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 
 public class BlockRegistryEnergy extends BlockRegistry {
-	public final BlockEngine engine;
+    public final BlockEngine engine;
 
-	public BlockRegistryEnergy() {
-		engine = registerBlock(new BlockEngine(), ItemBlockForestry.class, "engine");
-	}
+    public BlockRegistryEnergy() {
+        engine = registerBlock(new BlockEngine(), ItemBlockForestry.class, "engine");
+    }
 }

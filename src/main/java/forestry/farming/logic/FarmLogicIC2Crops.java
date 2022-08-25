@@ -13,7 +13,7 @@ package forestry.farming.logic;
 import forestry.api.farming.Farmables;
 import forestry.api.farming.IFarmHousing;
 
-//TODO: Make special Logic for Crops, maybe a virtual map of references to iterate faster?
+// TODO: Make special Logic for Crops, maybe a virtual map of references to iterate faster?
 public class FarmLogicIC2Crops extends FarmLogicOrchard {
     public FarmLogicIC2Crops(IFarmHousing housing) {
         super(housing);

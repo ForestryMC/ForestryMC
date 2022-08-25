@@ -10,41 +10,40 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.gui.ContainerItemInventory;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IGuiHandlerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.core.gui.ContainerItemInventory;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IGuiHandlerItem;
-
 public abstract class ItemWithGui extends ItemForestry implements IGuiHandlerItem {
-	public ItemWithGui() {
-		setMaxStackSize(1);
-	}
+    public ItemWithGui() {
+        setMaxStackSize(1);
+    }
 
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (!world.isRemote) {
-			openGui(entityplayer);
-		}
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        if (!world.isRemote) {
+            openGui(entityplayer);
+        }
 
-		return itemstack;
-	}
+        return itemstack;
+    }
 
-	protected void openGui(EntityPlayer entityplayer) {
-		GuiHandler.openGui(entityplayer, this);
-	}
+    protected void openGui(EntityPlayer entityplayer) {
+        GuiHandler.openGui(entityplayer, this);
+    }
 
-	@Override
-	public boolean onDroppedByPlayer(ItemStack itemstack, EntityPlayer player) {
-		if (itemstack != null &&
-				player instanceof EntityPlayerMP &&
-				player.openContainer instanceof ContainerItemInventory) {
-			player.closeScreen();
-		}
+    @Override
+    public boolean onDroppedByPlayer(ItemStack itemstack, EntityPlayer player) {
+        if (itemstack != null
+                && player instanceof EntityPlayerMP
+                && player.openContainer instanceof ContainerItemInventory) {
+            player.closeScreen();
+        }
 
-		return super.onDroppedByPlayer(itemstack, player);
-	}
+        return super.onDroppedByPlayer(itemstack, player);
+    }
 }

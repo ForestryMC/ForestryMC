@@ -10,34 +10,31 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.farming.Farmables;
+import forestry.api.farming.IFarmHousing;
 import net.minecraft.init.Items;
 import net.minecraft.util.IIcon;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.api.farming.Farmables;
-import forestry.api.farming.IFarmHousing;
-
 public class FarmLogicVegetable extends FarmLogicCrops {
 
-	public FarmLogicVegetable(IFarmHousing housing) {
-		super(housing, Farmables.farmables.get(FarmableReference.Vegetables.get()));
-	}
+    public FarmLogicVegetable(IFarmHousing housing) {
+        super(housing, Farmables.farmables.get(FarmableReference.Vegetables.get()));
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return Items.carrot.getIconFromDamage(0);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon() {
+        return Items.carrot.getIconFromDamage(0);
+    }
 
-	@Override
-	public String getName() {
-		if (isManual) {
-			return "Manual Vegetable Farm";
-		} else {
-			return "Managed Vegetable Farm";
-		}
-	}
-
+    @Override
+    public String getName() {
+        if (isManual) {
+            return "Manual Vegetable Farm";
+        } else {
+            return "Managed Vegetable Farm";
+        }
+    }
 }

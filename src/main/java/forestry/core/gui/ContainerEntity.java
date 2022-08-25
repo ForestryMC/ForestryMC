@@ -11,12 +11,6 @@
 package forestry.core.gui;
 
 import com.google.common.collect.ImmutableSet;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
 import forestry.core.access.EnumAccess;
@@ -26,65 +20,70 @@ import forestry.core.access.IRestrictedAccess;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketAccessUpdateEntity;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 
 public class ContainerEntity<T extends Entity & IInventory> extends ContainerForestry {
-	protected final T entity;
-	private final IAccessHandler accessHandler;
+    protected final T entity;
+    private final IAccessHandler accessHandler;
 
-	protected ContainerEntity(T entity) {
-		this.entity = entity;
+    protected ContainerEntity(T entity) {
+        this.entity = entity;
 
-		if (entity instanceof IRestrictedAccess) {
-			accessHandler = ((IRestrictedAccess) entity).getAccessHandler();
-		} else {
-			accessHandler = FakeAccessHandler.getInstance();
-		}
-	}
+        if (entity instanceof IRestrictedAccess) {
+            accessHandler = ((IRestrictedAccess) entity).getAccessHandler();
+        } else {
+            accessHandler = FakeAccessHandler.getInstance();
+        }
+    }
 
-	protected ContainerEntity(T entity, InventoryPlayer playerInventory, int xInv, int yInv) {
-		this(entity);
-		addPlayerInventory(playerInventory, xInv, yInv);
-	}
+    protected ContainerEntity(T entity, InventoryPlayer playerInventory, int xInv, int yInv) {
+        this(entity);
+        addPlayerInventory(playerInventory, xInv, yInv);
+    }
 
-	@Override
-	protected final boolean canAccess(EntityPlayer player) {
-		return player != null && accessHandler.allowsAlteration(player);
-	}
+    @Override
+    protected final boolean canAccess(EntityPlayer player) {
+        return player != null && accessHandler.allowsAlteration(player);
+    }
 
-	@Override
-	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return entity.isUseableByPlayer(entityplayer) && accessHandler.allowsViewing(entityplayer);
-	}
+    @Override
+    public final boolean canInteractWith(EntityPlayer entityplayer) {
+        return entity.isUseableByPlayer(entityplayer) && accessHandler.allowsViewing(entityplayer);
+    }
 
-	private ImmutableSet<IErrorState> previousErrorStates;
-	private EnumAccess previousAccess;
+    private ImmutableSet<IErrorState> previousErrorStates;
+    private EnumAccess previousAccess;
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		if (entity instanceof IErrorLogicSource) {
-			IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;
-			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
+        if (entity instanceof IErrorLogicSource) {
+            IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;
+            ImmutableSet<IErrorState> errorStates =
+                    errorLogicSource.getErrorLogic().getErrorStates();
 
-			if ((previousErrorStates == null) || !errorStates.equals(previousErrorStates)) {
-				PacketErrorUpdateEntity packet = new PacketErrorUpdateEntity(entity, errorLogicSource);
-				sendPacketToCrafters(packet);
-			}
+            if ((previousErrorStates == null) || !errorStates.equals(previousErrorStates)) {
+                PacketErrorUpdateEntity packet = new PacketErrorUpdateEntity(entity, errorLogicSource);
+                sendPacketToCrafters(packet);
+            }
 
-			previousErrorStates = errorStates;
-		}
+            previousErrorStates = errorStates;
+        }
 
-		if (entity instanceof IRestrictedAccess) {
-			IRestrictedAccess restrictedAccess = (IRestrictedAccess) entity;
-			IAccessHandler accessHandler = restrictedAccess.getAccessHandler();
-			EnumAccess access = accessHandler.getAccess();
-			if (access != previousAccess) {
-				IForestryPacketClient packet = new PacketAccessUpdateEntity(restrictedAccess, entity);
-				sendPacketToCrafters(packet);
+        if (entity instanceof IRestrictedAccess) {
+            IRestrictedAccess restrictedAccess = (IRestrictedAccess) entity;
+            IAccessHandler accessHandler = restrictedAccess.getAccessHandler();
+            EnumAccess access = accessHandler.getAccess();
+            if (access != previousAccess) {
+                IForestryPacketClient packet = new PacketAccessUpdateEntity(restrictedAccess, entity);
+                sendPacketToCrafters(packet);
 
-				previousAccess = access;
-			}
-		}
-	}
+                previousAccess = access;
+            }
+        }
+    }
 }

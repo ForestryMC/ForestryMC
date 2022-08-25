@@ -10,18 +10,17 @@
  ******************************************************************************/
 package forestry.storage;
 
-import net.minecraft.item.Item;
-
 import forestry.api.storage.BackpackManager;
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
 import forestry.api.storage.IBackpackInterface;
 import forestry.storage.items.ItemBackpack;
+import net.minecraft.item.Item;
 
 public class BackpackInterface implements IBackpackInterface {
-	@Override
-	public Item addBackpack(IBackpackDefinition definition, EnumBackpackType type) {
-		BackpackManager.definitions.put(definition.getKey(), definition);
-		return new ItemBackpack(definition, type);
-	}
+    @Override
+    public Item addBackpack(IBackpackDefinition definition, EnumBackpackType type) {
+        BackpackManager.definitions.put(definition.getKey(), definition);
+        return new ItemBackpack(definition, type);
+    }
 }

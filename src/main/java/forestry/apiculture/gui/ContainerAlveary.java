@@ -10,23 +10,22 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.apiculture.multiblock.TileAlveary;
 import forestry.core.gui.ContainerTile;
 import forestry.core.network.packets.PacketGuiUpdate;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerAlveary extends ContainerTile<TileAlveary> {
 
-	public ContainerAlveary(InventoryPlayer player, TileAlveary tile) {
-		super(tile, player, 8, 108);
-		ContainerBeeHelper.addSlots(this, tile, false);
-	}
+    public ContainerAlveary(InventoryPlayer player, TileAlveary tile) {
+        super(tile, player, 8, 108);
+        ContainerBeeHelper.addSlots(this, tile, false);
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		PacketGuiUpdate packet = new PacketGuiUpdate(tile);
-		sendPacketToCrafters(packet);
-	}
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        PacketGuiUpdate packet = new PacketGuiUpdate(tile);
+        sendPacketToCrafters(packet);
+    }
 }

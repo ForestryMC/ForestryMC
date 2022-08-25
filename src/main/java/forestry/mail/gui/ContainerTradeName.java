@@ -10,33 +10,32 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.api.mail.IMailAddress;
 import forestry.core.gui.ContainerTile;
 import forestry.mail.tiles.TileTrader;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerTradeName extends ContainerTile<TileTrader> {
 
-	public ContainerTradeName(TileTrader tile) {
-		super(tile);
-	}
+    public ContainerTradeName(TileTrader tile) {
+        super(tile);
+    }
 
-	public IMailAddress getAddress() {
-		return tile.getAddress();
-	}
+    public IMailAddress getAddress() {
+        return tile.getAddress();
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		if (tile.isLinked()) {
-			for (Object crafter : crafters) {
-				if (crafter instanceof EntityPlayer) {
-					EntityPlayer player = (EntityPlayer) crafter;
-					tile.openGui(player);
-				}
-			}
-		}
-	}
+        if (tile.isLinked()) {
+            for (Object crafter : crafters) {
+                if (crafter instanceof EntityPlayer) {
+                    EntityPlayer player = (EntityPlayer) crafter;
+                    tile.openGui(player);
+                }
+            }
+        }
+    }
 }

@@ -10,35 +10,35 @@
  ******************************************************************************/
 package forestry.food;
 
+import forestry.api.food.IIngredientManager;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.item.ItemStack;
 
-import forestry.api.food.IIngredientManager;
-
 public class InfuserIngredientManager implements IIngredientManager {
-	private final List<InfuserIngredient> ingredients = new ArrayList<>();
+    private final List<InfuserIngredient> ingredients = new ArrayList<>();
 
-	@Override
-	public void addIngredient(ItemStack ingredient, String description) {
-		this.ingredients.add(new InfuserIngredient(ingredient, description));
-	}
+    @Override
+    public void addIngredient(ItemStack ingredient, String description) {
+        this.ingredients.add(new InfuserIngredient(ingredient, description));
+    }
 
-	@Override
-	public String getDescription(ItemStack itemstack) {
-		if (itemstack == null) {
-			return null;
-		}
+    @Override
+    public String getDescription(ItemStack itemstack) {
+        if (itemstack == null) {
+            return null;
+        }
 
-		for (InfuserIngredient ingredient : ingredients) {
-			if (ingredient.getIngredient().getItemDamage() < 0 && ingredient.getIngredient().getItem() == itemstack.getItem()) {
-				return ingredient.getDescription();
-			} else if (ingredient.getIngredient().getItemDamage() >= 0 && ingredient.getIngredient().isItemEqual(itemstack)) {
-				return ingredient.getDescription();
-			}
-		}
+        for (InfuserIngredient ingredient : ingredients) {
+            if (ingredient.getIngredient().getItemDamage() < 0
+                    && ingredient.getIngredient().getItem() == itemstack.getItem()) {
+                return ingredient.getDescription();
+            } else if (ingredient.getIngredient().getItemDamage() >= 0
+                    && ingredient.getIngredient().isItemEqual(itemstack)) {
+                return ingredient.getDescription();
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

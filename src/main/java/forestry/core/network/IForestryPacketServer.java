@@ -11,12 +11,11 @@
 package forestry.core.network;
 
 import java.io.IOException;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public interface IForestryPacketServer extends IForestryPacket {
-	void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException;
+    void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException;
 
-	@Override
-	PacketIdServer getPacketId();
+    @Override
+    PacketIdServer getPacketId();
 }

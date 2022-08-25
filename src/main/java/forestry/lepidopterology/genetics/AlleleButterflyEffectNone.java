@@ -11,12 +11,12 @@
 package forestry.lepidopterology.genetics;
 
 public class AlleleButterflyEffectNone extends AlleleButterflyEffect {
-	public AlleleButterflyEffectNone() {
-		super("none", false);
-	}
+    public AlleleButterflyEffectNone() {
+        super("none", false);
+    }
 
-	@Override
-	public String getUnlocalizedName() {
-		return "for.lepidopterology.effect.none";
-	}
+    @Override
+    public String getUnlocalizedName() {
+        return "for.lepidopterology.effect.none";
+    }
 }

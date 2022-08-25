@@ -1,58 +1,56 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.mail;
 
+import com.mojang.authlib.GameProfile;
 import java.util.Map;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import com.mojang.authlib.GameProfile;
-
 public interface IPostRegistry {
 
-	/* POST OFFICE */
-	IPostOffice getPostOffice(World world);
+    /* POST OFFICE */
+    IPostOffice getPostOffice(World world);
 
-	/* MAIL ADDRESSES */
-	IMailAddress getMailAddress(GameProfile gameProfile);
-	IMailAddress getMailAddress(String traderName);
+    /* MAIL ADDRESSES */
+    IMailAddress getMailAddress(GameProfile gameProfile);
 
-	/* LETTERS */
-	boolean isLetter(ItemStack itemstack);
+    IMailAddress getMailAddress(String traderName);
 
-	ILetter createLetter(IMailAddress sender, IMailAddress recipient);
+    /* LETTERS */
+    boolean isLetter(ItemStack itemstack);
 
-	ILetter getLetter(ItemStack itemstack);
+    ILetter createLetter(IMailAddress sender, IMailAddress recipient);
 
-	ItemStack createLetterStack(ILetter letter);
+    ILetter getLetter(ItemStack itemstack);
 
-	/* CARRIERS */
-	/**
-	 * Registers a new {@link IPostalCarrier}. See {@link IPostalCarrier} for details.
-	 * @param carrier {@link IPostalCarrier} to register.
-	 */
-	void registerCarrier(IPostalCarrier carrier);
+    ItemStack createLetterStack(ILetter letter);
 
-	IPostalCarrier getCarrier(EnumAddressee uid);
+    /* CARRIERS */
+    /**
+     * Registers a new {@link IPostalCarrier}. See {@link IPostalCarrier} for details.
+     * @param carrier {@link IPostalCarrier} to register.
+     */
+    void registerCarrier(IPostalCarrier carrier);
 
-	Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers();
+    IPostalCarrier getCarrier(EnumAddressee uid);
 
-	/* TRADE STATIONS */
-	void deleteTradeStation(World world, IMailAddress address);
+    Map<EnumAddressee, IPostalCarrier> getRegisteredCarriers();
 
-	ITradeStation getOrCreateTradeStation(World world, GameProfile owner, IMailAddress address);
+    /* TRADE STATIONS */
+    void deleteTradeStation(World world, IMailAddress address);
 
-	ITradeStation getTradeStation(World world, IMailAddress address);
+    ITradeStation getOrCreateTradeStation(World world, GameProfile owner, IMailAddress address);
 
-	boolean isAvailableTradeAddress(World world, IMailAddress address);
+    ITradeStation getTradeStation(World world, IMailAddress address);
 
-	boolean isValidTradeAddress(World world, IMailAddress address);
+    boolean isAvailableTradeAddress(World world, IMailAddress address);
 
-	/* PO BOXES */
-	boolean isValidPOBox(World world, IMailAddress address);
+    boolean isValidTradeAddress(World world, IMailAddress address);
 
+    /* PO BOXES */
+    boolean isValidPOBox(World world, IMailAddress address);
 }

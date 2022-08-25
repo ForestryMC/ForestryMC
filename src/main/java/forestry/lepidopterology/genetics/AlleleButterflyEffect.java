@@ -19,30 +19,29 @@ import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleButterflyEffect extends AlleleCategorized implements IAlleleButterflyEffect {
 
-	public static IAlleleButterflyEffect butterflyNone;
+    public static IAlleleButterflyEffect butterflyNone;
 
-	public static void createAlleles() {
-		butterflyNone = new AlleleButterflyEffectNone();
-		AlleleManager.alleleRegistry.registerAllele(butterflyNone, EnumButterflyChromosome.EFFECT);
-	}
+    public static void createAlleles() {
+        butterflyNone = new AlleleButterflyEffectNone();
+        AlleleManager.alleleRegistry.registerAllele(butterflyNone, EnumButterflyChromosome.EFFECT);
+    }
 
-	protected AlleleButterflyEffect(String valueName, boolean isDominant) {
-		super("forestry", "bf", valueName, isDominant);
-	}
+    protected AlleleButterflyEffect(String valueName, boolean isDominant) {
+        super("forestry", "bf", valueName, isDominant);
+    }
 
-	@Override
-	public boolean isCombinable() {
-		return true;
-	}
+    @Override
+    public boolean isCombinable() {
+        return true;
+    }
 
-	@Override
-	public IEffectData validateStorage(IEffectData storedData) {
-		return null;
-	}
+    @Override
+    public IEffectData validateStorage(IEffectData storedData) {
+        return null;
+    }
 
-	@Override
-	public IEffectData doEffect(IEntityButterfly butterfly, IEffectData storedData) {
-		return storedData;
-	}
-
+    @Override
+    public IEffectData doEffect(IEntityButterfly butterfly, IEffectData storedData) {
+        return storedData;
+    }
 }

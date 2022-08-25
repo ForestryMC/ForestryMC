@@ -11,14 +11,7 @@
 package forestry.plugins.compat;
 
 import com.google.common.collect.ImmutableList;
-
-import forestry.farming.logic.FarmableReference;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.registry.GameRegistry;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.fuels.FuelManager;
@@ -30,379 +23,396 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
+import forestry.farming.logic.FarmableReference;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 
-@Plugin(pluginID = "HarvestCraft", name = "HarvestCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.harvestcraft.description")
+@Plugin(
+        pluginID = "HarvestCraft",
+        name = "HarvestCraft",
+        author = "Nirek",
+        url = Constants.URL,
+        unlocalizedDescription = "for.plugin.harvestcraft.description")
 public class PluginHarvestCraft extends ForestryPlugin {
 
-	private static final String HC = "harvestcraft";
-	private static final String HCN = "harvestthenether";
+    private static final String HC = "harvestcraft";
+    private static final String HCN = "harvestthenether";
 
-	@Override
-	public boolean isAvailable() {
-		return ModUtil.isModLoaded(HC);
-	}
+    @Override
+    public boolean isAvailable() {
+        return ModUtil.isModLoaded(HC);
+    }
 
-	@Override
-	public String getFailMessage() {
-		return "HarvestCraft not found";
-	}
+    @Override
+    public String getFailMessage() {
+        return "HarvestCraft not found";
+    }
 
-	@Override
-	protected void registerRecipes() {
+    @Override
+    protected void registerRecipes() {
 
-		ImmutableList<String> berries = ImmutableList.of(
-				"cranberry",
-				"blackberry",
-				"blueberry",
-				"raspberry",
-				"strawberry"
-		);
+        ImmutableList<String> berries =
+                ImmutableList.of("cranberry", "blackberry", "blueberry", "raspberry", "strawberry");
 
-		ImmutableList<String> fruits = ImmutableList.of(
-				"pineapple",
-				"cactusfruit",
-				"cantaloupe",
-				"grape",
-				"kiwi",
-				"chilipepper"
-		);
+        ImmutableList<String> fruits =
+                ImmutableList.of("pineapple", "cactusfruit", "cantaloupe", "grape", "kiwi", "chilipepper");
 
-		ImmutableList<String> treeFruits = ImmutableList.of(
-				"banana",
-				"dragonfruit",
-				"lemon",
-				"lime",
-				"mango",
-				"orange",
-				"papaya",
-				"peach",
-				"pear",
-				"plum",
-				"pomegranate",
-				"starfruit",
-				"apricot",
-				"date",
-				"fig",
-				"grapefruit",
-				"persimmon",
-				"avocado",
-				"coconut",
-				"durian",
-				"gooseberry"
-		);
+        ImmutableList<String> treeFruits = ImmutableList.of(
+                "banana",
+                "dragonfruit",
+                "lemon",
+                "lime",
+                "mango",
+                "orange",
+                "papaya",
+                "peach",
+                "pear",
+                "plum",
+                "pomegranate",
+                "starfruit",
+                "apricot",
+                "date",
+                "fig",
+                "grapefruit",
+                "persimmon",
+                "avocado",
+                "coconut",
+                "durian",
+                "gooseberry");
 
-		ImmutableList<String> trees = ImmutableList.of(
-				"nutmeg",
-				"olive",
-				"peppercorn"
-		);
+        ImmutableList<String> trees = ImmutableList.of("nutmeg", "olive", "peppercorn");
 
-		ImmutableList<String> treesSpecial = ImmutableList.of(
-				"cinnamon",
-				"maple",
-				"paperbark",
-				"vanillabean",
-				"apple" // to prevent apples from getting double registered
-		);
+        ImmutableList<String> treesSpecial = ImmutableList.of(
+                "cinnamon",
+                "maple",
+                "paperbark",
+                "vanillabean",
+                "apple" // to prevent apples from getting double registered
+                );
 
-		ImmutableList<String> herbs = ImmutableList.of(
-				"garlic"
-		);
+        ImmutableList<String> herbs = ImmutableList.of("garlic");
 
-		ImmutableList<String> spices = ImmutableList.of(
-				"ginger",
-				"spiceleaf",
-				"curryleaf"
-				//"mustardseed" Mustard is inconsistent and annoying.
-		);
+        ImmutableList<String> spices = ImmutableList.of(
+                "ginger", "spiceleaf", "curryleaf"
+                // "mustardseed" Mustard is inconsistent and annoying.
+                );
 
-		ImmutableList<String> vegetables = ImmutableList.of(
-				"asparagus",
-				"bean",
-				"beet",
-				"broccoli",
-				"cauliflower",
-				"celery",
-				"leek",
-				"lettuce",
-				"onion",
-				"parsnip",
-				"radish",
-				"rutabaga",
-				"scallion",
-				"soybean",
-				"sweetpotato",
-				"turnip",
-				"whitemushroom",
-				"artichoke",
-				"bellpepper",
-				"brusselsprout",
-				"cabbage",
-				"corn",
-				"cucumber",
-				"eggplant",
-				"okra",
-				"peas",
-				"rhubarb",
-				"seaweed",
-				"tomato",
-				"wintersquash",
-				"zucchini",
-				"bambooshoot",
-				"spinach",
-				"waterchestnut"
-		);
+        ImmutableList<String> vegetables = ImmutableList.of(
+                "asparagus",
+                "bean",
+                "beet",
+                "broccoli",
+                "cauliflower",
+                "celery",
+                "leek",
+                "lettuce",
+                "onion",
+                "parsnip",
+                "radish",
+                "rutabaga",
+                "scallion",
+                "soybean",
+                "sweetpotato",
+                "turnip",
+                "whitemushroom",
+                "artichoke",
+                "bellpepper",
+                "brusselsprout",
+                "cabbage",
+                "corn",
+                "cucumber",
+                "eggplant",
+                "okra",
+                "peas",
+                "rhubarb",
+                "seaweed",
+                "tomato",
+                "wintersquash",
+                "zucchini",
+                "bambooshoot",
+                "spinach",
+                "waterchestnut");
 
-		ImmutableList<String> grains = ImmutableList.of(
-				"barley",
-				"oats",
-				"rye"
-		);
+        ImmutableList<String> grains = ImmutableList.of("barley", "oats", "rye");
 
-		ImmutableList<String> cropNuts = ImmutableList.of(
-				"peanut",
-				"sesameseeds"
-		);
+        ImmutableList<String> cropNuts = ImmutableList.of("peanut", "sesameseeds");
 
-		ImmutableList<String> nuts = ImmutableList.of(
-				"walnut",
-				"almond",
-				"cashew",
-				"chestnut",
-				"pecan",
-				"pistachio",
-				"cherry" //Cherries in forestry make seed oil
-		);
+        ImmutableList<String> nuts = ImmutableList.of(
+                "walnut",
+                "almond",
+                "cashew",
+                "chestnut",
+                "pecan",
+                "pistachio",
+                "cherry" // Cherries in forestry make seed oil
+                );
 
-		ImmutableList.Builder<String> genericCropsBuilder = ImmutableList.builder();
-		genericCropsBuilder.add(
-				"cotton",
-				"rice",
-				"tea",
-				"coffee",
-				"candleberry"
-		);
-		genericCropsBuilder.addAll(herbs);
-		genericCropsBuilder.addAll(spices);
+        ImmutableList.Builder<String> genericCropsBuilder = ImmutableList.builder();
+        genericCropsBuilder.add("cotton", "rice", "tea", "coffee", "candleberry");
+        genericCropsBuilder.addAll(herbs);
+        genericCropsBuilder.addAll(spices);
 
-		ImmutableList<String> genericCrops = genericCropsBuilder.build();
+        ImmutableList<String> genericCrops = genericCropsBuilder.build();
 
-		// Pam's Harvest The Nether Crops
-		ImmutableList.Builder<String> genericNetherCropsBuilder = ImmutableList.builder();
-		genericNetherCropsBuilder.add(
-				"glowflower",
-				"fleshroot",
-				"bloodleaf",
-				"marrowberry"
-		);
-		
-		ImmutableList<String> genericNetherCrops = genericNetherCropsBuilder.build();
+        // Pam's Harvest The Nether Crops
+        ImmutableList.Builder<String> genericNetherCropsBuilder = ImmutableList.builder();
+        genericNetherCropsBuilder.add("glowflower", "fleshroot", "bloodleaf", "marrowberry");
 
-		ImmutableList.Builder<String> plants = ImmutableList.builder();
+        ImmutableList<String> genericNetherCrops = genericNetherCropsBuilder.build();
 
-		int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
-		int seedamount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-		ItemStack wheatamount = ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat");
+        ImmutableList.Builder<String> plants = ImmutableList.builder();
 
-		juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
-		for (String berryName : berries) {
-			ItemStack berry = GameRegistry.findItemStack(HC, berryName + "Item", 1);
-			ItemStack berrySeed = GameRegistry.findItemStack(HC, berryName + "seedItem", 1);
-			Block berryBlock = GameRegistry.findBlock(HC, "pam" + berryName + "Crop");
-			if (berry != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{berry}, Fluids.JUICE.getFluid(juiceAmount));
-			}
-			if (berrySeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{berrySeed}, Fluids.SEEDOIL.getFluid(seedamount));
-			}
-			if (PluginManager.Module.FARMING.isEnabled() && berrySeed != null && berryBlock != null) {
-				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(berrySeed, berryBlock, 7));
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(berryBlock, 7));
-			}
-			plants.add(berryName);
-		}
+        int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 25;
+        int seedamount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+        ItemStack wheatamount = ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat");
 
-		juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
-		for (String fruitName : fruits) {
-			ItemStack fruit = GameRegistry.findItemStack(HC, fruitName + "Item", 1);
-			ItemStack fruitSeed = GameRegistry.findItemStack(HC, fruitName + "seedItem", 1);
-			Block fruitBlock = GameRegistry.findBlock(HC, "pam" + fruitName + "Crop");
-			if (fruit != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{fruit}, Fluids.JUICE.getFluid(juiceAmount));
-			}
-			if (fruitSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{fruitSeed}, Fluids.SEEDOIL.getFluid(seedamount));
-			}
-			if (PluginManager.Module.FARMING.isEnabled() && fruitSeed != null && fruitBlock != null) {
-				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(fruitSeed, fruitBlock, 7));
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(fruitBlock, 7));
-			}
-			plants.add(fruitName);
-		}
+        juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
+        for (String berryName : berries) {
+            ItemStack berry = GameRegistry.findItemStack(HC, berryName + "Item", 1);
+            ItemStack berrySeed = GameRegistry.findItemStack(HC, berryName + "seedItem", 1);
+            Block berryBlock = GameRegistry.findBlock(HC, "pam" + berryName + "Crop");
+            if (berry != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {berry}, Fluids.JUICE.getFluid(juiceAmount));
+            }
+            if (berrySeed != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {berrySeed}, Fluids.SEEDOIL.getFluid(seedamount));
+            }
+            if (PluginManager.Module.FARMING.isEnabled() && berrySeed != null && berryBlock != null) {
+                Farmables.farmables
+                        .get(FarmableReference.Wheat.get())
+                        .add(new FarmableGenericCrop(berrySeed, berryBlock, 7));
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(berryBlock, 7));
+            }
+            plants.add(berryName);
+        }
 
-		juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2; // vegetables produce less juice
-		juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
-		for (String vegetableName : vegetables) {
-			ItemStack vegetable = GameRegistry.findItemStack(HC, vegetableName + "Item", 1);
-			ItemStack vegetableSeed = GameRegistry.findItemStack(HC, vegetableName + "seedItem", 1);
-			Block vegetableBlock = GameRegistry.findBlock(HC, "pam" + vegetableName + "Crop");
-			if (vegetable != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{vegetable}, Fluids.JUICE.getFluid(juiceAmount));
-			}
-			if (vegetableSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{vegetableSeed}, Fluids.SEEDOIL.getFluid(seedamount));
-			}
-			if (PluginManager.Module.FARMING.isEnabled() && vegetableSeed != null && vegetableBlock != null) {
-				Farmables.farmables.get(FarmableReference.Vegetables.get()).add(new FarmableGenericCrop(vegetableSeed, vegetableBlock, 7));
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(vegetableBlock, 7));
-			}
-			plants.add(vegetableName);
-		}
+        juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
+        for (String fruitName : fruits) {
+            ItemStack fruit = GameRegistry.findItemStack(HC, fruitName + "Item", 1);
+            ItemStack fruitSeed = GameRegistry.findItemStack(HC, fruitName + "seedItem", 1);
+            Block fruitBlock = GameRegistry.findBlock(HC, "pam" + fruitName + "Crop");
+            if (fruit != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {fruit}, Fluids.JUICE.getFluid(juiceAmount));
+            }
+            if (fruitSeed != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {fruitSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+            }
+            if (PluginManager.Module.FARMING.isEnabled() && fruitSeed != null && fruitBlock != null) {
+                Farmables.farmables
+                        .get(FarmableReference.Wheat.get())
+                        .add(new FarmableGenericCrop(fruitSeed, fruitBlock, 7));
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(fruitBlock, 7));
+            }
+            plants.add(fruitName);
+        }
 
-		for (String grainName : grains) {
-			ItemStack grain = GameRegistry.findItemStack(HC, grainName + "Item", 1);
-			ItemStack grainSeed = GameRegistry.findItemStack(HC, grainName + "seedItem", 1);
-			Block grainBlock = GameRegistry.findBlock(HC, "pam" + grainName + "Crop");
-			if (grain != null && wheatamount.stackSize > 0) {
-				RecipeUtil.addRecipe(wheatamount, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', grain);
-				FuelManager.moistenerResource.put(grain, new MoistenerFuel(grain, PluginCore.items.mouldyWheat.getItemStack(), 0, 300));
-			}
-			if (grainSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{grainSeed}, Fluids.SEEDOIL.getFluid(seedamount));
-				RecipeManagers.moistenerManager.addRecipe(grainSeed, new ItemStack(Blocks.mycelium), 5000);
-			}
-			if (PluginManager.Module.FARMING.isEnabled() && grainSeed != null && grainBlock != null) {
-				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(grainSeed, grainBlock, 7));
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(grainBlock, 7));
-			}
-			plants.add(grainName);
-		}
+        juiceAmount =
+                ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2; // vegetables produce less juice
+        juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
+        for (String vegetableName : vegetables) {
+            ItemStack vegetable = GameRegistry.findItemStack(HC, vegetableName + "Item", 1);
+            ItemStack vegetableSeed = GameRegistry.findItemStack(HC, vegetableName + "seedItem", 1);
+            Block vegetableBlock = GameRegistry.findBlock(HC, "pam" + vegetableName + "Crop");
+            if (vegetable != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {vegetable}, Fluids.JUICE.getFluid(juiceAmount));
+            }
+            if (vegetableSeed != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {vegetableSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+            }
+            if (PluginManager.Module.FARMING.isEnabled() && vegetableSeed != null && vegetableBlock != null) {
+                Farmables.farmables
+                        .get(FarmableReference.Vegetables.get())
+                        .add(new FarmableGenericCrop(vegetableSeed, vegetableBlock, 7));
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(vegetableBlock, 7));
+            }
+            plants.add(vegetableName);
+        }
 
-		for (String treeFruitName : treeFruits) {
-			ItemStack treeFruit = GameRegistry.findItemStack(HC, treeFruitName + "Item", 1);
-			Block treeFruitBlock = GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(treeFruitName.charAt(0)) + treeFruitName.substring(1)));
-			if (PluginManager.Module.FARMING.isEnabled() && treeFruitBlock != null) {
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(treeFruitBlock, 2));
-			}
-			if (treeFruit != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{treeFruit}, Fluids.JUICE.getFluid(juiceAmount));
-			}
-			plants.add(treeFruitName);
-		}
+        for (String grainName : grains) {
+            ItemStack grain = GameRegistry.findItemStack(HC, grainName + "Item", 1);
+            ItemStack grainSeed = GameRegistry.findItemStack(HC, grainName + "seedItem", 1);
+            Block grainBlock = GameRegistry.findBlock(HC, "pam" + grainName + "Crop");
+            if (grain != null && wheatamount.stackSize > 0) {
+                RecipeUtil.addRecipe(wheatamount, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', grain);
+                FuelManager.moistenerResource.put(
+                        grain, new MoistenerFuel(grain, PluginCore.items.mouldyWheat.getItemStack(), 0, 300));
+            }
+            if (grainSeed != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {grainSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+                RecipeManagers.moistenerManager.addRecipe(grainSeed, new ItemStack(Blocks.mycelium), 5000);
+            }
+            if (PluginManager.Module.FARMING.isEnabled() && grainSeed != null && grainBlock != null) {
+                Farmables.farmables
+                        .get(FarmableReference.Wheat.get())
+                        .add(new FarmableGenericCrop(grainSeed, grainBlock, 7));
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(grainBlock, 7));
+            }
+            plants.add(grainName);
+        }
 
-		for (String treeName : trees) {
-			Block fruitBlock = GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(treeName.charAt(0)) + treeName.substring(1)));
-			if (PluginManager.Module.FARMING.isEnabled() && fruitBlock != null) {
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(fruitBlock, 2));
-			}
-			plants.add(treeName);
-		}
+        for (String treeFruitName : treeFruits) {
+            ItemStack treeFruit = GameRegistry.findItemStack(HC, treeFruitName + "Item", 1);
+            Block treeFruitBlock = GameRegistry.findBlock(
+                    HC, "pam" + (Character.toUpperCase(treeFruitName.charAt(0)) + treeFruitName.substring(1)));
+            if (PluginManager.Module.FARMING.isEnabled() && treeFruitBlock != null) {
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(treeFruitBlock, 2));
+            }
+            if (treeFruit != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {treeFruit}, Fluids.JUICE.getFluid(juiceAmount));
+            }
+            plants.add(treeFruitName);
+        }
 
-		for (String treeName : treesSpecial) {
-			Block fruitBlock = GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(treeName.charAt(0)) + treeName.substring(1)));
-			if (PluginManager.Module.FARMING.isEnabled() && fruitBlock != null) {
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(fruitBlock, 2));
-			}
-		}
+        for (String treeName : trees) {
+            Block fruitBlock = GameRegistry.findBlock(
+                    HC, "pam" + (Character.toUpperCase(treeName.charAt(0)) + treeName.substring(1)));
+            if (PluginManager.Module.FARMING.isEnabled() && fruitBlock != null) {
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(fruitBlock, 2));
+            }
+            plants.add(treeName);
+        }
 
-		for (String cropName : genericCrops) {
-			ItemStack genericCropSeed = GameRegistry.findItemStack(HC, cropName + "seedItem", 1);
-			Block genericCropBlock = GameRegistry.findBlock(HC, "pam" + cropName + "Crop");
-			if (genericCropSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{genericCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
-			}
-			if (PluginManager.Module.FARMING.isEnabled() && genericCropSeed != null && genericCropBlock != null) {
-				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(genericCropSeed, genericCropBlock, 7));
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(genericCropBlock, 7));
-			}
-			plants.add(cropName);
-		}
+        for (String treeName : treesSpecial) {
+            Block fruitBlock = GameRegistry.findBlock(
+                    HC, "pam" + (Character.toUpperCase(treeName.charAt(0)) + treeName.substring(1)));
+            if (PluginManager.Module.FARMING.isEnabled() && fruitBlock != null) {
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(fruitBlock, 2));
+            }
+        }
 
-		ItemStack mustardCropSeed = GameRegistry.findItemStack(HC, "mustard" + "seedItem", 1);
-		Block mustardCropBlock = GameRegistry.findBlock(HC, "pam" + "mustardseeds" + "Crop");
-		ItemStack mustardFruit = GameRegistry.findItemStack(HC, "mustard" + "seedsItem", 1);
-		if (mustardCropSeed != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{mustardCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
-		}
-		if (PluginManager.Module.FARMING.isEnabled() && mustardCropSeed != null && mustardCropBlock != null) {
-			Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(mustardCropSeed, mustardCropBlock, 7));
-			Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(mustardCropBlock, 7));
-		}
-		if (mustardFruit != null) {
-			RecipeUtil.addFermenterRecipes(mustardFruit, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-		}
+        for (String cropName : genericCrops) {
+            ItemStack genericCropSeed = GameRegistry.findItemStack(HC, cropName + "seedItem", 1);
+            Block genericCropBlock = GameRegistry.findBlock(HC, "pam" + cropName + "Crop");
+            if (genericCropSeed != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {genericCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+            }
+            if (PluginManager.Module.FARMING.isEnabled() && genericCropSeed != null && genericCropBlock != null) {
+                Farmables.farmables
+                        .get(FarmableReference.Wheat.get())
+                        .add(new FarmableGenericCrop(genericCropSeed, genericCropBlock, 7));
+                Farmables.farmables
+                        .get(FarmableReference.Orchard.get())
+                        .add(new FarmableBasicFruit(genericCropBlock, 7));
+            }
+            plants.add(cropName);
+        }
 
-		for (String plantName : plants.build()) {
-			ItemStack plant = GameRegistry.findItemStack(HC, plantName + "Item", 1);
-			if (plant != null) {
-				RecipeUtil.addFermenterRecipes(plant, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-			}
-		}
+        ItemStack mustardCropSeed = GameRegistry.findItemStack(HC, "mustard" + "seedItem", 1);
+        Block mustardCropBlock = GameRegistry.findBlock(HC, "pam" + "mustardseeds" + "Crop");
+        ItemStack mustardFruit = GameRegistry.findItemStack(HC, "mustard" + "seedsItem", 1);
+        if (mustardCropSeed != null) {
+            RecipeManagers.squeezerManager.addRecipe(
+                    10, new ItemStack[] {mustardCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+        }
+        if (PluginManager.Module.FARMING.isEnabled() && mustardCropSeed != null && mustardCropBlock != null) {
+            Farmables.farmables
+                    .get(FarmableReference.Wheat.get())
+                    .add(new FarmableGenericCrop(mustardCropSeed, mustardCropBlock, 7));
+            Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(mustardCropBlock, 7));
+        }
+        if (mustardFruit != null) {
+            RecipeUtil.addFermenterRecipes(
+                    mustardFruit, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+        }
 
-		for (String cropnutName : cropNuts) {
-			ItemStack cropnut = GameRegistry.findItemStack(HC, cropnutName + "Item", 1);
-			ItemStack cropnutSeed = GameRegistry.findItemStack(HC, cropnutName + "seedItem", 1);
-			Block cropnutBlock = GameRegistry.findBlock(HC, "pam" + cropnutName + "Crop");
-			if (cropnutSeed != null) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{cropnutSeed}, Fluids.SEEDOIL.getFluid(seedamount));
-			}
-			if (PluginManager.Module.FARMING.isEnabled() && cropnutSeed != null && cropnutBlock != null) {
-				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(cropnutSeed, cropnutBlock, 7));
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(cropnutBlock, 7));
-			}
-			if (cropnut != null) {
-				RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{cropnut}, Fluids.SEEDOIL.getFluid(12 * seedamount));
-			}
-		}
+        for (String plantName : plants.build()) {
+            ItemStack plant = GameRegistry.findItemStack(HC, plantName + "Item", 1);
+            if (plant != null) {
+                RecipeUtil.addFermenterRecipes(
+                        plant, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+            }
+        }
 
-		for (String nutName : nuts) {
-			ItemStack nut = GameRegistry.findItemStack(HC, nutName + "Item", 1);
-			Block nutBlock = GameRegistry.findBlock(HC, "pam" + (Character.toUpperCase(nutName.charAt(0)) + nutName.substring(1)));
-			if (PluginManager.Module.FARMING.isEnabled() && nutBlock != null) {
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(nutBlock, 2));
-			}
-			if (nut != null) {
-				RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{nut}, Fluids.SEEDOIL.getFluid(15 * seedamount));
-			}
-		}
+        for (String cropnutName : cropNuts) {
+            ItemStack cropnut = GameRegistry.findItemStack(HC, cropnutName + "Item", 1);
+            ItemStack cropnutSeed = GameRegistry.findItemStack(HC, cropnutName + "seedItem", 1);
+            Block cropnutBlock = GameRegistry.findBlock(HC, "pam" + cropnutName + "Crop");
+            if (cropnutSeed != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {cropnutSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+            }
+            if (PluginManager.Module.FARMING.isEnabled() && cropnutSeed != null && cropnutBlock != null) {
+                Farmables.farmables
+                        .get(FarmableReference.Wheat.get())
+                        .add(new FarmableGenericCrop(cropnutSeed, cropnutBlock, 7));
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(cropnutBlock, 7));
+            }
+            if (cropnut != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        20, new ItemStack[] {cropnut}, Fluids.SEEDOIL.getFluid(12 * seedamount));
+            }
+        }
 
-		ItemStack hcHoneyItem = GameRegistry.findItemStack(HC, "honeyItem", 1);
-		if (hcHoneyItem != null) {
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{hcHoneyItem}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
-		}
+        for (String nutName : nuts) {
+            ItemStack nut = GameRegistry.findItemStack(HC, nutName + "Item", 1);
+            Block nutBlock = GameRegistry.findBlock(
+                    HC, "pam" + (Character.toUpperCase(nutName.charAt(0)) + nutName.substring(1)));
+            if (PluginManager.Module.FARMING.isEnabled() && nutBlock != null) {
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(nutBlock, 2));
+            }
+            if (nut != null) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        20, new ItemStack[] {nut}, Fluids.SEEDOIL.getFluid(15 * seedamount));
+            }
+        }
 
-		ItemStack hcBeeswaxItem = GameRegistry.findItemStack(HC, "beeswaxItem", 1);
-		if (hcBeeswaxItem != null) {
-			RecipeUtil.addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.capsule"), "XXX ", 'X', hcBeeswaxItem);
-		}
+        ItemStack hcHoneyItem = GameRegistry.findItemStack(HC, "honeyItem", 1);
+        if (hcHoneyItem != null) {
+            RecipeManagers.squeezerManager.addRecipe(
+                    10, new ItemStack[] {hcHoneyItem}, Fluids.HONEY.getFluid(Constants.FLUID_PER_HONEY_DROP));
+        }
 
-		// Recipe registering for Pam's Harvest the Nether
-		if (ModUtil.isModLoaded(HCN)) {
-			for (String netherCropName : genericNetherCrops) {
-				ItemStack genericNetherCropSeed = GameRegistry.findItemStack(HCN, netherCropName + "seedItem", 1);
-				Block genericNetherCropBlock = GameRegistry.findBlock(HCN, netherCropName + "Crop");
-				if (genericNetherCropSeed != null) {
-					RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{genericNetherCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
-				}
+        ItemStack hcBeeswaxItem = GameRegistry.findItemStack(HC, "beeswaxItem", 1);
+        if (hcBeeswaxItem != null) {
+            RecipeUtil.addRecipe(
+                    ForestryAPI.activeMode.getStackSetting("recipe.output.capsule"), "XXX ", 'X', hcBeeswaxItem);
+        }
 
-				if (PluginManager.Module.FARMING.isEnabled() && genericNetherCropSeed != null && genericNetherCropBlock != null) {
-					// Add all crops to orchard farms
-					Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(genericNetherCropBlock, 7));
-					
-					if (netherCropName == "glowflower") {
-						// Add glowflowers to managed and manual crop farms
-						Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
-					} else {
-						// Add every other crop to infernal farms, since they only grow on soul sand
-						Farmables.farmables.get(FarmableReference.Infernal.get()).add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
-					}
-				}
-			}
-		}
-	}
+        // Recipe registering for Pam's Harvest the Nether
+        if (ModUtil.isModLoaded(HCN)) {
+            for (String netherCropName : genericNetherCrops) {
+                ItemStack genericNetherCropSeed = GameRegistry.findItemStack(HCN, netherCropName + "seedItem", 1);
+                Block genericNetherCropBlock = GameRegistry.findBlock(HCN, netherCropName + "Crop");
+                if (genericNetherCropSeed != null) {
+                    RecipeManagers.squeezerManager.addRecipe(
+                            10, new ItemStack[] {genericNetherCropSeed}, Fluids.SEEDOIL.getFluid(seedamount));
+                }
 
+                if (PluginManager.Module.FARMING.isEnabled()
+                        && genericNetherCropSeed != null
+                        && genericNetherCropBlock != null) {
+                    // Add all crops to orchard farms
+                    Farmables.farmables
+                            .get(FarmableReference.Orchard.get())
+                            .add(new FarmableBasicFruit(genericNetherCropBlock, 7));
+
+                    if (netherCropName == "glowflower") {
+                        // Add glowflowers to managed and manual crop farms
+                        Farmables.farmables
+                                .get(FarmableReference.Wheat.get())
+                                .add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
+                    } else {
+                        // Add every other crop to infernal farms, since they only grow on soul sand
+                        Farmables.farmables
+                                .get(FarmableReference.Infernal.get())
+                                .add(new FarmableGenericCrop(genericNetherCropSeed, genericNetherCropBlock, 7));
+                    }
+                }
+            }
+        }
+    }
 }

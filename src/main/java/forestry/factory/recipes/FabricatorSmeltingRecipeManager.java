@@ -10,69 +10,66 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IFabricatorSmeltingManager;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.core.utils.ItemStackUtil;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.IFabricatorSmeltingManager;
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.core.utils.ItemStackUtil;
-
 public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
-	public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();
+    public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();
 
-	public static IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
-		if (resource == null) {
-			return null;
-		}
+    public static IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
+        if (resource == null) {
+            return null;
+        }
 
-		for (IFabricatorSmeltingRecipe smelting : recipes) {
-			if (ItemStackUtil.isCraftingEquivalent(smelting.getResource(), resource)) {
-				return smelting;
-			}
-		}
+        for (IFabricatorSmeltingRecipe smelting : recipes) {
+            if (ItemStackUtil.isCraftingEquivalent(smelting.getResource(), resource)) {
+                return smelting;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
-		if (resource == null || molten == null) {
-			return;
-		}
-		addRecipe(new FabricatorSmeltingRecipe(resource, molten, meltingPoint));
-	}
+    @Override
+    public void addSmelting(ItemStack resource, FluidStack molten, int meltingPoint) {
+        if (resource == null || molten == null) {
+            return;
+        }
+        addRecipe(new FabricatorSmeltingRecipe(resource, molten, meltingPoint));
+    }
 
-	@Override
-	public boolean addRecipe(IFabricatorSmeltingRecipe recipe) {
-		return recipes.add(recipe);
-	}
+    @Override
+    public boolean addRecipe(IFabricatorSmeltingRecipe recipe) {
+        return recipes.add(recipe);
+    }
 
-	@Override
-	public boolean removeRecipe(IFabricatorSmeltingRecipe recipe) {
-		return recipes.remove(recipe);
-	}
+    @Override
+    public boolean removeRecipe(IFabricatorSmeltingRecipe recipe) {
+        return recipes.remove(recipe);
+    }
 
-	@Override
-	public Collection<IFabricatorSmeltingRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
-	}
+    @Override
+    public Collection<IFabricatorSmeltingRecipe> recipes() {
+        return Collections.unmodifiableSet(recipes);
+    }
 
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
+    @Override
+    public Map<Object[], Object[]> getRecipes() {
+        HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
-		for (IFabricatorSmeltingRecipe recipe : recipes) {
-			recipeList.put(new Object[]{recipe.getResource()}, new Object[]{recipe.getProduct()});
-		}
+        for (IFabricatorSmeltingRecipe recipe : recipes) {
+            recipeList.put(new Object[] {recipe.getResource()}, new Object[] {recipe.getProduct()});
+        }
 
-		return recipeList;
-	}
+        return recipeList;
+    }
 }

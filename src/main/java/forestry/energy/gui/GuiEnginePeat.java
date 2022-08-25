@@ -10,26 +10,25 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.energy.tiles.TileEnginePeat;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiEnginePeat extends GuiEngine<ContainerEnginePeat, TileEnginePeat> {
 
-	public GuiEnginePeat(InventoryPlayer inventory, TileEnginePeat tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEnginePeat(inventory, tile), tile);
-	}
+    public GuiEnginePeat(InventoryPlayer inventory, TileEnginePeat tile) {
+        super(Constants.TEXTURE_PATH_GUI + "/peatengine.png", new ContainerEnginePeat(inventory, tile), tile);
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-		TileEnginePeat engine = inventory;
-		int progress;
-		if (engine.isBurning()) {
-			progress = engine.getBurnTimeRemainingScaled(12);
-			this.drawTexturedModalRect(guiLeft + 45, guiTop + 27 + 12 - progress, 176, 12 - progress, 14, progress + 2);
-		}
-	}
+        TileEnginePeat engine = inventory;
+        int progress;
+        if (engine.isBurning()) {
+            progress = engine.getBurnTimeRemainingScaled(12);
+            this.drawTexturedModalRect(guiLeft + 45, guiTop + 27 + 12 - progress, 176, 12 - progress, 14, progress + 2);
+        }
+    }
 }

@@ -17,33 +17,32 @@ import net.minecraft.util.EnumChatFormatting;
  */
 public class ToolTipLine {
 
-	private final String text;
-	private final EnumChatFormatting color;
-	private final int spacing;
+    private final String text;
+    private final EnumChatFormatting color;
+    private final int spacing;
 
-	public ToolTipLine(String text, EnumChatFormatting color, int spacing) {
-		this.text = text;
-		this.color = color;
-		this.spacing = spacing;
-	}
+    public ToolTipLine(String text, EnumChatFormatting color, int spacing) {
+        this.text = text;
+        this.color = color;
+        this.spacing = spacing;
+    }
 
-	public ToolTipLine(String text) {
-		this(text, null, 0);
-	}
+    public ToolTipLine(String text) {
+        this(text, null, 0);
+    }
 
-	public ToolTipLine() {
-		this("", null, 0);
-	}
+    public ToolTipLine() {
+        this("", null, 0);
+    }
 
-	public int getSpacing() {
-		return spacing;
-	}
+    public int getSpacing() {
+        return spacing;
+    }
 
-	public String toString() {
-		if (color == null) {
-			return text;
-		}
-		return color + text;
-	}
-
+    public String toString() {
+        if (color == null) {
+            return text;
+        }
+        return color + text;
+    }
 }

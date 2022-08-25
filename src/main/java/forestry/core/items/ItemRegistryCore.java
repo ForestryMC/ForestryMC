@@ -10,183 +10,181 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.core.Tabs;
 import forestry.core.circuits.ItemCircuitBoard;
 import forestry.core.genetics.ItemResearchNote;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryCore extends ItemRegistry {
-	/* Fertilizer */
-	public final ItemForestry fertilizerBio;
-	public final ItemForestryBonemeal fertilizerCompound;
+    /* Fertilizer */
+    public final ItemForestry fertilizerBio;
+    public final ItemForestryBonemeal fertilizerCompound;
 
-	/* Gems */
-	public final ItemForestry apatite;
+    /* Gems */
+    public final ItemForestry apatite;
 
-	/* Research */
-	public final ItemResearchNote researchNote;
+    /* Research */
+    public final ItemResearchNote researchNote;
 
-	/* Ingots */
-	public final ItemForestry ingotCopper;
-	public final ItemForestry ingotTin;
-	public final ItemForestry ingotBronze;
+    /* Ingots */
+    public final ItemForestry ingotCopper;
+    public final ItemForestry ingotTin;
+    public final ItemForestry ingotBronze;
 
-	/* Tools */
-	public final ItemWrench wrench;
-	public final ItemPipette pipette;
+    /* Tools */
+    public final ItemWrench wrench;
+    public final ItemPipette pipette;
 
-	/* Packaged Tools */
-	public final ItemForestry carton;
-	public final ItemForestry brokenBronzePickaxe;
-	public final ItemForestry brokenBronzeShovel;
-	public final ItemForestryTool bronzePickaxe;
-	public final ItemForestryTool bronzeShovel;
-	public final ItemAssemblyKit kitShovel;
-	public final ItemAssemblyKit kitPickaxe;
+    /* Packaged Tools */
+    public final ItemForestry carton;
+    public final ItemForestry brokenBronzePickaxe;
+    public final ItemForestry brokenBronzeShovel;
+    public final ItemForestryTool bronzePickaxe;
+    public final ItemForestryTool bronzeShovel;
+    public final ItemAssemblyKit kitShovel;
+    public final ItemAssemblyKit kitPickaxe;
 
-	/* Machine Parts */
-	public final ItemForestry sturdyCasing;
-	public final ItemForestry hardenedCasing;
-	public final ItemForestry impregnatedCasing;
-	public final ItemForestry gearBronze;
-	public final ItemForestry gearCopper;
-	public final ItemForestry gearTin;
+    /* Machine Parts */
+    public final ItemForestry sturdyCasing;
+    public final ItemForestry hardenedCasing;
+    public final ItemForestry impregnatedCasing;
+    public final ItemForestry gearBronze;
+    public final ItemForestry gearCopper;
+    public final ItemForestry gearTin;
 
-	/* Soldering */
-	public final ItemSolderingIron solderingIron;
-	public final ItemCircuitBoard circuitboards;
-	public final ItemElectronTube tubes;
+    /* Soldering */
+    public final ItemSolderingIron solderingIron;
+    public final ItemCircuitBoard circuitboards;
+    public final ItemElectronTube tubes;
 
-	/* Armor */
-	public final ItemArmorNaturalist spectacles;
+    /* Armor */
+    public final ItemArmorNaturalist spectacles;
 
-	/* Peat */
-	public final ItemForestry peat;
-	public final ItemForestry ash;
-	public final ItemForestry bituminousPeat;
+    /* Peat */
+    public final ItemForestry peat;
+    public final ItemForestry ash;
+    public final ItemForestry bituminousPeat;
 
-	/* Moistener */
-	public final ItemForestry mouldyWheat;
-	public final ItemForestry decayingWheat;
-	public final ItemForestry mulch;
+    /* Moistener */
+    public final ItemForestry mouldyWheat;
+    public final ItemForestry decayingWheat;
+    public final ItemForestry mulch;
 
-	/* Rainmaker */
-	public final ItemForestry iodineCharge;
-	public final ItemForestry phosphor;
+    /* Rainmaker */
+    public final ItemForestry iodineCharge;
+    public final ItemForestry phosphor;
 
-	/* Misc */
-	public final ItemCraftingMaterial craftingMaterial;
-	public final ItemForestry stickImpregnated;
-	public final ItemForestry woodPulp;
-	public final ItemForestry beeswax;
-	public final ItemForestry refractoryWax;
-	public final ItemFruit fruits;
-	
-	public ItemRegistryCore() {
-		fertilizerBio = registerItem(new ItemForestry(), "fertilizerBio");
-		fertilizerCompound = registerItem(new ItemForestryBonemeal(), "fertilizerCompound");
+    /* Misc */
+    public final ItemCraftingMaterial craftingMaterial;
+    public final ItemForestry stickImpregnated;
+    public final ItemForestry woodPulp;
+    public final ItemForestry beeswax;
+    public final ItemForestry refractoryWax;
+    public final ItemFruit fruits;
 
-		apatite = registerItem(new ItemForestry(), "apatite");
-		OreDictionary.registerOre("gemApatite", apatite);
+    public ItemRegistryCore() {
+        fertilizerBio = registerItem(new ItemForestry(), "fertilizerBio");
+        fertilizerCompound = registerItem(new ItemForestryBonemeal(), "fertilizerCompound");
 
-		researchNote = registerItem(new ItemResearchNote(), "researchNote");
+        apatite = registerItem(new ItemForestry(), "apatite");
+        OreDictionary.registerOre("gemApatite", apatite);
 
-		ingotCopper = registerItem(new ItemForestry(), "ingotCopper");
-		OreDictionary.registerOre("ingotCopper", ingotCopper);
-		
-		ingotTin = registerItem(new ItemForestry(), "ingotTin");
-		OreDictionary.registerOre("ingotTin", ingotTin);
-		
-		ingotBronze = registerItem(new ItemForestry(), "ingotBronze");
-		OreDictionary.registerOre("ingotBronze", ingotBronze);
+        researchNote = registerItem(new ItemResearchNote(), "researchNote");
 
-		wrench = registerItem(new ItemWrench(), "wrench");
-		pipette = registerItem(new ItemPipette(), "pipette");
+        ingotCopper = registerItem(new ItemForestry(), "ingotCopper");
+        OreDictionary.registerOre("ingotCopper", ingotCopper);
 
-		sturdyCasing = registerItem(new ItemForestry(), "sturdyMachine");
-		hardenedCasing = registerItem(new ItemForestry(), "hardenedMachine");
-		impregnatedCasing = registerItem(new ItemForestry(), "impregnatedCasing");
+        ingotTin = registerItem(new ItemForestry(), "ingotTin");
+        OreDictionary.registerOre("ingotTin", ingotTin);
 
-		craftingMaterial = registerItem(new ItemCraftingMaterial(), "craftingMaterial");
+        ingotBronze = registerItem(new ItemForestry(), "ingotBronze");
+        OreDictionary.registerOre("ingotBronze", ingotBronze);
 
-		spectacles = registerItem(new ItemArmorNaturalist(), "naturalistHelmet");
+        wrench = registerItem(new ItemWrench(), "wrench");
+        pipette = registerItem(new ItemPipette(), "pipette");
 
-		peat = registerItem(new ItemForestry(), "peat");
-		OreDictionary.registerOre("brickPeat", peat);
+        sturdyCasing = registerItem(new ItemForestry(), "sturdyMachine");
+        hardenedCasing = registerItem(new ItemForestry(), "hardenedMachine");
+        impregnatedCasing = registerItem(new ItemForestry(), "impregnatedCasing");
 
-		ash = registerItem(new ItemForestry(), "ash");
-		OreDictionary.registerOre("dustAsh", ash);
+        craftingMaterial = registerItem(new ItemCraftingMaterial(), "craftingMaterial");
 
-		bituminousPeat = registerItem(new ItemForestry(), "bituminousPeat");
+        spectacles = registerItem(new ItemArmorNaturalist(), "naturalistHelmet");
 
-		gearBronze = registerItem(new ItemForestry(), "gearBronze");
-		OreDictionary.registerOre("gearBronze", gearBronze);
-		gearCopper = registerItem(new ItemForestry(), "gearCopper");
-		OreDictionary.registerOre("gearCopper", gearCopper);
-		gearTin = registerItem(new ItemForestry(), "gearTin");
-		OreDictionary.registerOre("gearTin", gearTin);
+        peat = registerItem(new ItemForestry(), "peat");
+        OreDictionary.registerOre("brickPeat", peat);
 
-		circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
+        ash = registerItem(new ItemForestry(), "ash");
+        OreDictionary.registerOre("dustAsh", ash);
 
-		solderingIron = new ItemSolderingIron();
-		solderingIron.setMaxDamage(5).setFull3D();
-		registerItem(solderingIron, "solderingIron");
+        bituminousPeat = registerItem(new ItemForestry(), "bituminousPeat");
 
-		tubes = registerItem(new ItemElectronTube(), "thermionicTubes");
+        gearBronze = registerItem(new ItemForestry(), "gearBronze");
+        OreDictionary.registerOre("gearBronze", gearBronze);
+        gearCopper = registerItem(new ItemForestry(), "gearCopper");
+        OreDictionary.registerOre("gearCopper", gearCopper);
+        gearTin = registerItem(new ItemForestry(), "gearTin");
+        OreDictionary.registerOre("gearTin", gearTin);
 
-		// / CARTONS
-		carton = registerItem(new ItemForestry(), "carton");
+        circuitboards = registerItem(new ItemCircuitBoard(), "chipsets");
 
-		// / CRAFTING CARPENTER
-		stickImpregnated = registerItem(new ItemForestry(), "oakStick");
-		woodPulp = registerItem(new ItemForestry(), "woodPulp");
-		OreDictionary.registerOre("pulpWood", woodPulp);
+        solderingIron = new ItemSolderingIron();
+        solderingIron.setMaxDamage(5).setFull3D();
+        registerItem(solderingIron, "solderingIron");
 
-		// / RECLAMATION
-		brokenBronzePickaxe = registerItem(new ItemForestry(), "brokenBronzePickaxe");
-		brokenBronzeShovel = registerItem(new ItemForestry(), "brokenBronzeShovel");
+        tubes = registerItem(new ItemElectronTube(), "thermionicTubes");
 
-		// / TOOLS
-		bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe));
-		bronzePickaxe.setHarvestLevel("pickaxe", 3);
-		registerItem(bronzePickaxe, "bronzePickaxe");
+        // / CARTONS
+        carton = registerItem(new ItemForestry(), "carton");
 
-		bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel));
-		bronzeShovel.setHarvestLevel("shovel", 3);
-		registerItem(bronzeShovel, "bronzeShovel");
+        // / CRAFTING CARPENTER
+        stickImpregnated = registerItem(new ItemForestry(), "oakStick");
+        woodPulp = registerItem(new ItemForestry(), "woodPulp");
+        OreDictionary.registerOre("pulpWood", woodPulp);
 
-		// / ASSEMBLY KITS
-		kitShovel = new ItemAssemblyKit(new ItemStack(bronzeShovel));
-		registerItem(kitShovel, "kitShovel");
+        // / RECLAMATION
+        brokenBronzePickaxe = registerItem(new ItemForestry(), "brokenBronzePickaxe");
+        brokenBronzeShovel = registerItem(new ItemForestry(), "brokenBronzeShovel");
 
-		kitPickaxe = new ItemAssemblyKit(new ItemStack(bronzePickaxe));
-		registerItem(kitPickaxe, "kitPickaxe");
+        // / TOOLS
+        bronzePickaxe = new ItemForestryTool(new ItemStack(brokenBronzePickaxe));
+        bronzePickaxe.setHarvestLevel("pickaxe", 3);
+        registerItem(bronzePickaxe, "bronzePickaxe");
 
-		// / MOISTENER RESOURCES
-		mouldyWheat = registerItem(new ItemForestry(), "mouldyWheat");
-		decayingWheat = registerItem(new ItemForestry(), "decayingWheat");
-		mulch = registerItem(new ItemForestry(), "mulch");
+        bronzeShovel = new ItemForestryTool(new ItemStack(brokenBronzeShovel));
+        bronzeShovel.setHarvestLevel("shovel", 3);
+        registerItem(bronzeShovel, "bronzeShovel");
 
-		// / RAINMAKER SUBSTRATES
-		iodineCharge = registerItem(new ItemForestry(), "iodineCapsule");
+        // / ASSEMBLY KITS
+        kitShovel = new ItemAssemblyKit(new ItemStack(bronzeShovel));
+        registerItem(kitShovel, "kitShovel");
 
-		phosphor = registerItem(new ItemForestry(), "phosphor");
+        kitPickaxe = new ItemAssemblyKit(new ItemStack(bronzePickaxe));
+        registerItem(kitPickaxe, "kitPickaxe");
 
-		// / BEE RESOURCES
-		beeswax = registerItem(new ItemForestry(), "beeswax");
-		beeswax.setCreativeTab(Tabs.tabApiculture);
-		OreDictionary.registerOre("itemBeeswax", beeswax);
+        // / MOISTENER RESOURCES
+        mouldyWheat = registerItem(new ItemForestry(), "mouldyWheat");
+        decayingWheat = registerItem(new ItemForestry(), "decayingWheat");
+        mulch = registerItem(new ItemForestry(), "mulch");
 
-		refractoryWax = registerItem(new ItemForestry(), "refractoryWax");
+        // / RAINMAKER SUBSTRATES
+        iodineCharge = registerItem(new ItemForestry(), "iodineCapsule");
 
-		// FRUITS
-		fruits = registerItem(new ItemFruit(), "fruits");
-		for (ItemFruit.EnumFruit def : ItemFruit.EnumFruit.values()) {
-			ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
-			OreDictionary.registerOre(def.getOreDict(), fruit);
-		}
-	}
+        phosphor = registerItem(new ItemForestry(), "phosphor");
+
+        // / BEE RESOURCES
+        beeswax = registerItem(new ItemForestry(), "beeswax");
+        beeswax.setCreativeTab(Tabs.tabApiculture);
+        OreDictionary.registerOre("itemBeeswax", beeswax);
+
+        refractoryWax = registerItem(new ItemForestry(), "refractoryWax");
+
+        // FRUITS
+        fruits = registerItem(new ItemFruit(), "fruits");
+        for (ItemFruit.EnumFruit def : ItemFruit.EnumFruit.values()) {
+            ItemStack fruit = new ItemStack(fruits, 1, def.ordinal());
+            OreDictionary.registerOre(def.getOreDict(), fruit);
+        }
+    }
 }

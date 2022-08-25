@@ -16,31 +16,31 @@ import forestry.core.utils.StringUtil;
 
 public class CircuitLayout implements ICircuitLayout {
 
-	private final String uid;
-	private final ICircuitSocketType socketType;
+    private final String uid;
+    private final ICircuitSocketType socketType;
 
-	public CircuitLayout(String uid, ICircuitSocketType socketType) {
-		this.uid = uid;
-		this.socketType = socketType;
-	}
+    public CircuitLayout(String uid, ICircuitSocketType socketType) {
+        this.uid = uid;
+        this.socketType = socketType;
+    }
 
-	@Override
-	public String getUID() {
-		return "forestry." + this.uid;
-	}
+    @Override
+    public String getUID() {
+        return "forestry." + this.uid;
+    }
 
-	@Override
-	public String getName() {
-		return StringUtil.localize("circuit.layout." + this.uid + ".name");
-	}
+    @Override
+    public String getName() {
+        return StringUtil.localize("circuit.layout." + this.uid + ".name");
+    }
 
-	@Override
-	public String getUsage() {
-		return StringUtil.localize("circuit.layout." + this.uid + ".usage");
-	}
+    @Override
+    public String getUsage() {
+        return StringUtil.localize("circuit.layout." + this.uid + ".usage");
+    }
 
-	@Override
-	public ICircuitSocketType getSocketType() {
-		return socketType;
-	}
+    @Override
+    public ICircuitSocketType getSocketType() {
+        return socketType;
+    }
 }

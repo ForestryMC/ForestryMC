@@ -10,74 +10,72 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IMoistenerManager;
+import forestry.api.recipes.IMoistenerRecipe;
+import forestry.core.utils.ItemStackUtil;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import net.minecraft.item.ItemStack;
-
-import forestry.api.recipes.IMoistenerManager;
-import forestry.api.recipes.IMoistenerRecipe;
-import forestry.core.utils.ItemStackUtil;
 
 public class MoistenerRecipeManager implements IMoistenerManager {
 
-	private static final Set<IMoistenerRecipe> recipes = new HashSet<>();
+    private static final Set<IMoistenerRecipe> recipes = new HashSet<>();
 
-	@Override
-	public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
-		IMoistenerRecipe recipe = new MoistenerRecipe(resource, product, timePerItem);
-		addRecipe(recipe);
-	}
+    @Override
+    public void addRecipe(ItemStack resource, ItemStack product, int timePerItem) {
+        IMoistenerRecipe recipe = new MoistenerRecipe(resource, product, timePerItem);
+        addRecipe(recipe);
+    }
 
-	public static boolean isResource(ItemStack resource) {
-		if (resource == null) {
-			return false;
-		}
+    public static boolean isResource(ItemStack resource) {
+        if (resource == null) {
+            return false;
+        }
 
-		for (IMoistenerRecipe rec : recipes) {
-			if (ItemStackUtil.isIdenticalItem(resource, rec.getResource())) {
-				return true;
-			}
-		}
+        for (IMoistenerRecipe rec : recipes) {
+            if (ItemStackUtil.isIdenticalItem(resource, rec.getResource())) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public static IMoistenerRecipe findMatchingRecipe(ItemStack item) {
-		for (IMoistenerRecipe recipe : recipes) {
-			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), item)) {
-				return recipe;
-			}
-		}
-		return null;
-	}
+    public static IMoistenerRecipe findMatchingRecipe(ItemStack item) {
+        for (IMoistenerRecipe recipe : recipes) {
+            if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), item)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
 
-	@Override
-	public boolean addRecipe(IMoistenerRecipe recipe) {
-		return recipes.add(recipe);
-	}
+    @Override
+    public boolean addRecipe(IMoistenerRecipe recipe) {
+        return recipes.add(recipe);
+    }
 
-	@Override
-	public boolean removeRecipe(IMoistenerRecipe recipe) {
-		return recipes.remove(recipe);
-	}
+    @Override
+    public boolean removeRecipe(IMoistenerRecipe recipe) {
+        return recipes.remove(recipe);
+    }
 
-	@Override
-	public Set<IMoistenerRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
-	}
+    @Override
+    public Set<IMoistenerRecipe> recipes() {
+        return Collections.unmodifiableSet(recipes);
+    }
 
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
+    @Override
+    public Map<Object[], Object[]> getRecipes() {
+        HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
-		for (IMoistenerRecipe recipe : recipes) {
-			recipeList.put(new ItemStack[]{recipe.getResource()}, new ItemStack[]{recipe.getProduct()});
-		}
+        for (IMoistenerRecipe recipe : recipes) {
+            recipeList.put(new ItemStack[] {recipe.getResource()}, new ItemStack[] {recipe.getProduct()});
+        }
 
-		return recipeList;
-	}
+        return recipeList;
+    }
 }

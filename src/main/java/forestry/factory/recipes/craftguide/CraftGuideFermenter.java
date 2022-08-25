@@ -10,19 +10,15 @@
  ******************************************************************************/
 package forestry.factory.recipes.craftguide;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.fuels.FuelManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.factory.blocks.BlockFactoryTesrType;
 import forestry.plugins.PluginFactory;
-
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
 import uristqwerty.CraftGuide.api.RecipeGenerator;
@@ -33,38 +29,38 @@ import uristqwerty.CraftGuide.api.SlotType;
 
 public class CraftGuideFermenter implements RecipeProvider {
 
-	private final Slot[] slots = new Slot[5];
+    private final Slot[] slots = new Slot[5];
 
-	public CraftGuideFermenter() {
-		slots[0] = new ItemSlot(3, 12, 16, 16, true);
-		slots[1] = new ItemSlot(3, 30, 16, 16, true);
-		slots[2] = new LiquidSlot(21, 21);
-		slots[3] = new LiquidSlot(59, 21).setSlotType(SlotType.OUTPUT_SLOT);
-		slots[4] = new ItemSlot(40, 21, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
-	}
+    public CraftGuideFermenter() {
+        slots[0] = new ItemSlot(3, 12, 16, 16, true);
+        slots[1] = new ItemSlot(3, 30, 16, 16, true);
+        slots[2] = new LiquidSlot(21, 21);
+        slots[3] = new LiquidSlot(59, 21).setSlotType(SlotType.OUTPUT_SLOT);
+        slots[4] = new ItemSlot(40, 21, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
+    }
 
-	@Override
-	public void generateRecipes(RecipeGenerator generator) {
+    @Override
+    public void generateRecipes(RecipeGenerator generator) {
 
-		if (PluginFactory.blocks.factoryTESR == null) {
-			return;
-		}
+        if (PluginFactory.blocks.factoryTESR == null) {
+            return;
+        }
 
-		ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.FERMENTER);
-		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
-		List<Object> fuels = new ArrayList<Object>(FuelManager.fermenterFuel.keySet());
+        ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.FERMENTER);
+        RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
+        List<Object> fuels = new ArrayList<Object>(FuelManager.fermenterFuel.keySet());
 
-		for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
-			Object[] array = new Object[5];
+        for (IFermenterRecipe recipe : RecipeManagers.fermenterManager.recipes()) {
+            Object[] array = new Object[5];
 
-			array[0] = recipe.getResource();
-			array[1] = fuels;
-			array[2] = recipe.getFluidResource();
-			int amount = Math.round(recipe.getFermentationValue() * recipe.getModifier());
-			FluidStack output = new FluidStack(recipe.getOutput(), amount);
-			array[3] = output;
-			array[4] = machine;
-			generator.addRecipe(template, array);
-		}
-	}
+            array[0] = recipe.getResource();
+            array[1] = fuels;
+            array[2] = recipe.getFluidResource();
+            int amount = Math.round(recipe.getFermentationValue() * recipe.getModifier());
+            FluidStack output = new FluidStack(recipe.getOutput(), amount);
+            array[3] = output;
+            array[4] = machine;
+            generator.addRecipe(template, array);
+        }
+    }
 }

@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
@@ -22,35 +17,37 @@ import forestry.core.network.IStreamableGui;
 import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.ILocatable;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 public class PacketGuiUpdate extends PacketCoordinates implements IForestryPacketClient {
 
-	private IStreamableGui guiDataTile;
+    private IStreamableGui guiDataTile;
 
-	public PacketGuiUpdate() {
-	}
+    public PacketGuiUpdate() {}
 
-	public <T extends IStreamableGui & ILocatable> PacketGuiUpdate(T guiDataTile) {
-		super(guiDataTile.getCoordinates());
-		this.guiDataTile = guiDataTile;
-	}
+    public <T extends IStreamableGui & ILocatable> PacketGuiUpdate(T guiDataTile) {
+        super(guiDataTile.getCoordinates());
+        this.guiDataTile = guiDataTile;
+    }
 
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		guiDataTile.writeGuiData(data);
-	}
+    @Override
+    protected void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        guiDataTile.writeGuiData(data);
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IStreamableGui) {
-			((IStreamableGui) tile).readGuiData(data);
-		}
-	}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+        TileEntity tile = getTarget(Proxies.common.getRenderWorld());
+        if (tile instanceof IStreamableGui) {
+            ((IStreamableGui) tile).readGuiData(data);
+        }
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.GUI_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.GUI_UPDATE;
+    }
 }

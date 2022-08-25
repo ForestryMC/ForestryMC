@@ -10,14 +10,6 @@
  ******************************************************************************/
 package forestry.mail;
 
-import java.io.File;
-import java.util.LinkedHashMap;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
-
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -29,171 +21,177 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.plugins.PluginMail;
+import java.io.File;
+import java.util.LinkedHashMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
 
-	// / CONSTANTS
-	public static final String SAVE_NAME = "ForestryMail";
-	private final int[] collectedPostage = new int[EnumPostage.values().length];
+    // / CONSTANTS
+    public static final String SAVE_NAME = "ForestryMail";
+    private final int[] collectedPostage = new int[EnumPostage.values().length];
 
-	// CONSTRUCTORS
-	public PostOffice() {
-		super(SAVE_NAME);
-	}
-	
-	public PostOffice(String s) {
-		super(s);
-	}
+    // CONSTRUCTORS
+    public PostOffice() {
+        super(SAVE_NAME);
+    }
 
-	public void setWorld(World world) {
-		refreshActiveTradeStations(world);
-	}
+    public PostOffice(String s) {
+        super(s);
+    }
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		for (int i = 0; i < collectedPostage.length; i++) {
-			if (nbttagcompound.hasKey("CPS" + i)) {
-				collectedPostage[i] = nbttagcompound.getInteger("CPS" + i);
-			}
-		}
-	}
+    public void setWorld(World world) {
+        refreshActiveTradeStations(world);
+    }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		for (int i = 0; i < collectedPostage.length; i++) {
-			nbttagcompound.setInteger("CPS" + i, collectedPostage[i]);
-		}
-	}
+    @Override
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
+        for (int i = 0; i < collectedPostage.length; i++) {
+            if (nbttagcompound.hasKey("CPS" + i)) {
+                collectedPostage[i] = nbttagcompound.getInteger("CPS" + i);
+            }
+        }
+    }
 
-	/* TRADE STATION MANAGMENT */
-	private LinkedHashMap<IMailAddress, ITradeStation> activeTradeStations;
+    @Override
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
+        for (int i = 0; i < collectedPostage.length; i++) {
+            nbttagcompound.setInteger("CPS" + i, collectedPostage[i]);
+        }
+    }
 
-	@Override
-	public LinkedHashMap<IMailAddress, ITradeStation> getActiveTradeStations(World world) {
-		return this.activeTradeStations;
-	}
+    /* TRADE STATION MANAGMENT */
+    private LinkedHashMap<IMailAddress, ITradeStation> activeTradeStations;
 
-	private void refreshActiveTradeStations(World world) {
-		activeTradeStations = new LinkedHashMap<>();
-		if (world == null || world.getSaveHandler() == null) {
-			return;
-		}
-		File worldSave = world.getSaveHandler().getMapFileFromName("dummy");
-		if (worldSave == null) {
-			return;
-		}
-		File file = worldSave.getParentFile();
-		if (!file.exists() || !file.isDirectory()) {
-			return;
-		}
+    @Override
+    public LinkedHashMap<IMailAddress, ITradeStation> getActiveTradeStations(World world) {
+        return this.activeTradeStations;
+    }
 
-		for (String str : file.list()) {
-			if (!str.startsWith(TradeStation.SAVE_NAME)) {
-				continue;
-			}
-			if (!str.endsWith(".dat")) {
-				continue;
-			}
+    private void refreshActiveTradeStations(World world) {
+        activeTradeStations = new LinkedHashMap<>();
+        if (world == null || world.getSaveHandler() == null) {
+            return;
+        }
+        File worldSave = world.getSaveHandler().getMapFileFromName("dummy");
+        if (worldSave == null) {
+            return;
+        }
+        File file = worldSave.getParentFile();
+        if (!file.exists() || !file.isDirectory()) {
+            return;
+        }
 
-			MailAddress address = new MailAddress(str.replace(TradeStation.SAVE_NAME, "").replace(".dat", ""));
-			ITradeStation trade = PostManager.postRegistry.getTradeStation(world, address);
-			if (trade == null) {
-				continue;
-			}
+        for (String str : file.list()) {
+            if (!str.startsWith(TradeStation.SAVE_NAME)) {
+                continue;
+            }
+            if (!str.endsWith(".dat")) {
+                continue;
+            }
 
-			registerTradeStation(trade);
-		}
-	}
+            MailAddress address =
+                    new MailAddress(str.replace(TradeStation.SAVE_NAME, "").replace(".dat", ""));
+            ITradeStation trade = PostManager.postRegistry.getTradeStation(world, address);
+            if (trade == null) {
+                continue;
+            }
 
-	@Override
-	public void registerTradeStation(ITradeStation trade) {
-		if (!activeTradeStations.containsKey(trade.getAddress())) {
-			activeTradeStations.put(trade.getAddress(), trade);
-		}
-	}
+            registerTradeStation(trade);
+        }
+    }
 
-	@Override
-	public void deregisterTradeStation(ITradeStation trade) {
-		activeTradeStations.remove(trade.getAddress());
-	}
+    @Override
+    public void registerTradeStation(ITradeStation trade) {
+        if (!activeTradeStations.containsKey(trade.getAddress())) {
+            activeTradeStations.put(trade.getAddress(), trade);
+        }
+    }
 
-	// / STAMP MANAGMENT
-	@Override
-	public ItemStack getAnyStamp(int max) {
-		return getAnyStamp(EnumPostage.values(), max);
-	}
+    @Override
+    public void deregisterTradeStation(ITradeStation trade) {
+        activeTradeStations.remove(trade.getAddress());
+    }
 
-	@Override
-	public ItemStack getAnyStamp(EnumPostage postage, int max) {
-		return getAnyStamp(new EnumPostage[]{postage}, max);
-	}
+    // / STAMP MANAGMENT
+    @Override
+    public ItemStack getAnyStamp(int max) {
+        return getAnyStamp(EnumPostage.values(), max);
+    }
 
-	@Override
-	public ItemStack getAnyStamp(EnumPostage[] postages, int max) {
-		for (EnumPostage postage : postages) {
-			int collected = Math.min(max, collectedPostage[postage.ordinal()]);
-			collectedPostage[postage.ordinal()] -= collected;
+    @Override
+    public ItemStack getAnyStamp(EnumPostage postage, int max) {
+        return getAnyStamp(new EnumPostage[] {postage}, max);
+    }
 
-			if (collected > 0) {
-				EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
-				return PluginMail.items.stamps.get(stampDefinition, collected);
-			}
-		}
+    @Override
+    public ItemStack getAnyStamp(EnumPostage[] postages, int max) {
+        for (EnumPostage postage : postages) {
+            int collected = Math.min(max, collectedPostage[postage.ordinal()]);
+            collectedPostage[postage.ordinal()] -= collected;
 
-		return null;
-	}
+            if (collected > 0) {
+                EnumStampDefinition stampDefinition = EnumStampDefinition.getFromPostage(postage);
+                return PluginMail.items.stamps.get(stampDefinition, collected);
+            }
+        }
 
-	// / DELIVERY
-	@Override
-	public IPostalState lodgeLetter(World world, ItemStack itemstack, boolean doLodge) {
-		ILetter letter = PostManager.postRegistry.getLetter(itemstack);
+        return null;
+    }
 
-		if (letter.isProcessed()) {
-			return EnumDeliveryState.ALREADY_MAILED;
-		}
+    // / DELIVERY
+    @Override
+    public IPostalState lodgeLetter(World world, ItemStack itemstack, boolean doLodge) {
+        ILetter letter = PostManager.postRegistry.getLetter(itemstack);
 
-		if (!letter.isPostPaid()) {
-			return EnumDeliveryState.NOT_POSTPAID;
-		}
+        if (letter.isProcessed()) {
+            return EnumDeliveryState.ALREADY_MAILED;
+        }
 
-		if (!letter.isMailable()) {
-			return EnumDeliveryState.NOT_MAILABLE;
-		}
+        if (!letter.isPostPaid()) {
+            return EnumDeliveryState.NOT_POSTPAID;
+        }
 
-		IPostalState state = EnumDeliveryState.NOT_MAILABLE;
-		for (IMailAddress address : letter.getRecipients()) {
-			IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType());
-			if (carrier == null) {
-				continue;
-			}
-			state = carrier.deliverLetter(world, this, address, itemstack, doLodge);
-			if (!state.isOk()) {
-				break;
-			}
-		}
+        if (!letter.isMailable()) {
+            return EnumDeliveryState.NOT_MAILABLE;
+        }
 
-		if (!state.isOk()) {
-			return state;
-		}
+        IPostalState state = EnumDeliveryState.NOT_MAILABLE;
+        for (IMailAddress address : letter.getRecipients()) {
+            IPostalCarrier carrier = PostManager.postRegistry.getCarrier(address.getType());
+            if (carrier == null) {
+                continue;
+            }
+            state = carrier.deliverLetter(world, this, address, itemstack, doLodge);
+            if (!state.isOk()) {
+                break;
+            }
+        }
 
-		collectPostage(letter.getPostage());
+        if (!state.isOk()) {
+            return state;
+        }
 
-		markDirty();
-		return EnumDeliveryState.OK;
+        collectPostage(letter.getPostage());
 
-	}
+        markDirty();
+        return EnumDeliveryState.OK;
+    }
 
-	@Override
-	public void collectPostage(ItemStack[] stamps) {
-		for (ItemStack stamp : stamps) {
-			if (stamp == null) {
-				continue;
-			}
+    @Override
+    public void collectPostage(ItemStack[] stamps) {
+        for (ItemStack stamp : stamps) {
+            if (stamp == null) {
+                continue;
+            }
 
-			if (stamp.getItem() instanceof IStamps) {
-				EnumPostage postage = ((IStamps) stamp.getItem()).getPostage(stamp);
-				collectedPostage[postage.ordinal()] += stamp.stackSize;
-			}
-		}
-	}
+            if (stamp.getItem() instanceof IStamps) {
+                EnumPostage postage = ((IStamps) stamp.getItem()).getPostage(stamp);
+                collectedPostage[postage.ordinal()] += stamp.stackSize;
+            }
+        }
+    }
 }

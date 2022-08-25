@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
+import forestry.api.apiculture.hives.IHiveGen;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 
-import forestry.api.apiculture.hives.IHiveGen;
-
 public abstract class HiveGen implements IHiveGen {
 
-	@Override
-	public boolean canReplace(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
-		Material material = block.getMaterial();
-		return (material.isReplaceable() && !material.isLiquid()) ||
-				material == Material.air ||
-				material == Material.plants;
-	}
+    @Override
+    public boolean canReplace(World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        Material material = block.getMaterial();
+        return (material.isReplaceable() && !material.isLiquid())
+                || material == Material.air
+                || material == Material.plants;
+    }
 }

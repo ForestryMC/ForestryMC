@@ -10,49 +10,48 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.api.farming.ICrop;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginFarming;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class FarmableVanillaMushroom extends FarmableGenericSapling {
 
-	public FarmableVanillaMushroom(Block sapling, int saplingMeta) {
-		super(sapling, saplingMeta);
-	}
+    public FarmableVanillaMushroom(Block sapling, int saplingMeta) {
+        super(sapling, saplingMeta);
+    }
 
-	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+    @Override
+    public ICrop getCropAt(World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
 
-		if (block != Blocks.brown_mushroom_block && block != Blocks.red_mushroom_block) {
-			return null;
-		}
+        if (block != Blocks.brown_mushroom_block && block != Blocks.red_mushroom_block) {
+            return null;
+        }
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
-	}
+        return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
+    }
 
-	@Override
-	public boolean isGermling(ItemStack itemstack) {
-		return ItemStackUtil.equals(sapling, itemstack);
-	}
+    @Override
+    public boolean isGermling(ItemStack itemstack) {
+        return ItemStackUtil.equals(sapling, itemstack);
+    }
 
-	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		int meta = 0;
-		if (ItemStackUtil.equals(Blocks.red_mushroom, germling)) {
-			meta = 1;
-		}
+    @Override
+    public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+        int meta = 0;
+        if (ItemStackUtil.equals(Blocks.red_mushroom, germling)) {
+            meta = 1;
+        }
 
-		Proxies.common.addBlockPlaceEffects(world, x, y, z, Blocks.brown_mushroom, 0);
-		return world.setBlock(x, y, z, PluginFarming.blocks.mushroom, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
-	}
+        Proxies.common.addBlockPlaceEffects(world, x, y, z, Blocks.brown_mushroom, 0);
+        return world.setBlock(x, y, z, PluginFarming.blocks.mushroom, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+    }
 }

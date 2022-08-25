@@ -10,33 +10,32 @@
  ******************************************************************************/
 package forestry.apiculture.render;
 
+import forestry.apiculture.entities.EntityBee;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-import forestry.apiculture.entities.EntityBee;
-
 public class RenderBeeEntity extends RenderLiving {
 
-	private final ModelBee beeModel;
+    private final ModelBee beeModel;
 
-	public RenderBeeEntity() {
-		super(new ModelBee(), 0.15f);
-		beeModel = (ModelBee) mainModel;
-	}
+    public RenderBeeEntity() {
+        super(new ModelBee(), 0.15f);
+        beeModel = (ModelBee) mainModel;
+    }
 
-	private void renderBee(EntityBee entity, double posX, double posY, double posZ, float par8, float par9) {
-		beeModel.setType(entity.getType());
-		this.doRender(entity, posX, posY, posZ, par8, par9);
-	}
+    private void renderBee(EntityBee entity, double posX, double posY, double posZ, float par8, float par9) {
+        beeModel.setType(entity.getType());
+        this.doRender(entity, posX, posY, posZ, par8, par9);
+    }
 
-	@Override
-	public void doRender(Entity entity, double posX, double posY, double posZ, float par8, float par9) {
-		renderBee((EntityBee) entity, posX, posY, posZ, par8, par9);
-	}
+    @Override
+    public void doRender(Entity entity, double posX, double posY, double posZ, float par8, float par9) {
+        renderBee((EntityBee) entity, posX, posY, posZ, par8, par9);
+    }
 
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
-		return ((EntityBee) entity).getTexture();
-	}
+    @Override
+    protected ResourceLocation getEntityTexture(Entity entity) {
+        return ((EntityBee) entity).getTexture();
+    }
 }

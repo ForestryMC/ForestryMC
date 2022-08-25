@@ -10,7 +10,7 @@ package forestry.api.multiblock;
  * Each IMultiblockComponent needs its own instance of IMultiblockLogic.
  */
 public interface IMultiblockLogicFactory {
-	IMultiblockLogicAlveary createAlvearyLogic();
+    IMultiblockLogicAlveary createAlvearyLogic();
 
-	IMultiblockLogicFarm createFarmLogic();
+    IMultiblockLogicFarm createFarmLogic();
 }

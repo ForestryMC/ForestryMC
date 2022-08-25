@@ -10,27 +10,27 @@
  ******************************************************************************/
 package forestry.mail.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.mail.inventory.InventoryStampCollector;
 import forestry.mail.tiles.TileStampCollector;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerStampCollector extends ContainerTile<TileStampCollector> {
 
-	public ContainerStampCollector(InventoryPlayer player, TileStampCollector tile) {
-		super(tile, player, 8, 111);
+    public ContainerStampCollector(InventoryPlayer player, TileStampCollector tile) {
+        super(tile, player, 8, 111);
 
-		// Filter
-		addSlotToContainer(new SlotFiltered(tile, InventoryStampCollector.SLOT_FILTER, 80, 19));
+        // Filter
+        addSlotToContainer(new SlotFiltered(tile, InventoryStampCollector.SLOT_FILTER, 80, 19));
 
-		// Collected Stamps
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new SlotOutput(tile, j + i * 9 + InventoryStampCollector.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
-			}
-		}
-	}
+        // Collected Stamps
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                addSlotToContainer(new SlotOutput(
+                        tile, j + i * 9 + InventoryStampCollector.SLOT_BUFFER_1, 8 + j * 18, 46 + i * 18));
+            }
+        }
+    }
 }

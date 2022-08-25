@@ -10,26 +10,25 @@
  ******************************************************************************/
 package forestry.factory.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.factory.tiles.TileBottler;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiBottler extends GuiForestryTitled<ContainerBottler, TileBottler> {
 
-	public GuiBottler(InventoryPlayer inventory, TileBottler processor) {
-		super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, processor), processor);
-		widgetManager.add(new TankWidget(this.widgetManager, 53, 17, 0));
-	}
+    public GuiBottler(InventoryPlayer inventory, TileBottler processor) {
+        super(Constants.TEXTURE_PATH_GUI + "/bottler.png", new ContainerBottler(inventory, processor), processor);
+        widgetManager.add(new TankWidget(this.widgetManager, 53, 17, 0));
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		TileBottler bottler = inventory;
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+        TileBottler bottler = inventory;
 
-		int progress = bottler.getProgressScaled(24);
-		drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, progress, 16);
-	}
+        int progress = bottler.getProgressScaled(24);
+        drawTexturedModalRect(guiLeft + 80, guiTop + 39, 176, 74, progress, 16);
+    }
 }

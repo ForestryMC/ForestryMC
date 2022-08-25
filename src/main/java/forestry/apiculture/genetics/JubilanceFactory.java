@@ -10,19 +10,18 @@
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
-import net.minecraft.block.Block;
-
 import forestry.api.apiculture.IJubilanceFactory;
 import forestry.api.apiculture.IJubilanceProvider;
+import net.minecraft.block.Block;
 
 public class JubilanceFactory implements IJubilanceFactory {
-	@Override
-	public IJubilanceProvider getDefault() {
-		return JubilanceDefault.instance;
-	}
+    @Override
+    public IJubilanceProvider getDefault() {
+        return JubilanceDefault.instance;
+    }
 
-	@Override
-	public IJubilanceProvider getRequiresResource(Block block, int meta) {
-		return new JubilanceRequiresResource(block, meta);
-	}
+    @Override
+    public IJubilanceProvider getRequiresResource(Block block, int meta) {
+        return new JubilanceRequiresResource(block, meta);
+    }
 }

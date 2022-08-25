@@ -12,6 +12,5 @@ package forestry.lepidopterology.proxy;
 
 public class ProxyLepidopterology {
 
-	public void initializeRendering() {
-	}
+    public void initializeRendering() {}
 }

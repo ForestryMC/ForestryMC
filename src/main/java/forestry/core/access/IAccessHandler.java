@@ -10,27 +10,25 @@
  ******************************************************************************/
 package forestry.core.access;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.api.core.INBTTagable;
 import forestry.core.network.IStreamable;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface IAccessHandler extends IOwnable, IStreamable, INBTTagable {
 
-	boolean switchAccess(EntityPlayer player);
+    boolean switchAccess(EntityPlayer player);
 
-	EnumAccess getAccess();
+    EnumAccess getAccess();
 
-	boolean allowsRemoval(EntityPlayer player);
+    boolean allowsRemoval(EntityPlayer player);
 
-	boolean allowsAlteration(EntityPlayer player);
+    boolean allowsAlteration(EntityPlayer player);
 
-	boolean allowsViewing(EntityPlayer player);
+    boolean allowsViewing(EntityPlayer player);
 
-	boolean allowsPipeConnections();
+    boolean allowsPipeConnections();
 
-	void addOwnerListener(IAccessOwnerListener accessListener);
+    void addOwnerListener(IAccessOwnerListener accessListener);
 
-	void removeOwnerListener(IAccessOwnerListener accessListener);
-
+    void removeOwnerListener(IAccessOwnerListener accessListener);
 }

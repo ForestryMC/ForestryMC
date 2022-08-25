@@ -15,9 +15,9 @@ import net.minecraft.util.ChunkCoordinates;
 /* Networked tile entities that have a client side "active" flag */
 public interface IActivatable {
 
-	ChunkCoordinates getCoordinates();
+    ChunkCoordinates getCoordinates();
 
-	boolean isActive();
+    boolean isActive();
 
-	void setActive(boolean active);
+    void setActive(boolean active);
 }

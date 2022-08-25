@@ -6,10 +6,7 @@
 package forestry.api.farming;
 
 import java.util.Collection;
-
 import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Easily extendable default farmListener.
@@ -17,34 +14,26 @@ import net.minecraftforge.common.util.ForgeDirection;
  * FarmListeners should inherit from this class unless they need to listen for everything.
  */
 public class DefaultFarmListener implements IFarmListener {
-	@Override
-	public boolean beforeCropHarvest(ICrop crop) {
-		return false;
-	}
+    @Override
+    public boolean beforeCropHarvest(ICrop crop) {
+        return false;
+    }
 
-	@Override
-	public void afterCropHarvest(Collection<ItemStack> harvested, ICrop crop) {
+    @Override
+    public void afterCropHarvest(Collection<ItemStack> harvested, ICrop crop) {}
 
-	}
+    @Override
+    public void hasCollected(Collection<ItemStack> collected, IFarmLogic logic) {}
 
-	@Override
-	public void hasCollected(Collection<ItemStack> collected, IFarmLogic logic) {
+    @Override
+    public void hasCultivated(IFarmLogic logic, int x, int y, int z, FarmDirection direction, int extent) {}
 
-	}
+    @Override
+    public void hasScheduledHarvest(
+            Collection<ICrop> harvested, IFarmLogic logic, int x, int y, int z, FarmDirection direction, int extent) {}
 
-	@Override
-	public void hasCultivated(IFarmLogic logic, int x, int y, int z, FarmDirection direction, int extent) {
-
-	}
-
-	@Override
-	public void hasScheduledHarvest(Collection<ICrop> harvested, IFarmLogic logic, int x, int y, int z, FarmDirection direction, int extent) {
-
-	}
-
-	@Override
-	public boolean cancelTask(IFarmLogic logic, FarmDirection direction) {
-		return false;
-	}
-
+    @Override
+    public boolean cancelTask(IFarmLogic logic, FarmDirection direction) {
+        return false;
+    }
 }

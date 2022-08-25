@@ -13,5 +13,5 @@ package forestry.mail.gui;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 
 public interface ILetterInfoReceiver {
-	void handleLetterInfoUpdate(PacketLetterInfoResponse packet);
+    void handleLetterInfoUpdate(PacketLetterInfoResponse packet);
 }

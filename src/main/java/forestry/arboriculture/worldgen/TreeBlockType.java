@@ -10,39 +10,35 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.block.Block;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.world.ITreeGenData;
 import forestry.core.config.Constants;
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TreeBlockType implements ITreeBlockType {
 
-	private final Block block;
-	private final int meta;
+    private final Block block;
+    private final int meta;
 
-	public TreeBlockType(Block block, int meta) {
-		this.block = block;
-		this.meta = meta;
-	}
+    public TreeBlockType(Block block, int meta) {
+        this.block = block;
+        this.meta = meta;
+    }
 
-	@Override
-	public void setDirection(ForgeDirection facing) {
+    @Override
+    public void setDirection(ForgeDirection facing) {}
 
-	}
+    @Override
+    public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
+        world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH);
+    }
 
-	@Override
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
-		world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH);
-	}
+    public int getMeta() {
+        return this.meta;
+    }
 
-	public int getMeta() {
-		return this.meta;
-	}
-
-	public Block getBlock() {
-		return this.block;
-	}
+    public Block getBlock() {
+        return this.block;
+    }
 }

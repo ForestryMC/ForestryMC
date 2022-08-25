@@ -12,13 +12,12 @@ package forestry.core.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-
 import net.minecraftforge.fluids.IFluidTank;
 
 public interface IContainerLiquidTanks {
-	void handlePipetteClickClient(int slot, EntityPlayer player);
+    void handlePipetteClickClient(int slot, EntityPlayer player);
 
-	void handlePipetteClick(int slot, EntityPlayerMP player);
+    void handlePipetteClick(int slot, EntityPlayerMP player);
 
-	IFluidTank getTank(int slot);
+    IFluidTank getTank(int slot);
 }

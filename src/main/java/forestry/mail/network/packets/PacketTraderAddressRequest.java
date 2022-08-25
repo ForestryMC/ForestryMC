@@ -10,52 +10,49 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdServer;
 import forestry.core.network.packets.PacketCoordinates;
 import forestry.mail.tiles.TileTrader;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 
 public class PacketTraderAddressRequest extends PacketCoordinates implements IForestryPacketServer {
 
-	private String addressName;
+    private String addressName;
 
-	public PacketTraderAddressRequest() {
-	}
+    public PacketTraderAddressRequest() {}
 
-	public PacketTraderAddressRequest(TileTrader tile, String addressName) {
-		super(tile);
-		this.addressName = addressName;
-	}
+    public PacketTraderAddressRequest(TileTrader tile, String addressName) {
+        super(tile);
+        this.addressName = addressName;
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.TRADING_ADDRESS_REQUEST;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.TRADING_ADDRESS_REQUEST;
+    }
 
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeUTF(addressName);
-	}
+    @Override
+    protected void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        data.writeUTF(addressName);
+    }
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		addressName = data.readUTF();
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {
+        super.readData(data);
+        addressName = data.readUTF();
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		TileEntity tile = getTarget(player.worldObj);
-		if ((tile instanceof TileTrader)) {
-			((TileTrader) tile).handleSetAddressRequest(addressName);
-		}
-	}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+        TileEntity tile = getTarget(player.worldObj);
+        if ((tile instanceof TileTrader)) {
+            ((TileTrader) tile).handleSetAddressRequest(addressName);
+        }
+    }
 }

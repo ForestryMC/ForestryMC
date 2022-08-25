@@ -24,7 +24,6 @@ public enum FarmableReference {
     Shroom,
     Succulentes,
     Vegetables,
-
     ;
 
     private final String VALUE;

@@ -14,8 +14,8 @@ import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockBase;
 
 public class BlockArboriculture extends BlockBase<BlockArboricultureType> {
-	public BlockArboriculture() {
-		super(true);
-		setCreativeTab(Tabs.tabArboriculture);
-	}
+    public BlockArboriculture() {
+        super(true);
+        setCreativeTab(Tabs.tabArboriculture);
+    }
 }

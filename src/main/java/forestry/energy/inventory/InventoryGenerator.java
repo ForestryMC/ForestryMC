@@ -10,28 +10,26 @@
  ******************************************************************************/
 package forestry.energy.inventory;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.Fluid;
-
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.energy.tiles.TileGenerator;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 
 public class InventoryGenerator extends InventoryAdapterTile<TileGenerator> {
-	public static final short SLOT_CAN = 0;
+    public static final short SLOT_CAN = 0;
 
-	public InventoryGenerator(TileGenerator generator) {
-		super(generator, 1, "Items");
-	}
+    public InventoryGenerator(TileGenerator generator) {
+        super(generator, 1, "Items");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_CAN) {
-			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-			return tile.getTankManager().accepts(fluid);
-		}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_CAN) {
+            Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+            return tile.getTankManager().accepts(fluid);
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

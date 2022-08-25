@@ -14,8 +14,7 @@ import forestry.core.genetics.Branch;
 
 public class BranchTrees extends Branch {
 
-	public BranchTrees(String uid, String scientific) {
-		super("trees." + uid, scientific);
-	}
-
+    public BranchTrees(String uid, String scientific) {
+        super("trees." + uid, scientific);
+    }
 }

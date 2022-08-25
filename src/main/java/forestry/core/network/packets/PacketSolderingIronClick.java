@@ -10,38 +10,35 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.gui.IContainerSocketed;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdServer;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class PacketSolderingIronClick extends PacketSlotClick implements IForestryPacketServer {
 
-	public PacketSolderingIronClick() {
-	}
+    public PacketSolderingIronClick() {}
 
-	public PacketSolderingIronClick(TileEntity tile, int slot) {
-		super(tile, slot);
-	}
+    public PacketSolderingIronClick(TileEntity tile, int slot) {
+        super(tile, slot);
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		if (!(player.openContainer instanceof IContainerSocketed)) {
-			return;
-		}
-		ItemStack itemstack = player.inventory.getItemStack();
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+        if (!(player.openContainer instanceof IContainerSocketed)) {
+            return;
+        }
+        ItemStack itemstack = player.inventory.getItemStack();
 
-		((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(getSlot(), player, itemstack);
-	}
+        ((IContainerSocketed) player.openContainer).handleSolderingIronClickServer(getSlot(), player, itemstack);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.SOLDERING_IRON_CLICK;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.SOLDERING_IRON_CLICK;
+    }
 }

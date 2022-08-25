@@ -10,28 +10,22 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class PacketDummyClient extends PacketDummy implements IForestryPacketClient {
-	public static final PacketDummyClient instance = new PacketDummyClient();
+    public static final PacketDummyClient instance = new PacketDummyClient();
 
-	private PacketDummyClient() {
+    private PacketDummyClient() {}
 
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.INVALID;
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.INVALID;
-	}
-
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-
-	}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {}
 }

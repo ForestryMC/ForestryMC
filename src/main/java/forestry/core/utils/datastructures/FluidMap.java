@@ -15,38 +15,38 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class FluidMap<T> extends StackMap<Fluid, T> {
-	private static final long serialVersionUID = 15891293315299994L;
+    private static final long serialVersionUID = 15891293315299994L;
 
-	@Override
-	protected boolean areEqual(Fluid a, Object b) {
-		if (b instanceof FluidStack) {
-			return ((FluidStack) b).getFluid() == a;
-		}
-		if (b instanceof Fluid) {
-			return b == a;
-		}
-		if (b instanceof String) {
-			return b.equals(a.getName());
-		}
-		return false;
-	}
+    @Override
+    protected boolean areEqual(Fluid a, Object b) {
+        if (b instanceof FluidStack) {
+            return ((FluidStack) b).getFluid() == a;
+        }
+        if (b instanceof Fluid) {
+            return b == a;
+        }
+        if (b instanceof String) {
+            return b.equals(a.getName());
+        }
+        return false;
+    }
 
-	@Override
-	protected boolean isValidKey(Object key) {
-		return key instanceof FluidStack || key instanceof Fluid || key instanceof String;
-	}
+    @Override
+    protected boolean isValidKey(Object key) {
+        return key instanceof FluidStack || key instanceof Fluid || key instanceof String;
+    }
 
-	@Override
-	protected Fluid getStack(Object key) {
-		if (key instanceof FluidStack) {
-			return ((FluidStack) key).getFluid();
-		}
-		if (key instanceof Fluid) {
-			return (Fluid) key;
-		}
-		if (key instanceof String) {
-			return FluidRegistry.getFluid((String) key);
-		}
-		return null;
-	}
+    @Override
+    protected Fluid getStack(Object key) {
+        if (key instanceof FluidStack) {
+            return ((FluidStack) key).getFluid();
+        }
+        if (key instanceof Fluid) {
+            return (Fluid) key;
+        }
+        if (key instanceof String) {
+            return FluidRegistry.getFluid((String) key);
+        }
+        return null;
+    }
 }

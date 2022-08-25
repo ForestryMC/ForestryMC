@@ -14,8 +14,7 @@ import forestry.api.world.ITreeGenData;
 
 public class WorldGenDarkOak extends WorldGenTreeVanilla {
 
-	public WorldGenDarkOak(ITreeGenData tree) {
-		super(tree);
-	}
-
+    public WorldGenDarkOak(ITreeGenData tree) {
+        super(tree);
+    }
 }

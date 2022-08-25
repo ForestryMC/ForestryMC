@@ -10,23 +10,21 @@
  ******************************************************************************/
 package forestry.food.items;
 
+import forestry.core.config.Constants;
+import forestry.core.items.ItemForestryFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 
-import forestry.core.config.Constants;
-import forestry.core.items.ItemForestryFood;
-
 public class ItemAmbrosia extends ItemForestryFood {
 
-	public ItemAmbrosia() {
-		super(Constants.FOOD_AMBROSIA_HEAL, 0.6f);
-		setAlwaysEdible();
-		setPotionEffect(Potion.regeneration.id, 40, 0, 1.0F);
-	}
+    public ItemAmbrosia() {
+        super(Constants.FOOD_AMBROSIA_HEAL, 0.6f);
+        setAlwaysEdible();
+        setPotionEffect(Potion.regeneration.id, 40, 0, 1.0F);
+    }
 
-	@Override
-	public boolean hasEffect(ItemStack itemstack, int pass) {
-		return true;
-	}
-
+    @Override
+    public boolean hasEffect(ItemStack itemstack, int pass) {
+        return true;
+    }
 }

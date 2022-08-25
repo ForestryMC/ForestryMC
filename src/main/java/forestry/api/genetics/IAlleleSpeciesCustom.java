@@ -10,14 +10,15 @@ import forestry.api.core.EnumTemperature;
 
 public interface IAlleleSpeciesCustom extends IAlleleSpecies {
 
-	IAlleleSpeciesCustom setTemperature(EnumTemperature temperature);
-	IAlleleSpeciesCustom setHumidity(EnumHumidity humidity);
+    IAlleleSpeciesCustom setTemperature(EnumTemperature temperature);
 
-	IAlleleSpeciesCustom setHasEffect();
+    IAlleleSpeciesCustom setHumidity(EnumHumidity humidity);
 
-	/** Secret species are not shown in creative mode. */
-	IAlleleSpeciesCustom setIsSecret();
+    IAlleleSpeciesCustom setHasEffect();
 
-	/** Uncounted species do not count toward total species discovered. */
-	IAlleleSpeciesCustom setIsNotCounted();
+    /** Secret species are not shown in creative mode. */
+    IAlleleSpeciesCustom setIsSecret();
+
+    /** Uncounted species do not count toward total species discovered. */
+    IAlleleSpeciesCustom setIsNotCounted();
 }

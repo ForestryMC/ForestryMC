@@ -10,20 +10,25 @@
  ******************************************************************************/
 package forestry.mail;
 
+import forestry.api.mail.IPostalState;
 import java.util.Locale;
 
-import forestry.api.mail.IPostalState;
-
 public enum EnumDeliveryState implements IPostalState {
-	OK, NO_MAILBOX, NOT_MAILABLE, ALREADY_MAILED, NOT_POSTPAID, MAILBOX_FULL, RESPONSE_NOT_MAILABLE;
+    OK,
+    NO_MAILBOX,
+    NOT_MAILABLE,
+    ALREADY_MAILED,
+    NOT_POSTPAID,
+    MAILBOX_FULL,
+    RESPONSE_NOT_MAILABLE;
 
-	@Override
-	public boolean isOk() {
-		return this == OK;
-	}
+    @Override
+    public boolean isOk() {
+        return this == OK;
+    }
 
-	@Override
-	public String getIdentifier() {
-		return this.toString().toLowerCase(Locale.ENGLISH);
-	}
+    @Override
+    public String getIdentifier() {
+        return this.toString().toLowerCase(Locale.ENGLISH);
+    }
 }

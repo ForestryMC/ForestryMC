@@ -18,22 +18,21 @@ import net.minecraftforge.fluids.FluidTankInfo;
  */
 public final class FakeTank extends StandardTank {
 
-	public static final FakeTank INSTANCE = new FakeTank();
-	public static final FakeTank[] ARRAY = new FakeTank[]{INSTANCE};
-	public static final FluidTankInfo[] INFO = new FluidTankInfo[]{INSTANCE.getInfo()};
+    public static final FakeTank INSTANCE = new FakeTank();
+    public static final FakeTank[] ARRAY = new FakeTank[] {INSTANCE};
+    public static final FluidTankInfo[] INFO = new FluidTankInfo[] {INSTANCE.getInfo()};
 
-	private FakeTank() {
-		super(1);
-	}
+    private FakeTank() {
+        super(1);
+    }
 
-	@Override
-	public int fill(FluidStack resource, boolean doFill) {
-		return 0;
-	}
+    @Override
+    public int fill(FluidStack resource, boolean doFill) {
+        return 0;
+    }
 
-	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {
-		return null;
-	}
-
+    @Override
+    public FluidStack drain(int maxDrain, boolean doDrain) {
+        return null;
+    }
 }

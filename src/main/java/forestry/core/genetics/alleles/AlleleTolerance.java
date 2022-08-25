@@ -15,14 +15,14 @@ import forestry.api.genetics.IAlleleTolerance;
 
 public class AlleleTolerance extends AlleleCategorized implements IAlleleTolerance {
 
-	private final EnumTolerance value;
+    private final EnumTolerance value;
 
-	public AlleleTolerance(String modId, String category, String name, EnumTolerance value, boolean isDominant) {
-		super(modId, category, name, isDominant);
-		this.value = value;
-	}
+    public AlleleTolerance(String modId, String category, String name, EnumTolerance value, boolean isDominant) {
+        super(modId, category, name, isDominant);
+        this.value = value;
+    }
 
-	public EnumTolerance getValue() {
-		return value;
-	}
+    public EnumTolerance getValue() {
+        return value;
+    }
 }

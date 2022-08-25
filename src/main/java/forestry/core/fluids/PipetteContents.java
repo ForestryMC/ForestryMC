@@ -10,60 +10,57 @@
  ******************************************************************************/
 package forestry.core.fluids;
 
+import forestry.api.core.INBTTagable;
 import java.util.List;
-
 import net.minecraft.nbt.NBTTagCompound;
-
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.core.INBTTagable;
-
 public class PipetteContents implements INBTTagable {
-	private FluidStack contents;
+    private FluidStack contents;
 
-	public PipetteContents(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound != null) {
-			readFromNBT(nbttagcompound);
-		}
-	}
+    public PipetteContents(NBTTagCompound nbttagcompound) {
+        if (nbttagcompound != null) {
+            readFromNBT(nbttagcompound);
+        }
+    }
 
-	public FluidStack getContents() {
-		return contents;
-	}
+    public FluidStack getContents() {
+        return contents;
+    }
 
-	public void setContents(FluidStack contents) {
-		this.contents = contents;
-	}
+    public void setContents(FluidStack contents) {
+        this.contents = contents;
+    }
 
-	public boolean isFull() {
-		if (contents == null) {
-			return false;
-		}
+    public boolean isFull() {
+        if (contents == null) {
+            return false;
+        }
 
-		return contents.getFluid().getID() > 0 && contents.amount >= 1000;
-	}
+        return contents.getFluid().getID() > 0 && contents.amount >= 1000;
+    }
 
-	public void addTooltip(List<String> list) {
-		if (contents == null) {
-			return;
-		}
+    public void addTooltip(List<String> list) {
+        if (contents == null) {
+            return;
+        }
 
-		String descr = contents.getFluid().getLocalizedName(contents);
-		descr += " (" + contents.amount + " mb)";
+        String descr = contents.getFluid().getLocalizedName(contents);
+        descr += " (" + contents.amount + " mb)";
 
-		list.add(descr);
-	}
+        list.add(descr);
+    }
 
-	/* INBTTagable */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		contents = FluidStack.loadFluidStackFromNBT(nbttagcompound);
-	}
+    /* INBTTagable */
+    @Override
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
+        contents = FluidStack.loadFluidStackFromNBT(nbttagcompound);
+    }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		if (contents != null) {
-			contents.writeToNBT(nbttagcompound);
-		}
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
+        if (contents != null) {
+            contents.writeToNBT(nbttagcompound);
+        }
+    }
 }

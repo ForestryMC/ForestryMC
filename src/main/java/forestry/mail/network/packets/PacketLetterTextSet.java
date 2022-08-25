@@ -10,36 +10,33 @@
  ******************************************************************************/
 package forestry.mail.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdServer;
 import forestry.core.network.packets.PacketString;
 import forestry.mail.gui.ContainerLetter;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class PacketLetterTextSet extends PacketString implements IForestryPacketServer {
 
-	public PacketLetterTextSet() {
-	}
+    public PacketLetterTextSet() {}
 
-	public PacketLetterTextSet(String string) {
-		super(string);
-	}
+    public PacketLetterTextSet(String string) {
+        super(string);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.LETTER_TEXT_SET;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.LETTER_TEXT_SET;
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		if (!(player.openContainer instanceof ContainerLetter)) {
-			return;
-		}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+        if (!(player.openContainer instanceof ContainerLetter)) {
+            return;
+        }
 
-		((ContainerLetter) player.openContainer).handleSetText(this);
-	}
+        ((ContainerLetter) player.openContainer).handleSetText(this);
+    }
 }

@@ -11,75 +11,77 @@
 package forestry.apiculture.flowers;
 
 import com.google.common.base.Objects;
-
-import javax.annotation.Nonnull;
-
-import net.minecraft.block.Block;
-
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.genetics.IFlower;
+import javax.annotation.Nonnull;
+import net.minecraft.block.Block;
+import net.minecraftforge.oredict.OreDictionary;
 
 final class Flower implements IFlower {
 
-	private final Block block;
-	private final int meta;
-	private Double weight;
+    private final Block block;
+    private final int meta;
+    private Double weight;
 
-	public Flower(Block block, int meta, double weight) {
-		this.block = block;
-		this.meta = meta;
-		this.weight = weight;
-	}
+    public Flower(Block block, int meta, double weight) {
+        this.block = block;
+        this.meta = meta;
+        this.weight = weight;
+    }
 
-	public boolean isPlantable() {
-		return this.weight != 0.0;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof IFlower)) {
-			return false;
-		}
+    public boolean isPlantable() {
+        return this.weight != 0.0;
+    }
 
-		IFlower flower = (IFlower) obj;
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof IFlower)) {
+            return false;
+        }
 
-		return Block.isEqualTo(this.block, flower.getBlock()) && (this.meta == OreDictionary.WILDCARD_VALUE || flower.getMeta() == OreDictionary.WILDCARD_VALUE || this.meta == flower.getMeta());
-	}
+        IFlower flower = (IFlower) obj;
 
-	@Override
-	public int compareTo(@Nonnull IFlower other) {
-		return this.weight.compareTo(other.getWeight());
-	}
+        return Block.isEqualTo(this.block, flower.getBlock())
+                && (this.meta == OreDictionary.WILDCARD_VALUE
+                        || flower.getMeta() == OreDictionary.WILDCARD_VALUE
+                        || this.meta == flower.getMeta());
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(block);
-	}
+    @Override
+    public int compareTo(@Nonnull IFlower other) {
+        return this.weight.compareTo(other.getWeight());
+    }
 
-	@Override
-	public Block getBlock() {
-		return block;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(block);
+    }
 
-	@Override
-	public int getMeta() {
-		return meta;
-	}
+    @Override
+    public Block getBlock() {
+        return block;
+    }
 
-	@Override
-	public double getWeight() {
-		return weight;
-	}
+    @Override
+    public int getMeta() {
+        return meta;
+    }
 
-	@Override
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
+    @Override
+    public double getWeight() {
+        return weight;
+    }
 
-	@Override
-	public String toString() {
-		return Objects.toStringHelper(this).add("block", block).add("meta", meta).add("weight", weight).toString();
-	}
+    @Override
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("block", block)
+                .add("meta", meta)
+                .add("weight", weight)
+                .toString();
+    }
 }

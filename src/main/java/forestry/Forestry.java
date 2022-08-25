@@ -10,13 +10,6 @@
  ******************************************************************************/
 package forestry;
 
-import java.io.File;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-
-import net.minecraftforge.common.MinecraftForge;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -32,7 +25,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.Type;
-
 import forestry.api.core.ForestryAPI;
 import forestry.core.ClimateManager;
 import forestry.core.EventHandlerCore;
@@ -49,6 +41,10 @@ import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 import forestry.core.worldgen.WorldGenerator;
 import forestry.plugins.PluginManager;
+import java.io.File;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Forestry Minecraft Mod
@@ -56,113 +52,115 @@ import forestry.plugins.PluginManager;
  * @author SirSengir
  */
 @Mod(
-		modid = Constants.MOD,
-		name = Constants.MOD,
-		version = Constants.VERSION,
-		guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
-		dependencies = "required-after:Forge@[10.13.4.1566,);"
-				+ "after:Buildcraft|Core@[6.1.7,);"
-				+ "after:ExtrabiomesXL;"
-				+ "after:BiomesOPlenty;"
-				+ "after:IC2@[2.0.140,);"
-				+ "after:Natura@[2.2.0,);"
-				+ "after:HardcoreEnderExpansion;")
+        modid = Constants.MOD,
+        name = Constants.MOD,
+        version = Constants.VERSION,
+        guiFactory = "forestry.core.config.ForestryGuiConfigFactory",
+        dependencies = "required-after:Forge@[10.13.4.1566,);"
+                + "after:Buildcraft|Core@[6.1.7,);"
+                + "after:ExtrabiomesXL;"
+                + "after:BiomesOPlenty;"
+                + "after:IC2@[2.0.140,);"
+                + "after:Natura@[2.2.0,);"
+                + "after:HardcoreEnderExpansion;")
 public class Forestry {
 
-	@Mod.Instance(Constants.MOD)
-	public static Forestry instance;
-	private File configFolder;
+    @Mod.Instance(Constants.MOD)
+    public static Forestry instance;
 
-	public Forestry() {
-		ForestryAPI.instance = this;
-		ForestryAPI.climateManager = new ClimateManager();
-		ForestryAPI.forestryConstants = new Constants();
-		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
-		EnumErrorCode.init();
-	}
+    private File configFolder;
 
-	public static PacketHandler packetHandler;
+    public Forestry() {
+        ForestryAPI.instance = this;
+        ForestryAPI.climateManager = new ClimateManager();
+        ForestryAPI.forestryConstants = new Constants();
+        ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
+        EnumErrorCode.init();
+    }
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		checkForCoFHLib();
-		packetHandler = new PacketHandler();
+    public static PacketHandler packetHandler;
 
-		// Register event handler
-		EventHandlerCore eventHandlerCore = new EventHandlerCore();
-		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
-		FMLCommonHandler.instance().bus().register(eventHandlerCore);
-		MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        checkForCoFHLib();
+        packetHandler = new PacketHandler();
 
-		configFolder = new File(event.getModConfigurationDirectory(), "forestry");
-		Config.load();
+        // Register event handler
+        EventHandlerCore eventHandlerCore = new EventHandlerCore();
+        MinecraftForge.EVENT_BUS.register(eventHandlerCore);
+        FMLCommonHandler.instance().bus().register(eventHandlerCore);
+        MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
 
-		PluginManager.runSetup();
+        configFolder = new File(event.getModConfigurationDirectory(), "forestry");
+        Config.load();
 
-		ForestryAPI.activeMode = new GameMode(Config.gameMode);
+        PluginManager.runSetup();
 
-		PluginManager.runPreInit();
-	}
+        ForestryAPI.activeMode = new GameMode(Config.gameMode);
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		// Register gui handler
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+        PluginManager.runPreInit();
+    }
 
-		PluginManager.runInit();
-	}
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        // Register gui handler
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		PluginManager.runPostInit();
+        PluginManager.runInit();
+    }
 
-		// Register world generator
-		WorldGenerator worldGenerator = new WorldGenerator();
-		GameRegistry.registerWorldGenerator(worldGenerator, 0);
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        PluginManager.runPostInit();
 
-		// Register tick handlers
-		Proxies.common.registerTickHandlers(worldGenerator);
+        // Register world generator
+        WorldGenerator worldGenerator = new WorldGenerator();
+        GameRegistry.registerWorldGenerator(worldGenerator, 0);
 
-		// Handle IMC messages.
-		PluginManager.processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
-	}
+        // Register tick handlers
+        Proxies.common.registerTickHandlers(worldGenerator);
 
-	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event) {
-		PluginManager.serverStarting(event.getServer());
-	}
+        // Handle IMC messages.
+        PluginManager.processIMCMessages(FMLInterModComms.fetchRuntimeMessages(ForestryAPI.instance));
+    }
 
-	public File getConfigFolder() {
-		return configFolder;
-	}
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        PluginManager.serverStarting(event.getServer());
+    }
 
-	@EventHandler
-	public void processIMCMessages(IMCEvent event) {
-		PluginManager.processIMCMessages(event.getMessages());
-	}
+    public File getConfigFolder() {
+        return configFolder;
+    }
 
-	@EventHandler
-	public void missingMapping(FMLMissingMappingsEvent event) {
-		for (MissingMapping mapping : event.get()) {
-			if (mapping.type == Type.BLOCK) {
-				Block block = GameRegistry.findBlock(Constants.MOD, StringUtil.cleanTags(mapping.name));
-				if (block != null) {
-					mapping.remap(block);
-					Log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
-				}
-			} else {
-				Item item = GameRegistry.findItem(Constants.MOD, StringUtil.cleanTags(mapping.name));
-				if (item != null) {
-					mapping.remap(item);
-					Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanItemName(item));
-				}
-			}
-		}
-	}
-	
-	private static void checkForCoFHLib() {
-		if (!ModAPIManager.INSTANCE.hasAPI("CoFHAPI|energy")) {
-			throw new RuntimeException("CoFHAPI|energy could not be found! This version of Forestry does not contain the RedstoneFlux API anymore, so you have to install either CoFHLib or CoFHCore.");
-		}
-	}
+    @EventHandler
+    public void processIMCMessages(IMCEvent event) {
+        PluginManager.processIMCMessages(event.getMessages());
+    }
+
+    @EventHandler
+    public void missingMapping(FMLMissingMappingsEvent event) {
+        for (MissingMapping mapping : event.get()) {
+            if (mapping.type == Type.BLOCK) {
+                Block block = GameRegistry.findBlock(Constants.MOD, StringUtil.cleanTags(mapping.name));
+                if (block != null) {
+                    mapping.remap(block);
+                    Log.warning("Remapping block " + mapping.name + " to " + StringUtil.cleanBlockName(block));
+                }
+            } else {
+                Item item = GameRegistry.findItem(Constants.MOD, StringUtil.cleanTags(mapping.name));
+                if (item != null) {
+                    mapping.remap(item);
+                    Log.warning("Remapping item " + mapping.name + " to " + StringUtil.cleanItemName(item));
+                }
+            }
+        }
+    }
+
+    private static void checkForCoFHLib() {
+        if (!ModAPIManager.INSTANCE.hasAPI("CoFHAPI|energy")) {
+            throw new RuntimeException(
+                    "CoFHAPI|energy could not be found! This version of Forestry does not contain the RedstoneFlux API anymore, so you have to install either CoFHLib or CoFHCore.");
+        }
+    }
 }

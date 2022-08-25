@@ -13,7 +13,7 @@ package forestry.energy.proxy;
 import forestry.core.render.IBlockRenderer;
 
 public class ProxyEnergy {
-	public IBlockRenderer getRenderDefaultEngine(String gfxBase) {
-		return null;
-	}
+    public IBlockRenderer getRenderDefaultEngine(String gfxBase) {
+        return null;
+    }
 }

@@ -10,56 +10,56 @@
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-
 import forestry.core.gui.IHintSource;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
+import java.util.List;
+import java.util.Random;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 public class HintLedger extends Ledger {
 
-	private final String hintString;
-	private final String hintTooltip;
+    private final String hintString;
+    private final String hintTooltip;
 
-	public HintLedger(LedgerManager manager, IHintSource tile) {
-		super(manager, "hint");
-		List<String> hints = tile.getHints();
-		int position = new Random().nextInt(hints.size());
-		String hint = hints.get(position);
+    public HintLedger(LedgerManager manager, IHintSource tile) {
+        super(manager, "hint");
+        List<String> hints = tile.getHints();
+        int position = new Random().nextInt(hints.size());
+        String hint = hints.get(position);
 
-		hintString = StringUtil.localize("hints." + hint + ".desc");
-		hintTooltip = StringUtil.localize("hints." + hint + ".tag");
+        hintString = StringUtil.localize("hints." + hint + ".desc");
+        hintTooltip = StringUtil.localize("hints." + hint + ".tag");
 
-		Minecraft minecraft = Proxies.common.getClientInstance();
-		FontRenderer fontRenderer = minecraft.fontRenderer;
-		int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxTextWidth).size();
-		maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
-	}
+        Minecraft minecraft = Proxies.common.getClientInstance();
+        FontRenderer fontRenderer = minecraft.fontRenderer;
+        int lineCount = fontRenderer
+                .listFormattedStringToWidth(hintString, maxTextWidth)
+                .size();
+        maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
+    }
 
-	@Override
-	public void draw(int x, int y) {
+    @Override
+    public void draw(int x, int y) {
 
-		// Draw background
-		drawBackground(x, y);
+        // Draw background
+        drawBackground(x, y);
 
-		// Draw icon
-		drawIcon(TextureManager.getInstance().getDefault("misc/hint"), x + 3, y + 4);
+        // Draw icon
+        drawIcon(TextureManager.getInstance().getDefault("misc/hint"), x + 3, y + 4);
 
-		if (!isFullyOpened()) {
-			return;
-		}
+        if (!isFullyOpened()) {
+            return;
+        }
 
-		drawHeader(StringUtil.localize("gui.didyouknow") + '?', x + 22, y + 8);
-		drawSplitText(hintString, x + 12, y + 20, maxTextWidth);
-	}
+        drawHeader(StringUtil.localize("gui.didyouknow") + '?', x + 22, y + 8);
+        drawSplitText(hintString, x + 12, y + 20, maxTextWidth);
+    }
 
-	@Override
-	public String getTooltip() {
-		return hintTooltip;
-	}
+    @Override
+    public String getTooltip() {
+        return hintTooltip;
+    }
 }

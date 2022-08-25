@@ -10,37 +10,41 @@
  ******************************************************************************/
 package forestry.core.commands;
 
+import forestry.core.config.Version;
+import forestry.core.proxy.Proxies;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
-
-import forestry.core.config.Version;
-import forestry.core.proxy.Proxies;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandVersion extends SubCommand {
 
-	public CommandVersion() {
-		super("version");
-	}
+    public CommandVersion() {
+        super("version");
+    }
 
-	@Override
-	public void processSubCommand(ICommandSender sender, String[] args) {
-		ChatStyle style = new ChatStyle();
-		if (Version.isOutdated()) {
-			style.setColor(EnumChatFormatting.RED);
-		} else {
-			style.setColor(EnumChatFormatting.GREEN);
-		}
+    @Override
+    public void processSubCommand(ICommandSender sender, String[] args) {
+        ChatStyle style = new ChatStyle();
+        if (Version.isOutdated()) {
+            style.setColor(EnumChatFormatting.RED);
+        } else {
+            style.setColor(EnumChatFormatting.GREEN);
+        }
 
-		CommandHelpers.sendLocalizedChatMessage(sender, style, "for.chat.version", Version.getVersion(), Proxies.common.getMinecraftVersion(), Version.getRecommendedVersion());
-		if (Version.isOutdated()) {
-			for (String updateLine : Version.getChangelog()) {
-				CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + updateLine);
-			}
-		}
-	}
-
+        CommandHelpers.sendLocalizedChatMessage(
+                sender,
+                style,
+                "for.chat.version",
+                Version.getVersion(),
+                Proxies.common.getMinecraftVersion(),
+                Version.getRecommendedVersion());
+        if (Version.isOutdated()) {
+            for (String updateLine : Version.getChangelog()) {
+                CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + updateLine);
+            }
+        }
+    }
 }

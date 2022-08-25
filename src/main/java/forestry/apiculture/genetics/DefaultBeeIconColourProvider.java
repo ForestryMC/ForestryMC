@@ -13,22 +13,22 @@ package forestry.apiculture.genetics;
 import forestry.api.apiculture.IBeeIconColourProvider;
 
 public class DefaultBeeIconColourProvider implements IBeeIconColourProvider {
-	private final int primaryColour;
-	private final int secondaryColour;
+    private final int primaryColour;
+    private final int secondaryColour;
 
-	public DefaultBeeIconColourProvider(int primaryColour, int secondaryColour) {
-		this.primaryColour = primaryColour;
-		this.secondaryColour = secondaryColour;
-	}
+    public DefaultBeeIconColourProvider(int primaryColour, int secondaryColour) {
+        this.primaryColour = primaryColour;
+        this.secondaryColour = secondaryColour;
+    }
 
-	@Override
-	public int getIconColour(int renderPass) {
-		if (renderPass == 0) {
-			return primaryColour;
-		}
-		if (renderPass == 1) {
-			return secondaryColour;
-		}
-		return 0xffffff;
-	}
+    @Override
+    public int getIconColour(int renderPass) {
+        if (renderPass == 0) {
+            return primaryColour;
+        }
+        if (renderPass == 1) {
+            return secondaryColour;
+        }
+        return 0xffffff;
+    }
 }

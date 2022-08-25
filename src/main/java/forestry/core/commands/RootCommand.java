@@ -15,7 +15,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
@@ -24,82 +23,81 @@ import net.minecraft.command.ICommandSender;
  */
 public class RootCommand extends CommandBase implements IForestryCommand {
 
-	public static final String ROOT_COMMAND_NAME = "forestry";
-	public static final String ROOT_COMMAND_ALIAS = "for";
+    public static final String ROOT_COMMAND_NAME = "forestry";
+    public static final String ROOT_COMMAND_ALIAS = "for";
 
-	private final SortedSet<SubCommand> children = new TreeSet<>(new Comparator<SubCommand>() {
+    private final SortedSet<SubCommand> children = new TreeSet<>(new Comparator<SubCommand>() {
 
-		@Override
-		public int compare(SubCommand o1, SubCommand o2) {
-			return o1.compareTo(o2);
-		}
-	});
+        @Override
+        public int compare(SubCommand o1, SubCommand o2) {
+            return o1.compareTo(o2);
+        }
+    });
 
-	public void addChildCommand(SubCommand child) {
-		child.setParent(this);
-		children.add(child);
-	}
+    public void addChildCommand(SubCommand child) {
+        child.setParent(this);
+        children.add(child);
+    }
 
-	/* CommandBase */
+    /* CommandBase */
 
-	@Override
-	public String getCommandName() {
-		return ROOT_COMMAND_NAME;
-	}
+    @Override
+    public String getCommandName() {
+        return ROOT_COMMAND_NAME;
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/" + this.getCommandName() + " help";
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/" + this.getCommandName() + " help";
+    }
 
-	@Override
-	public void processCommand(ICommandSender sender, String[] args) {
-		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
-			CommandHelpers.throwWrongUsage(sender, this);
-		}
-	}
+    @Override
+    public void processCommand(ICommandSender sender, String[] args) {
+        if (!CommandHelpers.processStandardCommands(sender, this, args)) {
+            CommandHelpers.throwWrongUsage(sender, this);
+        }
+    }
 
-	/**
-	 * Used only for CommandBase.
-	 * It gets obfuscated, so the name needs to be different from the one in IForestryCommand.
-	 */
-	@Override
-	public int getRequiredPermissionLevel() {
-		return getPermissionLevel();
-	}
+    /**
+     * Used only for CommandBase.
+     * It gets obfuscated, so the name needs to be different from the one in IForestryCommand.
+     */
+    @Override
+    public int getRequiredPermissionLevel() {
+        return getPermissionLevel();
+    }
 
-	@Override
-	public List<String> getCommandAliases() {
-		List<String> aliases = new ArrayList<>();
-		aliases.add(ROOT_COMMAND_ALIAS);
-		return aliases;
-	}
+    @Override
+    public List<String> getCommandAliases() {
+        List<String> aliases = new ArrayList<>();
+        aliases.add(ROOT_COMMAND_ALIAS);
+        return aliases;
+    }
 
-	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
-		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
-	}
+    @Override
+    public List addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
+        return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
+    }
 
-	/* IForestryCommand */
+    /* IForestryCommand */
 
-	@Override
-	public String getFullCommandString() {
-		return getCommandName();
-	}
+    @Override
+    public String getFullCommandString() {
+        return getCommandName();
+    }
 
-	@Override
-	public int getPermissionLevel() {
-		return 0;
-	}
+    @Override
+    public int getPermissionLevel() {
+        return 0;
+    }
 
-	@Override
-	public SortedSet<SubCommand> getChildren() {
-		return children;
-	}
+    @Override
+    public SortedSet<SubCommand> getChildren() {
+        return children;
+    }
 
-	@Override
-	public void printHelp(ICommandSender sender) {
-		CommandHelpers.printHelp(sender, this);
-	}
-
+    @Override
+    public void printHelp(ICommandSender sender) {
+        CommandHelpers.printHelp(sender, this);
+    }
 }

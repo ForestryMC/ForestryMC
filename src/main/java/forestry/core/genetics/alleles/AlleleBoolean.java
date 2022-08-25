@@ -14,15 +14,14 @@ import forestry.api.genetics.IAlleleBoolean;
 
 public class AlleleBoolean extends AlleleCategorized implements IAlleleBoolean {
 
-	private final boolean value;
+    private final boolean value;
 
-	public AlleleBoolean(String modId, String category, boolean value, boolean isDominant) {
-		super(modId, category, Boolean.toString(value), isDominant);
-		this.value = value;
-	}
+    public AlleleBoolean(String modId, String category, boolean value, boolean isDominant) {
+        super(modId, category, Boolean.toString(value), isDominant);
+        this.value = value;
+    }
 
-	public boolean getValue() {
-		return value;
-	}
-
+    public boolean getValue() {
+        return value;
+    }
 }

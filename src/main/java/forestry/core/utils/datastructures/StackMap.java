@@ -21,68 +21,67 @@ import java.util.Map;
  * @author Alex Binnie
  */
 public abstract class StackMap<P, T> extends HashMap<P, T> {
-	
-	@Override
-	public final T put(P key, T value) {
-		if (isValidKey(key) && key != null && value != null) {
-			return super.put(key, value);
-		}
-		return null;
-	}
 
-	private static final long serialVersionUID = 5383477742290646466L;
+    @Override
+    public final T put(P key, T value) {
+        if (isValidKey(key) && key != null && value != null) {
+            return super.put(key, value);
+        }
+        return null;
+    }
 
-	@Override
-	public final boolean containsKey(Object key) {
-		P stack = getStack(key);
-		if (stack == null) {
-			return false;
-		}
-		for (Map.Entry<P, T> entry : this.entrySet()) {
-			if (areEqual(stack, entry.getKey())) {
-				return true;
-			}
-		}
-		return super.containsKey(key);
-	}
+    private static final long serialVersionUID = 5383477742290646466L;
 
-	@Override
-	public final T get(Object key) {
-		P stack = getStack(key);
-		if (stack == null) {
-			return null;
-		}
-		for (Map.Entry<P, T> entry : this.entrySet()) {
-			if (areEqual(stack, entry.getKey())) {
-				return entry.getValue();
-			}
-		}
-		return super.get(key);
-	}
+    @Override
+    public final boolean containsKey(Object key) {
+        P stack = getStack(key);
+        if (stack == null) {
+            return false;
+        }
+        for (Map.Entry<P, T> entry : this.entrySet()) {
+            if (areEqual(stack, entry.getKey())) {
+                return true;
+            }
+        }
+        return super.containsKey(key);
+    }
 
-	/**
-	 * Is a, the key used to lookup, equivelant to the key b
-	 *
-	 * @param a
-	 * @param b
-	 * @return
-	 */
-	protected abstract boolean areEqual(P a, Object b);
-	
-	/**
-	 * Can this key be added to the map
-	 *
-	 * @param key
-	 * @return
-	 */
-	protected abstract boolean isValidKey(Object key);
+    @Override
+    public final T get(Object key) {
+        P stack = getStack(key);
+        if (stack == null) {
+            return null;
+        }
+        for (Map.Entry<P, T> entry : this.entrySet()) {
+            if (areEqual(stack, entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+        return super.get(key);
+    }
 
-	/**
-	 * Converts a key used to lookup something into P (ItemStack or FluidStack)
-	 *
-	 * @param key
-	 * @return
-	 */
-	protected abstract P getStack(Object key);
+    /**
+     * Is a, the key used to lookup, equivelant to the key b
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    protected abstract boolean areEqual(P a, Object b);
 
+    /**
+     * Can this key be added to the map
+     *
+     * @param key
+     * @return
+     */
+    protected abstract boolean isValidKey(Object key);
+
+    /**
+     * Converts a key used to lookup something into P (ItemStack or FluidStack)
+     *
+     * @param key
+     * @return
+     */
+    protected abstract P getStack(Object key);
 }

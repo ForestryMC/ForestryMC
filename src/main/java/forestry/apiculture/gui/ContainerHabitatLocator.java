@@ -10,24 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerHabitatLocator extends ContainerItemInventory<ItemInventoryHabitatLocator> {
 
-	public ContainerHabitatLocator(EntityPlayer player, ItemInventoryHabitatLocator inventory) {
-		super(inventory, player.inventory, 8, 102);
+    public ContainerHabitatLocator(EntityPlayer player, ItemInventoryHabitatLocator inventory) {
+        super(inventory, player.inventory, 8, 102);
 
-		// Energy
-		this.addSlotToContainer(new SlotFiltered(inventory, 2, 152, 8));
+        // Energy
+        this.addSlotToContainer(new SlotFiltered(inventory, 2, 152, 8));
 
-		// Bee to analyze
-		this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 32));
-		// Analyzed bee
-		this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 75));
-	}
+        // Bee to analyze
+        this.addSlotToContainer(new SlotFiltered(inventory, 0, 152, 32));
+        // Analyzed bee
+        this.addSlotToContainer(new SlotOutput(inventory, 1, 152, 75));
+    }
 }

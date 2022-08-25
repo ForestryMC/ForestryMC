@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.mail.gui.widgets;
 
-import net.minecraft.entity.player.EntityPlayer;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.api.mail.IPostalCarrier;
 import forestry.api.mail.PostManager;
 import forestry.core.gui.widgets.Widget;
@@ -22,37 +18,40 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.SpriteSheet;
 import forestry.core.utils.StringUtil;
 import forestry.mail.gui.ContainerLetter;
+import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.opengl.GL11;
 
 public class AddresseeSlot extends Widget {
 
-	private final ContainerLetter containerLetter;
+    private final ContainerLetter containerLetter;
 
-	public AddresseeSlot(WidgetManager widgetManager, int xPos, int yPos, ContainerLetter containerLetter) {
-		super(widgetManager, xPos, yPos);
-		this.containerLetter = containerLetter;
-		this.width = 26;
-		this.height = 15;
-	}
+    public AddresseeSlot(WidgetManager widgetManager, int xPos, int yPos, ContainerLetter containerLetter) {
+        super(widgetManager, xPos, yPos);
+        this.containerLetter = containerLetter;
+        this.width = 26;
+        this.height = 15;
+    }
 
-	@Override
-	public void draw(int startX, int startY) {
-		IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
-		if (carrier != null) {
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-			Proxies.render.bindTexture(SpriteSheet.ITEMS);
-			manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos - 5, carrier.getIcon(), 26, 26);
-		}
-	}
+    @Override
+    public void draw(int startX, int startY) {
+        IPostalCarrier carrier = PostManager.postRegistry.getCarrier(containerLetter.getCarrierType());
+        if (carrier != null) {
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+            Proxies.render.bindTexture(SpriteSheet.ITEMS);
+            manager.gui.drawTexturedModelRectFromIcon(startX + xPos, startY + yPos - 5, carrier.getIcon(), 26, 26);
+        }
+    }
 
-	@Override
-	protected String getLegacyTooltip(EntityPlayer player) {
-		return StringUtil.localize("gui.addressee." + containerLetter.getCarrierType().toString());
-	}
+    @Override
+    protected String getLegacyTooltip(EntityPlayer player) {
+        return StringUtil.localize(
+                "gui.addressee." + containerLetter.getCarrierType().toString());
+    }
 
-	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-		if (!containerLetter.getLetter().isProcessed()) {
-			containerLetter.advanceCarrierType();
-		}
-	}
+    @Override
+    public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+        if (!containerLetter.getLetter().isProcessed()) {
+            containerLetter.advanceCarrierType();
+        }
+    }
 }

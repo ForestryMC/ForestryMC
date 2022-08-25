@@ -10,25 +10,23 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.core.config.Config;
 import forestry.core.gui.IHintSource;
 import forestry.core.inventory.ItemInventoryAlyzer;
+import java.util.List;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ItemInventoryBeealyzer extends ItemInventoryAlyzer implements IHintSource {
 
-	public ItemInventoryBeealyzer(EntityPlayer player, ItemStack itemStack) {
-		super(BeeManager.beeRoot, player, itemStack);
-	}
+    public ItemInventoryBeealyzer(EntityPlayer player, ItemStack itemStack) {
+        super(BeeManager.beeRoot, player, itemStack);
+    }
 
-	/* IHintSource */
-	@Override
-	public List<String> getHints() {
-		return Config.hints.get("beealyzer");
-	}
+    /* IHintSource */
+    @Override
+    public List<String> getHints() {
+        return Config.hints.get("beealyzer");
+    }
 }

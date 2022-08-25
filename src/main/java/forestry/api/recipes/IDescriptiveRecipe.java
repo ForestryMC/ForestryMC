@@ -16,34 +16,34 @@ import net.minecraft.world.World;
  */
 public interface IDescriptiveRecipe extends IRecipe {
 
-	/**
-	 * @return width of the crafting ingredients in the crafting table
-	 */
-	int getWidth();
+    /**
+     * @return width of the crafting ingredients in the crafting table
+     */
+    int getWidth();
 
-	/**
-	 * @return height of the crafting ingredients in the crafting table
-	 */
-	int getHeight();
+    /**
+     * @return height of the crafting ingredients in the crafting table
+     */
+    int getHeight();
 
-	/**
-	 * @return array of all the ingredients in the crafting table.
-	 * Ingredients may be null, ItemStack, ItemStack[], or a List of ItemStack
-	 */
-	Object[] getIngredients();
+    /**
+     * @return array of all the ingredients in the crafting table.
+     * Ingredients may be null, ItemStack, ItemStack[], or a List of ItemStack
+     */
+    Object[] getIngredients();
 
-	/**
-	 * @return true if the recipe manager should copy NBT from input items to the output item.
-	 * If true, all input items must have the same NBT for it to succeed.
-	 * @deprecated since Forestry 4.2 wood itemStacks use item damage (meta) instead of NBT
-	 */
-	@Deprecated
-	boolean preserveNBT();
+    /**
+     * @return true if the recipe manager should copy NBT from input items to the output item.
+     * If true, all input items must have the same NBT for it to succeed.
+     * @deprecated since Forestry 4.2 wood itemStacks use item damage (meta) instead of NBT
+     */
+    @Deprecated
+    boolean preserveNBT();
 
-	/**
-	 * Used to check if a recipe matches current crafting inventory
-	 * @deprecated Since Forestry 4.1. This is handled by Forestry.
-	 */
-	@Deprecated
-	boolean matches(IInventory inventoryCrafting, World world);
+    /**
+     * Used to check if a recipe matches current crafting inventory
+     * @deprecated Since Forestry 4.1. This is handled by Forestry.
+     */
+    @Deprecated
+    boolean matches(IInventory inventoryCrafting, World world);
 }

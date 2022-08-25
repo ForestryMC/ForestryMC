@@ -10,81 +10,77 @@
  ******************************************************************************/
 package forestry.core.gui.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-
-import org.lwjgl.opengl.GL11;
-
 import forestry.core.gui.GuiForestry;
 import forestry.core.proxy.Proxies;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.GL11;
 
 public class WidgetManager {
 
-	public final GuiForestry gui;
-	public final Minecraft minecraft;
-	protected final List<Widget> widgets = new ArrayList<>();
+    public final GuiForestry gui;
+    public final Minecraft minecraft;
+    protected final List<Widget> widgets = new ArrayList<>();
 
-	public WidgetManager(GuiForestry gui) {
-		this.gui = gui;
-		this.minecraft = Proxies.common.getClientInstance();
-	}
+    public WidgetManager(GuiForestry gui) {
+        this.gui = gui;
+        this.minecraft = Proxies.common.getClientInstance();
+    }
 
-	public void add(Widget slot) {
-		this.widgets.add(slot);
-	}
+    public void add(Widget slot) {
+        this.widgets.add(slot);
+    }
 
-	public void remove(Widget slot) {
-		this.widgets.remove(slot);
-	}
+    public void remove(Widget slot) {
+        this.widgets.remove(slot);
+    }
 
-	public void clear() {
-		this.widgets.clear();
-	}
+    public void clear() {
+        this.widgets.clear();
+    }
 
-	public List<Widget> getWidgets() {
-		return widgets;
-	}
+    public List<Widget> getWidgets() {
+        return widgets;
+    }
 
-	public Widget getAtPosition(int mX, int mY) {
-		for (Widget slot : widgets) {
-			if (slot.isMouseOver(mX, mY)) {
-				return slot;
-			}
-		}
+    public Widget getAtPosition(int mX, int mY) {
+        for (Widget slot : widgets) {
+            if (slot.isMouseOver(mX, mY)) {
+                return slot;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public void drawWidgets() {
-		gui.setZLevel(100.0F);
-		GuiForestry.getItemRenderer().zLevel = 100.0F;
-		for (Widget slot : widgets) {
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			slot.draw(0, 0);
-		}
-		gui.setZLevel(0.0F);
-		GuiForestry.getItemRenderer().zLevel = 0.0F;
+    public void drawWidgets() {
+        gui.setZLevel(100.0F);
+        GuiForestry.getItemRenderer().zLevel = 100.0F;
+        for (Widget slot : widgets) {
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            slot.draw(0, 0);
+        }
+        gui.setZLevel(0.0F);
+        GuiForestry.getItemRenderer().zLevel = 0.0F;
+    }
 
-	}
+    public void handleMouseClicked(int mouseX, int mouseY, int mouseButton) {
+        Widget slot = getAtPosition(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
+        if (slot != null) {
+            slot.handleMouseClick(mouseX, mouseY, mouseButton);
+        }
+    }
 
-	public void handleMouseClicked(int mouseX, int mouseY, int mouseButton) {
-		Widget slot = getAtPosition(mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
-		if (slot != null) {
-			slot.handleMouseClick(mouseX, mouseY, mouseButton);
-		}
-	}
+    public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
+        for (Widget slot : widgets) {
+            slot.handleMouseRelease(mouseX, mouseY, eventType);
+        }
+    }
 
-	public void handleMouseRelease(int mouseX, int mouseY, int eventType) {
-		for (Widget slot : widgets) {
-			slot.handleMouseRelease(mouseX, mouseY, eventType);
-		}
-	}
-
-	public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
-		for (Widget slot : widgets) {
-			slot.handleMouseMove(mouseX, mouseY, mouseButton, time);
-		}
-	}
+    public void handleMouseMove(int mouseX, int mouseY, int mouseButton, long time) {
+        for (Widget slot : widgets) {
+            slot.handleMouseMove(mouseX, mouseY, mouseButton, time);
+        }
+    }
 }

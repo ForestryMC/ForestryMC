@@ -10,6 +10,4 @@
  ******************************************************************************/
 package forestry.core.circuits;
 
-public interface ISolderingIron {
-
-}
+public interface ISolderingIron {}

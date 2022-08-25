@@ -10,19 +10,18 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.lepidopterology.EnumFlutterType;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.genetics.IGeneticDefinition;
+import net.minecraft.item.ItemStack;
 
 public interface IButterflyDefinition extends IGeneticDefinition {
-	@Override
-	IButterflyGenome getGenome();
+    @Override
+    IButterflyGenome getGenome();
 
-	@Override
-	IButterfly getIndividual();
+    @Override
+    IButterfly getIndividual();
 
-	ItemStack getMemberStack(EnumFlutterType flutterType);
+    ItemStack getMemberStack(EnumFlutterType flutterType);
 }

@@ -10,37 +10,34 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdServer;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
 
 public class PacketGuiSelectRequest extends PacketGuiSelect implements IForestryPacketServer {
 
-	public PacketGuiSelectRequest() {
-	}
+    public PacketGuiSelectRequest() {}
 
-	public PacketGuiSelectRequest(int primaryIndex, int secondaryIndex) {
-		super(primaryIndex, secondaryIndex);
-	}
+    public PacketGuiSelectRequest(int primaryIndex, int secondaryIndex) {
+        super(primaryIndex, secondaryIndex);
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		Container container = player.openContainer;
-		if (!(container instanceof IGuiSelectable)) {
-			return;
-		}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+        Container container = player.openContainer;
+        if (!(container instanceof IGuiSelectable)) {
+            return;
+        }
 
-		((IGuiSelectable) container).handleSelectionRequest(player, this);
-	}
+        ((IGuiSelectable) container).handleSelectionRequest(player, this);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.GUI_SELECTION_REQUEST;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.GUI_SELECTION_REQUEST;
+    }
 }

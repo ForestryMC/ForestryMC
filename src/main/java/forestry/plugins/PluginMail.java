@@ -10,11 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.FMLCommonHandler;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.PostManager;
 import forestry.api.recipes.RecipeManagers;
@@ -39,129 +35,164 @@ import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.triggers.MailTriggers;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
-@Plugin(pluginID = "Mail", name = "Mail", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.mail.description")
+@Plugin(
+        pluginID = "Mail",
+        name = "Mail",
+        author = "SirSengir",
+        url = Constants.URL,
+        unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
-	public static ItemRegistryMail items;
-	public static BlockRegistryMail blocks;
+    public static ItemRegistryMail items;
+    public static BlockRegistryMail blocks;
 
-	@Override
-	protected void setupAPI() {
-		super.setupAPI();
+    @Override
+    protected void setupAPI() {
+        super.setupAPI();
 
-		PostManager.postRegistry = new PostRegistry();
-		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
-		PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
-	}
+        PostManager.postRegistry = new PostRegistry();
+        PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.PLAYER));
+        PostManager.postRegistry.registerCarrier(new PostalCarrier(EnumAddressee.TRADER));
+    }
 
-	@Override
-	protected void registerItemsAndBlocks() {
-		items = new ItemRegistryMail();
-		blocks = new BlockRegistryMail();
-	}
+    @Override
+    protected void registerItemsAndBlocks() {
+        items = new ItemRegistryMail();
+        blocks = new BlockRegistryMail();
+    }
 
-	@Override
-	public void preInit() {
-		super.preInit();
-		
-		PluginCore.rootCommand.addChildCommand(new CommandMail());
+    @Override
+    public void preInit() {
+        super.preInit();
 
-		if (Config.mailAlertEnabled) {
-			FMLCommonHandler.instance().bus().register(new EventHandlerMailAlert());
-		}
+        PluginCore.rootCommand.addChildCommand(new CommandMail());
 
-		blocks.mail.addDefinitions(
-				new MachineDefinition(BlockMailType.MAILBOX).setFaces(0, 1, 2, 2, 2, 2, 0, 7),
-				new MachineDefinition(BlockMailType.TRADESTATION).setFaces(0, 1, 2, 3, 4, 4, 0, 7),
-				new MachineDefinition(BlockMailType.PHILATELIST).setFaces(0, 1, 2, 3, 2, 2, 0, 7)
-		);
-	}
+        if (Config.mailAlertEnabled) {
+            FMLCommonHandler.instance().bus().register(new EventHandlerMailAlert());
+        }
 
-	@Override
-	protected void registerTriggers() {
-		MailTriggers.initialize();
-	}
+        blocks.mail.addDefinitions(
+                new MachineDefinition(BlockMailType.MAILBOX).setFaces(0, 1, 2, 2, 2, 2, 0, 7),
+                new MachineDefinition(BlockMailType.TRADESTATION).setFaces(0, 1, 2, 3, 4, 4, 0, 7),
+                new MachineDefinition(BlockMailType.PHILATELIST).setFaces(0, 1, 2, 3, 2, 2, 0, 7));
+    }
 
-	@Override
-	public void doInit() {
-		super.doInit();
+    @Override
+    protected void registerTriggers() {
+        MailTriggers.initialize();
+    }
 
-		blocks.mail.init();
-	}
+    @Override
+    public void doInit() {
+        super.doInit();
 
-	@Override
-	public IPacketRegistry getPacketRegistry() {
-		return new PacketRegistryMail();
-	}
+        blocks.mail.init();
+    }
 
-	@Override
-	protected void registerRecipes() {
-		Object stampGlue;
-		Object letterGlue;
+    @Override
+    public IPacketRegistry getPacketRegistry() {
+        return new PacketRegistryMail();
+    }
 
-		ItemRegistryApiculture beeItems = PluginApiculture.items;
-		if (beeItems != null) {
-			stampGlue = beeItems.honeyDrop;
-			letterGlue = beeItems.propolis.getWildcard();
-		} else {
-			stampGlue = Items.slime_ball;
-			letterGlue = Items.slime_ball;
-		}
+    @Override
+    protected void registerRecipes() {
+        Object stampGlue;
+        Object letterGlue;
 
-		RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.paper, letterGlue);
+        ItemRegistryApiculture beeItems = PluginApiculture.items;
+        if (beeItems != null) {
+            stampGlue = beeItems.honeyDrop;
+            letterGlue = beeItems.propolis.getWildcard();
+        } else {
+            stampGlue = Items.slime_ball;
+            letterGlue = Items.slime_ball;
+        }
 
-		if (Config.craftingStampsEnabled) {
-			for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
-				if (Config.collectorStamps.contains(stampDefinition.getName())) {
-					continue;
-				}
+        RecipeUtil.addShapelessRecipe(items.letters.getItemStack(), Items.paper, letterGlue);
 
-				ItemStack stamps = items.stamps.get(stampDefinition, 9);
+        if (Config.craftingStampsEnabled) {
+            for (EnumStampDefinition stampDefinition : EnumStampDefinition.VALUES) {
+                if (Config.collectorStamps.contains(stampDefinition.getName())) {
+                    continue;
+                }
 
-				RecipeUtil.addRecipe(stamps,
-						"XXX",
-						"###",
-						"ZZZ",
-						'X', stampDefinition.getCraftingIngredient(),
-						'#', Items.paper,
-						'Z', stampGlue);
-				RecipeManagers.carpenterManager.addRecipe(10, Fluids.SEEDOIL.getFluid(300), null, stamps,
-						"XXX",
-						"###",
-						'X', stampDefinition.getCraftingIngredient(),
-						'#', Items.paper);
-			}
-		}
+                ItemStack stamps = items.stamps.get(stampDefinition, 9);
 
-		// Recycling
-		RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', items.letters.getWildcard());
+                RecipeUtil.addRecipe(
+                        stamps,
+                        "XXX",
+                        "###",
+                        "ZZZ",
+                        'X',
+                        stampDefinition.getCraftingIngredient(),
+                        '#',
+                        Items.paper,
+                        'Z',
+                        stampGlue);
+                RecipeManagers.carpenterManager.addRecipe(
+                        10,
+                        Fluids.SEEDOIL.getFluid(300),
+                        null,
+                        stamps,
+                        "XXX",
+                        "###",
+                        'X',
+                        stampDefinition.getCraftingIngredient(),
+                        '#',
+                        Items.paper);
+            }
+        }
 
-		// Carpenter
-		RecipeManagers.carpenterManager.addRecipe(10, Fluids.WATER.getFluid(250), null, items.letters.getItemStack(), "###", "###", '#', PluginCore.items.woodPulp);
+        // Recycling
+        RecipeUtil.addRecipe(new ItemStack(Items.paper), "###", '#', items.letters.getWildcard());
 
-		RecipeUtil.addShapelessRecipe(items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.book));
+        // Carpenter
+        RecipeManagers.carpenterManager.addRecipe(
+                10,
+                Fluids.WATER.getFluid(250),
+                null,
+                items.letters.getItemStack(),
+                "###",
+                "###",
+                '#',
+                PluginCore.items.woodPulp);
 
-		RecipeUtil.addRecipe(blocks.mail.get(BlockMailType.MAILBOX),
-				" # ",
-				"#Y#",
-				"XXX",
-				'#', "ingotTin",
-				'X', "chestWood",
-				'Y', PluginCore.items.sturdyCasing);
+        RecipeUtil.addShapelessRecipe(
+                items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.book));
 
-		RecipeUtil.addRecipe(blocks.mail.get(BlockMailType.TRADESTATION),
-				"Z#Z",
-				"#Y#",
-				"XWX",
-				'#', PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
-				'X', "chestWood",
-				'Y', PluginCore.items.sturdyCasing,
-				'Z', PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
-				'W', PluginCore.items.circuitboards.get(EnumCircuitBoardType.REFINED));
-	}
+        RecipeUtil.addRecipe(
+                blocks.mail.get(BlockMailType.MAILBOX),
+                " # ",
+                "#Y#",
+                "XXX",
+                '#',
+                "ingotTin",
+                'X',
+                "chestWood",
+                'Y',
+                PluginCore.items.sturdyCasing);
 
-	@Override
-	public ISaveEventHandler getSaveEventHandler() {
-		return new SaveEventHandlerMail();
-	}
+        RecipeUtil.addRecipe(
+                blocks.mail.get(BlockMailType.TRADESTATION),
+                "Z#Z",
+                "#Y#",
+                "XWX",
+                '#',
+                PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
+                'X',
+                "chestWood",
+                'Y',
+                PluginCore.items.sturdyCasing,
+                'Z',
+                PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
+                'W',
+                PluginCore.items.circuitboards.get(EnumCircuitBoardType.REFINED));
+    }
+
+    @Override
+    public ISaveEventHandler getSaveEventHandler() {
+        return new SaveEventHandlerMail();
+    }
 }

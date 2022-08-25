@@ -15,8 +15,7 @@ import forestry.energy.render.RenderEngine;
 
 public class ProxyEnergyClient extends ProxyEnergy {
 
-	public IBlockRenderer getRenderDefaultEngine(String gfxBase) {
-		return new RenderEngine(gfxBase);
-	}
-
+    public IBlockRenderer getRenderDefaultEngine(String gfxBase) {
+        return new RenderEngine(gfxBase);
+    }
 }

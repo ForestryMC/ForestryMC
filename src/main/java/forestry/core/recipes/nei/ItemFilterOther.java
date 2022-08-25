@@ -10,21 +10,20 @@
  ******************************************************************************/
 package forestry.core.recipes.nei;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.AlleleManager;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author bdew
  */
 public class ItemFilterOther extends ItemFilterForestry {
 
-	public ItemFilterOther(Boolean items) {
-		super(items);
-	}
+    public ItemFilterOther(Boolean items) {
+        super(items);
+    }
 
-	@Override
-	public boolean matches(ItemStack item) {
-		return super.matches(item) && !AlleleManager.alleleRegistry.isIndividual(item);
-	}
+    @Override
+    public boolean matches(ItemStack item) {
+        return super.matches(item) && !AlleleManager.alleleRegistry.isIndividual(item);
+    }
 }

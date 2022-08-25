@@ -10,31 +10,34 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 import forestry.core.config.Constants;
 import forestry.core.gui.widgets.TankWidget;
 import forestry.core.render.EnumTankLevel;
 import forestry.core.tiles.TileAnalyzer;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiAnalyzer extends GuiForestryTitled<ContainerAnalyzer, TileAnalyzer> {
 
-	public GuiAnalyzer(InventoryPlayer inventory, TileAnalyzer tile) {
-		super(Constants.TEXTURE_PATH_GUI + "/alyzer.png", new ContainerAnalyzer(inventory, tile), tile);
-		ySize = 176;
-		widgetManager.add(new TankWidget(this.widgetManager, 95, 24, 0));
-	}
+    public GuiAnalyzer(InventoryPlayer inventory, TileAnalyzer tile) {
+        super(Constants.TEXTURE_PATH_GUI + "/alyzer.png", new ContainerAnalyzer(inventory, tile), tile);
+        ySize = 176;
+        widgetManager.add(new TankWidget(this.widgetManager, 95, 24, 0));
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
-		drawAnalyzeMeter(guiLeft + 64, guiTop + 30, inventory.getProgressScaled(46), EnumTankLevel.rateTankLevel(inventory.getProgressScaled(100)));
-	}
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
+        drawAnalyzeMeter(
+                guiLeft + 64,
+                guiTop + 30,
+                inventory.getProgressScaled(46),
+                EnumTankLevel.rateTankLevel(inventory.getProgressScaled(100)));
+    }
 
-	private void drawAnalyzeMeter(int x, int y, int height, EnumTankLevel rated) {
-		int i = 176 + rated.getLevelScaled(16);
-		int k = 60;
+    private void drawAnalyzeMeter(int x, int y, int height, EnumTankLevel rated) {
+        int i = 176 + rated.getLevelScaled(16);
+        int k = 60;
 
-		drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
-	}
+        drawTexturedModalRect(x, y + 46 - height, i, k + 46 - height, 4, height);
+    }
 }

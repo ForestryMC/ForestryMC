@@ -10,117 +10,113 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.config.Config;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
 import java.util.List;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.config.Config;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
-
 public class ItemOverlay extends ItemForestry {
-	public interface IOverlayInfo {
-		String getName();
+    public interface IOverlayInfo {
+        String getName();
 
-		int getPrimaryColor();
+        int getPrimaryColor();
 
-		int getSecondaryColor();
+        int getSecondaryColor();
 
-		boolean isSecret();
-	}
+        boolean isSecret();
+    }
 
-	protected final IOverlayInfo[] overlays;
+    protected final IOverlayInfo[] overlays;
 
-	public ItemOverlay(CreativeTabs tab, IOverlayInfo... overlays) {
-		setMaxDamage(0);
-		setHasSubtypes(true);
-		setCreativeTab(tab);
+    public ItemOverlay(CreativeTabs tab, IOverlayInfo... overlays) {
+        setMaxDamage(0);
+        setHasSubtypes(true);
+        setCreativeTab(tab);
 
-		this.overlays = overlays;
-	}
+        this.overlays = overlays;
+    }
 
-	@Override
-	public boolean isDamageable() {
-		return false;
-	}
+    @Override
+    public boolean isDamageable() {
+        return false;
+    }
 
-	@Override
-	public boolean isRepairable() {
-		return false;
-	}
+    @Override
+    public boolean isRepairable() {
+        return false;
+    }
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	@Override
-	public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
-		for (int i = 0; i < overlays.length; i++) {
-			if (Config.isDebug || !overlays[i].isSecret()) {
-				itemList.add(new ItemStack(this, 1, i));
-			}
-		}
-	}
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Override
+    public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+        for (int i = 0; i < overlays.length; i++) {
+            if (Config.isDebug || !overlays[i].isSecret()) {
+                itemList.add(new ItemStack(this, 1, i));
+            }
+        }
+    }
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon primaryIcon;
-	@SideOnly(Side.CLIENT)
-	private IIcon secondaryIcon;
+    /* ICONS */
+    @SideOnly(Side.CLIENT)
+    private IIcon primaryIcon;
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		if (overlays[0].getSecondaryColor() != 0) {
-			secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
-		}
-	}
+    @SideOnly(Side.CLIENT)
+    private IIcon secondaryIcon;
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int i, int j) {
-		if (i < 0 || i >= overlays.length)
-			return null;
-		if (j > 0 && overlays[i].getSecondaryColor() != 0) {
-			return secondaryIcon;
-		} else {
-			return primaryIcon;
-		}
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerIcons(IIconRegister register) {
+        primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
+        if (overlays[0].getSecondaryColor() != 0) {
+            secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
+        }
+    }
 
-	@Override
-	public int getRenderPasses(int metadata) {
-		return metadata < 0 || metadata >= overlays.length ? 0 : overlays[metadata].getSecondaryColor() != 0 ? 2 : 1;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromDamageForRenderPass(int i, int j) {
+        if (i < 0 || i >= overlays.length) return null;
+        if (j > 0 && overlays[i].getSecondaryColor() != 0) {
+            return secondaryIcon;
+        } else {
+            return primaryIcon;
+        }
+    }
 
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
+    @Override
+    public int getRenderPasses(int metadata) {
+        return metadata < 0 || metadata >= overlays.length ? 0 : overlays[metadata].getSecondaryColor() != 0 ? 2 : 1;
+    }
 
-	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
-			return null;
-		}
+    @Override
+    public boolean requiresMultipleRenderPasses() {
+        return true;
+    }
 
-		return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getName();
-	}
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        if (stack.getItemDamage() < 0 || stack.getItemDamage() >= overlays.length) {
+            return null;
+        }
 
-	@Override
-	public int getColorFromItemStack(ItemStack itemstack, int j) {
-		if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= overlays.length)
-			return 0;
-		IOverlayInfo overlayInfo = overlays[itemstack.getItemDamage()];
-		if (j == 0 || overlayInfo.getSecondaryColor() == 0) {
-			return overlayInfo.getPrimaryColor();
-		} else {
-			return overlayInfo.getSecondaryColor();
-		}
-	}
+        return super.getUnlocalizedName(stack) + "." + overlays[stack.getItemDamage()].getName();
+    }
+
+    @Override
+    public int getColorFromItemStack(ItemStack itemstack, int j) {
+        if (itemstack.getItemDamage() < 0 || itemstack.getItemDamage() >= overlays.length) return 0;
+        IOverlayInfo overlayInfo = overlays[itemstack.getItemDamage()];
+        if (j == 0 || overlayInfo.getSecondaryColor() == 0) {
+            return overlayInfo.getPrimaryColor();
+        } else {
+            return overlayInfo.getSecondaryColor();
+        }
+    }
 }

@@ -13,13 +13,13 @@ package forestry.core.commands;
 import net.minecraft.world.World;
 
 public interface ICommandModeHelper {
-	String[] getModeNames();
+    String[] getModeNames();
 
-	String getModeNameMatching(String desired);
+    String getModeNameMatching(String desired);
 
-	String getModeName(World world);
+    String getModeName(World world);
 
-	void setMode(World world, String modeName);
+    void setMode(World world, String modeName);
 
-	Iterable<String> getDescription(String modeName);
+    Iterable<String> getDescription(String modeName);
 }

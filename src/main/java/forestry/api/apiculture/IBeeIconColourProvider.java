@@ -9,5 +9,5 @@ package forestry.api.apiculture;
  * Custom colour provider for bees with complicated colors.
  */
 public interface IBeeIconColourProvider {
-	int getIconColour(int renderPass);
+    int getIconColour(int renderPass);
 }

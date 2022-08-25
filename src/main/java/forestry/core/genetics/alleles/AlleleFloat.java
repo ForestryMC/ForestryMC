@@ -14,15 +14,15 @@ import forestry.api.genetics.IAlleleFloat;
 
 public class AlleleFloat extends AlleleCategorized implements IAlleleFloat {
 
-	private final float value;
+    private final float value;
 
-	public AlleleFloat(String modId, String category, String valueName, float value, boolean isDominant) {
-		super(modId, category, valueName, isDominant);
-		this.value = value;
-	}
+    public AlleleFloat(String modId, String category, String valueName, float value, boolean isDominant) {
+        super(modId, category, valueName, isDominant);
+        this.value = value;
+    }
 
-	@Override
-	public float getValue() {
-		return value;
-	}
+    @Override
+    public float getValue() {
+        return value;
+    }
 }

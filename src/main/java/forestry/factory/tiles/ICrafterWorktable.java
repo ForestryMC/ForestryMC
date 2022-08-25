@@ -4,11 +4,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public interface ICrafterWorktable {
-	ItemStack getResult();
+    ItemStack getResult();
 
-	boolean canTakeStack(int slotIndex);
+    boolean canTakeStack(int slotIndex);
 
-	boolean onCraftingStart(EntityPlayer player);
+    boolean onCraftingStart(EntityPlayer player);
 
-	void onCraftingComplete(EntityPlayer player);
+    void onCraftingComplete(EntityPlayer player);
 }

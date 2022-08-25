@@ -10,37 +10,34 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-
 import forestry.core.circuits.ContainerSolderingIron;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 
 public class PacketGuiLayoutSelect extends PacketString implements IForestryPacketClient {
 
-	public PacketGuiLayoutSelect() {
-	}
+    public PacketGuiLayoutSelect() {}
 
-	public PacketGuiLayoutSelect(String string) {
-		super(string);
-	}
+    public PacketGuiLayoutSelect(String string) {
+        super(string);
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Container container = player.openContainer;
-		if (!(container instanceof ContainerSolderingIron)) {
-			return;
-		}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+        Container container = player.openContainer;
+        if (!(container instanceof ContainerSolderingIron)) {
+            return;
+        }
 
-		((ContainerSolderingIron) container).setLayout(getString());
-	}
+        ((ContainerSolderingIron) container).setLayout(getString());
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.GUI_LAYOUT_SELECT;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.GUI_LAYOUT_SELECT;
+    }
 }

@@ -20,41 +20,51 @@ import forestry.core.utils.StringUtil;
  */
 public class ClimateLedger extends Ledger {
 
-	private final IClimatised tile;
+    private final IClimatised tile;
 
-	public ClimateLedger(LedgerManager manager, IClimatised tile) {
-		super(manager, "climate");
-		this.tile = tile;
-		maxHeight = 72;
-	}
+    public ClimateLedger(LedgerManager manager, IClimatised tile) {
+        super(manager, "climate");
+        this.tile = tile;
+        maxHeight = 72;
+    }
 
-	@Override
-	public void draw(int x, int y) {
+    @Override
+    public void draw(int x, int y) {
 
-		EnumTemperature temperature = tile.getTemperature();
+        EnumTemperature temperature = tile.getTemperature();
 
-		// Draw background
-		drawBackground(x, y);
+        // Draw background
+        drawBackground(x, y);
 
-		// Draw icon
-		drawIcon(temperature.getIcon(), x + 3, y + 4);
+        // Draw icon
+        drawIcon(temperature.getIcon(), x + 3, y + 4);
 
-		if (!isFullyOpened()) {
-			return;
-		}
+        if (!isFullyOpened()) {
+            return;
+        }
 
-		drawHeader(StringUtil.localize("gui.climate"), x + 22, y + 8);
+        drawHeader(StringUtil.localize("gui.climate"), x + 22, y + 8);
 
-		drawSubheader(StringUtil.localize("gui.temperature") + ':', x + 22, y + 20);
-		drawText(AlleleManager.climateHelper.toDisplay(temperature) + ' ' + StringUtil.floatAsPercent(tile.getExactTemperature()), x + 22, y + 32);
+        drawSubheader(StringUtil.localize("gui.temperature") + ':', x + 22, y + 20);
+        drawText(
+                AlleleManager.climateHelper.toDisplay(temperature)
+                        + ' '
+                        + StringUtil.floatAsPercent(tile.getExactTemperature()),
+                x + 22,
+                y + 32);
 
-		drawSubheader(StringUtil.localize("gui.humidity") + ':', x + 22, y + 44);
-		drawText(AlleleManager.climateHelper.toDisplay(tile.getHumidity()) + ' ' + StringUtil.floatAsPercent(tile.getExactHumidity()), x + 22, y + 56);
-	}
+        drawSubheader(StringUtil.localize("gui.humidity") + ':', x + 22, y + 44);
+        drawText(
+                AlleleManager.climateHelper.toDisplay(tile.getHumidity())
+                        + ' '
+                        + StringUtil.floatAsPercent(tile.getExactHumidity()),
+                x + 22,
+                y + 56);
+    }
 
-	@Override
-	public String getTooltip() {
-		return "T: " + AlleleManager.climateHelper.toDisplay(tile.getTemperature()) + " / H: " + AlleleManager.climateHelper.toDisplay(tile.getHumidity());
-	}
-
+    @Override
+    public String getTooltip() {
+        return "T: " + AlleleManager.climateHelper.toDisplay(tile.getTemperature()) + " / H: "
+                + AlleleManager.climateHelper.toDisplay(tile.getHumidity());
+    }
 }

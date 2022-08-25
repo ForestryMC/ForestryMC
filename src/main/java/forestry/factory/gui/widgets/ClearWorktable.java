@@ -16,18 +16,17 @@ import forestry.factory.gui.ContainerWorktable;
 
 public class ClearWorktable extends Widget {
 
-	public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
-		super(manager, xPos, yPos);
-		width = 7;
-		height = 7;
-	}
+    public ClearWorktable(WidgetManager manager, int xPos, int yPos) {
+        super(manager, xPos, yPos);
+        width = 7;
+        height = 7;
+    }
 
-	@Override
-	public void draw(int startX, int startY) {
-	}
+    @Override
+    public void draw(int startX, int startY) {}
 
-	@Override
-	public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
-		ContainerWorktable.clearRecipe();
-	}
+    @Override
+    public void handleMouseClick(int mouseX, int mouseY, int mouseButton) {
+        ContainerWorktable.clearRecipe();
+    }
 }

@@ -16,20 +16,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemAssemblyKit extends ItemForestry {
-	private final ItemStack assembled;
+    private final ItemStack assembled;
 
-	public ItemAssemblyKit(ItemStack assembled) {
-		maxStackSize = 24;
-		this.assembled = assembled;
-	}
+    public ItemAssemblyKit(ItemStack assembled) {
+        maxStackSize = 24;
+        this.assembled = assembled;
+    }
 
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (!world.isRemote) {
-			itemstack.stackSize--;
-			EntityItem entity = new EntityItem(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, assembled.copy());
-			world.spawnEntityInWorld(entity);
-		}
-		return itemstack;
-	}
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        if (!world.isRemote) {
+            itemstack.stackSize--;
+            EntityItem entity =
+                    new EntityItem(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, assembled.copy());
+            world.spawnEntityInWorld(entity);
+        }
+        return itemstack;
+    }
 }

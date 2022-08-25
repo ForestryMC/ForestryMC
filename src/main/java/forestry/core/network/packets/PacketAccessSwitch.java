@@ -10,38 +10,35 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.access.IRestrictedAccess;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdServer;
 import forestry.core.tiles.ILocatable;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 
 public class PacketAccessSwitch extends PacketCoordinates implements IForestryPacketServer {
 
-	public PacketAccessSwitch() {
-	}
+    public PacketAccessSwitch() {}
 
-	public PacketAccessSwitch(ILocatable tile) {
-		super(tile.getCoordinates());
-	}
+    public PacketAccessSwitch(ILocatable tile) {
+        super(tile.getCoordinates());
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		TileEntity tile = getTarget(player.worldObj);
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+        TileEntity tile = getTarget(player.worldObj);
 
-		if (tile instanceof IRestrictedAccess) {
-			IRestrictedAccess restrictedAccessTile = (IRestrictedAccess) tile;
-			restrictedAccessTile.getAccessHandler().switchAccess(player);
-		}
-	}
+        if (tile instanceof IRestrictedAccess) {
+            IRestrictedAccess restrictedAccessTile = (IRestrictedAccess) tile;
+            restrictedAccessTile.getAccessHandler().switchAccess(player);
+        }
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.ACCESS_SWITCH;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.ACCESS_SWITCH;
+    }
 }

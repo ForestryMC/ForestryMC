@@ -10,46 +10,43 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
+import net.minecraft.world.World;
 
 public class WorldGenGreenheart extends WorldGenTree {
 
-	public WorldGenGreenheart(ITreeGenData tree) {
-		super(tree, 10, 8);
-	}
+    public WorldGenGreenheart(ITreeGenData tree) {
+        super(tree, 10, 8);
+    }
 
-	@Override
-	public void generate(World world) {
+    @Override
+    public void generate(World world) {
 
-		generateTreeTrunk(world, height, girth, 0.4f);
-		generateSupportStems(world, height, girth, 0.5f, 0.2f);
+        generateTreeTrunk(world, height, girth, 0.4f);
+        generateSupportStems(world, height, girth, 0.5f, 0.2f);
 
-		int leafSpawn = height + 1;
+        int leafSpawn = height + 1;
 
-		generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf);
+        generateAdjustedCylinder(world, leafSpawn--, 0, 1, leaf);
+        generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf);
 
-		generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
+        generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
 
-		while (leafSpawn > height - 4) {
-			generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
-		}
-		generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
-		generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf);
+        while (leafSpawn > height - 4) {
+            generateAdjustedCylinder(world, leafSpawn--, 1.9f, 1, leaf);
+        }
+        generateAdjustedCylinder(world, leafSpawn--, 1.5f, 1, leaf);
+        generateAdjustedCylinder(world, leafSpawn--, 0.5f, 1, leaf);
 
-		// Add some smaller twigs below for flavour
-		for (int times = 0; times < height / 4; times++) {
-			int h = 10 + world.rand.nextInt(height - 10);
-			if (world.rand.nextBoolean() && h < height / 2) {
-				h = height / 2 + world.rand.nextInt(height / 2);
-			}
-			int x_off = -1 + world.rand.nextInt(3);
-			int y_off = -1 + world.rand.nextInt(3);
-			generateSphere(world, new Vector(x_off, h, y_off), 1 + world.rand.nextInt(1), leaf, EnumReplaceMode.NONE);
-		}
-
-	}
-
+        // Add some smaller twigs below for flavour
+        for (int times = 0; times < height / 4; times++) {
+            int h = 10 + world.rand.nextInt(height - 10);
+            if (world.rand.nextBoolean() && h < height / 2) {
+                h = height / 2 + world.rand.nextInt(height / 2);
+            }
+            int x_off = -1 + world.rand.nextInt(3);
+            int y_off = -1 + world.rand.nextInt(3);
+            generateSphere(world, new Vector(x_off, h, y_off), 1 + world.rand.nextInt(1), leaf, EnumReplaceMode.NONE);
+        }
+    }
 }

@@ -10,48 +10,46 @@
  ******************************************************************************/
 package forestry.core.recipes.nei;
 
+import codechicken.nei.api.ItemFilter;
+import forestry.core.config.Constants;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.config.Constants;
-
-import codechicken.nei.api.ItemFilter;
 
 /**
  * @author bdew
  */
 public class ItemFilterForestry implements ItemFilter {
-	private final boolean items;
+    private final boolean items;
 
-	public ItemFilterForestry(Boolean items) {
-		this.items = items;
-	}
+    public ItemFilterForestry(Boolean items) {
+        this.items = items;
+    }
 
-	@Override
-	public boolean matches(ItemStack item) {
-		if (item == null || item.getItem() == null) {
-			return false;
-		}
+    @Override
+    public boolean matches(ItemStack item) {
+        if (item == null || item.getItem() == null) {
+            return false;
+        }
 
-		if (item.getItem() instanceof ItemBlock && items) {
-			return false;
-		}
+        if (item.getItem() instanceof ItemBlock && items) {
+            return false;
+        }
 
-		if (!(item.getItem() instanceof ItemBlock) && !items) {
-			return false;
-		}
+        if (!(item.getItem() instanceof ItemBlock) && !items) {
+            return false;
+        }
 
-		String itemName = Item.itemRegistry.getNameForObject(item.getItem());
-		if (itemName == null) {
-			return false;
-		}
+        String itemName = Item.itemRegistry.getNameForObject(item.getItem());
+        if (itemName == null) {
+            return false;
+        }
 
-		String[] s = itemName.split(":");
-		if (s.length <= 1) {
-			return false;
-		}
+        String[] s = itemName.split(":");
+        if (s.length <= 1) {
+            return false;
+        }
 
-		return s[0].equals(Constants.MOD);
-	}
+        return s[0].equals(Constants.MOD);
+    }
 }

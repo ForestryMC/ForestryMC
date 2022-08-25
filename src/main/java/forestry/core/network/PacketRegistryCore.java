@@ -32,28 +32,28 @@ import forestry.core.network.packets.PacketTankLevelUpdate;
 import forestry.core.network.packets.PacketTileStream;
 
 public class PacketRegistryCore extends PacketRegistry {
-	@Override
-	public void registerPackets() {
-		registerClientPacket(new PacketErrorUpdate());
-		registerClientPacket(new PacketErrorUpdateEntity());
-		registerClientPacket(new PacketGuiUpdate());
-		registerClientPacket(new PacketGuiUpdateEntity());
-		registerClientPacket(new PacketGuiLayoutSelect());
-		registerClientPacket(new PacketGuiEnergy());
-		registerClientPacket(new PacketSocketUpdate());
-		registerClientPacket(new PacketAccessUpdate());
-		registerClientPacket(new PacketAccessUpdateEntity());
-		registerClientPacket(new PacketTileStream());
-		registerClientPacket(new PacketItemStackDisplay());
-		registerClientPacket(new PacketFXSignal());
-		registerClientPacket(new PacketTankLevelUpdate());
-		registerClientPacket(new PacketGenomeTrackerSync());
+    @Override
+    public void registerPackets() {
+        registerClientPacket(new PacketErrorUpdate());
+        registerClientPacket(new PacketErrorUpdateEntity());
+        registerClientPacket(new PacketGuiUpdate());
+        registerClientPacket(new PacketGuiUpdateEntity());
+        registerClientPacket(new PacketGuiLayoutSelect());
+        registerClientPacket(new PacketGuiEnergy());
+        registerClientPacket(new PacketSocketUpdate());
+        registerClientPacket(new PacketAccessUpdate());
+        registerClientPacket(new PacketAccessUpdateEntity());
+        registerClientPacket(new PacketTileStream());
+        registerClientPacket(new PacketItemStackDisplay());
+        registerClientPacket(new PacketFXSignal());
+        registerClientPacket(new PacketTankLevelUpdate());
+        registerClientPacket(new PacketGenomeTrackerSync());
 
-		registerServerPacket(new PacketGuiSelectRequest());
-		registerServerPacket(new PacketPipetteClick());
-		registerServerPacket(new PacketAccessSwitch());
-		registerServerPacket(new PacketAccessSwitchEntity());
-		registerServerPacket(new PacketChipsetClick());
-		registerServerPacket(new PacketSolderingIronClick());
-	}
+        registerServerPacket(new PacketGuiSelectRequest());
+        registerServerPacket(new PacketPipetteClick());
+        registerServerPacket(new PacketAccessSwitch());
+        registerServerPacket(new PacketAccessSwitchEntity());
+        registerServerPacket(new PacketChipsetClick());
+        registerServerPacket(new PacketSolderingIronClick());
+    }
 }

@@ -10,24 +10,7 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
-
 import com.mojang.authlib.GameProfile;
-
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
-
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
@@ -37,234 +20,257 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.proxy.Proxies;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import javax.annotation.Nullable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayer;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
-	private static final String SPECIES_COUNT_KEY = "SpeciesCount";
-	private static final String MUTATIONS_COUNT_KEY = "MutationsCount";
-	private static final String RESEARCHED_COUNT_KEY = "ResearchedCount";
-	private static final String SPECIES_KEY = "SD";
-	private static final String MUTATIONS_KEY = "MD";
-	private static final String RESEARCHED_KEY = "RD";
-	private static final String MODE_NAME_KEY = "BMS";
-	private static final String MUTATION_FORMAT = "%s-%s=%s";
-	private static final Collection<String> emptyStringCollection = Collections.emptyList();
+    private static final String SPECIES_COUNT_KEY = "SpeciesCount";
+    private static final String MUTATIONS_COUNT_KEY = "MutationsCount";
+    private static final String RESEARCHED_COUNT_KEY = "ResearchedCount";
+    private static final String SPECIES_KEY = "SD";
+    private static final String MUTATIONS_KEY = "MD";
+    private static final String RESEARCHED_KEY = "RD";
+    private static final String MODE_NAME_KEY = "BMS";
+    private static final String MUTATION_FORMAT = "%s-%s=%s";
+    private static final Collection<String> emptyStringCollection = Collections.emptyList();
 
-	public static final String TYPE_KEY = "TYPE";
+    public static final String TYPE_KEY = "TYPE";
 
-	private final Set<String> discoveredSpecies = new HashSet<>();
-	private final Set<String> discoveredMutations = new HashSet<>();
-	private final Set<String> researchedMutations = new HashSet<>();
-	private String modeName;
+    private final Set<String> discoveredSpecies = new HashSet<>();
+    private final Set<String> discoveredMutations = new HashSet<>();
+    private final Set<String> researchedMutations = new HashSet<>();
+    private String modeName;
 
-	@Nullable
-	private GameProfile username;
-	@Nullable
-	private World world;
+    @Nullable
+    private GameProfile username;
 
-	protected BreedingTracker(String s) {
-		super(s);
-	}
+    @Nullable
+    private World world;
 
-	public void setUsername(@Nullable GameProfile username) {
-		this.username = username;
-	}
+    protected BreedingTracker(String s) {
+        super(s);
+    }
 
-	public void setWorld(@Nullable World world) {
-		this.world = world;
-	}
+    public void setUsername(@Nullable GameProfile username) {
+        this.username = username;
+    }
 
-	@Override
-	public String getModeName() {
-		return modeName;
-	}
+    public void setWorld(@Nullable World world) {
+        this.world = world;
+    }
 
-	@Override
-	public void setModeName(String name) {
-		this.modeName = name;
-		markDirty();
-	}
+    @Override
+    public String getModeName() {
+        return modeName;
+    }
 
-	/**
-	 * Returns the common tracker
-	 *
-	 * @param player used to get worldObj
-	 * @return common tracker for this breeding system
-	 */
-	protected abstract IBreedingTracker getBreedingTracker(EntityPlayer player);
+    @Override
+    public void setModeName(String name) {
+        this.modeName = name;
+        markDirty();
+    }
 
-	/**
-	 * Tag stored in NBT to identify the type of the tracker being synced
-	 */
-	protected abstract String speciesRootUID();
+    /**
+     * Returns the common tracker
+     *
+     * @param player used to get worldObj
+     * @return common tracker for this breeding system
+     */
+    protected abstract IBreedingTracker getBreedingTracker(EntityPlayer player);
 
-	@Override
-	public void synchToPlayer(EntityPlayer player) {
-		if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer)) {
-			IBreedingTracker breedingTracker = getBreedingTracker(player);
-			String modeName = breedingTracker.getModeName();
-			setModeName(modeName);
+    /**
+     * Tag stored in NBT to identify the type of the tracker being synced
+     */
+    protected abstract String speciesRootUID();
 
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			encodeToNBT(nbttagcompound);
-			PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbttagcompound);
-			Proxies.net.sendToPlayer(packet, player);
-		}
-	}
+    @Override
+    public void synchToPlayer(EntityPlayer player) {
+        if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer)) {
+            IBreedingTracker breedingTracker = getBreedingTracker(player);
+            String modeName = breedingTracker.getModeName();
+            setModeName(modeName);
 
-	private void syncToPlayer(Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
-		if (world != null && username != null && username.getName() != null) {
-			EntityPlayer player = world.getPlayerEntityByName(username.getName());
-			if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer)) {
-				IBreedingTracker breedingTracker = getBreedingTracker(player);
-				String modeName = breedingTracker.getModeName();
-				setModeName(modeName);
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            encodeToNBT(nbttagcompound);
+            PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbttagcompound);
+            Proxies.net.sendToPlayer(packet, player);
+        }
+    }
 
-				NBTTagCompound nbtTagCompound = new NBTTagCompound();
-				writeToNBT(nbtTagCompound, discoveredSpecies, discoveredMutations, researchedMutations);
-				PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbtTagCompound);
-				Proxies.net.sendToPlayer(packet, player);
-			}
-		}
-	}
+    private void syncToPlayer(
+            Collection<String> discoveredSpecies,
+            Collection<String> discoveredMutations,
+            Collection<String> researchedMutations) {
+        if (world != null && username != null && username.getName() != null) {
+            EntityPlayer player = world.getPlayerEntityByName(username.getName());
+            if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer)) {
+                IBreedingTracker breedingTracker = getBreedingTracker(player);
+                String modeName = breedingTracker.getModeName();
+                setModeName(modeName);
 
-	/* HELPER FUNCTIONS TO PREVENT OBFUSCATION OF INTERFACE METHODS */
-	@Override
-	public void decodeFromNBT(NBTTagCompound nbttagcompound) {
-		readFromNBT(nbttagcompound);
-	}
+                NBTTagCompound nbtTagCompound = new NBTTagCompound();
+                writeToNBT(nbtTagCompound, discoveredSpecies, discoveredMutations, researchedMutations);
+                PacketGenomeTrackerSync packet = new PacketGenomeTrackerSync(nbtTagCompound);
+                Proxies.net.sendToPlayer(packet, player);
+            }
+        }
+    }
 
-	@Override
-	public void encodeToNBT(NBTTagCompound nbttagcompound) {
-		writeToNBT(nbttagcompound);
-	}
+    /* HELPER FUNCTIONS TO PREVENT OBFUSCATION OF INTERFACE METHODS */
+    @Override
+    public void decodeFromNBT(NBTTagCompound nbttagcompound) {
+        readFromNBT(nbttagcompound);
+    }
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
+    @Override
+    public void encodeToNBT(NBTTagCompound nbttagcompound) {
+        writeToNBT(nbttagcompound);
+    }
 
-		if (nbttagcompound.hasKey(MODE_NAME_KEY)) {
-			modeName = nbttagcompound.getString(MODE_NAME_KEY);
-		}
+    @Override
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
 
-		readValuesFromNBT(nbttagcompound, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
-		readValuesFromNBT(nbttagcompound, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
-		readValuesFromNBT(nbttagcompound, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
-	}
+        if (nbttagcompound.hasKey(MODE_NAME_KEY)) {
+            modeName = nbttagcompound.getString(MODE_NAME_KEY);
+        }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		writeToNBT(nbttagcompound, discoveredSpecies, discoveredMutations, researchedMutations);
-	}
+        readValuesFromNBT(nbttagcompound, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
+        readValuesFromNBT(nbttagcompound, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
+        readValuesFromNBT(nbttagcompound, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
+    }
 
-	private void writeToNBT(NBTTagCompound nbtTagCompound, Collection<String> discoveredSpecies, Collection<String> discoveredMutations, Collection<String> researchedMutations) {
-		if (modeName != null && !modeName.isEmpty()) {
-			nbtTagCompound.setString(MODE_NAME_KEY, modeName);
-		}
+    @Override
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
+        writeToNBT(nbttagcompound, discoveredSpecies, discoveredMutations, researchedMutations);
+    }
 
-		nbtTagCompound.setString(TYPE_KEY, speciesRootUID());
+    private void writeToNBT(
+            NBTTagCompound nbtTagCompound,
+            Collection<String> discoveredSpecies,
+            Collection<String> discoveredMutations,
+            Collection<String> researchedMutations) {
+        if (modeName != null && !modeName.isEmpty()) {
+            nbtTagCompound.setString(MODE_NAME_KEY, modeName);
+        }
 
-		writeValuesToNBT(nbtTagCompound, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
-		writeValuesToNBT(nbtTagCompound, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
-		writeValuesToNBT(nbtTagCompound, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
-	}
+        nbtTagCompound.setString(TYPE_KEY, speciesRootUID());
 
-	private static void readValuesFromNBT(NBTTagCompound nbttagcompound, Set<String> values, String countKey, String key) {
-		if (nbttagcompound.hasKey(countKey)) {
-			final int count = nbttagcompound.getInteger(countKey);
-			for (int i = 0; i < count; i++) {
-				String value = nbttagcompound.getString(key + i);
-				if (value != null && value.length() > 0) {
-					values.add(value);
-				}
-			}
-		}
-	}
+        writeValuesToNBT(nbtTagCompound, discoveredSpecies, SPECIES_COUNT_KEY, SPECIES_KEY);
+        writeValuesToNBT(nbtTagCompound, discoveredMutations, MUTATIONS_COUNT_KEY, MUTATIONS_KEY);
+        writeValuesToNBT(nbtTagCompound, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
+    }
 
-	private static void writeValuesToNBT(NBTTagCompound nbttagcompound, Collection<String> values, String countKey, String key) {
-		final int count = values.size();
-		nbttagcompound.setInteger(countKey, count);
-		Iterator<String> iterator = values.iterator();
-		for (int i = 0; i < count; i++) {
-			String value = iterator.next();
-			if (value != null && value.length() > 0) {
-				nbttagcompound.setString(key + i, value);
-			}
-		}
-	}
+    private static void readValuesFromNBT(
+            NBTTagCompound nbttagcompound, Set<String> values, String countKey, String key) {
+        if (nbttagcompound.hasKey(countKey)) {
+            final int count = nbttagcompound.getInteger(countKey);
+            for (int i = 0; i < count; i++) {
+                String value = nbttagcompound.getString(key + i);
+                if (value != null && value.length() > 0) {
+                    values.add(value);
+                }
+            }
+        }
+    }
 
-	private static String getMutationString(IMutation mutation) {
-		String species0 = mutation.getAllele0().getUID();
-		String species1 = mutation.getAllele1().getUID();
-		String resultSpecies = mutation.getTemplate()[0].getUID();
-		return String.format(MUTATION_FORMAT, species0, species1, resultSpecies);
-	}
+    private static void writeValuesToNBT(
+            NBTTagCompound nbttagcompound, Collection<String> values, String countKey, String key) {
+        final int count = values.size();
+        nbttagcompound.setInteger(countKey, count);
+        Iterator<String> iterator = values.iterator();
+        for (int i = 0; i < count; i++) {
+            String value = iterator.next();
+            if (value != null && value.length() > 0) {
+                nbttagcompound.setString(key + i, value);
+            }
+        }
+    }
 
-	@Override
-	public void registerMutation(IMutation mutation) {
-		String mutationString = getMutationString(mutation);
-		if (!discoveredMutations.contains(mutationString)) {
-			discoveredMutations.add(mutationString);
-			markDirty();
+    private static String getMutationString(IMutation mutation) {
+        String species0 = mutation.getAllele0().getUID();
+        String species1 = mutation.getAllele1().getUID();
+        String resultSpecies = mutation.getTemplate()[0].getUID();
+        return String.format(MUTATION_FORMAT, species0, species1, resultSpecies);
+    }
 
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUID());
-			ForestryEvent event = new ForestryEvent.MutationDiscovered(speciesRoot, username, mutation, this);
-			MinecraftForge.EVENT_BUS.post(event);
+    @Override
+    public void registerMutation(IMutation mutation) {
+        String mutationString = getMutationString(mutation);
+        if (!discoveredMutations.contains(mutationString)) {
+            discoveredMutations.add(mutationString);
+            markDirty();
 
-			syncToPlayer(emptyStringCollection, Collections.singleton(mutationString), emptyStringCollection);
-		}
-	}
+            ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUID());
+            ForestryEvent event = new ForestryEvent.MutationDiscovered(speciesRoot, username, mutation, this);
+            MinecraftForge.EVENT_BUS.post(event);
 
-	@Override
-	public boolean isDiscovered(IMutation mutation) {
-		String mutationString = getMutationString(mutation);
-		return discoveredMutations.contains(mutationString) || researchedMutations.contains(mutationString);
-	}
+            syncToPlayer(emptyStringCollection, Collections.singleton(mutationString), emptyStringCollection);
+        }
+    }
 
-	@Override
-	public boolean isDiscovered(IAlleleSpecies species) {
-		return discoveredSpecies.contains(species.getUID());
-	}
+    @Override
+    public boolean isDiscovered(IMutation mutation) {
+        String mutationString = getMutationString(mutation);
+        return discoveredMutations.contains(mutationString) || researchedMutations.contains(mutationString);
+    }
 
-	@Override
-	public int getSpeciesBred() {
-		return discoveredSpecies.size();
-	}
+    @Override
+    public boolean isDiscovered(IAlleleSpecies species) {
+        return discoveredSpecies.contains(species.getUID());
+    }
 
-	@Override
-	public void registerBirth(IIndividual individual) {
-		registerSpecies(individual.getGenome().getPrimary());
-		registerSpecies(individual.getGenome().getSecondary());
-	}
+    @Override
+    public int getSpeciesBred() {
+        return discoveredSpecies.size();
+    }
 
-	@Override
-	public void registerSpecies(IAlleleSpecies species) {
-		if (!discoveredSpecies.contains(species.getUID())) {
-			discoveredSpecies.add(species.getUID());
+    @Override
+    public void registerBirth(IIndividual individual) {
+        registerSpecies(individual.getGenome().getPrimary());
+        registerSpecies(individual.getGenome().getSecondary());
+    }
 
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUID());
-			ForestryEvent event = new ForestryEvent.SpeciesDiscovered(speciesRoot, username, species, this);
-			MinecraftForge.EVENT_BUS.post(event);
+    @Override
+    public void registerSpecies(IAlleleSpecies species) {
+        if (!discoveredSpecies.contains(species.getUID())) {
+            discoveredSpecies.add(species.getUID());
 
-			syncToPlayer(Collections.singleton(species.getUID()), emptyStringCollection, emptyStringCollection);
-		}
-	}
+            ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(speciesRootUID());
+            ForestryEvent event = new ForestryEvent.SpeciesDiscovered(speciesRoot, username, species, this);
+            MinecraftForge.EVENT_BUS.post(event);
 
-	@Override
-	public void researchMutation(IMutation mutation) {
-		String mutationString = getMutationString(mutation);
-		if (!researchedMutations.contains(mutationString)) {
-			researchedMutations.add(mutationString);
-			markDirty();
+            syncToPlayer(Collections.singleton(species.getUID()), emptyStringCollection, emptyStringCollection);
+        }
+    }
 
-			registerMutation(mutation);
+    @Override
+    public void researchMutation(IMutation mutation) {
+        String mutationString = getMutationString(mutation);
+        if (!researchedMutations.contains(mutationString)) {
+            researchedMutations.add(mutationString);
+            markDirty();
 
-			syncToPlayer(emptyStringCollection, emptyStringCollection, Collections.singleton(mutationString));
-		}
-	}
+            registerMutation(mutation);
 
-	@Override
-	public boolean isResearched(IMutation mutation) {
-		String mutationString = getMutationString(mutation);
-		return researchedMutations.contains(mutationString);
-	}
+            syncToPlayer(emptyStringCollection, emptyStringCollection, Collections.singleton(mutationString));
+        }
+    }
+
+    @Override
+    public boolean isResearched(IMutation mutation) {
+        String mutationString = getMutationString(mutation);
+        return researchedMutations.contains(mutationString);
+    }
 }

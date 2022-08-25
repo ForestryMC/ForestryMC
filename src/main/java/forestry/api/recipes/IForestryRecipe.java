@@ -5,5 +5,4 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-public interface IForestryRecipe {
-}
+public interface IForestryRecipe {}

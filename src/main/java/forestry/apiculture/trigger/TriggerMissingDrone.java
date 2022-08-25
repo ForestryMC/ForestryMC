@@ -10,35 +10,32 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.api.core.IErrorLogicSource;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.triggers.Trigger;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerMissingDrone extends Trigger {
 
-	public TriggerMissingDrone() {
-		super("missingDrone");
-	}
+    public TriggerMissingDrone() {
+        super("missingDrone");
+    }
 
-	/**
-	 * Return true if the tile given in parameter activates the trigger, given the parameters.
-	 */
-	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+    /**
+     * Return true if the tile given in parameter activates the trigger, given the parameters.
+     */
+    @Override
+    public boolean isTriggerActive(
+            TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof IErrorLogicSource)) {
-			return false;
-		}
+        if (!(tile instanceof IErrorLogicSource)) {
+            return false;
+        }
 
-		IErrorLogicSource apiary = (IErrorLogicSource) tile;
-		return apiary.getErrorLogic().contains(EnumErrorCode.NO_DRONE);
-	}
-
+        IErrorLogicSource apiary = (IErrorLogicSource) tile;
+        return apiary.getErrorLogic().contains(EnumErrorCode.NO_DRONE);
+    }
 }

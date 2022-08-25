@@ -10,38 +10,35 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
 import forestry.core.network.packets.PacketGuiSelect;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 
 public class PacketImprintSelectionResponse extends PacketGuiSelect implements IForestryPacketClient {
 
-	public PacketImprintSelectionResponse() {
-	}
+    public PacketImprintSelectionResponse() {}
 
-	public PacketImprintSelectionResponse(int primaryIndex, int secondaryIndex) {
-		super(primaryIndex, secondaryIndex);
-	}
+    public PacketImprintSelectionResponse(int primaryIndex, int secondaryIndex) {
+        super(primaryIndex, secondaryIndex);
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.IMPRINT_SELECTION_RESPONSE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.IMPRINT_SELECTION_RESPONSE;
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		Container container = player.openContainer;
-		if (!(container instanceof ContainerImprinter)) {
-			return;
-		}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+        Container container = player.openContainer;
+        if (!(container instanceof ContainerImprinter)) {
+            return;
+        }
 
-		((ContainerImprinter) container).setSelection(this);
-	}
+        ((ContainerImprinter) container).setSelection(this);
+    }
 }

@@ -14,37 +14,37 @@ import forestry.apiculture.blocks.BlockAlveary;
 
 public class TileAlvearyHeater extends TileAlvearyClimatiser {
 
-	private static final HeaterDefinition definition = new HeaterDefinition();
+    private static final HeaterDefinition definition = new HeaterDefinition();
 
-	public TileAlvearyHeater() {
-		super(definition);
-	}
+    public TileAlvearyHeater() {
+        super(definition);
+    }
 
-	private static class HeaterDefinition implements IClimitiserDefinition {
+    private static class HeaterDefinition implements IClimitiserDefinition {
 
-		@Override
-		public float getChangePerTransfer() {
-			return 0.01f;
-		}
+        @Override
+        public float getChangePerTransfer() {
+            return 0.01f;
+        }
 
-		@Override
-		public float getBoundaryUp() {
-			return 2.5f;
-		}
+        @Override
+        public float getBoundaryUp() {
+            return 2.5f;
+        }
 
-		@Override
-		public float getBoundaryDown() {
-			return 0.0f;
-		}
+        @Override
+        public float getBoundaryDown() {
+            return 0.0f;
+        }
 
-		@Override
-		public int getIconOff() {
-			return BlockAlveary.ALVEARY_HEATER_OFF;
-		}
+        @Override
+        public int getIconOff() {
+            return BlockAlveary.ALVEARY_HEATER_OFF;
+        }
 
-		@Override
-		public int getIconOn() {
-			return BlockAlveary.ALVEARY_HEATER_ON;
-		}
-	}
+        @Override
+        public int getIconOn() {
+            return BlockAlveary.ALVEARY_HEATER_ON;
+        }
+    }
 }

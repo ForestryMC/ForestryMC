@@ -18,15 +18,33 @@ import forestry.api.genetics.IClassification;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 
 public class BeeFactory implements IBeeFactory {
-	@Override
-	public IAlleleBeeSpeciesCustom createSpecies(String uid, boolean dominant, String authority, String unlocalizedName, String unlocalizedDescription, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
-		IAlleleBeeSpeciesCustom species = new AlleleBeeSpecies(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial, primaryColor, secondaryColor);
-		AlleleManager.alleleRegistry.registerAllele(species, EnumBeeChromosome.SPECIES);
-		return species;
-	}
+    @Override
+    public IAlleleBeeSpeciesCustom createSpecies(
+            String uid,
+            boolean dominant,
+            String authority,
+            String unlocalizedName,
+            String unlocalizedDescription,
+            IClassification branch,
+            String binomial,
+            int primaryColor,
+            int secondaryColor) {
+        IAlleleBeeSpeciesCustom species = new AlleleBeeSpecies(
+                uid,
+                unlocalizedName,
+                authority,
+                unlocalizedDescription,
+                dominant,
+                branch,
+                binomial,
+                primaryColor,
+                secondaryColor);
+        AlleleManager.alleleRegistry.registerAllele(species, EnumBeeChromosome.SPECIES);
+        return species;
+    }
 
-	@Override
-	public IClassification createBranch(String uid, String scientific) {
-		return new BranchBees(uid, scientific);
-	}
+    @Override
+    public IClassification createBranch(String uid, String scientific) {
+        return new BranchBees(uid, scientific);
+    }
 }

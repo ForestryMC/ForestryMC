@@ -17,35 +17,35 @@ import forestry.core.tiles.TileForestry;
 import forestry.lepidopterology.tiles.TileLepidopteristChest;
 
 public enum BlockLepidopterologyType implements IMachinePropertiesTESR {
-	LEPICHEST(TileLepidopteristChest.class, "LepiChest") {
-		@Override
-		public IBlockRenderer getRenderer() {
-			return Proxies.render.getRenderChest("lepichest");
-		}
-	};
+    LEPICHEST(TileLepidopteristChest.class, "LepiChest") {
+        @Override
+        public IBlockRenderer getRenderer() {
+            return Proxies.render.getRenderChest("lepichest");
+        }
+    };
 
-	public static final BlockLepidopterologyType[] VALUES = values();
+    public static final BlockLepidopterologyType[] VALUES = values();
 
-	private final String teIdent;
-	private final Class<? extends TileForestry> teClass;
+    private final String teIdent;
+    private final Class<? extends TileForestry> teClass;
 
-	BlockLepidopterologyType(Class<? extends TileForestry> teClass, String teName) {
-		this.teIdent = "forestry." + teName;
-		this.teClass = teClass;
-	}
+    BlockLepidopterologyType(Class<? extends TileForestry> teClass, String teName) {
+        this.teIdent = "forestry." + teName;
+        this.teClass = teClass;
+    }
 
-	@Override
-	public int getMeta() {
-		return ordinal();
-	}
+    @Override
+    public int getMeta() {
+        return ordinal();
+    }
 
-	@Override
-	public String getTeIdent() {
-		return teIdent;
-	}
+    @Override
+    public String getTeIdent() {
+        return teIdent;
+    }
 
-	@Override
-	public Class<? extends TileForestry> getTeClass() {
-		return teClass;
-	}
+    @Override
+    public Class<? extends TileForestry> getTeClass() {
+        return teClass;
+    }
 }

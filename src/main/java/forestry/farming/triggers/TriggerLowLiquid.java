@@ -10,49 +10,48 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.IFluidTank;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.core.fluids.ITankManager;
 import forestry.core.triggers.Trigger;
 import forestry.farming.tiles.TileFarmHatch;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.IFluidTank;
 
 public class TriggerLowLiquid extends Trigger {
 
-	private final float threshold;
+    private final float threshold;
 
-	public TriggerLowLiquid(String tag, float threshold) {
-		super(tag, "lowLiquid");
-		this.threshold = threshold;
-	}
+    public TriggerLowLiquid(String tag, float threshold) {
+        super(tag, "lowLiquid");
+        this.threshold = threshold;
+    }
 
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
-	}
+    @Override
+    public String getDescription() {
+        return super.getDescription() + " < " + threshold * 100 + "%";
+    }
 
-	/**
-	 * Return true if the tile given in parameter activates the trigger, given
-	 * the parameters.
-	 */
-	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TileFarmHatch)) {
-			return false;
-		}
+    /**
+     * Return true if the tile given in parameter activates the trigger, given
+     * the parameters.
+     */
+    @Override
+    public boolean isTriggerActive(
+            TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+        if (!(tile instanceof TileFarmHatch)) {
+            return false;
+        }
 
-		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-		ITankManager tankManager = tileHatch.getMultiblockLogic().getController().getTankManager();
+        TileFarmHatch tileHatch = (TileFarmHatch) tile;
+        ITankManager tankManager =
+                tileHatch.getMultiblockLogic().getController().getTankManager();
 
-		IFluidTank tank = tankManager.getTank(0);
-		if (tank.getCapacity() == 0) {
-			return false;
-		}
-		return ((float) tank.getFluidAmount() / tank.getCapacity()) <= threshold;
-	}
+        IFluidTank tank = tankManager.getTank(0);
+        if (tank.getCapacity() == 0) {
+            return false;
+        }
+        return ((float) tank.getFluidAmount() / tank.getCapacity()) <= threshold;
+    }
 }

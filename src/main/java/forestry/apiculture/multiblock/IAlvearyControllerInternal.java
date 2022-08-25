@@ -17,8 +17,9 @@ import forestry.core.multiblock.IMultiblockControllerInternal;
 import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.IClimatised;
 
-public interface IAlvearyControllerInternal extends IAlvearyController, IMultiblockControllerInternal, IClimatised, IRestrictedAccess, IStreamableGui {
-	IInventoryAdapter getInternalInventory();
+public interface IAlvearyControllerInternal
+        extends IAlvearyController, IMultiblockControllerInternal, IClimatised, IRestrictedAccess, IStreamableGui {
+    IInventoryAdapter getInternalInventory();
 
-	int getHealthScaled(int i);
+    int getHealthScaled(int i);
 }

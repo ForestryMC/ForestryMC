@@ -13,19 +13,19 @@ package forestry.food;
 import net.minecraft.item.ItemStack;
 
 public class InfuserIngredient {
-	private final ItemStack ingredient;
-	private final String description;
+    private final ItemStack ingredient;
+    private final String description;
 
-	public InfuserIngredient(ItemStack ingredient, String description) {
-		this.ingredient = ingredient;
-		this.description = description;
-	}
+    public InfuserIngredient(ItemStack ingredient, String description) {
+        this.ingredient = ingredient;
+        this.description = description;
+    }
 
-	public ItemStack getIngredient() {
-		return ingredient;
-	}
+    public ItemStack getIngredient() {
+        return ingredient;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 }

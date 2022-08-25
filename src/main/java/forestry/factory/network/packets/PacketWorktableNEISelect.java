@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.factory.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.core.gui.slots.SlotCraftMatrix;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
@@ -22,24 +17,27 @@ import forestry.core.network.PacketIdServer;
 import forestry.core.network.packets.PacketNBT;
 import forestry.core.recipes.nei.SetRecipeCommandHandler;
 import forestry.factory.gui.ContainerWorktable;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketWorktableNEISelect extends PacketNBT implements IForestryPacketServer {
-	private static final SetRecipeCommandHandler worktableNEISelectHandler = new SetRecipeCommandHandler(ContainerWorktable.class, SlotCraftMatrix.class);
+    private static final SetRecipeCommandHandler worktableNEISelectHandler =
+            new SetRecipeCommandHandler(ContainerWorktable.class, SlotCraftMatrix.class);
 
-	public PacketWorktableNEISelect() {
-	}
+    public PacketWorktableNEISelect() {}
 
-	public PacketWorktableNEISelect(NBTTagCompound nbttagcompound) {
-		super(nbttagcompound);
-	}
+    public PacketWorktableNEISelect(NBTTagCompound nbttagcompound) {
+        super(nbttagcompound);
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		worktableNEISelectHandler.handle(getTagCompound(), player);
-	}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+        worktableNEISelectHandler.handle(getTagCompound(), player);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.WORKTABLE_NEI_SELECT;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.WORKTABLE_NEI_SELECT;
+    }
 }

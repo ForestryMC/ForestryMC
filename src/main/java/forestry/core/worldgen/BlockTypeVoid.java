@@ -15,13 +15,12 @@ import net.minecraft.world.World;
 
 public class BlockTypeVoid extends BlockType {
 
-	public BlockTypeVoid() {
-		super(Blocks.air, 0);
-	}
+    public BlockTypeVoid() {
+        super(Blocks.air, 0);
+    }
 
-	@Override
-	public void setBlock(World world, int x, int y, int z) {
-		world.setBlockToAir(x, y, z);
-	}
-
+    @Override
+    public void setBlock(World world, int x, int y, int z) {
+        world.setBlockToAir(x, y, z);
+    }
 }

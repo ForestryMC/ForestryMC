@@ -11,13 +11,13 @@
 package forestry.farming.gui;
 
 public interface IFarmLedgerDelegate {
-	float getHydrationModifier();
+    float getHydrationModifier();
 
-	float getHydrationTempModifier();
+    float getHydrationTempModifier();
 
-	float getHydrationHumidModifier();
+    float getHydrationHumidModifier();
 
-	float getHydrationRainfallModifier();
+    float getHydrationRainfallModifier();
 
-	double getDrought();
+    double getDrought();
 }

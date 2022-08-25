@@ -10,30 +10,29 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class SlotOutput extends SlotWatched {
 
-	public SlotOutput(IInventory iinventory, int slotIndex, int posX, int posY) {
-		super(iinventory, slotIndex, posX, posY);
-	}
+    public SlotOutput(IInventory iinventory, int slotIndex, int posX, int posY) {
+        super(iinventory, slotIndex, posX, posY);
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack itemstack) {
-		return false;
-	}
+    @Override
+    public boolean isItemValid(ItemStack itemstack) {
+        return false;
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getBackgroundIconIndex() {
-		return null;
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getBackgroundIconIndex() {
+        return null;
+    }
 }

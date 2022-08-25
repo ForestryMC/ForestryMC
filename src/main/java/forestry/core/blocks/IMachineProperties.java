@@ -13,9 +13,9 @@ package forestry.core.blocks;
 import forestry.core.tiles.TileForestry;
 
 public interface IMachineProperties {
-	int getMeta();
+    int getMeta();
 
-	String getTeIdent();
+    String getTeIdent();
 
-	Class<? extends TileForestry> getTeClass();
+    Class<? extends TileForestry> getTeClass();
 }

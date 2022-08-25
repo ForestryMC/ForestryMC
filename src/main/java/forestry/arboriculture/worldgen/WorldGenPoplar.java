@@ -10,27 +10,24 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
+import net.minecraft.world.World;
 
 public class WorldGenPoplar extends WorldGenTree {
 
-	public WorldGenPoplar(ITreeGenData tree) {
-		super(tree, 8, 3);
-	}
+    public WorldGenPoplar(ITreeGenData tree) {
+        super(tree, 8, 3);
+    }
 
-	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
+    @Override
+    public void generate(World world) {
+        generateTreeTrunk(world, height, girth);
 
-		int leafSpawn = height + 1;
-		float leafRadius = (girth - 1.0f) / 2.0f;
+        int leafSpawn = height + 1;
+        float leafRadius = (girth - 1.0f) / 2.0f;
 
-		while (leafSpawn > girth - 1) {
-			generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
-		}
-
-	}
-
+        while (leafSpawn > girth - 1) {
+            generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
+        }
+    }
 }

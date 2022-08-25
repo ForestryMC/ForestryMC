@@ -10,15 +10,14 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.core.render.TankRenderInfo;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public interface IRenderableTile {
 
-	ForgeDirection getOrientation();
+    ForgeDirection getOrientation();
 
-	TankRenderInfo getResourceTankInfo();
+    TankRenderInfo getResourceTankInfo();
 
-	TankRenderInfo getProductTankInfo();
+    TankRenderInfo getProductTankInfo();
 }

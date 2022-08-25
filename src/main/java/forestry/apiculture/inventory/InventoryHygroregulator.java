@@ -10,27 +10,25 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.Fluid;
-
 import forestry.apiculture.multiblock.TileAlvearyHygroregulator;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 
 public class InventoryHygroregulator extends InventoryAdapterTile<TileAlvearyHygroregulator> {
-	public static final short SLOT_INPUT = 0;
+    public static final short SLOT_INPUT = 0;
 
-	public InventoryHygroregulator(TileAlvearyHygroregulator alvearyHygroregulator) {
-		super(alvearyHygroregulator, 1, "CanInv");
-	}
+    public InventoryHygroregulator(TileAlvearyHygroregulator alvearyHygroregulator) {
+        super(alvearyHygroregulator, 1, "CanInv");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		if (slotIndex == SLOT_INPUT) {
-			Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
-			return tile.getTankManager().accepts(fluid);
-		}
-		return false;
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        if (slotIndex == SLOT_INPUT) {
+            Fluid fluid = FluidHelper.getFluidInContainer(itemStack);
+            return tile.getTankManager().accepts(fluid);
+        }
+        return false;
+    }
 }

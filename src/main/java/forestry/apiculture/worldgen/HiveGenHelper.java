@@ -10,22 +10,21 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import net.minecraft.block.Block;
-
 import forestry.api.apiculture.hives.IHiveGen;
 import forestry.api.apiculture.hives.IHiveGenHelper;
+import net.minecraft.block.Block;
 
 public class HiveGenHelper implements IHiveGenHelper {
 
-	private static final IHiveGen treeGen = new HiveGenTree();
+    private static final IHiveGen treeGen = new HiveGenTree();
 
-	@Override
-	public IHiveGen ground(Block... validGroundBlocks) {
-		return new HiveGenGround(validGroundBlocks);
-	}
+    @Override
+    public IHiveGen ground(Block... validGroundBlocks) {
+        return new HiveGenGround(validGroundBlocks);
+    }
 
-	@Override
-	public IHiveGen tree() {
-		return treeGen;
-	}
+    @Override
+    public IHiveGen tree() {
+        return treeGen;
+    }
 }

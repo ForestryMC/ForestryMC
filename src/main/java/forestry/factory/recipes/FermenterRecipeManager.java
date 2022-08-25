@@ -10,106 +10,105 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
+import forestry.api.recipes.IFermenterManager;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.ItemStackUtil;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import forestry.api.recipes.IFermenterManager;
-import forestry.api.recipes.IFermenterRecipe;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ItemStackUtil;
-
 public class FermenterRecipeManager implements IFermenterManager {
 
-	private static final Set<IFermenterRecipe> recipes = new HashSet<>();
-	public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
-	public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
+    private static final Set<IFermenterRecipe> recipes = new HashSet<>();
+    public static final Set<Fluid> recipeFluidInputs = new HashSet<>();
+    public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
 
-	@Override
-	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
-		IFermenterRecipe recipe = new FermenterRecipe(resource, fermentationValue, modifier, output.getFluid(), liquid);
-		addRecipe(recipe);
-	}
+    @Override
+    public void addRecipe(
+            ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+        IFermenterRecipe recipe = new FermenterRecipe(resource, fermentationValue, modifier, output.getFluid(), liquid);
+        addRecipe(recipe);
+    }
 
-	@Override
-	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resource, fermentationValue, modifier, output, Fluids.WATER.getFluid(1000));
-	}
+    @Override
+    public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
+        addRecipe(resource, fermentationValue, modifier, output, Fluids.WATER.getFluid(1000));
+    }
 
-	public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
-		for (IFermenterRecipe recipe : recipes) {
-			if (matches(recipe, res, liqu)) {
-				return recipe;
-			}
-		}
-		return null;
-	}
+    public static IFermenterRecipe findMatchingRecipe(ItemStack res, FluidStack liqu) {
+        for (IFermenterRecipe recipe : recipes) {
+            if (matches(recipe, res, liqu)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
 
-	public static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
-		ItemStack resource = recipe.getResource();
-		if (!ItemStackUtil.isCraftingEquivalent(resource, res)) {
-			return false;
-		}
+    public static boolean matches(IFermenterRecipe recipe, ItemStack res, FluidStack liqu) {
+        ItemStack resource = recipe.getResource();
+        if (!ItemStackUtil.isCraftingEquivalent(resource, res)) {
+            return false;
+        }
 
-		FluidStack fluid = recipe.getFluidResource();
-		return liqu != null && liqu.isFluidEqual(fluid);
-	}
+        FluidStack fluid = recipe.getFluidResource();
+        return liqu != null && liqu.isFluidEqual(fluid);
+    }
 
-	public static boolean isResource(ItemStack resource) {
-		if (resource == null) {
-			return false;
-		}
+    public static boolean isResource(ItemStack resource) {
+        if (resource == null) {
+            return false;
+        }
 
-		for (IFermenterRecipe recipe : recipes) {
-			if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), resource)) {
-				return true;
-			}
-		}
-		return false;
-	}
+        for (IFermenterRecipe recipe : recipes) {
+            if (ItemStackUtil.isCraftingEquivalent(recipe.getResource(), resource)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public boolean addRecipe(IFermenterRecipe recipe) {
-		FluidStack liquid = recipe.getFluidResource();
-		recipeFluidInputs.add(liquid.getFluid());
+    @Override
+    public boolean addRecipe(IFermenterRecipe recipe) {
+        FluidStack liquid = recipe.getFluidResource();
+        recipeFluidInputs.add(liquid.getFluid());
 
-		Fluid output = recipe.getOutput();
-		recipeFluidOutputs.add(output);
+        Fluid output = recipe.getOutput();
+        recipeFluidOutputs.add(output);
 
-		return recipes.add(recipe);
-	}
+        return recipes.add(recipe);
+    }
 
-	@Override
-	public boolean removeRecipe(IFermenterRecipe recipe) {
-		FluidStack liquid = recipe.getFluidResource();
-		recipeFluidInputs.remove(liquid.getFluid());
+    @Override
+    public boolean removeRecipe(IFermenterRecipe recipe) {
+        FluidStack liquid = recipe.getFluidResource();
+        recipeFluidInputs.remove(liquid.getFluid());
 
-		Fluid output = recipe.getOutput();
-		recipeFluidOutputs.remove(output);
+        Fluid output = recipe.getOutput();
+        recipeFluidOutputs.remove(output);
 
-		return recipes.remove(recipe);
-	}
+        return recipes.remove(recipe);
+    }
 
-	@Override
-	public Set<IFermenterRecipe> recipes() {
-		return Collections.unmodifiableSet(recipes);
-	}
+    @Override
+    public Set<IFermenterRecipe> recipes() {
+        return Collections.unmodifiableSet(recipes);
+    }
 
-	@Override
-	public Map<Object[], Object[]> getRecipes() {
-		HashMap<Object[], Object[]> recipeList = new HashMap<>();
+    @Override
+    public Map<Object[], Object[]> getRecipes() {
+        HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
-		for (IFermenterRecipe recipe : recipes) {
-			recipeList.put(new Object[]{recipe.getResource(), recipe.getFluidResource()}, new Object[]{recipe.getOutput()});
-		}
+        for (IFermenterRecipe recipe : recipes) {
+            recipeList.put(
+                    new Object[] {recipe.getResource(), recipe.getFluidResource()}, new Object[] {recipe.getOutput()});
+        }
 
-		return recipeList;
-	}
+        return recipeList;
+    }
 }

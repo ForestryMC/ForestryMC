@@ -14,7 +14,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 public interface ILocatable {
-	ChunkCoordinates getCoordinates();
+    ChunkCoordinates getCoordinates();
 
-	World getWorld();
+    World getWorld();
 }

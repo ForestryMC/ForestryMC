@@ -14,14 +14,14 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
 public enum SpriteSheet {
-	BLOCKS,
-	ITEMS;
+    BLOCKS,
+    ITEMS;
 
-	public ResourceLocation getLocation() {
-		return ordinal() == 0 ? TextureMap.locationBlocksTexture : TextureMap.locationItemsTexture;
-	}
-	
-	public int getSheetOrdinal() {
-		return ordinal();
-	}
+    public ResourceLocation getLocation() {
+        return ordinal() == 0 ? TextureMap.locationBlocksTexture : TextureMap.locationItemsTexture;
+    }
+
+    public int getSheetOrdinal() {
+        return ordinal();
+    }
 }

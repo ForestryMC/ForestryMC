@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.lepidopterology.proxy;
 
-import net.minecraftforge.client.MinecraftForgeClient;
-
 import cpw.mods.fml.client.registry.RenderingRegistry;
-
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.render.RenderButterflyEntity;
 import forestry.lepidopterology.render.RenderButterflyItem;
 import forestry.plugins.PluginLepidopterology;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ProxyLepidopterologyClient extends ProxyLepidopterology {
 
-	@Override
-	public void initializeRendering() {
-		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, new RenderButterflyEntity());
-		MinecraftForgeClient.registerItemRenderer(PluginLepidopterology.items.butterflyGE, new RenderButterflyItem());
-	}
+    @Override
+    public void initializeRendering() {
+        RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, new RenderButterflyEntity());
+        MinecraftForgeClient.registerItemRenderer(PluginLepidopterology.items.butterflyGE, new RenderButterflyItem());
+    }
 }

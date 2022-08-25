@@ -17,47 +17,49 @@ import forestry.plugins.PluginLepidopterology;
 
 public class AIButterflyMate extends AIButterflyInteract {
 
-	public AIButterflyMate(EntityButterfly entity) {
-		super(entity);
-	}
+    public AIButterflyMate(EntityButterfly entity) {
+        super(entity);
+    }
 
-	/**
-	 * Should lay egg?
-	 */
-	@Override
-	protected boolean canInteract() {
-		if (entity.cooldownEgg > 0) {
-			return false;
-		}
+    /**
+     * Should lay egg?
+     */
+    @Override
+    protected boolean canInteract() {
+        if (entity.cooldownEgg > 0) {
+            return false;
+        }
 
-		if (entity.getButterfly().getMate() == null) {
-			return false;
-		}
+        if (entity.getButterfly().getMate() == null) {
+            return false;
+        }
 
-		if (entity.worldObj.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
-			return false;
-		}
+        if (entity.worldObj.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
+            return false;
+        }
 
-		return GeneticsUtil.canNurse(entity.getButterfly(), entity.worldObj, rest.posX, rest.posY, rest.posZ);
-	}
+        return GeneticsUtil.canNurse(entity.getButterfly(), entity.worldObj, rest.posX, rest.posY, rest.posZ);
+    }
 
-	@Override
-	public void updateTask() {
-		if (continueExecuting()) {
-			IPollinatable tile = GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
-			if (tile instanceof IButterflyNursery) {
-				IButterflyNursery nursery = (IButterflyNursery) tile;
-				if (nursery.canNurse(entity.getButterfly())) {
-					nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(nursery));
-					//				Log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(), rest.posX, rest.posY, rest.posZ);
-					if (entity.getRNG().nextFloat() < 1.0f / entity.getButterfly().getGenome().getFertility()) {
-						entity.setHealth(0);
-					}
-				}
-			}
-			setHasInteracted();
-			entity.cooldownEgg = EntityButterfly.COOLDOWNS;
-		}
-	}
-
+    @Override
+    public void updateTask() {
+        if (continueExecuting()) {
+            IPollinatable tile =
+                    GeneticsUtil.getOrCreatePollinatable(null, entity.worldObj, rest.posX, rest.posY, rest.posZ);
+            if (tile instanceof IButterflyNursery) {
+                IButterflyNursery nursery = (IButterflyNursery) tile;
+                if (nursery.canNurse(entity.getButterfly())) {
+                    nursery.setCaterpillar(entity.getButterfly().spawnCaterpillar(nursery));
+                    //				Log.finest("A butterfly '%s' laid an egg at %s/%s/%s.", entity.getButterfly().getIdent(),
+                    // rest.posX, rest.posY, rest.posZ);
+                    if (entity.getRNG().nextFloat()
+                            < 1.0f / entity.getButterfly().getGenome().getFertility()) {
+                        entity.setHealth(0);
+                    }
+                }
+            }
+            setHasInteracted();
+            entity.cooldownEgg = EntityButterfly.COOLDOWNS;
+        }
+    }
 }

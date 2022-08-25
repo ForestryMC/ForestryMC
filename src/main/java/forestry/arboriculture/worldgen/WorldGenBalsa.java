@@ -10,37 +10,34 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.world.World;
-
 import forestry.api.world.ITreeGenData;
+import net.minecraft.world.World;
 
 public class WorldGenBalsa extends WorldGenTree {
 
-	public WorldGenBalsa(ITreeGenData tree) {
-		super(tree, 6, 6);
-	}
+    public WorldGenBalsa(ITreeGenData tree) {
+        super(tree, 6, 6);
+    }
 
-	@Override
-	public void generate(World world) {
-		generateTreeTrunk(world, height, girth);
+    @Override
+    public void generate(World world) {
+        generateTreeTrunk(world, height, girth);
 
-		int leafSpawn = height;
-		float leafRadius = (girth - 1.0f) / 2.0f;
+        int leafSpawn = height;
+        float leafRadius = (girth - 1.0f) / 2.0f;
 
-		addLeaf(world, 0, leafSpawn--, 0, EnumReplaceMode.NONE);
-		generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
+        addLeaf(world, 0, leafSpawn--, 0, EnumReplaceMode.NONE);
+        generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
 
-		if (height > 10) {
-			generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
-		}
+        if (height > 10) {
+            generateAdjustedCylinder(world, leafSpawn--, leafRadius, 1, leaf);
+        }
 
-		leafSpawn--;
+        leafSpawn--;
 
-		while (leafSpawn > 6) {
-			generateAdjustedCylinder(world, leafSpawn, leafRadius, 1, leaf);
-			leafSpawn--;
-		}
-
-	}
-
+        while (leafSpawn > 6) {
+            generateAdjustedCylinder(world, leafSpawn, leafRadius, 1, leaf);
+            leafSpawn--;
+        }
+    }
 }

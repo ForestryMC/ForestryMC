@@ -15,12 +15,11 @@ import forestry.api.genetics.IChromosomeType;
 
 public interface IAlleleHelper {
 
-	<T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAllele allele);
+    <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAllele allele);
 
-	<T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAlleleValue value);
+    <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAlleleValue value);
 
-	<T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, boolean value);
+    <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, boolean value);
 
-	<T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, int value);
-
+    <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, int value);
 }

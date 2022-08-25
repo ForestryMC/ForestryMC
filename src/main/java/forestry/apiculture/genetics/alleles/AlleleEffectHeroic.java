@@ -10,30 +10,28 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import java.util.List;
-
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.util.DamageSource;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.utils.DamageSourceForestry;
+import java.util.List;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.util.DamageSource;
 
 public class AlleleEffectHeroic extends AlleleEffectThrottled {
-	private static final DamageSource damageSourceBeeHeroic = new DamageSourceForestry("bee.heroic");
+    private static final DamageSource damageSourceBeeHeroic = new DamageSourceForestry("bee.heroic");
 
-	public AlleleEffectHeroic() {
-		super("heroic", false, 40, true, false);
-	}
+    public AlleleEffectHeroic() {
+        super("heroic", false, 40, true, false);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<EntityMob> mobs = getEntitiesInRange(genome, housing, EntityMob.class);
-		for (EntityMob mob : mobs) {
-			mob.attackEntityFrom(damageSourceBeeHeroic, 2);
-		}
+    @Override
+    public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+        List<EntityMob> mobs = getEntitiesInRange(genome, housing, EntityMob.class);
+        for (EntityMob mob : mobs) {
+            mob.attackEntityFrom(damageSourceBeeHeroic, 2);
+        }
 
-		return storedData;
-	}
+        return storedData;
+    }
 }

@@ -10,36 +10,35 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-
 import forestry.core.gui.ContainerLiquidTanks;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.energy.inventory.InventoryGenerator;
 import forestry.energy.tiles.TileGenerator;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
 
 public class ContainerGenerator extends ContainerLiquidTanks<TileGenerator> {
 
-	public ContainerGenerator(InventoryPlayer player, TileGenerator tile) {
-		super(tile, player, 8, 84);
+    public ContainerGenerator(InventoryPlayer player, TileGenerator tile) {
+        super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, InventoryGenerator.SLOT_CAN, 22, 38));
-	}
+        this.addSlotToContainer(new SlotFiltered(tile, InventoryGenerator.SLOT_CAN, 22, 38));
+    }
 
-	@Override
-	public void updateProgressBar(int messageId, int data) {
-		super.updateProgressBar(messageId, data);
+    @Override
+    public void updateProgressBar(int messageId, int data) {
+        super.updateProgressBar(messageId, data);
 
-		tile.getGUINetworkData(messageId, data);
-	}
+        tile.getGUINetworkData(messageId, data);
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    @SuppressWarnings("unchecked")
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
-		}
-	}
+        for (Object crafter : crafters) {
+            tile.sendGUINetworkData(this, (ICrafting) crafter);
+        }
+    }
 }

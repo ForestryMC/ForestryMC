@@ -14,16 +14,12 @@ import net.minecraft.world.World;
 
 public class SaveEventHandlerCore implements ISaveEventHandler {
 
-	@Override
-	public void onWorldLoad(World world) {
-	}
+    @Override
+    public void onWorldLoad(World world) {}
 
-	@Override
-	public void onWorldSave(World world) {
-	}
+    @Override
+    public void onWorldSave(World world) {}
 
-	@Override
-	public void onWorldUnload(World world) {
-	}
-
+    @Override
+    public void onWorldUnload(World world) {}
 }

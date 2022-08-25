@@ -17,21 +17,20 @@ import net.minecraft.world.World;
 
 public class BeverageEffectDrunk extends BeverageEffect {
 
-	private final PotionEffect drunkEffect;
-	private final float chance;
+    private final PotionEffect drunkEffect;
+    private final float chance;
 
-	public BeverageEffectDrunk(int id, float chance) {
-		super(id);
-		this.chance = chance;
-		this.description = "beverage.effect.alcoholic";
-		this.drunkEffect = new PotionEffect(Potion.confusion.id, 25 * 20, 0);
-	}
+    public BeverageEffectDrunk(int id, float chance) {
+        super(id);
+        this.chance = chance;
+        this.description = "beverage.effect.alcoholic";
+        this.drunkEffect = new PotionEffect(Potion.confusion.id, 25 * 20, 0);
+    }
 
-	@Override
-	public void doEffect(World world, EntityPlayer player) {
-		if (world.rand.nextFloat() < chance) {
-			player.addPotionEffect(drunkEffect);
-		}
-	}
-
+    @Override
+    public void doEffect(World world, EntityPlayer player) {
+        if (world.rand.nextFloat() < chance) {
+            player.addPotionEffect(drunkEffect);
+        }
+    }
 }

@@ -14,11 +14,11 @@ import forestry.api.core.IToolScoop;
 import forestry.api.core.Tabs;
 
 public class ItemScoop extends ItemForestryTool implements IToolScoop {
-	public ItemScoop() {
-		super(null);
-		setEfficiencyOnProperMaterial(4.0f);
-		setMaxDamage(10);
-		setCreativeTab(Tabs.tabApiculture);
-		setMaxStackSize(1);
-	}
+    public ItemScoop() {
+        super(null);
+        setEfficiencyOnProperMaterial(4.0f);
+        setMaxDamage(10);
+        setCreativeTab(Tabs.tabApiculture);
+        setMaxStackSize(1);
+    }
 }

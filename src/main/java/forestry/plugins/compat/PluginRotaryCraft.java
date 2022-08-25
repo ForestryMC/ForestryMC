@@ -10,12 +10,7 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import forestry.farming.logic.FarmableReference;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.registry.GameRegistry;
-
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
 import forestry.api.recipes.RecipeManagers;
@@ -24,42 +19,52 @@ import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.farming.logic.FarmableBasicFruit;
 import forestry.farming.logic.FarmableGenericCrop;
+import forestry.farming.logic.FarmableReference;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginManager;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
-@Plugin(pluginID = "RotaryCraft", name = "RotaryCraft", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.rotarycraft.description")
+@Plugin(
+        pluginID = "RotaryCraft",
+        name = "RotaryCraft",
+        author = "Nirek",
+        url = Constants.URL,
+        unlocalizedDescription = "for.plugin.rotarycraft.description")
 public class PluginRotaryCraft extends ForestryPlugin {
 
-	private static final String RC = "RotaryCraft";
+    private static final String RC = "RotaryCraft";
 
-	@Override
-	public boolean isAvailable() {
-		return ModUtil.isModLoaded(RC);
-	}
+    @Override
+    public boolean isAvailable() {
+        return ModUtil.isModLoaded(RC);
+    }
 
-	@Override
-	public String getFailMessage() {
-		return "RotaryCraft not found";
-	}
+    @Override
+    public String getFailMessage() {
+        return "RotaryCraft not found";
+    }
 
-	@Override
-	protected void registerRecipes() {
+    @Override
+    protected void registerRecipes() {
 
-		ItemStack canolaSeed = GameRegistry.findItemStack(RC, "rotarycraft_item_canola", 1);
-		Block canolaCrop = GameRegistry.findBlock(RC, "rotarycraft_block_canola");
+        ItemStack canolaSeed = GameRegistry.findItemStack(RC, "rotarycraft_item_canola", 1);
+        Block canolaCrop = GameRegistry.findBlock(RC, "rotarycraft_block_canola");
 
-		int seedAmount = (ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed") / 16);
-		seedAmount = Math.max(seedAmount, 1); // Produce at least 1 mb.
-		if (canolaSeed != null && canolaCrop != null) {
-			if(PluginManager.Module.FACTORY.isEnabled()) {
-				RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{canolaSeed}, Fluids.SEEDOIL.getFluid(seedAmount));
-			}
-			if(PluginManager.Module.FARMING.isEnabled()) {
-				Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(canolaSeed, canolaCrop, 9));
-				Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(canolaCrop, 9));
-			}
-		}
-	}
-
+        int seedAmount = (ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed") / 16);
+        seedAmount = Math.max(seedAmount, 1); // Produce at least 1 mb.
+        if (canolaSeed != null && canolaCrop != null) {
+            if (PluginManager.Module.FACTORY.isEnabled()) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {canolaSeed}, Fluids.SEEDOIL.getFluid(seedAmount));
+            }
+            if (PluginManager.Module.FARMING.isEnabled()) {
+                Farmables.farmables
+                        .get(FarmableReference.Wheat.get())
+                        .add(new FarmableGenericCrop(canolaSeed, canolaCrop, 9));
+                Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(canolaCrop, 9));
+            }
+        }
+    }
 }

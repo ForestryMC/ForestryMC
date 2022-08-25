@@ -16,21 +16,20 @@ import forestry.core.genetics.alleles.AlleleCategorized;
 
 public class AlleleFlowers extends AlleleCategorized implements IAlleleFlowers {
 
-	private final IFlowerProvider provider;
+    private final IFlowerProvider provider;
 
-	public AlleleFlowers(String modId, String category, String name, IFlowerProvider provider, boolean isDominant) {
-		super(modId, category, name, isDominant);
-		this.provider = provider;
-	}
+    public AlleleFlowers(String modId, String category, String name, IFlowerProvider provider, boolean isDominant) {
+        super(modId, category, name, isDominant);
+        this.provider = provider;
+    }
 
-	@Override
-	public IFlowerProvider getProvider() {
-		return provider;
-	}
-	
-	@Override
-	public String getName() {
-		return getProvider().getDescription();
-	}
+    @Override
+    public IFlowerProvider getProvider() {
+        return provider;
+    }
 
+    @Override
+    public String getName() {
+        return getProvider().getDescription();
+    }
 }

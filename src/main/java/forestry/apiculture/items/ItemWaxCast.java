@@ -10,29 +10,27 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.Tabs;
 import forestry.core.items.ICraftingPlan;
 import forestry.core.items.ItemForestry;
+import net.minecraft.item.ItemStack;
 
 public class ItemWaxCast extends ItemForestry implements ICraftingPlan {
 
-	public ItemWaxCast() {
-		super(Tabs.tabApiculture);
-		setMaxStackSize(1);
-		setMaxDamage(16);
-		setNoRepair();
-	}
+    public ItemWaxCast() {
+        super(Tabs.tabApiculture);
+        setMaxStackSize(1);
+        setMaxDamage(16);
+        setNoRepair();
+    }
 
-	@Override
-	public ItemStack planUsed(ItemStack plan, ItemStack result) {
-		plan.setItemDamage(plan.getItemDamage() + result.stackSize);
-		if (plan.getItemDamage() >= plan.getMaxDamage()) {
-			return null;
-		} else {
-			return plan;
-		}
-	}
-
+    @Override
+    public ItemStack planUsed(ItemStack plan, ItemStack result) {
+        plan.setItemDamage(plan.getItemDamage() + result.stackSize);
+        if (plan.getItemDamage() >= plan.getMaxDamage()) {
+            return null;
+        } else {
+            return plan;
+        }
+    }
 }

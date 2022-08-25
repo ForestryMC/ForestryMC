@@ -11,5 +11,5 @@
 package forestry.core.network;
 
 public interface IPacketRegistry {
-	void registerPackets();
+    void registerPackets();
 }

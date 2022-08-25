@@ -14,21 +14,21 @@ import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 
 public abstract class EntitySelector<T extends Entity> implements IEntitySelector {
-	private final Class<T> entityClass;
+    private final Class<T> entityClass;
 
-	protected EntitySelector(Class<T> entityClass) {
-		this.entityClass = entityClass;
-	}
+    protected EntitySelector(Class<T> entityClass) {
+        this.entityClass = entityClass;
+    }
 
-	public Class<T> getEntityClass() {
-		return entityClass;
-	}
+    public Class<T> getEntityClass() {
+        return entityClass;
+    }
 
-	@Override
-	public final boolean isEntityApplicable(Entity entity) {
-		T castEntity = entityClass.cast(entity);
-		return isEntityApplicableTyped(castEntity);
-	}
+    @Override
+    public final boolean isEntityApplicable(Entity entity) {
+        T castEntity = entityClass.cast(entity);
+        return isEntityApplicableTyped(castEntity);
+    }
 
-	protected abstract boolean isEntityApplicableTyped(T entity);
+    protected abstract boolean isEntityApplicableTyped(T entity);
 }

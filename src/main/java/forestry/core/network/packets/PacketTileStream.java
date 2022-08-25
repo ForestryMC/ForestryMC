@@ -10,46 +10,43 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 public class PacketTileStream extends PacketCoordinates implements IForestryPacketClient {
 
-	private IStreamable streamable;
+    private IStreamable streamable;
 
-	public PacketTileStream() {
-	}
+    public PacketTileStream() {}
 
-	public <T extends TileEntity & IStreamable> PacketTileStream(T streamable) {
-		super(streamable);
-		this.streamable = streamable;
-	}
+    public <T extends TileEntity & IStreamable> PacketTileStream(T streamable) {
+        super(streamable);
+        this.streamable = streamable;
+    }
 
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		streamable.writeData(data);
-	}
+    @Override
+    protected void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        streamable.writeData(data);
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IStreamable) {
-			((IStreamable) tile).readData(data);
-		}
-	}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+        TileEntity tile = getTarget(Proxies.common.getRenderWorld());
+        if (tile instanceof IStreamable) {
+            ((IStreamable) tile).readData(data);
+        }
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.TILE_FORESTRY_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.TILE_FORESTRY_UPDATE;
+    }
 }

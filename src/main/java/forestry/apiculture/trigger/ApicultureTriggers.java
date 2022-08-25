@@ -13,14 +13,14 @@ package forestry.apiculture.trigger;
 import forestry.core.triggers.Trigger;
 
 public class ApicultureTriggers {
-	public static Trigger noFrames;
-	public static Trigger missingQueen;
-	public static Trigger missingDrone;
+    public static Trigger noFrames;
+    public static Trigger missingQueen;
+    public static Trigger missingDrone;
 
-	public static void initialize() {
-		noFrames = new TriggerNoFrames();
+    public static void initialize() {
+        noFrames = new TriggerNoFrames();
 
-		missingQueen = new TriggerMissingQueen();
-		missingDrone = new TriggerMissingDrone();
-	}
+        missingQueen = new TriggerMissingQueen();
+        missingDrone = new TriggerMissingDrone();
+    }
 }

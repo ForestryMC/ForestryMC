@@ -14,9 +14,9 @@ import forestry.api.core.Tabs;
 import forestry.core.blocks.BlockBase;
 
 public class BlockApiculture extends BlockBase<BlockApicultureType> {
-	public BlockApiculture() {
-		super();
-		setCreativeTab(Tabs.tabApiculture);
-		setHarvestLevel("axe", 0);
-	}
+    public BlockApiculture() {
+        super();
+        setCreativeTab(Tabs.tabApiculture);
+        setHarvestLevel("axe", 0);
+    }
 }

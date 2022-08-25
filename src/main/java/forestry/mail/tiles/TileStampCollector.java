@@ -10,10 +10,6 @@
  ******************************************************************************/
 package forestry.mail.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
 import forestry.core.inventory.IInventoryAdapter;
@@ -22,46 +18,56 @@ import forestry.core.utils.InventoryUtil;
 import forestry.mail.gui.ContainerStampCollector;
 import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 public class TileStampCollector extends TileBase implements IInventory {
-	public TileStampCollector() {
-		super("philatelist");
-		setInternalInventory(new InventoryStampCollector(this));
-	}
+    public TileStampCollector() {
+        super("philatelist");
+        setInternalInventory(new InventoryStampCollector(this));
+    }
 
-	@Override
-	public void updateServerSide() {
-		if (!updateOnInterval(20)) {
-			return;
-		}
+    @Override
+    public void updateServerSide() {
+        if (!updateOnInterval(20)) {
+            return;
+        }
 
-		ItemStack stamp = null;
+        ItemStack stamp = null;
 
-		IInventoryAdapter inventory = getInternalInventory();
-		if (inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER) == null) {
-			stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(1);
-		} else {
-			ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
-			if (filter.getItem() instanceof IStamps) {
-				stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
-			}
-		}
+        IInventoryAdapter inventory = getInternalInventory();
+        if (inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER) == null) {
+            stamp = PostManager.postRegistry.getPostOffice(worldObj).getAnyStamp(1);
+        } else {
+            ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
+            if (filter.getItem() instanceof IStamps) {
+                stamp = PostManager.postRegistry
+                        .getPostOffice(worldObj)
+                        .getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
+            }
+        }
 
-		if (stamp == null) {
-			return;
-		}
+        if (stamp == null) {
+            return;
+        }
 
-		// Store it.
-		InventoryUtil.stowInInventory(stamp, inventory, true, InventoryStampCollector.SLOT_BUFFER_1, InventoryStampCollector.SLOT_BUFFER_COUNT);
-	}
+        // Store it.
+        InventoryUtil.stowInInventory(
+                stamp,
+                inventory,
+                true,
+                InventoryStampCollector.SLOT_BUFFER_1,
+                InventoryStampCollector.SLOT_BUFFER_COUNT);
+    }
 
-	@Override
-	public Object getGui(EntityPlayer player, int data) {
-		return new GuiStampCollector(player.inventory, this);
-	}
+    @Override
+    public Object getGui(EntityPlayer player, int data) {
+        return new GuiStampCollector(player.inventory, this);
+    }
 
-	@Override
-	public Object getContainer(EntityPlayer player, int data) {
-		return new ContainerStampCollector(player.inventory, this);
-	}
+    @Override
+    public Object getContainer(EntityPlayer player, int data) {
+        return new ContainerStampCollector(player.inventory, this);
+    }
 }

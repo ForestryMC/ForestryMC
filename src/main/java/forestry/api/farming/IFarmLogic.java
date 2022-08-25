@@ -1,41 +1,39 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.farming;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Collection;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public interface IFarmLogic {
 
-	int getFertilizerConsumption();
+    int getFertilizerConsumption();
 
-	int getWaterConsumption(float hydrationModifier);
+    int getWaterConsumption(float hydrationModifier);
 
-	boolean isAcceptedResource(ItemStack itemstack);
+    boolean isAcceptedResource(ItemStack itemstack);
 
-	boolean isAcceptedGermling(ItemStack itemstack);
+    boolean isAcceptedGermling(ItemStack itemstack);
 
-	Collection<ItemStack> collect();
+    Collection<ItemStack> collect();
 
-	boolean cultivate(int x, int y, int z, FarmDirection direction, int extent);
+    boolean cultivate(int x, int y, int z, FarmDirection direction, int extent);
 
-	Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent);
+    Collection<ICrop> harvest(int x, int y, int z, FarmDirection direction, int extent);
 
-	IFarmLogic setManual(boolean manual);
+    IFarmLogic setManual(boolean manual);
 
-	@SideOnly(Side.CLIENT)
-	IIcon getIcon();
+    @SideOnly(Side.CLIENT)
+    IIcon getIcon();
 
-	ResourceLocation getSpriteSheet();
-	
-	String getName();
+    ResourceLocation getSpriteSheet();
+
+    String getName();
 }

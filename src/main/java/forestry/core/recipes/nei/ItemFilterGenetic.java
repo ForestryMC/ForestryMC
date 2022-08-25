@@ -10,45 +10,43 @@
  ******************************************************************************/
 package forestry.core.recipes.nei;
 
-import net.minecraft.item.ItemStack;
-
+import codechicken.nei.api.ItemFilter;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
-
-import codechicken.nei.api.ItemFilter;
+import net.minecraft.item.ItemStack;
 
 /**
  * @author bdew
  */
 public class ItemFilterGenetic implements ItemFilter {
-	private final ISpeciesRoot root;
-	private final int type;
-	private final boolean analyzedOnly;
+    private final ISpeciesRoot root;
+    private final int type;
+    private final boolean analyzedOnly;
 
-	public ItemFilterGenetic(ISpeciesRoot root, int type, boolean analyzedOnly) {
-		this.root = root;
-		this.type = type;
-		this.analyzedOnly = analyzedOnly;
-	}
+    public ItemFilterGenetic(ISpeciesRoot root, int type, boolean analyzedOnly) {
+        this.root = root;
+        this.type = type;
+        this.analyzedOnly = analyzedOnly;
+    }
 
-	private boolean isMember(ItemStack item) {
-		if (type >= 0) {
-			return root.isMember(item, type);
-		} else {
-			return root.isMember(item);
-		}
-	}
+    private boolean isMember(ItemStack item) {
+        if (type >= 0) {
+            return root.isMember(item, type);
+        } else {
+            return root.isMember(item);
+        }
+    }
 
-	@Override
-	public boolean matches(ItemStack item) {
-		if (analyzedOnly) {
-			if (!isMember(item)) {
-				return false;
-			}
-			IIndividual individual = root.getMember(item);
-			return individual.isAnalyzed() || !individual.isSecret();
-		} else {
-			return isMember(item);
-		}
-	}
+    @Override
+    public boolean matches(ItemStack item) {
+        if (analyzedOnly) {
+            if (!isMember(item)) {
+                return false;
+            }
+            IIndividual individual = root.getMember(item);
+            return individual.isAnalyzed() || !individual.isSecret();
+        } else {
+            return isMember(item);
+        }
+    }
 }

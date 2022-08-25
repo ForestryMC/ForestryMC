@@ -10,37 +10,36 @@
  ******************************************************************************/
 package forestry.core.render;
 
-import javax.annotation.Nonnull;
+import forestry.core.fluids.Fluids;
 import java.awt.Color;
-
+import javax.annotation.Nonnull;
 import net.minecraftforge.fluids.IFluidTank;
 
-import forestry.core.fluids.Fluids;
-
 public class TankRenderInfo {
-	public static final TankRenderInfo EMPTY = new TankRenderInfo(Fluids.WATER.getColor(), EnumTankLevel.EMPTY);
+    public static final TankRenderInfo EMPTY = new TankRenderInfo(Fluids.WATER.getColor(), EnumTankLevel.EMPTY);
 
-	@Nonnull
-	private final Color fluidColor;
-	@Nonnull
-	private final EnumTankLevel level;
+    @Nonnull
+    private final Color fluidColor;
 
-	public TankRenderInfo(@Nonnull IFluidTank fluidTank) {
-		this(Fluids.getFluidColor(fluidTank.getFluid()), EnumTankLevel.rateTankLevel(fluidTank));
-	}
+    @Nonnull
+    private final EnumTankLevel level;
 
-	public TankRenderInfo(@Nonnull Color fluidColor, @Nonnull EnumTankLevel level) {
-		this.fluidColor = fluidColor;
-		this.level = level;
-	}
+    public TankRenderInfo(@Nonnull IFluidTank fluidTank) {
+        this(Fluids.getFluidColor(fluidTank.getFluid()), EnumTankLevel.rateTankLevel(fluidTank));
+    }
 
-	@Nonnull
-	public Color getFluidColor() {
-		return fluidColor;
-	}
+    public TankRenderInfo(@Nonnull Color fluidColor, @Nonnull EnumTankLevel level) {
+        this.fluidColor = fluidColor;
+        this.level = level;
+    }
 
-	@Nonnull
-	public EnumTankLevel getLevel() {
-		return level;
-	}
+    @Nonnull
+    public Color getFluidColor() {
+        return fluidColor;
+    }
+
+    @Nonnull
+    public EnumTankLevel getLevel() {
+        return level;
+    }
 }

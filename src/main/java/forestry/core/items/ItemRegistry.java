@@ -10,20 +10,18 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import net.minecraft.item.Item;
-
 import cpw.mods.fml.common.registry.GameRegistry;
-
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginManager;
+import net.minecraft.item.Item;
 
 public abstract class ItemRegistry {
-	protected static <T extends Item> T registerItem(T item, String name) {
-		if (PluginManager.getStage() != PluginManager.Stage.SETUP) {
-			throw new RuntimeException("Tried to register Item outside of Setup");
-		}
-		item.setUnlocalizedName("for." + name);
-		GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
-		return item;
-	}
+    protected static <T extends Item> T registerItem(T item, String name) {
+        if (PluginManager.getStage() != PluginManager.Stage.SETUP) {
+            throw new RuntimeException("Tried to register Item outside of Setup");
+        }
+        item.setUnlocalizedName("for." + name);
+        GameRegistry.registerItem(item, StringUtil.cleanItemName(item));
+        return item;
+    }
 }

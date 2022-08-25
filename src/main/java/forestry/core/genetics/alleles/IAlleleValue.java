@@ -1,7 +1,7 @@
 package forestry.core.genetics.alleles;
 
 public interface IAlleleValue<V> {
-	boolean isDominant();
+    boolean isDominant();
 
-	V getValue();
+    V getValue();
 }

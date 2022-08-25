@@ -10,40 +10,39 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.gui.slots.SlotOutput;
 import forestry.energy.tiles.TileEnginePeat;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ICrafting;
 
 public class ContainerEnginePeat extends ContainerTile<TileEnginePeat> {
 
-	public ContainerEnginePeat(InventoryPlayer player, TileEnginePeat tile) {
-		super(tile, player, 8, 84);
+    public ContainerEnginePeat(InventoryPlayer player, TileEnginePeat tile) {
+        super(tile, player, 8, 84);
 
-		this.addSlotToContainer(new SlotFiltered(tile, 0, 44, 46));
+        this.addSlotToContainer(new SlotFiltered(tile, 0, 44, 46));
 
-		this.addSlotToContainer(new SlotOutput(tile, 1, 98, 35));
-		this.addSlotToContainer(new SlotOutput(tile, 2, 98, 53));
-		this.addSlotToContainer(new SlotOutput(tile, 3, 116, 35));
-		this.addSlotToContainer(new SlotOutput(tile, 4, 116, 53));
-	}
+        this.addSlotToContainer(new SlotOutput(tile, 1, 98, 35));
+        this.addSlotToContainer(new SlotOutput(tile, 2, 98, 53));
+        this.addSlotToContainer(new SlotOutput(tile, 3, 116, 35));
+        this.addSlotToContainer(new SlotOutput(tile, 4, 116, 53));
+    }
 
-	@Override
-	public void updateProgressBar(int i, int j) {
-		if (tile != null) {
-			tile.getGUINetworkData(i, j);
-		}
-	}
+    @Override
+    public void updateProgressBar(int i, int j) {
+        if (tile != null) {
+            tile.getGUINetworkData(i, j);
+        }
+    }
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		for (Object crafter : crafters) {
-			tile.sendGUINetworkData(this, (ICrafting) crafter);
-		}
-	}
+        for (Object crafter : crafters) {
+            tile.sendGUINetworkData(this, (ICrafting) crafter);
+        }
+    }
 }

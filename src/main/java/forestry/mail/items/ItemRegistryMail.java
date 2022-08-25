@@ -13,13 +13,13 @@ package forestry.mail.items;
 import forestry.core.items.ItemRegistry;
 
 public class ItemRegistryMail extends ItemRegistry {
-	public final ItemStamps stamps;
-	public final ItemLetter letters;
-	public final ItemCatalogue catalogue;
+    public final ItemStamps stamps;
+    public final ItemLetter letters;
+    public final ItemCatalogue catalogue;
 
-	public ItemRegistryMail() {
-		stamps = registerItem(new ItemStamps(), "stamps");
-		letters = registerItem(new ItemLetter(), "letters");
-		catalogue = registerItem(new ItemCatalogue(), "catalogue");
-	}
+    public ItemRegistryMail() {
+        stamps = registerItem(new ItemStamps(), "stamps");
+        letters = registerItem(new ItemLetter(), "letters");
+        catalogue = registerItem(new ItemCatalogue(), "catalogue");
+    }
 }

@@ -10,44 +10,42 @@
  ******************************************************************************/
 package forestry.factory.blocks;
 
-import java.util.Locale;
-
-import org.apache.commons.lang3.text.WordUtils;
-
 import forestry.core.blocks.IMachineProperties;
 import forestry.core.tiles.TileForestry;
 import forestry.factory.tiles.TileFabricator;
 import forestry.factory.tiles.TileRaintank;
 import forestry.factory.tiles.TileWorktable;
+import java.util.Locale;
+import org.apache.commons.lang3.text.WordUtils;
 
 public enum BlockFactoryPlainType implements IMachineProperties {
-	FABRICATOR(TileFabricator.class),
-	RAINTANK(TileRaintank.class),
-	WORKTABLE(TileWorktable.class);
+    FABRICATOR(TileFabricator.class),
+    RAINTANK(TileRaintank.class),
+    WORKTABLE(TileWorktable.class);
 
-	public static final BlockFactoryPlainType[] VALUES = values();
+    public static final BlockFactoryPlainType[] VALUES = values();
 
-	private final String teIdent;
-	private final Class<? extends TileForestry> teClass;
+    private final String teIdent;
+    private final Class<? extends TileForestry> teClass;
 
-	BlockFactoryPlainType(Class<? extends TileForestry> teClass) {
-		String name = toString().toLowerCase(Locale.ENGLISH);
-		this.teIdent = "forestry." + WordUtils.capitalize(name);
-		this.teClass = teClass;
-	}
+    BlockFactoryPlainType(Class<? extends TileForestry> teClass) {
+        String name = toString().toLowerCase(Locale.ENGLISH);
+        this.teIdent = "forestry." + WordUtils.capitalize(name);
+        this.teClass = teClass;
+    }
 
-	@Override
-	public int getMeta() {
-		return ordinal();
-	}
+    @Override
+    public int getMeta() {
+        return ordinal();
+    }
 
-	@Override
-	public String getTeIdent() {
-		return teIdent;
-	}
+    @Override
+    public String getTeIdent() {
+        return teIdent;
+    }
 
-	@Override
-	public Class<? extends TileForestry> getTeClass() {
-		return teClass;
-	}
+    @Override
+    public Class<? extends TileForestry> getTeClass() {
+        return teClass;
+    }
 }

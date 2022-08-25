@@ -10,38 +10,35 @@
  ******************************************************************************/
 package forestry.apiculture.trigger;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.apiculture.inventory.InventoryApiary;
 import forestry.apiculture.tiles.TileApiary;
 import forestry.core.triggers.Trigger;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerNoFrames extends Trigger {
 
-	public TriggerNoFrames() {
-		super("noFrames");
-	}
+    public TriggerNoFrames() {
+        super("noFrames");
+    }
 
-	/**
-	 * Return true if the tile given in parameter activates the trigger, given the parameters.
-	 */
-	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+    /**
+     * Return true if the tile given in parameter activates the trigger, given the parameters.
+     */
+    @Override
+    public boolean isTriggerActive(
+            TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof TileApiary)) {
-			return false;
-		}
+        if (!(tile instanceof TileApiary)) {
+            return false;
+        }
 
-		TileApiary apiary = (TileApiary) tile;
+        TileApiary apiary = (TileApiary) tile;
 
-		InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
+        InventoryApiary inventory = (InventoryApiary) apiary.getInternalInventory();
 
-		return inventory.getFrames().size() == 0;
-	}
-
+        return inventory.getFrames().size() == 0;
+    }
 }

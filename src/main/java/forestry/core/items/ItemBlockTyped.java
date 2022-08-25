@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.items;
 
+import forestry.core.blocks.IItemTyped;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-
-import forestry.core.blocks.IItemTyped;
 
 /**
  * For blocks whose type depends on metadata.
@@ -21,23 +20,23 @@ import forestry.core.blocks.IItemTyped;
  */
 public class ItemBlockTyped extends ItemBlockForestry {
 
-	public ItemBlockTyped(Block block) {
-		super(block);
-	}
+    public ItemBlockTyped(Block block) {
+        super(block);
+    }
 
-	@Override
-	@SuppressWarnings("rawtypes")
-	public String getUnlocalizedName(ItemStack itemstack) {
-		Block block = getBlock();
-		if (block instanceof IItemTyped) {
-			IItemTyped blockTyped = (IItemTyped) block;
-			Enum type = blockTyped.getTypeFromMeta(itemstack.getItemDamage());
-			if (type != null) {
-				return getBlock().getUnlocalizedName() + "." + type.ordinal();
-			} else {
-				return null;
-			}
-		}
-		return super.getUnlocalizedName(itemstack);
-	}
+    @Override
+    @SuppressWarnings("rawtypes")
+    public String getUnlocalizedName(ItemStack itemstack) {
+        Block block = getBlock();
+        if (block instanceof IItemTyped) {
+            IItemTyped blockTyped = (IItemTyped) block;
+            Enum type = blockTyped.getTypeFromMeta(itemstack.getItemDamage());
+            if (type != null) {
+                return getBlock().getUnlocalizedName() + "." + type.ordinal();
+            } else {
+                return null;
+            }
+        }
+        return super.getUnlocalizedName(itemstack);
+    }
 }

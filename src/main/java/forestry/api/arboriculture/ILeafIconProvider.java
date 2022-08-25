@@ -15,6 +15,7 @@ import net.minecraft.util.IIcon;
  * Icon registration is not done here because these icons are heavily reused.
  */
 public interface ILeafIconProvider {
-	IIcon getIcon(boolean pollinated, boolean fancy);
-	int getColor(boolean pollinated);
+    IIcon getIcon(boolean pollinated, boolean fancy);
+
+    int getColor(boolean pollinated);
 }

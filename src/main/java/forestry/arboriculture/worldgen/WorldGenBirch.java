@@ -14,8 +14,7 @@ import forestry.api.world.ITreeGenData;
 
 public class WorldGenBirch extends WorldGenTreeVanilla {
 
-	public WorldGenBirch(ITreeGenData tree) {
-		super(tree);
-	}
-
+    public WorldGenBirch(ITreeGenData tree) {
+        super(tree);
+    }
 }

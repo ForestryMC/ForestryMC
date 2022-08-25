@@ -10,17 +10,14 @@
  ******************************************************************************/
 package forestry.factory.recipes.craftguide;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
-import net.minecraft.item.ItemStack;
-
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.factory.blocks.BlockFactoryTesrType;
 import forestry.plugins.PluginFactory;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import net.minecraft.item.ItemStack;
 import uristqwerty.CraftGuide.api.ChanceSlot;
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.RecipeGenerator;
@@ -31,42 +28,46 @@ import uristqwerty.CraftGuide.api.SlotType;
 
 public class CraftGuideCentrifuge implements RecipeProvider {
 
-	private final Slot[] slots = new Slot[11];
+    private final Slot[] slots = new Slot[11];
 
-	public CraftGuideCentrifuge() {
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				slots[i + j * 3] = new ChanceSlot(i * 18 + 24, j * 18 + 3, 16, 16).setRatio(100).setSlotType(SlotType.OUTPUT_SLOT).drawOwnBackground();
-			}
-		}
-		slots[9] = new ItemSlot(4, 31, 16, 16, true).drawOwnBackground();
-		slots[10] = new ItemSlot(4, 11, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
-	}
+    public CraftGuideCentrifuge() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                slots[i + j * 3] = new ChanceSlot(i * 18 + 24, j * 18 + 3, 16, 16)
+                        .setRatio(100)
+                        .setSlotType(SlotType.OUTPUT_SLOT)
+                        .drawOwnBackground();
+            }
+        }
+        slots[9] = new ItemSlot(4, 31, 16, 16, true).drawOwnBackground();
+        slots[10] = new ItemSlot(4, 11, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
+    }
 
-	@Override
-	public void generateRecipes(RecipeGenerator generator) {
+    @Override
+    public void generateRecipes(RecipeGenerator generator) {
 
-		if (PluginFactory.blocks.factoryTESR == null) {
-			return;
-		}
+        if (PluginFactory.blocks.factoryTESR == null) {
+            return;
+        }
 
-		ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.CENTRIFUGE);
-		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
+        ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.CENTRIFUGE);
+        RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (ICentrifugeRecipe recipe : RecipeManagers.centrifugeManager.recipes()) {
-			Object[] array = new Object[11];
+        for (ICentrifugeRecipe recipe : RecipeManagers.centrifugeManager.recipes()) {
+            Object[] array = new Object[11];
 
-			List<Entry<ItemStack, Float>> entries = new ArrayList<>(recipe.getAllProducts().entrySet());
+            List<Entry<ItemStack, Float>> entries =
+                    new ArrayList<>(recipe.getAllProducts().entrySet());
 
-			for (int i = 0; i < Math.min(entries.size(), 9); i++) {
-				Entry<ItemStack, Float> entry = entries.get(i);
-				array[i] = entry.getValue() > 0 ? new Object[]{entry.getKey(), entry.getValue()} : null;
-			}
+            for (int i = 0; i < Math.min(entries.size(), 9); i++) {
+                Entry<ItemStack, Float> entry = entries.get(i);
+                array[i] = entry.getValue() > 0 ? new Object[] {entry.getKey(), entry.getValue()} : null;
+            }
 
-			array[9] = recipe.getInput();
-			array[10] = machine;
+            array[9] = recipe.getInput();
+            array[10] = machine;
 
-			generator.addRecipe(template, array);
-		}
-	}
+            generator.addRecipe(template, array);
+        }
+    }
 }

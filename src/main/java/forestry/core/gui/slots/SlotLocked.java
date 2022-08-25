@@ -16,29 +16,28 @@ import net.minecraft.item.ItemStack;
 
 public class SlotLocked extends SlotForestry {
 
-	public SlotLocked(IInventory inventory, int slotIndex, int xPos, int yPos) {
-		super(inventory, slotIndex, xPos, yPos);
-		setCanAdjustPhantom(false);
-		blockShift();
-		setPhantom();
-	}
+    public SlotLocked(IInventory inventory, int slotIndex, int xPos, int yPos) {
+        super(inventory, slotIndex, xPos, yPos);
+        setCanAdjustPhantom(false);
+        blockShift();
+        setPhantom();
+    }
 
-	@Override
-	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
-	}
+    @Override
+    public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {}
 
-	@Override
-	public boolean isItemValid(ItemStack par1ItemStack) {
-		return false;
-	}
+    @Override
+    public boolean isItemValid(ItemStack par1ItemStack) {
+        return false;
+    }
 
-	@Override
-	public boolean getHasStack() {
-		return false;
-	}
+    @Override
+    public boolean getHasStack() {
+        return false;
+    }
 
-	@Override
-	public ItemStack decrStackSize(int i) {
-		return null;
-	}
+    @Override
+    public ItemStack decrStackSize(int i) {
+        return null;
+    }
 }

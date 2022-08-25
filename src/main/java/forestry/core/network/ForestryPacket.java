@@ -10,33 +10,29 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import io.netty.buffer.Unpooled;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-
-import io.netty.buffer.Unpooled;
-
 public abstract class ForestryPacket implements IForestryPacket {
-	private final IPacketId id = getPacketId();
+    private final IPacketId id = getPacketId();
 
-	public final FMLProxyPacket getPacket() {
-		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		DataOutputStreamForestry data = new DataOutputStreamForestry(bytes);
+    public final FMLProxyPacket getPacket() {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStreamForestry data = new DataOutputStreamForestry(bytes);
 
-		try {
-			data.writeByte(id.ordinal());
-			writeData(data);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        try {
+            data.writeByte(id.ordinal());
+            writeData(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		return new FMLProxyPacket(Unpooled.wrappedBuffer(bytes.toByteArray()), PacketHandler.channelId);
-	}
+        return new FMLProxyPacket(Unpooled.wrappedBuffer(bytes.toByteArray()), PacketHandler.channelId);
+    }
 
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-	}
+    protected void writeData(DataOutputStreamForestry data) throws IOException {}
 
-	public void readData(DataInputStreamForestry data) throws IOException {
-	}
+    public void readData(DataInputStreamForestry data) throws IOException {}
 }

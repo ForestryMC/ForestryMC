@@ -10,34 +10,32 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.pollination;
 
-import java.util.EnumSet;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.genetics.IIndividual;
+import java.util.EnumSet;
+import net.minecraftforge.common.EnumPlantType;
 
 /** Just like IPollinatible but for checking only, it can't be mated */
 public interface ICheckPollinatable {
 
-	/**
-	 * @return plant types this pollinatable is classified as. (Can be used by bees to determine whether to interact or not.
-	 */
-	EnumSet<EnumPlantType> getPlantType();
+    /**
+     * @return plant types this pollinatable is classified as. (Can be used by bees to determine whether to interact or not.
+     */
+    EnumSet<EnumPlantType> getPlantType();
 
-	/**
-	 * @return IIndividual containing the genetic information of this IPollinatable
-	 */
-	IIndividual getPollen();
+    /**
+     * @return IIndividual containing the genetic information of this IPollinatable
+     */
+    IIndividual getPollen();
 
-	/**
-	 * Checks whether this can mate with the given pollen.
-	 *
-	 * Must be the one to check genetic equivalency.
-	 *
-	 * @param pollen IIndividual representing the pollen.
-	 * @return true if mating is possible, false otherwise.
-	 */
-	boolean canMateWith(IIndividual pollen);
+    /**
+     * Checks whether this can mate with the given pollen.
+     *
+     * Must be the one to check genetic equivalency.
+     *
+     * @param pollen IIndividual representing the pollen.
+     * @return true if mating is possible, false otherwise.
+     */
+    boolean canMateWith(IIndividual pollen);
 
-	boolean isPollinated();
+    boolean isPollinated();
 }

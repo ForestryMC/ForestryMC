@@ -10,45 +10,44 @@
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-
 import forestry.core.inventory.watchers.FakeSlotChangeWatcher;
 import forestry.core.inventory.watchers.FakeSlotPickupWatcher;
 import forestry.core.inventory.watchers.ISlotChangeWatcher;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 /**
  * Slot with a watcher callbacks.
  */
 public class SlotWatched extends SlotForestry {
-	private ISlotPickupWatcher pickupWatcher = FakeSlotPickupWatcher.instance;
-	private ISlotChangeWatcher changeWatcher = FakeSlotChangeWatcher.instance;
+    private ISlotPickupWatcher pickupWatcher = FakeSlotPickupWatcher.instance;
+    private ISlotChangeWatcher changeWatcher = FakeSlotChangeWatcher.instance;
 
-	public SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
-		super(inventory, slotIndex, xPos, yPos);
-	}
+    public SlotWatched(IInventory inventory, int slotIndex, int xPos, int yPos) {
+        super(inventory, slotIndex, xPos, yPos);
+    }
 
-	public SlotWatched setPickupWatcher(ISlotPickupWatcher pickupWatcher) {
-		this.pickupWatcher = pickupWatcher;
-		return this;
-	}
+    public SlotWatched setPickupWatcher(ISlotPickupWatcher pickupWatcher) {
+        this.pickupWatcher = pickupWatcher;
+        return this;
+    }
 
-	public SlotWatched setChangeWatcher(ISlotChangeWatcher changeWatcher) {
-		this.changeWatcher = changeWatcher;
-		return this;
-	}
+    public SlotWatched setChangeWatcher(ISlotChangeWatcher changeWatcher) {
+        this.changeWatcher = changeWatcher;
+        return this;
+    }
 
-	@Override
-	public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
-		super.onPickupFromSlot(player, itemStack);
-		pickupWatcher.onPickupFromSlot(getSlotIndex(), player);
-	}
+    @Override
+    public void onPickupFromSlot(EntityPlayer player, ItemStack itemStack) {
+        super.onPickupFromSlot(player, itemStack);
+        pickupWatcher.onPickupFromSlot(getSlotIndex(), player);
+    }
 
-	@Override
-	public void onSlotChanged() {
-		super.onSlotChanged();
-		changeWatcher.onSlotChanged(inventory, getSlotIndex());
-	}
+    @Override
+    public void onSlotChanged() {
+        super.onSlotChanged();
+        changeWatcher.onSlotChanged(inventory, getSlotIndex());
+    }
 }

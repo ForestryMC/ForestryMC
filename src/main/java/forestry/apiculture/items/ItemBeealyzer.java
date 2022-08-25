@@ -10,29 +10,28 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.Tabs;
 import forestry.apiculture.gui.GuiBeealyzer;
 import forestry.apiculture.inventory.ItemInventoryBeealyzer;
 import forestry.core.gui.ContainerAlyzer;
 import forestry.core.items.ItemWithGui;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ItemBeealyzer extends ItemWithGui {
-	public ItemBeealyzer() {
-		setCreativeTab(Tabs.tabApiculture);
-	}
+    public ItemBeealyzer() {
+        setCreativeTab(Tabs.tabApiculture);
+    }
 
-	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
-		return new GuiBeealyzer(player, inventory);
-	}
+    @Override
+    public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+        ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
+        return new GuiBeealyzer(player, inventory);
+    }
 
-	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
-		return new ContainerAlyzer(inventory, player);
-	}
+    @Override
+    public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+        ItemInventoryBeealyzer inventory = new ItemInventoryBeealyzer(player, heldItem);
+        return new ContainerAlyzer(inventory, player);
+    }
 }

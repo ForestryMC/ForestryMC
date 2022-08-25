@@ -10,44 +10,40 @@
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import java.awt.Color;
-
-import net.minecraft.util.IIcon;
-
 import forestry.api.arboriculture.EnumLeafType;
 import forestry.api.arboriculture.ILeafIconProvider;
+import java.awt.Color;
+import net.minecraft.util.IIcon;
 
 public class IconProviderLeaves implements ILeafIconProvider {
 
-	private final TextureLeaves leafTexture;
-	private final int color;
-	private final int colorPollinated;
+    private final TextureLeaves leafTexture;
+    private final int color;
+    private final int colorPollinated;
 
-	public IconProviderLeaves(EnumLeafType leafType, Color color, Color colorPollinated) {
-		this.leafTexture = TextureLeaves.get(leafType);
-		this.color = color.getRGB();
-		this.colorPollinated = colorPollinated.getRGB();
-	}
+    public IconProviderLeaves(EnumLeafType leafType, Color color, Color colorPollinated) {
+        this.leafTexture = TextureLeaves.get(leafType);
+        this.color = color.getRGB();
+        this.colorPollinated = colorPollinated.getRGB();
+    }
 
-	@Override
-	public int getColor(boolean pollinated) {
-		if (pollinated) {
-			return colorPollinated;
-		} else {
-			return color;
-		}
-	}
+    @Override
+    public int getColor(boolean pollinated) {
+        if (pollinated) {
+            return colorPollinated;
+        } else {
+            return color;
+        }
+    }
 
-	@Override
-	public IIcon getIcon(boolean pollinated, boolean fancy) {
-		if (pollinated) {
-			return leafTexture.getPollinated();
-		} else if (fancy) {
-			return leafTexture.getFancy();
-		} else {
-			return leafTexture.getPlain();
-		}
-	}
-
+    @Override
+    public IIcon getIcon(boolean pollinated, boolean fancy) {
+        if (pollinated) {
+            return leafTexture.getPollinated();
+        } else if (fancy) {
+            return leafTexture.getFancy();
+        } else {
+            return leafTexture.getPlain();
+        }
+    }
 }
-

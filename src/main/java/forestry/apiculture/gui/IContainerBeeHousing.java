@@ -10,5 +10,4 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-public interface IContainerBeeHousing {
-}
+public interface IContainerBeeHousing {}

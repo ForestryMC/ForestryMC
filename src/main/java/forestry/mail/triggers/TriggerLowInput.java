@@ -10,37 +10,35 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.core.triggers.Trigger;
-import forestry.mail.tiles.TileTrader;
-
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
+import forestry.core.triggers.Trigger;
+import forestry.mail.tiles.TileTrader;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowInput extends Trigger {
 
-	private final float threshold;
+    private final float threshold;
 
-	public TriggerLowInput(String tag, float threshold) {
-		super(tag, "lowInput");
-		this.threshold = threshold;
-	}
+    public TriggerLowInput(String tag, float threshold) {
+        super(tag, "lowInput");
+        this.threshold = threshold;
+    }
 
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
-	}
+    @Override
+    public String getDescription() {
+        return super.getDescription() + " < " + threshold * 100 + "%";
+    }
 
-	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+    @Override
+    public boolean isTriggerActive(
+            TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof TileTrader)) {
-			return false;
-		}
+        if (!(tile instanceof TileTrader)) {
+            return false;
+        }
 
-		return !((TileTrader) tile).hasInputBufMin(threshold);
-	}
+        return !((TileTrader) tile).hasInputBufMin(threshold);
+    }
 }

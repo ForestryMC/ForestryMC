@@ -10,45 +10,43 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics.pollination;
 
-import java.util.EnumSet;
-
-import net.minecraftforge.common.EnumPlantType;
-
 import forestry.api.arboriculture.ITree;
 import forestry.api.genetics.IIndividual;
+import java.util.EnumSet;
+import net.minecraftforge.common.EnumPlantType;
 
 public class CheckPollinatableTree implements ICheckPollinatable {
 
-	private final ITree tree;
+    private final ITree tree;
 
-	public CheckPollinatableTree(ITree tree) {
-		this.tree = tree;
-	}
+    public CheckPollinatableTree(ITree tree) {
+        this.tree = tree;
+    }
 
-	@Override
-	public EnumSet<EnumPlantType> getPlantType() {
-		return tree.getPlantTypes();
-	}
+    @Override
+    public EnumSet<EnumPlantType> getPlantType() {
+        return tree.getPlantTypes();
+    }
 
-	@Override
-	public IIndividual getPollen() {
-		return tree;
-	}
+    @Override
+    public IIndividual getPollen() {
+        return tree;
+    }
 
-	@Override
-	public boolean canMateWith(IIndividual pollen) {
-		if (tree.getMate() != null) {
-			return false;
-		}
-		if (!(pollen instanceof ITree)) {
-			return false;
-		}
+    @Override
+    public boolean canMateWith(IIndividual pollen) {
+        if (tree.getMate() != null) {
+            return false;
+        }
+        if (!(pollen instanceof ITree)) {
+            return false;
+        }
 
-		return !tree.isGeneticEqual(pollen);
-	}
+        return !tree.isGeneticEqual(pollen);
+    }
 
-	@Override
-	public boolean isPollinated() {
-		return tree.getMate() != null;
-	}
+    @Override
+    public boolean isPollinated() {
+        return tree.getMate() != null;
+    }
 }

@@ -10,24 +10,20 @@
  ******************************************************************************/
 package forestry.apiculture;
 
-import net.minecraft.world.World;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.core.ISaveEventHandler;
+import net.minecraft.world.World;
 
 public class SaveEventHandlerApiculture implements ISaveEventHandler {
 
-	@Override
-	public void onWorldLoad(World world) {
-		BeeManager.beeRoot.resetBeekeepingMode();
-	}
+    @Override
+    public void onWorldLoad(World world) {
+        BeeManager.beeRoot.resetBeekeepingMode();
+    }
 
-	@Override
-	public void onWorldSave(World world) {
-	}
+    @Override
+    public void onWorldSave(World world) {}
 
-	@Override
-	public void onWorldUnload(World world) {
-	}
-
+    @Override
+    public void onWorldUnload(World world) {}
 }

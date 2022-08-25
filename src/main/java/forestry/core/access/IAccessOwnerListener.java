@@ -13,5 +13,5 @@ package forestry.core.access;
 import com.mojang.authlib.GameProfile;
 
 public interface IAccessOwnerListener {
-	void onOwnerSet(GameProfile gameProfile);
+    void onOwnerSet(GameProfile gameProfile);
 }

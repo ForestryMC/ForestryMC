@@ -10,36 +10,34 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
+import java.io.IOException;
 
 public abstract class PacketString extends ForestryPacket {
 
-	private String string;
+    private String string;
 
-	protected PacketString() {
-	}
+    protected PacketString() {}
 
-	protected PacketString(String string) {
-		this.string = string;
-	}
+    protected PacketString(String string) {
+        this.string = string;
+    }
 
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeUTF(string);
-	}
+    @Override
+    protected void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        data.writeUTF(string);
+    }
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		string = data.readUTF();
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {
+        super.readData(data);
+        string = data.readUTF();
+    }
 
-	public String getString() {
-		return string;
-	}
+    public String getString() {
+        return string;
+    }
 }

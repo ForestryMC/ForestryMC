@@ -11,54 +11,44 @@
 package forestry.core.errors;
 
 import com.google.common.collect.ImmutableSet;
-
+import forestry.api.core.IErrorLogic;
+import forestry.api.core.IErrorState;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import forestry.api.core.IErrorLogic;
-import forestry.api.core.IErrorState;
-
 public class FakeErrorLogic implements IErrorLogic {
 
-	public static final FakeErrorLogic instance = new FakeErrorLogic();
+    public static final FakeErrorLogic instance = new FakeErrorLogic();
 
-	private FakeErrorLogic() {
+    private FakeErrorLogic() {}
 
-	}
+    @Override
+    public boolean setCondition(boolean condition, IErrorState errorState) {
+        return false;
+    }
 
-	@Override
-	public boolean setCondition(boolean condition, IErrorState errorState) {
-		return false;
-	}
+    @Override
+    public boolean contains(IErrorState state) {
+        return false;
+    }
 
-	@Override
-	public boolean contains(IErrorState state) {
-		return false;
-	}
+    @Override
+    public boolean hasErrors() {
+        return true;
+    }
 
-	@Override
-	public boolean hasErrors() {
-		return true;
-	}
+    @Override
+    public void clearErrors() {}
 
-	@Override
-	public void clearErrors() {
+    @Override
+    public void writeData(DataOutputStream data) throws IOException {}
 
-	}
+    @Override
+    public void readData(DataInputStream data) throws IOException {}
 
-	@Override
-	public void writeData(DataOutputStream data) throws IOException {
-
-	}
-
-	@Override
-	public void readData(DataInputStream data) throws IOException {
-
-	}
-
-	@Override
-	public ImmutableSet<IErrorState> getErrorStates() {
-		return ImmutableSet.of();
-	}
+    @Override
+    public ImmutableSet<IErrorState> getErrorStates() {
+        return ImmutableSet.of();
+    }
 }

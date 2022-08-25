@@ -5,44 +5,42 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.util.StatCollector;
-
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IFruitFamily;
+import net.minecraft.util.StatCollector;
 
 public enum EnumFruitFamily implements IFruitFamily {
-	PRUNES("prunes", "Prunus domestica"),
-	POMES("pomes", "Pomum"),
-	JUNGLE("jungle", "Tropicus"),
-	NUX("nuts", "Nux");
+    PRUNES("prunes", "Prunus domestica"),
+    POMES("pomes", "Pomum"),
+    JUNGLE("jungle", "Tropicus"),
+    NUX("nuts", "Nux");
 
-	private final String uid;
-	private final String scientific;
+    private final String uid;
+    private final String scientific;
 
-	EnumFruitFamily(String uid, String scientific) {
-		this.uid = uid;
-		this.scientific = scientific;
-		AlleleManager.alleleRegistry.registerFruitFamily(this);
-	}
+    EnumFruitFamily(String uid, String scientific) {
+        this.uid = uid;
+        this.scientific = scientific;
+        AlleleManager.alleleRegistry.registerFruitFamily(this);
+    }
 
-	@Override
-	public String getUID() {
-		return "forestry." + uid;
-	}
+    @Override
+    public String getUID() {
+        return "forestry." + uid;
+    }
 
-	@Override
-	public String getScientific() {
-		return this.scientific;
-	}
+    @Override
+    public String getScientific() {
+        return this.scientific;
+    }
 
-	@Override
-	public String getName() {
-		return StatCollector.translateToLocal("for.family." + uid);
-	}
+    @Override
+    public String getName() {
+        return StatCollector.translateToLocal("for.family." + uid);
+    }
 
-	@Override
-	public String getDescription() {
-		return StatCollector.translateToLocal("for.family." + uid + ".description");
-	}
-
+    @Override
+    public String getDescription() {
+        return StatCollector.translateToLocal("for.family." + uid + ".description");
+    }
 }

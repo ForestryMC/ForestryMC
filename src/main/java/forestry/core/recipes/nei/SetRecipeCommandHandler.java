@@ -12,7 +12,6 @@ package forestry.core.recipes.nei;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -24,37 +23,37 @@ import net.minecraft.nbt.NBTTagList;
  * @author bdew
  */
 public class SetRecipeCommandHandler {
-	private final Class<? extends Container> containerClass;
-	private final Class<? extends Slot> slotClass;
+    private final Class<? extends Container> containerClass;
+    private final Class<? extends Slot> slotClass;
 
-	public SetRecipeCommandHandler(Class<? extends Container> containerClass, Class<? extends Slot> slotClass) {
-		this.containerClass = containerClass;
-		this.slotClass = slotClass;
-	}
+    public SetRecipeCommandHandler(Class<? extends Container> containerClass, Class<? extends Slot> slotClass) {
+        this.containerClass = containerClass;
+        this.slotClass = slotClass;
+    }
 
-	public void handle(NBTTagCompound data, EntityPlayerMP player) {
-		NBTTagList stacks = data.getTagList("stacks", 10);
-		Container cont = player.openContainer;
-		if (!containerClass.isInstance(cont)) {
-			return;
-		}
+    public void handle(NBTTagCompound data, EntityPlayerMP player) {
+        NBTTagList stacks = data.getTagList("stacks", 10);
+        Container cont = player.openContainer;
+        if (!containerClass.isInstance(cont)) {
+            return;
+        }
 
-		Map<Integer, ItemStack> stmap = new HashMap<>();
-		for (int i = 0; i < stacks.tagCount(); i++) {
-			NBTTagCompound itemdata = stacks.getCompoundTagAt(i);
-			stmap.put(itemdata.getInteger("slot"), ItemStack.loadItemStackFromNBT(itemdata));
-		}
-		for (Object slotobj : cont.inventorySlots) {
-			if (!slotClass.isInstance(slotobj)) {
-				continue;
-			}
+        Map<Integer, ItemStack> stmap = new HashMap<>();
+        for (int i = 0; i < stacks.tagCount(); i++) {
+            NBTTagCompound itemdata = stacks.getCompoundTagAt(i);
+            stmap.put(itemdata.getInteger("slot"), ItemStack.loadItemStackFromNBT(itemdata));
+        }
+        for (Object slotobj : cont.inventorySlots) {
+            if (!slotClass.isInstance(slotobj)) {
+                continue;
+            }
 
-			Slot slot = (Slot) slotobj;
-			if (stmap.containsKey(slot.getSlotIndex())) {
-				slot.putStack(stmap.get(slot.getSlotIndex()));
-			} else {
-				slot.putStack(null);
-			}
-		}
-	}
+            Slot slot = (Slot) slotobj;
+            if (stmap.containsKey(slot.getSlotIndex())) {
+                slot.putStack(stmap.get(slot.getSlotIndex()));
+            } else {
+                slot.putStack(null);
+            }
+        }
+    }
 }

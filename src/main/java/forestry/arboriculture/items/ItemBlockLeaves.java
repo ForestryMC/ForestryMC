@@ -10,70 +10,79 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.items.ItemBlockForestry;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
+import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.items.ItemBlockForestry;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
-import forestry.plugins.PluginArboriculture;
-
 public class ItemBlockLeaves extends ItemBlockForestry {
 
-	public ItemBlockLeaves(Block block) {
-		super(block);
-	}
+    public ItemBlockLeaves(Block block) {
+        super(block);
+    }
 
-	@Override
-	public String getItemStackDisplayName(ItemStack itemstack) {
-		String type = StringUtil.localize("trees.grammar.leaves.type");
-		if (!itemstack.hasTagCompound()) {
-			return type;
-		}
+    @Override
+    public String getItemStackDisplayName(ItemStack itemstack) {
+        String type = StringUtil.localize("trees.grammar.leaves.type");
+        if (!itemstack.hasTagCompound()) {
+            return type;
+        }
 
-		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.readFromNBT(itemstack.getTagCompound());
+        TileLeaves tileLeaves = new TileLeaves();
+        tileLeaves.readFromNBT(itemstack.getTagCompound());
 
-		String unlocalizedName = tileLeaves.getUnlocalizedName();
+        String unlocalizedName = tileLeaves.getUnlocalizedName();
 
-		String customTreeKey = "trees.custom.leaves." + unlocalizedName.replace("trees.species.", "");
-		if (StringUtil.canTranslate(customTreeKey)) {
-			return StringUtil.localize(customTreeKey);
-		}
+        String customTreeKey = "trees.custom.leaves." + unlocalizedName.replace("trees.species.", "");
+        if (StringUtil.canTranslate(customTreeKey)) {
+            return StringUtil.localize(customTreeKey);
+        }
 
-		String grammar = StringUtil.localize("trees.grammar.leaves");
-		String localizedName = StatCollector.translateToLocal(unlocalizedName);
+        String grammar = StringUtil.localize("trees.grammar.leaves");
+        String localizedName = StatCollector.translateToLocal(unlocalizedName);
 
-		return grammar.replaceAll("%SPECIES", localizedName).replaceAll("%TYPE", type);
-	}
+        return grammar.replaceAll("%SPECIES", localizedName).replaceAll("%TYPE", type);
+    }
 
-	@Override
-	public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
-		if (!itemStack.hasTagCompound()) {
-			return PluginArboriculture.proxy.getFoliageColorBasic();
-		}
+    @Override
+    public int getColorFromItemStack(ItemStack itemStack, int renderPass) {
+        if (!itemStack.hasTagCompound()) {
+            return PluginArboriculture.proxy.getFoliageColorBasic();
+        }
 
-		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.readFromNBT(itemStack.getTagCompound());
+        TileLeaves tileLeaves = new TileLeaves();
+        tileLeaves.readFromNBT(itemStack.getTagCompound());
 
-		return tileLeaves.getFoliageColour(Proxies.common.getPlayer());
-	}
+        return tileLeaves.getFoliageColour(Proxies.common.getPlayer());
+    }
 
-	@Override
-	public boolean placeBlockAt(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
-		if (!itemStack.hasTagCompound()) {
-			return false;
-		}
+    @Override
+    public boolean placeBlockAt(
+            ItemStack itemStack,
+            EntityPlayer player,
+            World world,
+            int x,
+            int y,
+            int z,
+            int side,
+            float hitX,
+            float hitY,
+            float hitZ,
+            int metadata) {
+        if (!itemStack.hasTagCompound()) {
+            return false;
+        }
 
-		TileLeaves tileLeaves = new TileLeaves();
-		tileLeaves.readFromNBT(itemStack.getTagCompound());
-		tileLeaves.getTree().setLeavesDecorative(world, player.getGameProfile(), x, y, z);
+        TileLeaves tileLeaves = new TileLeaves();
+        tileLeaves.readFromNBT(itemStack.getTagCompound());
+        tileLeaves.getTree().setLeavesDecorative(world, player.getGameProfile(), x, y, z);
 
-		return true;
-	}
-
+        return true;
+    }
 }

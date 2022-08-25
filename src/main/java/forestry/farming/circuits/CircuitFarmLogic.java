@@ -17,72 +17,71 @@ import forestry.core.circuits.Circuit;
 
 public class CircuitFarmLogic extends Circuit {
 
-	private final Class<? extends IFarmLogic> logicClass;
-	private boolean isManual = false;
+    private final Class<? extends IFarmLogic> logicClass;
+    private boolean isManual = false;
 
-	public CircuitFarmLogic(String uid, Class<? extends IFarmLogic> logicClass) {
-		super(uid, false);
-		this.logicClass = logicClass;
-		setLimit(4);
-	}
+    public CircuitFarmLogic(String uid, Class<? extends IFarmLogic> logicClass) {
+        super(uid, false);
+        this.logicClass = logicClass;
+        setLimit(4);
+    }
 
-	public CircuitFarmLogic setManual() {
-		isManual = true;
-		return this;
-	}
+    public CircuitFarmLogic setManual() {
+        isManual = true;
+        return this;
+    }
 
-	@Override
-	public boolean isCircuitable(Object tile) {
-		return tile instanceof IFarmHousing;
-	}
+    @Override
+    public boolean isCircuitable(Object tile) {
+        return tile instanceof IFarmHousing;
+    }
 
-	private IFarmHousing getCircuitable(Object tile) {
-		if (!isCircuitable(tile)) {
-			return null;
-		}
-		return (IFarmHousing) tile;
-	}
+    private IFarmHousing getCircuitable(Object tile) {
+        if (!isCircuitable(tile)) {
+            return null;
+        }
+        return (IFarmHousing) tile;
+    }
 
-	@Override
-	@SuppressWarnings("rawtypes")
-	public void onInsertion(int slot, Object tile) {
-		IFarmHousing housing = getCircuitable(tile);
-		if (housing == null) {
-			return;
-		}
+    @Override
+    @SuppressWarnings("rawtypes")
+    public void onInsertion(int slot, Object tile) {
+        IFarmHousing housing = getCircuitable(tile);
+        if (housing == null) {
+            return;
+        }
 
-		IFarmLogic logic;
-		try {
-			logic = logicClass.getConstructor(IFarmHousing.class).newInstance(housing);
-		} catch (Exception ex) {
-			throw new RuntimeException("Failed to instantiate logic of class " + logicClass.getName() + ": " + ex.getMessage());
-		}
+        IFarmLogic logic;
+        try {
+            logic = logicClass.getConstructor(IFarmHousing.class).newInstance(housing);
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                    "Failed to instantiate logic of class " + logicClass.getName() + ": " + ex.getMessage());
+        }
 
-		try {
-			logic.setManual(isManual);
-		} catch (Throwable e) {
-			// uses older version of the API that doesn't implement setManual
-		}
-		housing.setFarmLogic(FarmDirection.values()[slot], logic);
-	}
+        try {
+            logic.setManual(isManual);
+        } catch (Throwable e) {
+            // uses older version of the API that doesn't implement setManual
+        }
+        housing.setFarmLogic(FarmDirection.values()[slot], logic);
+    }
 
-	@Override
-	public void onLoad(int slot, Object tile) {
-		onInsertion(slot, tile);
-	}
+    @Override
+    public void onLoad(int slot, Object tile) {
+        onInsertion(slot, tile);
+    }
 
-	@Override
-	public void onRemoval(int slot, Object tile) {
-		IFarmHousing farmHousing = getCircuitable(tile);
-		if (farmHousing == null) {
-			return;
-		}
+    @Override
+    public void onRemoval(int slot, Object tile) {
+        IFarmHousing farmHousing = getCircuitable(tile);
+        if (farmHousing == null) {
+            return;
+        }
 
-		farmHousing.resetFarmLogic(FarmDirection.values()[slot]);
-	}
+        farmHousing.resetFarmLogic(FarmDirection.values()[slot]);
+    }
 
-	@Override
-	public void onTick(int slot, Object tile) {
-	}
-
+    @Override
+    public void onTick(int slot, Object tile) {}
 }

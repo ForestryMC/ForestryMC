@@ -6,10 +6,9 @@ import forestry.api.genetics.IIndividual;
 
 public interface IGeneticDefinition {
 
-	IAllele[] getTemplate();
+    IAllele[] getTemplate();
 
-	IGenome getGenome();
+    IGenome getGenome();
 
-	IIndividual getIndividual();
-
+    IIndividual getIndividual();
 }

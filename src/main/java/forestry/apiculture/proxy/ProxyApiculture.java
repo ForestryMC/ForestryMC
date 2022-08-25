@@ -14,11 +14,9 @@ import forestry.core.render.IBlockRenderer;
 
 public class ProxyApiculture {
 
-	public IBlockRenderer getRendererAnalyzer(String string) {
-		return null;
-	}
+    public IBlockRenderer getRendererAnalyzer(String string) {
+        return null;
+    }
 
-	public void initializeRendering() {
-	}
-
+    public void initializeRendering() {}
 }

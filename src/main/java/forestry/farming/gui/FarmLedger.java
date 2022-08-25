@@ -10,68 +10,71 @@
  ******************************************************************************/
 package forestry.farming.gui;
 
-import net.minecraft.init.Items;
-
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.utils.StringUtil;
+import net.minecraft.init.Items;
 
 public class FarmLedger extends Ledger {
-	private final IFarmLedgerDelegate delegate;
+    private final IFarmLedgerDelegate delegate;
 
-	public FarmLedger(LedgerManager ledgerManager, IFarmLedgerDelegate delegate) {
-		super(ledgerManager, "farm");
-		this.delegate = delegate;
+    public FarmLedger(LedgerManager ledgerManager, IFarmLedgerDelegate delegate) {
+        super(ledgerManager, "farm");
+        this.delegate = delegate;
 
-		int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
-		this.maxHeight = titleHeight + 110;
-	}
+        int titleHeight = StringUtil.getLineHeight(maxTextWidth, getTooltip());
+        this.maxHeight = titleHeight + 110;
+    }
 
-	@Override
-	public void draw(int x, int y) {
+    @Override
+    public void draw(int x, int y) {
 
-		// Draw background
-		drawBackground(x, y);
-		y += 4;
+        // Draw background
+        drawBackground(x, y);
+        y += 4;
 
-		int xIcon = x + 3;
-		int xBody = x + 10;
-		int xHeader = x + 22;
+        int xIcon = x + 3;
+        int xBody = x + 10;
+        int xHeader = x + 22;
 
-		// Draw icon
-		drawIcon(Items.water_bucket.getIconFromDamage(0), xIcon, y);
-		y += 4;
+        // Draw icon
+        drawIcon(Items.water_bucket.getIconFromDamage(0), xIcon, y);
+        y += 4;
 
-		if (!isFullyOpened()) {
-			return;
-		}
+        if (!isFullyOpened()) {
+            return;
+        }
 
-		y += drawHeader(StringUtil.localize("gui.hydration"), xHeader, y);
-		y += 4;
+        y += drawHeader(StringUtil.localize("gui.hydration"), xHeader, y);
+        y += 4;
 
-		y += drawSubheader(StringUtil.localize("gui.hydr.heat") + ':', xBody, y);
-		y += 3;
-		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationTempModifier()), xBody, y);
-		y += 3;
+        y += drawSubheader(StringUtil.localize("gui.hydr.heat") + ':', xBody, y);
+        y += 3;
+        y += drawText(StringUtil.floatAsPercent(delegate.getHydrationTempModifier()), xBody, y);
+        y += 3;
 
-		y += drawSubheader(StringUtil.localize("gui.hydr.humid") + ':', xBody, y);
-		y += 3;
-		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), xBody, y);
-		y += 3;
+        y += drawSubheader(StringUtil.localize("gui.hydr.humid") + ':', xBody, y);
+        y += 3;
+        y += drawText(StringUtil.floatAsPercent(delegate.getHydrationHumidModifier()), xBody, y);
+        y += 3;
 
-		y += drawSubheader(StringUtil.localize("gui.hydr.rainfall") + ':', xBody, y);
-		y += 3;
-		y += drawText(StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought() + " d)", xBody, y);
-		y += 3;
+        y += drawSubheader(StringUtil.localize("gui.hydr.rainfall") + ':', xBody, y);
+        y += 3;
+        y += drawText(
+                StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought()
+                        + " d)",
+                xBody,
+                y);
+        y += 3;
 
-		y += drawSubheader(StringUtil.localize("gui.hydr.overall") + ':', xBody, y);
-		y += 3;
-		drawText(StringUtil.floatAsPercent(delegate.getHydrationModifier()), xBody, y);
-	}
+        y += drawSubheader(StringUtil.localize("gui.hydr.overall") + ':', xBody, y);
+        y += 3;
+        drawText(StringUtil.floatAsPercent(delegate.getHydrationModifier()), xBody, y);
+    }
 
-	@Override
-	public String getTooltip() {
-		float hydrationModifier = delegate.getHydrationModifier();
-		return StringUtil.floatAsPercent(hydrationModifier) + ' ' + StringUtil.localize("gui.hydration");
-	}
+    @Override
+    public String getTooltip() {
+        float hydrationModifier = delegate.getHydrationModifier();
+        return StringUtil.floatAsPercent(hydrationModifier) + ' ' + StringUtil.localize("gui.hydration");
+    }
 }

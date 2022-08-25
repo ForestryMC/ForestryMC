@@ -10,36 +10,32 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.items.ItemBlockWood;
 import forestry.core.worldgen.IBlockType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockTypeWood implements IBlockType, ITreeBlockType {
 
-	protected final ItemStack itemStack;
-	protected int blockMeta;
+    protected final ItemStack itemStack;
+    protected int blockMeta;
 
-	public BlockTypeWood(ItemStack itemStack) {
-		this.itemStack = itemStack;
-	}
+    public BlockTypeWood(ItemStack itemStack) {
+        this.itemStack = itemStack;
+    }
 
-	@Override
-	public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
-		setBlock(world, x, y, z);
-	}
+    @Override
+    public void setBlock(World world, ITreeGenData tree, int x, int y, int z) {
+        setBlock(world, x, y, z);
+    }
 
-	@Override
-	public void setBlock(World world, int x, int y, int z) {
-		ItemBlockWood.placeWood(itemStack, null, world, x, y, z, blockMeta);
-	}
+    @Override
+    public void setBlock(World world, int x, int y, int z) {
+        ItemBlockWood.placeWood(itemStack, null, world, x, y, z, blockMeta);
+    }
 
-	@Override
-	public void setDirection(ForgeDirection facing) {
-
-	}
+    @Override
+    public void setDirection(ForgeDirection facing) {}
 }

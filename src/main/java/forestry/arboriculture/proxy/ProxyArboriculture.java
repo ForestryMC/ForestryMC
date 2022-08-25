@@ -12,19 +12,17 @@ package forestry.arboriculture.proxy;
 
 public class ProxyArboriculture {
 
-	public void initializeRendering() {
-	}
+    public void initializeRendering() {}
 
-	public int getFoliageColorBasic() {
-		return 4764952;
-	}
+    public int getFoliageColorBasic() {
+        return 4764952;
+    }
 
-	public int getFoliageColorBirch() {
-		return 8431445;
-	}
+    public int getFoliageColorBirch() {
+        return 8431445;
+    }
 
-	public int getFoliageColorPine() {
-		return 6396257;
-	}
-
+    public int getFoliageColorPine() {
+        return 6396257;
+    }
 }

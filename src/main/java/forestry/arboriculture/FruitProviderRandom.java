@@ -10,71 +10,68 @@
  ******************************************************************************/
 package forestry.arboriculture;
 
+import forestry.api.arboriculture.ITreeGenome;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.genetics.IFruitFamily;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import forestry.api.arboriculture.ITreeGenome;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.genetics.IFruitFamily;
 
 /**
  * Simple fruit provider which drops from any leaf block according to yield and either marks all leave blocks as fruit leaves or none.
  */
 public class FruitProviderRandom extends FruitProviderNone {
 
-	private final Map<ItemStack, Float> products = new HashMap<>();
-	private int colour = 0xffffff;
+    private final Map<ItemStack, Float> products = new HashMap<>();
+    private int colour = 0xffffff;
 
-	public FruitProviderRandom(String key, IFruitFamily family, ItemStack product, float modifier) {
-		super(key, family);
-		products.put(product, modifier);
-	}
+    public FruitProviderRandom(String key, IFruitFamily family, ItemStack product, float modifier) {
+        super(key, family);
+        products.put(product, modifier);
+    }
 
-	public FruitProviderRandom setColour(int colour) {
-		this.colour = colour;
-		return this;
-	}
+    public FruitProviderRandom setColour(int colour) {
+        this.colour = colour;
+        return this;
+    }
 
-	@Override
-	public int getColour(ITreeGenome genome, IBlockAccess world, int x, int y, int z, int ripeningTime) {
-		return colour;
-	}
+    @Override
+    public int getColour(ITreeGenome genome, IBlockAccess world, int x, int y, int z, int ripeningTime) {
+        return colour;
+    }
 
-	@Override
-	public ItemStack[] getFruits(ITreeGenome genome, World world, int x, int y, int z, int ripeningTime) {
-		ArrayList<ItemStack> product = new ArrayList<>();
+    @Override
+    public ItemStack[] getFruits(ITreeGenome genome, World world, int x, int y, int z, int ripeningTime) {
+        ArrayList<ItemStack> product = new ArrayList<>();
 
-		float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
+        float modeYieldMod = TreeManager.treeRoot.getTreekeepingMode(world).getYieldModifier(genome, 1f);
 
-		for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
-			if (world.rand.nextFloat() <= genome.getYield() * modeYieldMod * entry.getValue()) {
-				product.add(entry.getKey().copy());
-			}
-		}
+        for (Map.Entry<ItemStack, Float> entry : products.entrySet()) {
+            if (world.rand.nextFloat() <= genome.getYield() * modeYieldMod * entry.getValue()) {
+                product.add(entry.getKey().copy());
+            }
+        }
 
-		return product.toArray(new ItemStack[product.size()]);
-	}
+        return product.toArray(new ItemStack[product.size()]);
+    }
 
-	@Override
-	public ItemStack[] getProducts() {
-		Set<ItemStack> products = this.products.keySet();
-		return products.toArray(new ItemStack[products.size()]);
-	}
+    @Override
+    public ItemStack[] getProducts() {
+        Set<ItemStack> products = this.products.keySet();
+        return products.toArray(new ItemStack[products.size()]);
+    }
 
-	@Override
-	public ItemStack[] getSpecialty() {
-		return new ItemStack[0];
-	}
+    @Override
+    public ItemStack[] getSpecialty() {
+        return new ItemStack[0];
+    }
 
-	@Override
-	public boolean markAsFruitLeaf(ITreeGenome genome, World world, int x, int y, int z) {
-		return true;
-	}
-
+    @Override
+    public boolean markAsFruitLeaf(ITreeGenome genome, World world, int x, int y, int z) {
+        return true;
+    }
 }

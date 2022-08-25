@@ -14,8 +14,8 @@ import forestry.arboriculture.network.packets.PacketRipeningUpdate;
 import forestry.core.network.PacketRegistry;
 
 public class PacketRegistryArboriculture extends PacketRegistry {
-	@Override
-	public void registerPackets() {
-		registerClientPacket(new PacketRipeningUpdate());
-	}
+    @Override
+    public void registerPackets() {
+        registerClientPacket(new PacketRipeningUpdate());
+    }
 }

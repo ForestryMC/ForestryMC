@@ -10,215 +10,208 @@
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.proxy.Proxies;
+import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
-
 import net.minecraftforge.client.IItemRenderer;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.core.proxy.Proxies;
-import forestry.lepidopterology.entities.EntityButterfly;
-
 public class RenderButterflyItem implements IItemRenderer {
 
-	private final ModelButterfly model;
-	private EntityButterfly entity;
-	
-	public RenderButterflyItem() {
-		model = new ModelButterfly();
-	}
-	
-	private static float getWingYaw(IButterfly butterfly) {
-		float wingYaw = 1f;
+    private final ModelButterfly model;
+    private EntityButterfly entity;
 
-		if (butterfly.isAlive()) {
-			long systemTime = System.currentTimeMillis();
-			long flapping = systemTime + butterfly.getIdent().hashCode();
-			float flap = (float) (flapping % 1024) / 1024;   // 0 to 1
+    public RenderButterflyItem() {
+        model = new ModelButterfly();
+    }
 
-			wingYaw = getIrregularWingYaw(flapping, flap);
+    private static float getWingYaw(IButterfly butterfly) {
+        float wingYaw = 1f;
 
-		}
+        if (butterfly.isAlive()) {
+            long systemTime = System.currentTimeMillis();
+            long flapping = systemTime + butterfly.getIdent().hashCode();
+            float flap = (float) (flapping % 1024) / 1024; // 0 to 1
 
-		return wingYaw;
-	}
-	
-	public static float getIrregularWingYaw(long flapping, float flap) {
-		long irregular = flapping / 1024;
-		float wingYaw;
-		
-		if (irregular % 11 == 0) {
-			wingYaw = 0.75f;
-		} else {
-			if (irregular % 7 == 0) {
-				flap *= 4;
-				flap = flap % 1;
-			} else if (irregular % 19 == 0) {
-				flap *= 6;
-				flap = flap % 1;
-			}
-			wingYaw = getRegularWingYaw(flap);
-		}
-		
-		return wingYaw;
-	}
-	
-	private static float getRegularWingYaw(float flap) {
-		return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
-	}
-	
-	private IButterfly initButterfly(ItemStack item) {
-		IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(item);
-		if (butterfly == null) {
-			butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
-		}
-		
-		if (entity == null) {
-			entity = new EntityButterfly(Proxies.common.getRenderWorld(), butterfly, 0, 0, 0);
-		} else {
-			entity.setIndividual(butterfly);
-		}
-		
-		return butterfly;
-	}
-	
-	private void renderButterflyItem(IButterfly butterfly, float translateX, float translateY, float translateZ) {
-		float yaw = 1;
-		float pitch = 1;
-		
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+            wingYaw = getIrregularWingYaw(flapping, flap);
+        }
 
-		GL11.glPushMatrix();
+        return wingYaw;
+    }
 
-		if (RenderItem.renderInFrame) {
-			//GL11.glScalef(-2.0f, 2.0f, 2.0f);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glScalef(1.1f, 1f, 1f);
+    public static float getIrregularWingYaw(long flapping, float flap) {
+        long irregular = flapping / 1024;
+        float wingYaw;
 
-			GL11.glTranslatef(0, -0.7f, 0.2f);
+        if (irregular % 11 == 0) {
+            wingYaw = 0.75f;
+        } else {
+            if (irregular % 7 == 0) {
+                flap *= 4;
+                flap = flap % 1;
+            } else if (irregular % 19 == 0) {
+                flap *= 6;
+                flap = flap % 1;
+            }
+            wingYaw = getRegularWingYaw(flap);
+        }
 
-			entity.renderYawOffset = 0;
-			entity.rotationYaw = 0;
-			entity.rotationPitch = 0;
-			entity.rotationYawHead = entity.rotationYaw;
+        return wingYaw;
+    }
 
-			RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0f);
+    private static float getRegularWingYaw(float flap) {
+        return flap < 0.5 ? 0.75f + flap : 1.75f - flap;
+    }
 
-		} else {
-			GL11.glTranslatef(translateX, translateY, translateZ);
+    private IButterfly initButterfly(ItemStack item) {
+        IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(item);
+        if (butterfly == null) {
+            butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(
+                    ButterflyManager.butterflyRoot.getDefaultTemplate());
+        }
 
-			GL11.glScalef(-2.0f, 2.0f, 2.0f);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(-((float) Math.atan((double) (pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+        if (entity == null) {
+            entity = new EntityButterfly(Proxies.common.getRenderWorld(), butterfly, 0, 0, 0);
+        } else {
+            entity.setIndividual(butterfly);
+        }
 
-			entity.renderYawOffset = (float) Math.atan((double) (yaw / 40.0F)) * 20.0F;
-			entity.rotationYaw = (float) Math.atan((double) (yaw / 40.0F)) * 40.0F;
-			entity.rotationPitch = -((float) Math.atan((double) (pitch / 40.0F))) * 20.0F;
-			entity.rotationYawHead = entity.rotationYaw;
+        return butterfly;
+    }
 
-			RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));
+    private void renderButterflyItem(IButterfly butterfly, float translateX, float translateY, float translateZ) {
+        float yaw = 1;
+        float pitch = 1;
 
-		}
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 
-		GL11.glPopMatrix();
+        GL11.glPushMatrix();
 
-		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-		GL11.glPopAttrib();
+        if (RenderItem.renderInFrame) {
+            // GL11.glScalef(-2.0f, 2.0f, 2.0f);
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+            GL11.glScalef(1.1f, 1f, 1f);
 
-	}
-	
-	private void renderButterflyInInventory(IButterfly butterfly) {
+            GL11.glTranslatef(0, -0.7f, 0.2f);
 
-		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-		RenderHelper.enableStandardItemLighting();
-		GL11.glPushMatrix();
+            entity.renderYawOffset = 0;
+            entity.rotationYaw = 0;
+            entity.rotationPitch = 0;
+            entity.rotationYawHead = entity.rotationYaw;
 
-		GL11.glTranslatef(0f, -0.25f, 0f);
-		GL11.glScalef(-2.0f, 2.0f, 2.0f);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(-35.0F, 1.0F, 0.0F, 0.0F);
-		GL11.glScalef(1.1f, 1f, 1f);
+            RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0f);
 
-		entity.renderYawOffset = 0;
-		entity.rotationYaw = 0;
-		entity.rotationPitch = 0;
-		entity.rotationYawHead = entity.rotationYaw;
+        } else {
+            GL11.glTranslatef(translateX, translateY, translateZ);
 
-		RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));
+            GL11.glScalef(-2.0f, 2.0f, 2.0f);
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(-((float) Math.atan((double) (pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
 
-		GL11.glPopMatrix();
-		RenderHelper.disableStandardItemLighting();
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-		GL11.glPopAttrib();
+            entity.renderYawOffset = (float) Math.atan((double) (yaw / 40.0F)) * 20.0F;
+            entity.rotationYaw = (float) Math.atan((double) (yaw / 40.0F)) * 40.0F;
+            entity.rotationPitch = -((float) Math.atan((double) (pitch / 40.0F))) * 20.0F;
+            entity.rotationYawHead = entity.rotationYaw;
 
-	}
-	
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		switch (type) {
-			case ENTITY:
-			case EQUIPPED:
-			case EQUIPPED_FIRST_PERSON:
-			case INVENTORY:
-				return true;
-			default:
-				return false;
-		}
-	}
+            RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));
+        }
 
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		switch (helper) {
-			case ENTITY_BOBBING:
-			case ENTITY_ROTATION:
-				return false;
-			default:
-				return true;
-		}
-	}
+        GL11.glPopMatrix();
 
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        RenderHelper.disableStandardItemLighting();
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        GL11.glPopAttrib();
+    }
 
-		switch (type) {
-			case ENTITY:
-				renderButterflyItem(initButterfly(item), 0f, -0.5f, 0f);
-				break;
-			case EQUIPPED:
-				renderButterflyItem(initButterfly(item), 0.5f, -0.9f, 1.0f);
-				break;
-			case EQUIPPED_FIRST_PERSON:
-				renderButterflyItem(initButterfly(item), 0.5f, -0.9f, 1.0f);
-				break;
-			case INVENTORY:
-				renderButterflyInInventory(initButterfly(item));
-				break;
-			default:
-		}
-	}
+    private void renderButterflyInInventory(IButterfly butterfly) {
 
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+        RenderHelper.enableStandardItemLighting();
+        GL11.glPushMatrix();
+
+        GL11.glTranslatef(0f, -0.25f, 0f);
+        GL11.glScalef(-2.0f, 2.0f, 2.0f);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(-35.0F, 1.0F, 0.0F, 0.0F);
+        GL11.glScalef(1.1f, 1f, 1f);
+
+        entity.renderYawOffset = 0;
+        entity.rotationYaw = 0;
+        entity.rotationPitch = 0;
+        entity.rotationYawHead = entity.rotationYaw;
+
+        RenderManager.instance.renderEntityWithPosYaw(entity, 0.0D, 0.0D, 0.0D, 0.0F, getWingYaw(butterfly));
+
+        GL11.glPopMatrix();
+        RenderHelper.disableStandardItemLighting();
+        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        GL11.glPopAttrib();
+    }
+
+    @Override
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+        switch (type) {
+            case ENTITY:
+            case EQUIPPED:
+            case EQUIPPED_FIRST_PERSON:
+            case INVENTORY:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+        switch (helper) {
+            case ENTITY_BOBBING:
+            case ENTITY_ROTATION:
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+
+        switch (type) {
+            case ENTITY:
+                renderButterflyItem(initButterfly(item), 0f, -0.5f, 0f);
+                break;
+            case EQUIPPED:
+                renderButterflyItem(initButterfly(item), 0.5f, -0.9f, 1.0f);
+                break;
+            case EQUIPPED_FIRST_PERSON:
+                renderButterflyItem(initButterfly(item), 0.5f, -0.9f, 1.0f);
+                break;
+            case INVENTORY:
+                renderButterflyInInventory(initButterfly(item));
+                break;
+            default:
+        }
+    }
 }

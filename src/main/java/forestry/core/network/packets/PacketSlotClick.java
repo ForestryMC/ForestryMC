@@ -10,37 +10,34 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
+import java.io.IOException;
+import net.minecraft.tileentity.TileEntity;
 
 public abstract class PacketSlotClick extends PacketCoordinates {
-	private int slot;
+    private int slot;
 
-	protected PacketSlotClick() {
-	}
+    protected PacketSlotClick() {}
 
-	protected PacketSlotClick(TileEntity tile, int slot) {
-		super(tile);
-		this.slot = slot;
-	}
+    protected PacketSlotClick(TileEntity tile, int slot) {
+        super(tile);
+        this.slot = slot;
+    }
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		this.slot = data.readVarInt();
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {
+        super.readData(data);
+        this.slot = data.readVarInt();
+    }
 
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeVarInt(slot);
-	}
+    @Override
+    protected void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        data.writeVarInt(slot);
+    }
 
-	public int getSlot() {
-		return slot;
-	}
+    public int getSlot() {
+        return slot;
+    }
 }

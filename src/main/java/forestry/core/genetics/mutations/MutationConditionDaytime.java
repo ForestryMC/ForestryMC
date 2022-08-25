@@ -10,36 +10,44 @@
  ******************************************************************************/
 package forestry.core.genetics.mutations;
 
-import net.minecraft.world.World;
-
 import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.StringUtil;
+import net.minecraft.world.World;
 
 public class MutationConditionDaytime implements IMutationCondition {
 
-	private final boolean daytime;
+    private final boolean daytime;
 
-	public MutationConditionDaytime(boolean daytime) {
-		this.daytime = daytime;
-	}
+    public MutationConditionDaytime(boolean daytime) {
+        this.daytime = daytime;
+    }
 
-	@Override
-	public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
-		if (world.isDaytime() == daytime) {
-			return 1;
-		}
-		return 0;
-	}
+    @Override
+    public float getChance(
+            World world,
+            int x,
+            int y,
+            int z,
+            IAllele allele0,
+            IAllele allele1,
+            IGenome genome0,
+            IGenome genome1,
+            IClimateProvider climate) {
+        if (world.isDaytime() == daytime) {
+            return 1;
+        }
+        return 0;
+    }
 
-	@Override
-	public String getDescription() {
-		if (daytime) {
-			return StringUtil.localize("mutation.condition.daytime.day");
-		} else {
-			return StringUtil.localize("mutation.condition.daytime.night");
-		}
-	}
+    @Override
+    public String getDescription() {
+        if (daytime) {
+            return StringUtil.localize("mutation.condition.daytime.day");
+        } else {
+            return StringUtil.localize("mutation.condition.daytime.night");
+        }
+    }
 }

@@ -10,12 +10,11 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import forestry.core.genetics.Branch;
 import java.util.Locale;
 
-import forestry.core.genetics.Branch;
-
 public class BranchButterflies extends Branch {
-	public BranchButterflies(String scientific) {
-		super("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
-	}
+    public BranchButterflies(String scientific) {
+        super("moth." + scientific.toLowerCase(Locale.ENGLISH), scientific);
+    }
 }

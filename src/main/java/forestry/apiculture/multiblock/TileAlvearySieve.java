@@ -10,9 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.DefaultBeeListener;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -26,71 +23,73 @@ import forestry.apiculture.gui.GuiAlvearySieve;
 import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.BeeListener {
 
-	private final IBeeListener beeListener;
-	private final InventoryAlvearySieve inventory;
+    private final IBeeListener beeListener;
+    private final InventoryAlvearySieve inventory;
 
-	public TileAlvearySieve() {
-		super(BlockAlveary.Type.SIEVE);
-		this.inventory = new InventoryAlvearySieve(this);
-		this.beeListener = new AlvearySieveBeeListener(inventory);
-	}
+    public TileAlvearySieve() {
+        super(BlockAlveary.Type.SIEVE);
+        this.inventory = new InventoryAlvearySieve(this);
+        this.beeListener = new AlvearySieveBeeListener(inventory);
+    }
 
-	@Override
-	public IInventoryAdapter getInternalInventory() {
-		return inventory;
-	}
+    @Override
+    public IInventoryAdapter getInternalInventory() {
+        return inventory;
+    }
 
-	public ISlotPickupWatcher getCrafter() {
-		return inventory;
-	}
+    public ISlotPickupWatcher getCrafter() {
+        return inventory;
+    }
 
-	@Override
-	public IBeeListener getBeeListener() {
-		return beeListener;
-	}
-	
-	@Override
-	public int getIcon(int side) {
-		if (side == 0 || side == 1) {
-			return BlockAlveary.BOTTOM;
-		}
-		return BlockAlveary.SIEVE;
-	}
+    @Override
+    public IBeeListener getBeeListener() {
+        return beeListener;
+    }
 
-	@Override
-	public Object getGui(EntityPlayer player, int data) {
-		return new GuiAlvearySieve(player.inventory, this);
-	}
+    @Override
+    public int getIcon(int side) {
+        if (side == 0 || side == 1) {
+            return BlockAlveary.BOTTOM;
+        }
+        return BlockAlveary.SIEVE;
+    }
 
-	@Override
-	public Object getContainer(EntityPlayer player, int data) {
-		return new ContainerAlvearySieve(player.inventory, this);
-	}
+    @Override
+    public Object getGui(EntityPlayer player, int data) {
+        return new GuiAlvearySieve(player.inventory, this);
+    }
 
-	static class AlvearySieveBeeListener extends DefaultBeeListener {
-		private final InventoryAlvearySieve inventory;
+    @Override
+    public Object getContainer(EntityPlayer player, int data) {
+        return new ContainerAlvearySieve(player.inventory, this);
+    }
 
-		public AlvearySieveBeeListener(InventoryAlvearySieve inventory) {
-			this.inventory = inventory;
-		}
+    static class AlvearySieveBeeListener extends DefaultBeeListener {
+        private final InventoryAlvearySieve inventory;
 
-		@Override
-		public boolean onPollenRetrieved(IIndividual pollen) {
-			if (!inventory.canStorePollen()) {
-				return false;
-			}
+        public AlvearySieveBeeListener(InventoryAlvearySieve inventory) {
+            this.inventory = inventory;
+        }
 
-			ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(pollen.getClass());
+        @Override
+        public boolean onPollenRetrieved(IIndividual pollen) {
+            if (!inventory.canStorePollen()) {
+                return false;
+            }
 
-			ItemStack pollenStack = speciesRoot.getMemberStack(pollen, EnumGermlingType.POLLEN.ordinal());
-			if (pollenStack != null) {
-				inventory.storePollenStack(pollenStack);
-				return true;
-			}
-			return false;
-		}
-	}
+            ISpeciesRoot speciesRoot = AlleleManager.alleleRegistry.getSpeciesRoot(pollen.getClass());
+
+            ItemStack pollenStack = speciesRoot.getMemberStack(pollen, EnumGermlingType.POLLEN.ordinal());
+            if (pollenStack != null) {
+                inventory.storePollenStack(pollenStack);
+                return true;
+            }
+            return false;
+        }
+    }
 }

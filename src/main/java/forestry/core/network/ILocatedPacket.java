@@ -11,9 +11,9 @@
 package forestry.core.network;
 
 public interface ILocatedPacket {
-	int getPosX();
+    int getPosX();
 
-	int getPosY();
+    int getPosY();
 
-	int getPosZ();
+    int getPosZ();
 }

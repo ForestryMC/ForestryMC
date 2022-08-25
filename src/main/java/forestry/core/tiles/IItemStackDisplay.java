@@ -13,5 +13,5 @@ package forestry.core.tiles;
 import net.minecraft.item.ItemStack;
 
 public interface IItemStackDisplay {
-	void handleItemStackForDisplay(ItemStack itemStack);
+    void handleItemStackForDisplay(ItemStack itemStack);
 }

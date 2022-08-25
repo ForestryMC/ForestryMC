@@ -13,26 +13,29 @@ package forestry.lepidopterology.entities;
 import forestry.lepidopterology.render.RenderButterflyItem;
 
 public enum EnumButterflyState {
+    FLYING(true),
+    GLIDING(true),
+    RISING(true),
+    RESTING(false),
+    HOVER(false);
 
-	FLYING(true), GLIDING(true), RISING(true), RESTING(false), HOVER(false);
+    public static final EnumButterflyState[] VALUES = values();
 
-	public static final EnumButterflyState[] VALUES = values();
+    public final boolean doesMovement;
 
-	public final boolean doesMovement;
+    EnumButterflyState(boolean doesMovement) {
+        this.doesMovement = doesMovement;
+    }
 
-	EnumButterflyState(boolean doesMovement) {
-		this.doesMovement = doesMovement;
-	}
+    public float getWingFlap(EntityButterfly entity, long offset, float partialTicktime) {
+        if (this == RESTING || this == HOVER) {
+            long systemTime = System.currentTimeMillis();
+            long flapping = systemTime + offset;
+            float flap = (float) (flapping % 1000) / 1000; // 0 to 1
 
-	public float getWingFlap(EntityButterfly entity, long offset, float partialTicktime) {
-		if (this == RESTING || this == HOVER) {
-			long systemTime = System.currentTimeMillis();
-			long flapping = systemTime + offset;
-			float flap = (float) (flapping % 1000) / 1000;   // 0 to 1
-
-			return RenderButterflyItem.getIrregularWingYaw(flapping, flap);
-		} else {
-			return entity.ticksExisted + partialTicktime;
-		}
-	}
+            return RenderButterflyItem.getIrregularWingYaw(flapping, flap);
+        } else {
+            return entity.ticksExisted + partialTicktime;
+        }
+    }
 }

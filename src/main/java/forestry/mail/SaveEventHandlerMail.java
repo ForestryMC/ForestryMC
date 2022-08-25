@@ -10,25 +10,21 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.world.World;
-
 import forestry.core.ISaveEventHandler;
+import net.minecraft.world.World;
 
 public class SaveEventHandlerMail implements ISaveEventHandler {
 
-	@Override
-	public void onWorldLoad(World world) {
-		PostRegistry.cachedPostOffice = null;
-		PostRegistry.cachedPOBoxes.clear();
-		PostRegistry.cachedTradeStations.clear();
-	}
+    @Override
+    public void onWorldLoad(World world) {
+        PostRegistry.cachedPostOffice = null;
+        PostRegistry.cachedPOBoxes.clear();
+        PostRegistry.cachedTradeStations.clear();
+    }
 
-	@Override
-	public void onWorldSave(World world) {
-	}
+    @Override
+    public void onWorldSave(World world) {}
 
-	@Override
-	public void onWorldUnload(World world) {
-	}
-
+    @Override
+    public void onWorldUnload(World world) {}
 }

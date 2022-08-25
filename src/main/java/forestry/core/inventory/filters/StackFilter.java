@@ -24,26 +24,27 @@ import net.minecraft.tileentity.TileEntityFurnace;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum StackFilter implements IStackFilter {
+    ALL {
+        @Override
+        public boolean matches(ItemStack stack) {
+            return true;
+        }
+    },
+    FUEL {
+        @Override
+        public boolean matches(ItemStack stack) {
+            return TileEntityFurnace.getItemBurnTime(stack) > 0;
+        }
+    },
+    FEED {
+        @Override
+        public boolean matches(ItemStack stack) {
+            return stack.getItem() instanceof ItemFood
+                    || stack.getItem() == Items.wheat
+                    || stack.getItem() instanceof ItemSeeds;
+        }
+    };
 
-	ALL {
-		@Override
-		public boolean matches(ItemStack stack) {
-			return true;
-		}
-	},
-	FUEL {
-		@Override
-		public boolean matches(ItemStack stack) {
-			return TileEntityFurnace.getItemBurnTime(stack) > 0;
-		}
-	},
-	FEED {
-		@Override
-		public boolean matches(ItemStack stack) {
-			return stack.getItem() instanceof ItemFood || stack.getItem() == Items.wheat || stack.getItem() instanceof ItemSeeds;
-		}
-	};
-
-	@Override
-	public abstract boolean matches(ItemStack stack);
+    @Override
+    public abstract boolean matches(ItemStack stack);
 }

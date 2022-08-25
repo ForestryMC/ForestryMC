@@ -10,14 +10,12 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import forestry.api.world.ITreeGenData;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.api.world.ITreeGenData;
-
 public interface ITreeBlockType {
-	void setDirection(ForgeDirection facing);
+    void setDirection(ForgeDirection facing);
 
-	void setBlock(World world, ITreeGenData tree, int x, int y, int z);
+    void setBlock(World world, ITreeGenData tree, int x, int y, int z);
 }

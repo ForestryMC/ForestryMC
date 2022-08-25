@@ -10,60 +10,60 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.core.config.Constants;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.vect.Vect;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.core.config.Constants;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
-
 public class CropBasicGrowthCraft extends Crop {
 
-	private final Block block;
-	private final int meta;
-	private final boolean isRice;
-	private final boolean isGrape;
+    private final Block block;
+    private final int meta;
+    private final boolean isRice;
+    private final boolean isGrape;
 
-	public CropBasicGrowthCraft(World world, Block block, int meta, Vect position, boolean isRice, boolean isGrape) {
-		super(world, position);
-		this.block = block;
-		this.meta = meta;
-		this.isRice = isRice;
-		this.isGrape = isGrape;
-	}
+    public CropBasicGrowthCraft(World world, Block block, int meta, Vect position, boolean isRice, boolean isGrape) {
+        super(world, position);
+        this.block = block;
+        this.meta = meta;
+        this.isRice = isRice;
+        this.isGrape = isGrape;
+    }
 
-	@Override
-	protected boolean isCrop(Vect pos) {
-		return getBlock(pos) == block && getBlockMeta(pos) == meta;
-	}
+    @Override
+    protected boolean isCrop(Vect pos) {
+        return getBlock(pos) == block && getBlockMeta(pos) == meta;
+    }
 
-	@Override
-	protected Collection<ItemStack> harvestBlock(Vect pos) {
-		ArrayList<ItemStack> harvest = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
-		if (harvest.size() > 1) {
-			harvest.remove(0); //Hops have rope as first drop.
-		}
-		Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
-		if (isGrape) {
-			world.setBlockToAir(pos.x, pos.y, pos.z);
+    @Override
+    protected Collection<ItemStack> harvestBlock(Vect pos) {
+        ArrayList<ItemStack> harvest = block.getDrops(world, pos.x, pos.y, pos.z, meta, 0);
+        if (harvest.size() > 1) {
+            harvest.remove(0); // Hops have rope as first drop.
+        }
+        Proxies.common.addBlockDestroyEffects(world, pos.x, pos.y, pos.z, block, 0);
+        if (isGrape) {
+            world.setBlockToAir(pos.x, pos.y, pos.z);
 
-		} else {
-			world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
-		}
+        } else {
+            world.setBlockMetadataWithNotify(pos.x, pos.y, pos.z, 0, Constants.FLAG_BLOCK_SYNCH);
+        }
 
-		if (isRice) {
-			world.setBlockMetadataWithNotify(pos.x, pos.y - 1, pos.z, 7, Constants.FLAG_BLOCK_SYNCH);
-		}
+        if (isRice) {
+            world.setBlockMetadataWithNotify(pos.x, pos.y - 1, pos.z, 7, Constants.FLAG_BLOCK_SYNCH);
+        }
 
-		return harvest;
-	}
+        return harvest;
+    }
 
-	@Override
-	public String toString() {
-		return String.format("CropBasicGrowthCraft [ position: [ %s ]; block: %s; meta: %s ]", position.toString(), block.getUnlocalizedName(), meta);
-	}
+    @Override
+    public String toString() {
+        return String.format(
+                "CropBasicGrowthCraft [ position: [ %s ]; block: %s; meta: %s ]",
+                position.toString(), block.getUnlocalizedName(), meta);
+    }
 }

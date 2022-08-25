@@ -10,17 +10,7 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.io.File;
-import java.util.EnumSet;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
-
 import cpw.mods.fml.common.SidedProxy;
-
 import forestry.Forestry;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
@@ -46,102 +36,137 @@ import forestry.lepidopterology.genetics.MothDefinition;
 import forestry.lepidopterology.items.ItemRegistryLepidopterology;
 import forestry.lepidopterology.proxy.ProxyLepidopterology;
 import forestry.lepidopterology.recipes.MatingRecipe;
+import java.io.File;
+import java.util.EnumSet;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 
-@Plugin(pluginID = "Lepidopterology", name = "Lepidopterology", author = "SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.lepidopterology.description")
+@Plugin(
+        pluginID = "Lepidopterology",
+        name = "Lepidopterology",
+        author = "SirSengir",
+        url = Constants.URL,
+        unlocalizedDescription = "for.plugin.lepidopterology.description")
 public class PluginLepidopterology extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.lepidopterology.proxy.ProxyLepidopterologyClient", serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
-	public static ProxyLepidopterology proxy;
-	private static final String CONFIG_CATEGORY = "lepidopterology";
-	public static int spawnConstraint = 100;
-	public static int entityConstraint = 1000;
-	private static boolean allowPollination = true;
+    @SidedProxy(
+            clientSide = "forestry.lepidopterology.proxy.ProxyLepidopterologyClient",
+            serverSide = "forestry.lepidopterology.proxy.ProxyLepidopterology")
+    public static ProxyLepidopterology proxy;
 
-	public static ItemRegistryLepidopterology items;
-	public static BlockRegistryLepidopterology blocks;
+    private static final String CONFIG_CATEGORY = "lepidopterology";
+    public static int spawnConstraint = 100;
+    public static int entityConstraint = 1000;
+    private static boolean allowPollination = true;
 
-	@Override
-	protected void setupAPI() {
-		super.setupAPI();
+    public static ItemRegistryLepidopterology items;
+    public static BlockRegistryLepidopterology blocks;
 
-		ButterflyManager.butterflyRoot = new ButterflyHelper();
-		AlleleManager.alleleRegistry.registerSpeciesRoot(ButterflyManager.butterflyRoot);
+    @Override
+    protected void setupAPI() {
+        super.setupAPI();
 
-		ButterflyManager.butterflyFactory = new ButterflyFactory();
-	}
+        ButterflyManager.butterflyRoot = new ButterflyHelper();
+        AlleleManager.alleleRegistry.registerSpeciesRoot(ButterflyManager.butterflyRoot);
 
-	@Override
-	protected void registerItemsAndBlocks() {
-		items = new ItemRegistryLepidopterology();
-		blocks = new BlockRegistryLepidopterology();
-	}
+        ButterflyManager.butterflyFactory = new ButterflyFactory();
+    }
 
-	@Override
-	public void preInit() {
-		ButterflyBranchDefinition.createAlleles();
-		AlleleButterflyEffect.createAlleles();
+    @Override
+    protected void registerItemsAndBlocks() {
+        items = new ItemRegistryLepidopterology();
+        blocks = new BlockRegistryLepidopterology();
+    }
 
-		MachineDefinition definitionChest = new MachineDefinition(BlockLepidopterologyType.LEPICHEST)
-				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-		blocks.lepidopterology.addDefinition(definitionChest);
-	}
+    @Override
+    public void preInit() {
+        ButterflyBranchDefinition.createAlleles();
+        AlleleButterflyEffect.createAlleles();
 
-	@Override
-	public EnumSet<PluginManager.Module> getDependancies() {
-		EnumSet<PluginManager.Module> deps = super.getDependancies();
-		deps.add(PluginManager.Module.ARBORICULTURE);
-		return deps;
-	}
+        MachineDefinition definitionChest = new MachineDefinition(BlockLepidopterologyType.LEPICHEST)
+                .setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+        blocks.lepidopterology.addDefinition(definitionChest);
+    }
 
-	@Override
-	public void doInit() {
-		File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
-		loadConfig(configFile);
+    @Override
+    public EnumSet<PluginManager.Module> getDependancies() {
+        EnumSet<PluginManager.Module> deps = super.getDependancies();
+        deps.add(PluginManager.Module.ARBORICULTURE);
+        return deps;
+    }
 
-		PluginCore.rootCommand.addChildCommand(new CommandButterfly());
+    @Override
+    public void doInit() {
+        File configFile = new File(Forestry.instance.getConfigFolder(), CONFIG_CATEGORY + ".cfg");
+        loadConfig(configFile);
 
-		EntityUtil.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
-		proxy.initializeRendering();
+        PluginCore.rootCommand.addChildCommand(new CommandButterfly());
 
-		MothDefinition.initMoths();
-		ButterflyDefinition.initButterflies();
+        EntityUtil.registerEntity(EntityButterfly.class, "butterflyGE", 0, 0x000000, 0xffffff, 50, 1, true);
+        proxy.initializeRendering();
 
-		blocks.lepidopterology.init();
+        MothDefinition.initMoths();
+        ButterflyDefinition.initButterflies();
 
-		TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
+        blocks.lepidopterology.init();
 
-		RecipeSorter.register("forestry:lepidopterologymating", MatingRecipe.class, RecipeSorter.Category.SHAPELESS, "before:minecraft:shapeless");
-	}
+        TreeManager.treeRoot.registerLeafTickHandler(new ButterflySpawner());
 
-	private static void loadConfig(File configFile) {
-		LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
+        RecipeSorter.register(
+                "forestry:lepidopterologymating",
+                MatingRecipe.class,
+                RecipeSorter.Category.SHAPELESS,
+                "before:minecraft:shapeless");
+    }
 
-		spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
-		entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
-		allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
+    private static void loadConfig(File configFile) {
+        LocalizedConfiguration config = new LocalizedConfiguration(configFile, "1.0.0");
 
-		config.save();
-	}
+        spawnConstraint = config.getIntLocalized("butterfly.entities", "spawn.limit", spawnConstraint, 0, 500);
+        entityConstraint = config.getIntLocalized("butterfly.entities", "maximum", entityConstraint, 0, 5000);
+        allowPollination = config.getBooleanLocalized("butterfly.entities", "pollination", allowPollination);
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void registerRecipes() {
-		CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
+        config.save();
+    }
 
-		RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.flutterlyzer.getItemStack(),
-				"X#X", "X#X", "RDR", '#', "paneGlass", 'X', "ingotBronze", 'R',
-				"dustRedstone", 'D', "gemDiamond");
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void registerRecipes() {
+        CraftingManager.getInstance().getRecipeList().add(new MatingRecipe());
 
-		RecipeUtil.addRecipe(blocks.lepidopterology.get(BlockLepidopterologyType.LEPICHEST),
-				" # ",
-				"XYX",
-				"XXX",
-				'#', "blockGlass",
-				'X', new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE),
-				'Y', "chestWood");
-	}
+        RecipeManagers.carpenterManager.addRecipe(
+                100,
+                Fluids.WATER.getFluid(2000),
+                null,
+                items.flutterlyzer.getItemStack(),
+                "X#X",
+                "X#X",
+                "RDR",
+                '#',
+                "paneGlass",
+                'X',
+                "ingotBronze",
+                'R',
+                "dustRedstone",
+                'D',
+                "gemDiamond");
 
-	public static boolean isPollinationAllowed() {
-		return allowPollination;
-	}
+        RecipeUtil.addRecipe(
+                blocks.lepidopterology.get(BlockLepidopterologyType.LEPICHEST),
+                " # ",
+                "XYX",
+                "XXX",
+                '#',
+                "blockGlass",
+                'X',
+                new ItemStack(items.butterflyGE, 1, OreDictionary.WILDCARD_VALUE),
+                'Y',
+                "chestWood");
+    }
+
+    public static boolean isPollinationAllowed() {
+        return allowPollination;
+    }
 }

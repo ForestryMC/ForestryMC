@@ -10,28 +10,25 @@
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
-import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
+import java.util.List;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class AlleleEffectExploration extends AlleleEffectThrottled {
 
-	public AlleleEffectExploration() {
-		super("exploration", false, 80, true, false);
-	}
+    public AlleleEffectExploration() {
+        super("exploration", false, 80, true, false);
+    }
 
-	@Override
-	public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
-		List<EntityPlayer> players = getEntitiesInRange(genome, housing, EntityPlayer.class);
-		for (EntityPlayer player : players) {
-			player.addExperience(2);
-		}
+    @Override
+    public IEffectData doEffectThrottled(IBeeGenome genome, IEffectData storedData, IBeeHousing housing) {
+        List<EntityPlayer> players = getEntitiesInRange(genome, housing, EntityPlayer.class);
+        for (EntityPlayer player : players) {
+            player.addExperience(2);
+        }
 
-		return storedData;
-	}
-
+        return storedData;
+    }
 }

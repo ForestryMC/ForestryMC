@@ -14,9 +14,9 @@ import forestry.core.blocks.BlockRegistry;
 import forestry.core.items.ItemBlockForestry;
 
 public class BlockRegistryMail extends BlockRegistry {
-	public final BlockMail mail;
+    public final BlockMail mail;
 
-	public BlockRegistryMail() {
-		mail = registerBlock(new BlockMail(), ItemBlockForestry.class, "mail");
-	}
+    public BlockRegistryMail() {
+        mail = registerBlock(new BlockMail(), ItemBlockForestry.class, "mail");
+    }
 }

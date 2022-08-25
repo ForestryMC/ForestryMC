@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.apiculture;
@@ -11,38 +11,37 @@ import forestry.api.genetics.IGenome;
 
 /**
  * Only the default implementation is supported.
- * 
+ *
  * @author SirSengir
- * 
+ *
  */
 public interface IBeeGenome extends IGenome {
 
-	IAlleleBeeSpecies getPrimary();
-	
-	IAlleleBeeSpecies getSecondary();
+    IAlleleBeeSpecies getPrimary();
 
-	float getSpeed();
+    IAlleleBeeSpecies getSecondary();
 
-	int getLifespan();
+    float getSpeed();
 
-	int getFertility();
+    int getLifespan();
 
-	EnumTolerance getToleranceTemp();
+    int getFertility();
 
-	EnumTolerance getToleranceHumid();
+    EnumTolerance getToleranceTemp();
 
-	boolean getNocturnal();
+    EnumTolerance getToleranceHumid();
 
-	boolean getTolerantFlyer();
+    boolean getNocturnal();
 
-	boolean getCaveDwelling();
+    boolean getTolerantFlyer();
 
-	IFlowerProvider getFlowerProvider();
+    boolean getCaveDwelling();
 
-	int getFlowering();
+    IFlowerProvider getFlowerProvider();
 
-	int[] getTerritory();
+    int getFlowering();
 
-	IAlleleBeeEffect getEffect();
+    int[] getTerritory();
 
+    IAlleleBeeEffect getEffect();
 }

@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.core.commands;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
+import javax.annotation.Nonnull;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 
@@ -25,120 +24,118 @@ import net.minecraft.command.ICommandSender;
  */
 public abstract class SubCommand implements IForestryCommand {
 
-	public enum PermLevel {
+    public enum PermLevel {
+        EVERYONE(0),
+        ADMIN(2);
+        public final int permLevel;
 
-		EVERYONE(0), ADMIN(2);
-		public final int permLevel;
+        PermLevel(int permLevel) {
+            this.permLevel = permLevel;
+        }
+    }
 
-		PermLevel(int permLevel) {
-			this.permLevel = permLevel;
-		}
+    private final String name;
+    private final List<String> aliases = new ArrayList<>();
+    private PermLevel permLevel = PermLevel.EVERYONE;
+    private IForestryCommand parent;
+    private final SortedSet<SubCommand> children = new TreeSet<>(new Comparator<SubCommand>() {
 
-	}
+        @Override
+        public int compare(SubCommand o1, SubCommand o2) {
+            return o1.compareTo(o2);
+        }
+    });
 
-	private final String name;
-	private final List<String> aliases = new ArrayList<>();
-	private PermLevel permLevel = PermLevel.EVERYONE;
-	private IForestryCommand parent;
-	private final SortedSet<SubCommand> children = new TreeSet<>(new Comparator<SubCommand>() {
+    public SubCommand(String name) {
+        this.name = name;
+    }
 
-		@Override
-		public int compare(SubCommand o1, SubCommand o2) {
-			return o1.compareTo(o2);
-		}
-	});
+    @Override
+    public final String getCommandName() {
+        return name;
+    }
 
-	public SubCommand(String name) {
-		this.name = name;
-	}
+    public SubCommand addChildCommand(SubCommand child) {
+        child.setParent(this);
+        children.add(child);
+        return this;
+    }
 
-	@Override
-	public final String getCommandName() {
-		return name;
-	}
+    void setParent(IForestryCommand parent) {
+        this.parent = parent;
+    }
 
-	public SubCommand addChildCommand(SubCommand child) {
-		child.setParent(this);
-		children.add(child);
-		return this;
-	}
+    @Override
+    public SortedSet<SubCommand> getChildren() {
+        return children;
+    }
 
-	void setParent(IForestryCommand parent) {
-		this.parent = parent;
-	}
+    public void addAlias(String alias) {
+        aliases.add(alias);
+    }
 
-	@Override
-	public SortedSet<SubCommand> getChildren() {
-		return children;
-	}
+    @Override
+    public List<String> getCommandAliases() {
+        return aliases;
+    }
 
-	public void addAlias(String alias) {
-		aliases.add(alias);
-	}
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
+        return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
+    }
 
-	@Override
-	public List<String> getCommandAliases() {
-		return aliases;
-	}
+    @Override
+    public final void processCommand(ICommandSender sender, String[] args) {
+        if (!CommandHelpers.processStandardCommands(sender, this, args)) {
+            processSubCommand(sender, args);
+        }
+    }
 
-	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] incomplete) {
-		return CommandHelpers.addStandardTabCompletionOptions(this, sender, incomplete);
-	}
+    public void processSubCommand(ICommandSender sender, String[] args) {
+        printHelp(sender);
+    }
 
-	@Override
-	public final void processCommand(ICommandSender sender, String[] args) {
-		if (!CommandHelpers.processStandardCommands(sender, this, args)) {
-			processSubCommand(sender, args);
-		}
-	}
+    public SubCommand setPermLevel(PermLevel permLevel) {
+        this.permLevel = permLevel;
+        return this;
+    }
 
-	public void processSubCommand(ICommandSender sender, String[] args) {
-		printHelp(sender);
-	}
+    @Override
+    public final int getPermissionLevel() {
+        return permLevel.permLevel;
+    }
 
-	public SubCommand setPermLevel(PermLevel permLevel) {
-		this.permLevel = permLevel;
-		return this;
-	}
+    @Override
+    public boolean canCommandSenderUseCommand(ICommandSender sender) {
+        return sender.canCommandSenderUseCommand(getPermissionLevel(), getCommandName());
+    }
 
-	@Override
-	public final int getPermissionLevel() {
-		return permLevel.permLevel;
-	}
+    @Override
+    public boolean isUsernameIndex(String[] args, int index) {
+        return false;
+    }
 
-	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return sender.canCommandSenderUseCommand(getPermissionLevel(), getCommandName());
-	}
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/" + getFullCommandString() + " help";
+    }
 
-	@Override
-	public boolean isUsernameIndex(String[] args, int index) {
-		return false;
-	}
+    @Override
+    public void printHelp(ICommandSender sender) {
+        CommandHelpers.printHelp(sender, this);
+    }
 
-	@Override
-	public String getCommandUsage(ICommandSender sender) {
-		return "/" + getFullCommandString() + " help";
-	}
+    @Override
+    public String getFullCommandString() {
+        return parent.getFullCommandString() + " " + getCommandName();
+    }
 
-	@Override
-	public void printHelp(ICommandSender sender) {
-		CommandHelpers.printHelp(sender, this);
-	}
+    public int compareTo(ICommand command) {
+        return this.getCommandName().compareTo(command.getCommandName());
+    }
 
-	@Override
-	public String getFullCommandString() {
-		return parent.getFullCommandString() + " " + getCommandName();
-	}
-
-	public int compareTo(ICommand command) {
-		return this.getCommandName().compareTo(command.getCommandName());
-	}
-
-	@Override
-	public int compareTo(@Nonnull Object command) {
-		return this.compareTo((ICommand) command);
-	}
-
+    @Override
+    public int compareTo(@Nonnull Object command) {
+        return this.compareTo((ICommand) command);
+    }
 }

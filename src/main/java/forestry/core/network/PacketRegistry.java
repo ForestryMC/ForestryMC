@@ -11,11 +11,11 @@
 package forestry.core.network;
 
 public abstract class PacketRegistry implements IPacketRegistry {
-	protected static void registerClientPacket(IForestryPacketClient packet) {
-		packet.getPacketId().setPacketHandler(packet);
-	}
+    protected static void registerClientPacket(IForestryPacketClient packet) {
+        packet.getPacketId().setPacketHandler(packet);
+    }
 
-	protected static void registerServerPacket(IForestryPacketServer packet) {
-		packet.getPacketId().setPacketHandler(packet);
-	}
+    protected static void registerServerPacket(IForestryPacketServer packet) {
+        packet.getPacketId().setPacketHandler(packet);
+    }
 }

@@ -14,10 +14,9 @@ import net.minecraft.command.CommandException;
 
 public class SpeciesNotFoundException extends CommandException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public SpeciesNotFoundException(String title) {
-		super("Could not find species with Name or UID %s", title);
-	}
-
+    public SpeciesNotFoundException(String title) {
+        super("Could not find species with Name or UID %s", title);
+    }
 }

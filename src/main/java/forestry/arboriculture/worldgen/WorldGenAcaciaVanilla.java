@@ -14,8 +14,7 @@ import forestry.api.world.ITreeGenData;
 
 public class WorldGenAcaciaVanilla extends WorldGenTreeVanilla {
 
-	public WorldGenAcaciaVanilla(ITreeGenData tree) {
-		super(tree);
-	}
-
+    public WorldGenAcaciaVanilla(ITreeGenData tree) {
+        super(tree);
+    }
 }

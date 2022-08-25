@@ -10,25 +10,25 @@
  ******************************************************************************/
 package forestry.core.access;
 
-import net.minecraft.util.IIcon;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.IIcon;
 
 public enum EnumAccess {
-	SHARED("gui.rule.shared"), VIEWABLE("gui.rule.restricted"), PRIVATE("gui.rule.private");
+    SHARED("gui.rule.shared"),
+    VIEWABLE("gui.rule.restricted"),
+    PRIVATE("gui.rule.private");
 
-	private final String name;
+    private final String name;
 
-	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+    @SideOnly(Side.CLIENT)
+    private IIcon icon;
 
-	EnumAccess(String name) {
-		this.name = name;
-	}
+    EnumAccess(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return this.name;
-	}
-
+    public String getName() {
+        return this.name;
+    }
 }

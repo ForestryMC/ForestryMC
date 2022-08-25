@@ -18,15 +18,15 @@ import forestry.core.commands.SubCommand;
 
 public class CommandBee extends SubCommand {
 
-	public CommandBee() {
-		super("bee");
-		addAlias("beekeeping");
+    public CommandBee() {
+        super("bee");
+        addAlias("beekeeping");
 
-		IStatsSaveHelper saveHelper = new BeeStatsSaveHelper();
-		ICommandModeHelper modeHelper = new BeeModeHelper();
+        IStatsSaveHelper saveHelper = new BeeStatsSaveHelper();
+        ICommandModeHelper modeHelper = new BeeModeHelper();
 
-		addChildCommand(new CommandMode(modeHelper));
-		addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
-		addChildCommand(new CommandBeeGive());
-	}
+        addChildCommand(new CommandMode(modeHelper));
+        addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
+        addChildCommand(new CommandBeeGive());
+    }
 }

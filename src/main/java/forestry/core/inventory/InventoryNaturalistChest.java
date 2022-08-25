@@ -10,26 +10,25 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.tiles.TileNaturalistChest;
+import net.minecraft.item.ItemStack;
 
 public class InventoryNaturalistChest extends InventoryAdapterTile<TileNaturalistChest> {
-	private final ISpeciesRoot speciesRoot;
+    private final ISpeciesRoot speciesRoot;
 
-	public InventoryNaturalistChest(TileNaturalistChest tile, ISpeciesRoot speciesRoot) {
-		super(tile, 125, "Items");
-		this.speciesRoot = speciesRoot;
-	}
+    public InventoryNaturalistChest(TileNaturalistChest tile, ISpeciesRoot speciesRoot) {
+        super(tile, 125, "Items");
+        this.speciesRoot = speciesRoot;
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
-		return speciesRoot.isMember(itemstack);
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemstack) {
+        return speciesRoot.isMember(itemstack);
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
-		return true;
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack stack, int side) {
+        return true;
+    }
 }

@@ -20,15 +20,15 @@ import forestry.apiculture.network.packets.PacketImprintSelectionResponse;
 import forestry.core.network.PacketRegistry;
 
 public class PacketRegistryApiculture extends PacketRegistry {
-	@Override
-	public void registerPackets() {
-		registerClientPacket(new PacketImprintSelectionResponse());
-		registerClientPacket(new PacketActiveUpdate());
-		registerClientPacket(new PacketBeeLogicActive());
-		registerClientPacket(new PacketBeeLogicActiveEntity());
-		registerClientPacket(new PacketHabitatBiomePointer());
-		registerClientPacket(new PacketCandleUpdate());
-		
-		registerServerPacket(new PacketBeeLogicEntityRequest());
-	}
+    @Override
+    public void registerPackets() {
+        registerClientPacket(new PacketImprintSelectionResponse());
+        registerClientPacket(new PacketActiveUpdate());
+        registerClientPacket(new PacketBeeLogicActive());
+        registerClientPacket(new PacketBeeLogicActiveEntity());
+        registerClientPacket(new PacketHabitatBiomePointer());
+        registerClientPacket(new PacketCandleUpdate());
+
+        registerServerPacket(new PacketBeeLogicEntityRequest());
+    }
 }

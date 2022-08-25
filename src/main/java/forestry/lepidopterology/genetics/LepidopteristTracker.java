@@ -10,40 +10,37 @@
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import forestry.api.genetics.IBreedingTracker;
 import forestry.api.genetics.IIndividual;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
 import forestry.core.genetics.BreedingTracker;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class LepidopteristTracker extends BreedingTracker implements ILepidopteristTracker {
 
-	/** Required for creation from map storage */
-	public LepidopteristTracker(String s) {
-		super(s);
-	}
+    /** Required for creation from map storage */
+    public LepidopteristTracker(String s) {
+        super(s);
+    }
 
-	@Override
-	protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
-		return ButterflyManager.butterflyRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
-	}
+    @Override
+    protected IBreedingTracker getBreedingTracker(EntityPlayer player) {
+        return ButterflyManager.butterflyRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+    }
 
-	@Override
-	protected String speciesRootUID() {
-		return ButterflyHelper.UID;
-	}
+    @Override
+    protected String speciesRootUID() {
+        return ButterflyHelper.UID;
+    }
 
-	@Override
-	public void registerPickup(IIndividual individual) {
-	}
+    @Override
+    public void registerPickup(IIndividual individual) {}
 
-	@Override
-	public void registerCatch(IButterfly butterfly) {
-		registerSpecies(butterfly.getGenome().getPrimary());
-		registerSpecies(butterfly.getGenome().getSecondary());
-	}
-
+    @Override
+    public void registerCatch(IButterfly butterfly) {
+        registerSpecies(butterfly.getGenome().getPrimary());
+        registerSpecies(butterfly.getGenome().getSecondary());
+    }
 }

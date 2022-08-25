@@ -16,11 +16,11 @@ import forestry.factory.network.packets.PacketWorktableNEISelect;
 import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
 
 public class PacketRegistryFactory extends PacketRegistry {
-	@Override
-	public void registerPackets() {
-		registerServerPacket(new PacketWorktableNEISelect());
+    @Override
+    public void registerPackets() {
+        registerServerPacket(new PacketWorktableNEISelect());
 
-		registerClientPacket(new PacketWorktableMemoryUpdate());
-		registerClientPacket(new PacketWorktableRecipeUpdate());
-	}
+        registerClientPacket(new PacketWorktableMemoryUpdate());
+        registerClientPacket(new PacketWorktableRecipeUpdate());
+    }
 }

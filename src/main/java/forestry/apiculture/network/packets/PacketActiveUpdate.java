@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
@@ -22,41 +17,43 @@ import forestry.core.network.PacketIdClient;
 import forestry.core.network.packets.PacketCoordinates;
 import forestry.core.proxy.Proxies;
 import forestry.core.tiles.IActivatable;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 public class PacketActiveUpdate extends PacketCoordinates implements IForestryPacketClient {
 
-	private boolean active;
+    private boolean active;
 
-	public PacketActiveUpdate() {
-	}
+    public PacketActiveUpdate() {}
 
-	public PacketActiveUpdate(IActivatable tile) {
-		super(tile.getCoordinates());
-		this.active = tile.isActive();
-	}
+    public PacketActiveUpdate(IActivatable tile) {
+        super(tile.getCoordinates());
+        this.active = tile.isActive();
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.TILE_FORESTRY_ACTIVE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.TILE_FORESTRY_ACTIVE;
+    }
 
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeBoolean(active);
-	}
+    @Override
+    protected void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        data.writeBoolean(active);
+    }
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		active = data.readBoolean();
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {
+        super.readData(data);
+        active = data.readBoolean();
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof IActivatable) {
-			((IActivatable) tile).setActive(active);
-		}
-	}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayer player) {
+        TileEntity tile = getTarget(Proxies.common.getRenderWorld());
+        if (tile instanceof IActivatable) {
+            ((IActivatable) tile).setActive(active);
+        }
+    }
 }

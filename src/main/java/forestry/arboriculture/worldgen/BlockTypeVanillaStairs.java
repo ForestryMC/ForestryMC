@@ -10,32 +10,30 @@
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import forestry.core.worldgen.BlockType;
 import net.minecraft.init.Blocks;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.worldgen.BlockType;
-
 public class BlockTypeVanillaStairs extends BlockType {
-	public BlockTypeVanillaStairs(int meta) {
-		super(Blocks.oak_stairs, meta);
-	}
+    public BlockTypeVanillaStairs(int meta) {
+        super(Blocks.oak_stairs, meta);
+    }
 
-	@Override
-	public void setDirection(ForgeDirection facing) {
-		switch (facing) {
-			case NORTH:
-				meta = 3;
-				break;
-			case SOUTH:
-				meta = 2;
-				break;
-			case WEST:
-				meta = 1;
-				break;
-			default:
-				meta = 0;
-				break;
-		}
-	}
+    @Override
+    public void setDirection(ForgeDirection facing) {
+        switch (facing) {
+            case NORTH:
+                meta = 3;
+                break;
+            case SOUTH:
+                meta = 2;
+                break;
+            case WEST:
+                meta = 1;
+                break;
+            default:
+                meta = 0;
+                break;
+        }
+    }
 }

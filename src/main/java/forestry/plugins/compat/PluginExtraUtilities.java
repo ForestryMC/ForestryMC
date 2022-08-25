@@ -10,14 +10,7 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import java.util.ArrayList;
-
-import forestry.farming.logic.FarmableReference;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.common.registry.GameRegistry;
-
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.api.farming.Farmables;
@@ -30,45 +23,57 @@ import forestry.core.utils.ModUtil;
 import forestry.farming.circuits.CircuitFarmLogic;
 import forestry.farming.logic.FarmLogicEnder;
 import forestry.farming.logic.FarmableGenericCrop;
+import forestry.farming.logic.FarmableReference;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
+import java.util.ArrayList;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
-@Plugin(pluginID = "ExtraUtilities", name = "ExtraUtilities", author = "Nirek", url = Constants.URL, unlocalizedDescription = "for.plugin.extrautilities.description")
+@Plugin(
+        pluginID = "ExtraUtilities",
+        name = "ExtraUtilities",
+        author = "Nirek",
+        url = Constants.URL,
+        unlocalizedDescription = "for.plugin.extrautilities.description")
 public class PluginExtraUtilities extends ForestryPlugin {
 
-	private static final String ExU = "ExtraUtilities";
+    private static final String ExU = "ExtraUtilities";
 
-	@Override
-	public boolean isAvailable() {
-		return ModUtil.isModLoaded(ExU);
-	}
+    @Override
+    public boolean isAvailable() {
+        return ModUtil.isModLoaded(ExU);
+    }
 
-	@Override
-	public String getFailMessage() {
-		return "ExtraUtilities not found";
-	}
+    @Override
+    public String getFailMessage() {
+        return "ExtraUtilities not found";
+    }
 
-	@Override
-	public void doInit() {
-		super.doInit();
+    @Override
+    public void doInit() {
+        super.doInit();
 
-		Block exUEnderLilly = GameRegistry.findBlock(ExU, "plant/ender_lilly");
-		Farmables.farmables.put(FarmableReference.Ender.get(), new ArrayList<IFarmable>());
-		if (Config.isExUtilEnderLilyEnabled()) {
-			Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
-			Farmables.farmables.get(FarmableReference.Ender.get()).add(new FarmableGenericCrop(new ItemStack(exUEnderLilly, 1, 0), exUEnderLilly, 7));
-		}
-	}
+        Block exUEnderLilly = GameRegistry.findBlock(ExU, "plant/ender_lilly");
+        Farmables.farmables.put(FarmableReference.Ender.get(), new ArrayList<IFarmable>());
+        if (Config.isExUtilEnderLilyEnabled()) {
+            Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
+            Farmables.farmables
+                    .get(FarmableReference.Ender.get())
+                    .add(new FarmableGenericCrop(new ItemStack(exUEnderLilly, 1, 0), exUEnderLilly, 7));
+        }
+    }
 
-	@Override
-	protected void registerRecipes() {
-		super.registerRecipes();
+    @Override
+    protected void registerRecipes() {
+        super.registerRecipes();
 
-		if (PluginManager.Module.FARMING.isEnabled() && Config.isExUtilEnderLilyEnabled()) {
-			ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
-			ChipsetManager.solderManager.addRecipe(layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.ENDER, 1), Circuit.farmEnderManaged);
-		}
-	}
+        if (PluginManager.Module.FARMING.isEnabled() && Config.isExUtilEnderLilyEnabled()) {
+            ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
+            ChipsetManager.solderManager.addRecipe(
+                    layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.ENDER, 1), Circuit.farmEnderManaged);
+        }
+    }
 }

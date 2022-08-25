@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
 public interface IBeeIconProvider {
-	void registerIcons(IIconRegister register);
-	IIcon getIcon(EnumBeeType type, int renderPass);
+    void registerIcons(IIconRegister register);
+
+    IIcon getIcon(EnumBeeType type, int renderPass);
 }

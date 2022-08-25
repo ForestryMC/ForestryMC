@@ -13,5 +13,5 @@ package forestry.core.blocks;
 import forestry.core.render.IBlockRenderer;
 
 public interface IMachinePropertiesTESR extends IMachineProperties {
-	IBlockRenderer getRenderer();
+    IBlockRenderer getRenderer();
 }

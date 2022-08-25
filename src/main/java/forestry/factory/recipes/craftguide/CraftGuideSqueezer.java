@@ -10,13 +10,11 @@
  ******************************************************************************/
 package forestry.factory.recipes.craftguide;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.RecipeManagers;
 import forestry.factory.blocks.BlockFactoryTesrType;
 import forestry.plugins.PluginFactory;
-
+import net.minecraft.item.ItemStack;
 import uristqwerty.CraftGuide.api.ChanceSlot;
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
@@ -28,42 +26,46 @@ import uristqwerty.CraftGuide.api.SlotType;
 
 public class CraftGuideSqueezer implements RecipeProvider {
 
-	private final Slot[] slots = new Slot[12];
+    private final Slot[] slots = new Slot[12];
 
-	public CraftGuideSqueezer() {
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				slots[i + j * 3] = new ItemSlot(i * 18 + 3, j * 18 + 3, 16, 16).drawOwnBackground();
-			}
-		}
-		slots[9] = new ChanceSlot(59, 39, 16, 16, true).setRatio(100).setSlotType(SlotType.OUTPUT_SLOT).drawOwnBackground();
-		slots[10] = new LiquidSlot(59, 21).setSlotType(SlotType.OUTPUT_SLOT);
-		slots[11] = new ItemSlot(59, 3, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
-	}
+    public CraftGuideSqueezer() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                slots[i + j * 3] = new ItemSlot(i * 18 + 3, j * 18 + 3, 16, 16).drawOwnBackground();
+            }
+        }
+        slots[9] = new ChanceSlot(59, 39, 16, 16, true)
+                .setRatio(100)
+                .setSlotType(SlotType.OUTPUT_SLOT)
+                .drawOwnBackground();
+        slots[10] = new LiquidSlot(59, 21).setSlotType(SlotType.OUTPUT_SLOT);
+        slots[11] = new ItemSlot(59, 3, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
+    }
 
-	@Override
-	public void generateRecipes(RecipeGenerator generator) {
+    @Override
+    public void generateRecipes(RecipeGenerator generator) {
 
-		if (PluginFactory.blocks.factoryTESR == null) {
-			return;
-		}
+        if (PluginFactory.blocks.factoryTESR == null) {
+            return;
+        }
 
-		ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.SQUEEZER);
-		RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
+        ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.SQUEEZER);
+        RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-		for (ISqueezerRecipe recipe : RecipeManagers.squeezerManager.recipes()) {
-			Object[] array = new Object[12];
+        for (ISqueezerRecipe recipe : RecipeManagers.squeezerManager.recipes()) {
+            Object[] array = new Object[12];
 
-			System.arraycopy(recipe.getResources(), 0, array, 0, recipe.getResources().length);
-			if (recipe.getRemnants() != null) {
-				array[9] = recipe.getRemnantsChance() > 0 ? new Object[]{recipe.getRemnants().copy(), recipe.getRemnantsChance()} : null;
-			}
-			if (recipe.getFluidOutput() != null) {
-				array[10] = recipe.getFluidOutput();
-			}
-			array[11] = machine;
-			generator.addRecipe(template, array);
-		}
-	}
-
+            System.arraycopy(recipe.getResources(), 0, array, 0, recipe.getResources().length);
+            if (recipe.getRemnants() != null) {
+                array[9] = recipe.getRemnantsChance() > 0
+                        ? new Object[] {recipe.getRemnants().copy(), recipe.getRemnantsChance()}
+                        : null;
+            }
+            if (recipe.getFluidOutput() != null) {
+                array[10] = recipe.getFluidOutput();
+            }
+            array[11] = machine;
+            generator.addRecipe(template, array);
+        }
+    }
 }

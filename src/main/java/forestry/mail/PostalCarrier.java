@@ -10,15 +10,8 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.IPostOffice;
@@ -31,68 +24,74 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 public class PostalCarrier implements IPostalCarrier {
 
-	private final String iconID;
-	private final EnumAddressee type;
+    private final String iconID;
+    private final EnumAddressee type;
 
-	public PostalCarrier(EnumAddressee type) {
-		iconID = "mail/carrier." + type;
-		this.type = type;
-	}
+    public PostalCarrier(EnumAddressee type) {
+        iconID = "mail/carrier." + type;
+        this.type = type;
+    }
 
-	@Override
-	public EnumAddressee getType() {
-		return type;
-	}
+    @Override
+    public EnumAddressee getType() {
+        return type;
+    }
 
-	@Override
-	public String getName() {
-		return StringUtil.localize("gui.addressee." + type);
-	}
+    @Override
+    public String getName() {
+        return StringUtil.localize("gui.addressee." + type);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return TextureManager.getInstance().getDefault(iconID);
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon() {
+        return TextureManager.getInstance().getDefault(iconID);
+    }
 
-	@Override
-	public IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterStack, boolean doDeliver) {
-		if (type == EnumAddressee.TRADER) {
-			return handleTradeLetter(world, recipient, letterStack, doDeliver);
-		} else {
-			return storeInPOBox(world, recipient, letterStack);
-		}
-	}
+    @Override
+    public IPostalState deliverLetter(
+            World world, IPostOffice office, IMailAddress recipient, ItemStack letterStack, boolean doDeliver) {
+        if (type == EnumAddressee.TRADER) {
+            return handleTradeLetter(world, recipient, letterStack, doDeliver);
+        } else {
+            return storeInPOBox(world, recipient, letterStack);
+        }
+    }
 
-	private static IPostalState handleTradeLetter(World world, IMailAddress recipient, ItemStack letterStack, boolean doLodge) {
-		ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
-		if (trade == null) {
-			return EnumDeliveryState.NO_MAILBOX;
-		}
+    private static IPostalState handleTradeLetter(
+            World world, IMailAddress recipient, ItemStack letterStack, boolean doLodge) {
+        ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
+        if (trade == null) {
+            return EnumDeliveryState.NO_MAILBOX;
+        }
 
-		return trade.handleLetter(world, recipient, letterStack, doLodge);
-	}
+        return trade.handleLetter(world, recipient, letterStack, doLodge);
+    }
 
-	private static EnumDeliveryState storeInPOBox(World world, IMailAddress recipient, ItemStack letterStack) {
+    private static EnumDeliveryState storeInPOBox(World world, IMailAddress recipient, ItemStack letterStack) {
 
-		POBox pobox = PostRegistry.getPOBox(world, recipient);
-		if (pobox == null) {
-			return EnumDeliveryState.NO_MAILBOX;
-		}
+        POBox pobox = PostRegistry.getPOBox(world, recipient);
+        if (pobox == null) {
+            return EnumDeliveryState.NO_MAILBOX;
+        }
 
-		if (!pobox.storeLetter(letterStack.copy())) {
-			return EnumDeliveryState.MAILBOX_FULL;
-		} else {
-			EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
-			if (player instanceof EntityPlayerMP) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), (EntityPlayerMP) player);
-			}
-		}
+        if (!pobox.storeLetter(letterStack.copy())) {
+            return EnumDeliveryState.MAILBOX_FULL;
+        } else {
+            EntityPlayer player = PlayerUtil.getPlayer(world, recipient.getPlayerProfile());
+            if (player instanceof EntityPlayerMP) {
+                Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), (EntityPlayerMP) player);
+            }
+        }
 
-		return EnumDeliveryState.OK;
-	}
-
+        return EnumDeliveryState.OK;
+    }
 }

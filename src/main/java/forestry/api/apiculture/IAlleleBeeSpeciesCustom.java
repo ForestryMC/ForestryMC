@@ -5,39 +5,38 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.genetics.IAlleleSpeciesCustom;
+import net.minecraft.item.ItemStack;
 
 public interface IAlleleBeeSpeciesCustom extends IAlleleBeeSpecies, IAlleleSpeciesCustom {
 
-	/**
-	 * Add a product for this bee species.
-	 * Chance is between 0 and 1.
-	 */
-	IAlleleBeeSpeciesCustom addProduct(ItemStack product, Float chance);
+    /**
+     * Add a product for this bee species.
+     * Chance is between 0 and 1.
+     */
+    IAlleleBeeSpeciesCustom addProduct(ItemStack product, Float chance);
 
-	/**
-	 * Add a specialty product for this bee species.
-	 * Bees only produce their specialty when they are Jubilant (see IJubilanceProvider)
-	 * Chance is between 0 and 1.
-	 */
-	IAlleleBeeSpeciesCustom addSpecialty(ItemStack specialty, Float chance);
+    /**
+     * Add a specialty product for this bee species.
+     * Bees only produce their specialty when they are Jubilant (see IJubilanceProvider)
+     * Chance is between 0 and 1.
+     */
+    IAlleleBeeSpeciesCustom addSpecialty(ItemStack specialty, Float chance);
 
-	/**
-	 * Set the Jubilance Provider for this bee species.
-	 * Bees only produce their specialty when they are Jubilant (see IJubilanceProvider)
-	 */
-	IAlleleBeeSpeciesCustom setJubilanceProvider(IJubilanceProvider provider);
+    /**
+     * Set the Jubilance Provider for this bee species.
+     * Bees only produce their specialty when they are Jubilant (see IJubilanceProvider)
+     */
+    IAlleleBeeSpeciesCustom setJubilanceProvider(IJubilanceProvider provider);
 
-	/**
-	 * Make this species only active at night.
-	 */
-	IAlleleBeeSpeciesCustom setNocturnal();
+    /**
+     * Make this species only active at night.
+     */
+    IAlleleBeeSpeciesCustom setNocturnal();
 
-	/** Use this if you have custom icons for bees. */
-	IAlleleBeeSpeciesCustom setCustomBeeIconProvider(IBeeIconProvider beeIconProvider);
+    /** Use this if you have custom icons for bees. */
+    IAlleleBeeSpeciesCustom setCustomBeeIconProvider(IBeeIconProvider beeIconProvider);
 
-	/** Use this if you have custom icon colours for bees (other than the default static primary + secondary colours). */
-	IAlleleBeeSpeciesCustom setCustomBeeIconColourProvider(IBeeIconColourProvider beeIconColourProvider);
+    /** Use this if you have custom icon colours for bees (other than the default static primary + secondary colours). */
+    IAlleleBeeSpeciesCustom setCustomBeeIconColourProvider(IBeeIconColourProvider beeIconColourProvider);
 }

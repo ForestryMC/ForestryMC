@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.core.recipes.craftguide;
 
-import java.lang.reflect.Method;
-
 import forestry.core.utils.Log;
 import forestry.factory.recipes.craftguide.CraftGuideBottler;
 import forestry.factory.recipes.craftguide.CraftGuideCarpenter;
@@ -20,39 +18,39 @@ import forestry.factory.recipes.craftguide.CraftGuideFabricator;
 import forestry.factory.recipes.craftguide.CraftGuideFermenter;
 import forestry.factory.recipes.craftguide.CraftGuideSqueezer;
 import forestry.factory.recipes.craftguide.CraftGuideStill;
+import java.lang.reflect.Method;
 
 public class CraftGuideIntegration {
 
-	public static void register() {
-		registerRecipeProviders();
-	}
+    public static void register() {
+        registerRecipeProviders();
+    }
 
-	private static void registerRecipeProviders() {
+    private static void registerRecipeProviders() {
 
-		Log.info("Registering CraftGuide integration.");
-		try {
-			Class<?> c = Class.forName("uristqwerty.CraftGuide.ReflectionAPI");
-			Method m = c.getMethod("registerAPIObject", Object.class);
+        Log.info("Registering CraftGuide integration.");
+        try {
+            Class<?> c = Class.forName("uristqwerty.CraftGuide.ReflectionAPI");
+            Method m = c.getMethod("registerAPIObject", Object.class);
 
-			Log.fine("Adding crafting handler custom recipes.");
-			m.invoke(null, new CraftGuideCustomRecipes());
-			Log.fine("Adding crafting handler for the carpenter.");
-			m.invoke(null, new CraftGuideCarpenter());
-			Log.fine("Adding crafting handler for the thermionic fabricator.");
-			m.invoke(null, new CraftGuideFabricator());
-			Log.fine("Adding crafting handler for the centrifuge.");
-			m.invoke(null, new CraftGuideCentrifuge());
-			Log.fine("Adding crafting handler for the squeezer.");
-			m.invoke(null, new CraftGuideSqueezer());
-			Log.fine("Adding crafting handler for the fermenter.");
-			m.invoke(null, new CraftGuideFermenter());
-			Log.fine("Adding crafting handler for the still.");
-			m.invoke(null, new CraftGuideStill());
-			Log.fine("Adding crafting handler for the bottler.");
-			m.invoke(null, new CraftGuideBottler());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
+            Log.fine("Adding crafting handler custom recipes.");
+            m.invoke(null, new CraftGuideCustomRecipes());
+            Log.fine("Adding crafting handler for the carpenter.");
+            m.invoke(null, new CraftGuideCarpenter());
+            Log.fine("Adding crafting handler for the thermionic fabricator.");
+            m.invoke(null, new CraftGuideFabricator());
+            Log.fine("Adding crafting handler for the centrifuge.");
+            m.invoke(null, new CraftGuideCentrifuge());
+            Log.fine("Adding crafting handler for the squeezer.");
+            m.invoke(null, new CraftGuideSqueezer());
+            Log.fine("Adding crafting handler for the fermenter.");
+            m.invoke(null, new CraftGuideFermenter());
+            Log.fine("Adding crafting handler for the still.");
+            m.invoke(null, new CraftGuideStill());
+            Log.fine("Adding crafting handler for the bottler.");
+            m.invoke(null, new CraftGuideBottler());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

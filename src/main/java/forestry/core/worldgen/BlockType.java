@@ -10,29 +10,25 @@
  ******************************************************************************/
 package forestry.core.worldgen;
 
+import forestry.core.config.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-
 import net.minecraftforge.common.util.ForgeDirection;
 
-import forestry.core.config.Constants;
-
 public class BlockType implements IBlockType {
-	private final Block block;
-	protected int meta;
+    private final Block block;
+    protected int meta;
 
-	public BlockType(Block block, int meta) {
-		this.block = block;
-		this.meta = meta;
-	}
+    public BlockType(Block block, int meta) {
+        this.block = block;
+        this.meta = meta;
+    }
 
-	@Override
-	public void setDirection(ForgeDirection facing) {
+    @Override
+    public void setDirection(ForgeDirection facing) {}
 
-	}
-
-	@Override
-	public void setBlock(World world, int x, int y, int z) {
-		world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
-	}
+    @Override
+    public void setBlock(World world, int x, int y, int z) {
+        world.setBlock(x, y, z, block, meta, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+    }
 }

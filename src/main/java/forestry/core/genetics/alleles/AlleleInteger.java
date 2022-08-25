@@ -14,15 +14,15 @@ import forestry.api.genetics.IAlleleInteger;
 
 public class AlleleInteger extends AlleleCategorized implements IAlleleInteger {
 
-	private final int value;
+    private final int value;
 
-	public AlleleInteger(String modId, String category, String name, int value, boolean isDominant) {
-		super(modId, category, name, isDominant);
-		this.value = value;
-	}
+    public AlleleInteger(String modId, String category, String name, int value, boolean isDominant) {
+        super(modId, category, name, isDominant);
+        this.value = value;
+    }
 
-	@Override
-	public int getValue() {
-		return value;
-	}
+    @Override
+    public int getValue() {
+        return value;
+    }
 }

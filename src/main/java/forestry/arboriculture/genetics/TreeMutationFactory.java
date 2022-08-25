@@ -18,10 +18,11 @@ import forestry.api.genetics.IAllele;
 
 public class TreeMutationFactory implements ITreeMutationFactory {
 
-	@Override
-	public ITreeMutationCustom createMutation(IAlleleTreeSpecies parent0, IAlleleTreeSpecies parent1, IAllele[] result, int chance) {
-		ITreeMutationCustom mutation = new TreeMutation(parent0, parent1, result, chance);
-		TreeManager.treeRoot.registerMutation(mutation);
-		return mutation;
-	}
+    @Override
+    public ITreeMutationCustom createMutation(
+            IAlleleTreeSpecies parent0, IAlleleTreeSpecies parent1, IAllele[] result, int chance) {
+        ITreeMutationCustom mutation = new TreeMutation(parent0, parent1, result, chance);
+        TreeManager.treeRoot.registerMutation(mutation);
+        return mutation;
+    }
 }

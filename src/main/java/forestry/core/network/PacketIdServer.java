@@ -10,48 +10,47 @@
  ******************************************************************************/
 package forestry.core.network;
 
+import forestry.core.network.packets.PacketDummyServer;
 import javax.annotation.Nonnull;
 
-import forestry.core.network.packets.PacketDummyServer;
-
 public enum PacketIdServer implements IPacketId {
-	INVALID,
+    INVALID,
 
-	// Core Gui
-	GUI_SELECTION_REQUEST,
-	PIPETTE_CLICK,
-	ACCESS_SWITCH,
-	ACCESS_SWITCH_ENTITY,
-	CHIPSET_CLICK,
-	SOLDERING_IRON_CLICK,
+    // Core Gui
+    GUI_SELECTION_REQUEST,
+    PIPETTE_CLICK,
+    ACCESS_SWITCH,
+    ACCESS_SWITCH_ENTITY,
+    CHIPSET_CLICK,
+    SOLDERING_IRON_CLICK,
 
-	// Apiculture
-	BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
+    // Apiculture
+    BEE_LOGIC_ACTIVE_ENTITY_REQUEST,
 
-	// Factory
-	WORKTABLE_NEI_SELECT,
+    // Factory
+    WORKTABLE_NEI_SELECT,
 
-	// Mail
-	LETTER_INFO_REQUEST,
-	TRADING_ADDRESS_REQUEST,
-	POBOX_INFO_REQUEST,
-	LETTER_TEXT_SET;
+    // Mail
+    LETTER_INFO_REQUEST,
+    TRADING_ADDRESS_REQUEST,
+    POBOX_INFO_REQUEST,
+    LETTER_TEXT_SET;
 
-	public static final PacketIdServer[] VALUES = values();
+    public static final PacketIdServer[] VALUES = values();
 
-	@Nonnull
-	private IForestryPacketServer packetHandler;
+    @Nonnull
+    private IForestryPacketServer packetHandler;
 
-	PacketIdServer() {
-		this.packetHandler = PacketDummyServer.instance;
-	}
+    PacketIdServer() {
+        this.packetHandler = PacketDummyServer.instance;
+    }
 
-	public void setPacketHandler(@Nonnull IForestryPacketServer packetHandler) {
-		this.packetHandler = packetHandler;
-	}
+    public void setPacketHandler(@Nonnull IForestryPacketServer packetHandler) {
+        this.packetHandler = packetHandler;
+    }
 
-	@Nonnull
-	public IForestryPacketServer getPacketHandler() {
-		return packetHandler;
-	}
+    @Nonnull
+    public IForestryPacketServer getPacketHandler() {
+        return packetHandler;
+    }
 }

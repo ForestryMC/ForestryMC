@@ -9,18 +9,20 @@ import net.minecraft.item.ItemStack;
 
 public interface IBeeHousingInventory {
 
-	ItemStack getQueen();
-	ItemStack getDrone();
+    ItemStack getQueen();
 
-	void setQueen(ItemStack itemstack);
-	void setDrone(ItemStack itemstack);
+    ItemStack getDrone();
 
-	/**
-	 * Adds products to the housing's inventory.
-	 *
-	 * @param product ItemStack with the product to add.
-	 * @param all if true, success requires that all products are added
-	 * @return boolean indicating success or failure.
-	 */
-	boolean addProduct(ItemStack product, boolean all);
+    void setQueen(ItemStack itemstack);
+
+    void setDrone(ItemStack itemstack);
+
+    /**
+     * Adds products to the housing's inventory.
+     *
+     * @param product ItemStack with the product to add.
+     * @param all if true, success requires that all products are added
+     * @return boolean indicating success or failure.
+     */
+    boolean addProduct(ItemStack product, boolean all);
 }

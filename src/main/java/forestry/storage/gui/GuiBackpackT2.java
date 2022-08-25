@@ -14,10 +14,10 @@ import forestry.core.config.Constants;
 
 public class GuiBackpackT2 extends GuiBackpack {
 
-	public GuiBackpackT2(ContainerBackpack container) {
-		super(Constants.TEXTURE_PATH_GUI + "/backpackT2.png", container);
+    public GuiBackpackT2(ContainerBackpack container) {
+        super(Constants.TEXTURE_PATH_GUI + "/backpackT2.png", container);
 
-		xSize = 176;
-		ySize = 192;
-	}
+        xSize = 176;
+        ySize = 192;
+    }
 }

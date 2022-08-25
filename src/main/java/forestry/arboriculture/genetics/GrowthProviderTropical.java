@@ -10,45 +10,44 @@
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
-import java.util.EnumSet;
-
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.ITreeGenome;
 import forestry.core.utils.StringUtil;
+import java.util.EnumSet;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class GrowthProviderTropical extends GrowthProvider {
 
-	@Override
-	public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, int xPos, int yPos, int zPos) {
-		EnumGrowthConditions light = getConditionFromLight(world, xPos, yPos, zPos);
-		EnumGrowthConditions moisture = getConditionsFromRainfall(world, xPos, yPos, zPos, BiomeGenBase.jungle.rainfall, 2.0f);
+    @Override
+    public EnumGrowthConditions getGrowthConditions(ITreeGenome genome, World world, int xPos, int yPos, int zPos) {
+        EnumGrowthConditions light = getConditionFromLight(world, xPos, yPos, zPos);
+        EnumGrowthConditions moisture =
+                getConditionsFromRainfall(world, xPos, yPos, zPos, BiomeGenBase.jungle.rainfall, 2.0f);
 
-		float jungleTemperature = BiomeGenBase.jungle.getFloatTemperature(xPos, yPos, zPos);
-		float desertTemperature = BiomeGenBase.desert.getFloatTemperature(xPos, yPos, zPos);
-		EnumGrowthConditions temperature = getConditionsFromTemperature(world, xPos, yPos, zPos, jungleTemperature, desertTemperature - 0.1f);
+        float jungleTemperature = BiomeGenBase.jungle.getFloatTemperature(xPos, yPos, zPos);
+        float desertTemperature = BiomeGenBase.desert.getFloatTemperature(xPos, yPos, zPos);
+        EnumGrowthConditions temperature =
+                getConditionsFromTemperature(world, xPos, yPos, zPos, jungleTemperature, desertTemperature - 0.1f);
 
-		EnumSet<EnumGrowthConditions> conditions = EnumSet.of(light, moisture, temperature);
+        EnumSet<EnumGrowthConditions> conditions = EnumSet.of(light, moisture, temperature);
 
-		EnumGrowthConditions result = EnumGrowthConditions.HOSTILE;
-		for (EnumGrowthConditions cond : conditions) {
-			if (cond == EnumGrowthConditions.HOSTILE) {
-				return EnumGrowthConditions.HOSTILE;
-			}
+        EnumGrowthConditions result = EnumGrowthConditions.HOSTILE;
+        for (EnumGrowthConditions cond : conditions) {
+            if (cond == EnumGrowthConditions.HOSTILE) {
+                return EnumGrowthConditions.HOSTILE;
+            }
 
-			if (cond.ordinal() > result.ordinal()) {
-				result = cond;
-			}
-		}
+            if (cond.ordinal() > result.ordinal()) {
+                result = cond;
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	@Override
-	public String getDescription() {
-		return StringUtil.localize("growth.tropical");
-	}
-
+    @Override
+    public String getDescription() {
+        return StringUtil.localize("growth.tropical");
+    }
 }

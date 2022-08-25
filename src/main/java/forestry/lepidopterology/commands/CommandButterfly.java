@@ -10,50 +10,47 @@
  ******************************************************************************/
 package forestry.lepidopterology.commands;
 
-import net.minecraft.command.ICommandSender;
-import net.minecraft.world.World;
-
 import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SubCommand;
 import forestry.lepidopterology.entities.EntityButterfly;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class CommandButterfly extends SubCommand {
 
-	public CommandButterfly() {
-		super("butterfly");
-		addAlias("bfly");
-		addChildCommand(new CommandButterflyKill());
-	}
+    public CommandButterfly() {
+        super("butterfly");
+        addAlias("bfly");
+        addChildCommand(new CommandButterflyKill());
+    }
 
-	public static class CommandButterflyKill extends SubCommand {
+    public static class CommandButterflyKill extends SubCommand {
 
-		public CommandButterflyKill() {
-			super("kill");
-			addAlias("killall");
-			setPermLevel(PermLevel.ADMIN);
-		}
+        public CommandButterflyKill() {
+            super("kill");
+            addAlias("killall");
+            setPermLevel(PermLevel.ADMIN);
+        }
 
-		@Override
-		public void processSubCommand(ICommandSender sender, String[] args) {
-			if (args.length > 1) {
-				CommandHelpers.throwWrongUsage(sender, this);
-			}
+        @Override
+        public void processSubCommand(ICommandSender sender, String[] args) {
+            if (args.length > 1) {
+                CommandHelpers.throwWrongUsage(sender, this);
+            }
 
-			World world = CommandHelpers.getWorld(sender, this, args, 0);
-			if (world == null) {
-				CommandHelpers.throwWrongUsage(sender, this);
-			} else {
-				for (Object entity : world.loadedEntityList) {
-					if (entity instanceof EntityButterfly) {
-						((EntityButterfly) entity).setDead();
-					}
-				}
-			}
-		}
-
-	}
-
+            World world = CommandHelpers.getWorld(sender, this, args, 0);
+            if (world == null) {
+                CommandHelpers.throwWrongUsage(sender, this);
+            } else {
+                for (Object entity : world.loadedEntityList) {
+                    if (entity instanceof EntityButterfly) {
+                        ((EntityButterfly) entity).setDead();
+                    }
+                }
+            }
+        }
+    }
 }

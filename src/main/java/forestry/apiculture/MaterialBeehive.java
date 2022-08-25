@@ -15,12 +15,11 @@ import net.minecraft.block.material.Material;
 
 public class MaterialBeehive extends Material {
 
-	public MaterialBeehive(boolean noHarvest) {
-		super(MapColor.stoneColor);
-		if (noHarvest) {
-			this.setRequiresTool();
-		}
-		setImmovableMobility();
-	}
-
+    public MaterialBeehive(boolean noHarvest) {
+        super(MapColor.stoneColor);
+        if (noHarvest) {
+            this.setRequiresTool();
+        }
+        setImmovableMobility();
+    }
 }

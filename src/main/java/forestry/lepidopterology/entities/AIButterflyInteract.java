@@ -14,52 +14,50 @@ import net.minecraft.util.ChunkCoordinates;
 
 public abstract class AIButterflyInteract extends AIButterflyBase {
 
-	protected ChunkCoordinates rest;
+    protected ChunkCoordinates rest;
 
-	private boolean canInteract = false;
-	private boolean hasInteracted = false;
+    private boolean canInteract = false;
+    private boolean hasInteracted = false;
 
-	protected AIButterflyInteract(EntityButterfly entity) {
-		super(entity);
-		setMutexBits(3);
-	}
+    protected AIButterflyInteract(EntityButterfly entity) {
+        super(entity);
+        setMutexBits(3);
+    }
 
-	@Override
-	public boolean shouldExecute() {
-		if (entity.getState() != EnumButterflyState.RESTING) {
-			return false;
-		}
+    @Override
+    public boolean shouldExecute() {
+        if (entity.getState() != EnumButterflyState.RESTING) {
+            return false;
+        }
 
-		rest = new ChunkCoordinates((int) entity.posX, ((int) Math.floor(entity.posY)) - 1, (int) entity.posZ);
-		if (entity.worldObj.isAirBlock(rest.posX, rest.posY, rest.posZ)) {
-			return false;
-		}
+        rest = new ChunkCoordinates((int) entity.posX, ((int) Math.floor(entity.posY)) - 1, (int) entity.posZ);
+        if (entity.worldObj.isAirBlock(rest.posX, rest.posY, rest.posZ)) {
+            return false;
+        }
 
-		canInteract = canInteract();
+        canInteract = canInteract();
 
-		return canInteract;
-	}
+        return canInteract;
+    }
 
-	protected abstract boolean canInteract();
+    protected abstract boolean canInteract();
 
-	@Override
-	public boolean continueExecuting() {
-		return canInteract && !hasInteracted;
-	}
+    @Override
+    public boolean continueExecuting() {
+        return canInteract && !hasInteracted;
+    }
 
-	@Override
-	public void startExecuting() {
-	}
+    @Override
+    public void startExecuting() {}
 
-	@Override
-	public void resetTask() {
-		canInteract = false;
-		hasInteracted = false;
-		rest = null;
-	}
+    @Override
+    public void resetTask() {
+        canInteract = false;
+        hasInteracted = false;
+        rest = null;
+    }
 
-	protected void setHasInteracted() {
-		hasInteracted = true;
-	}
-
+    protected void setHasInteracted() {
+        hasInteracted = true;
+    }
 }

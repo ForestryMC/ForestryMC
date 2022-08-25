@@ -10,71 +10,66 @@
  ******************************************************************************/
 package forestry.core.network;
 
-import java.io.InputStream;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.NetHandlerPlayServer;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-
 import forestry.core.proxy.Proxies;
-
 import io.netty.buffer.ByteBufInputStream;
+import java.io.InputStream;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.NetHandlerPlayServer;
 
 public class PacketHandler {
-	public static final String channelId = "FOR";
-	private final FMLEventChannel channel;
+    public static final String channelId = "FOR";
+    private final FMLEventChannel channel;
 
-	public PacketHandler() {
-		channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(channelId);
-		channel.register(this);
-	}
+    public PacketHandler() {
+        channel = NetworkRegistry.INSTANCE.newEventDrivenChannel(channelId);
+        channel.register(this);
+    }
 
-	@SubscribeEvent
-	public void onPacket(ServerCustomPacketEvent event) {
-		DataInputStreamForestry data = getStream(event.packet);
-		EntityPlayerMP player = ((NetHandlerPlayServer) event.handler).playerEntity;
+    @SubscribeEvent
+    public void onPacket(ServerCustomPacketEvent event) {
+        DataInputStreamForestry data = getStream(event.packet);
+        EntityPlayerMP player = ((NetHandlerPlayServer) event.handler).playerEntity;
 
-		try {
-			byte packetIdOrdinal = data.readByte();
-			PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
-			IForestryPacketServer packetHandler = packetId.getPacketHandler();
-			packetHandler.readData(data);
-			packetHandler.onPacketData(data, player);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+        try {
+            byte packetIdOrdinal = data.readByte();
+            PacketIdServer packetId = PacketIdServer.VALUES[packetIdOrdinal];
+            IForestryPacketServer packetHandler = packetId.getPacketHandler();
+            packetHandler.readData(data);
+            packetHandler.onPacketData(data, player);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-	@SubscribeEvent
-	public void onPacket(ClientCustomPacketEvent event) {
-		DataInputStreamForestry data = getStream(event.packet);
-		EntityPlayer player = Proxies.common.getPlayer();
+    @SubscribeEvent
+    public void onPacket(ClientCustomPacketEvent event) {
+        DataInputStreamForestry data = getStream(event.packet);
+        EntityPlayer player = Proxies.common.getPlayer();
 
-		try {
-			byte packetIdOrdinal = data.readByte();
-			PacketIdClient packetId = PacketIdClient.VALUES[packetIdOrdinal];
-			IForestryPacketClient packetHandler = packetId.getPacketHandler();
-			packetHandler.readData(data);
-			packetHandler.onPacketData(data, player);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+        try {
+            byte packetIdOrdinal = data.readByte();
+            PacketIdClient packetId = PacketIdClient.VALUES[packetIdOrdinal];
+            IForestryPacketClient packetHandler = packetId.getPacketHandler();
+            packetHandler.readData(data);
+            packetHandler.onPacketData(data, player);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-	private static DataInputStreamForestry getStream(FMLProxyPacket fmlPacket) {
-		InputStream is = new ByteBufInputStream(fmlPacket.payload());
-		return new DataInputStreamForestry(is);
-	}
+    private static DataInputStreamForestry getStream(FMLProxyPacket fmlPacket) {
+        InputStream is = new ByteBufInputStream(fmlPacket.payload());
+        return new DataInputStreamForestry(is);
+    }
 
-	public void sendPacket(FMLProxyPacket packet, EntityPlayerMP player) {
-		channel.sendTo(packet, player);
-	}
-
+    public void sendPacket(FMLProxyPacket packet, EntityPlayerMP player) {
+        channel.sendTo(packet, player);
+    }
 }

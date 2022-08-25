@@ -10,75 +10,73 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmableBasic;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.vect.Vect;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmableBasic;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.vect.Vect;
-
 public class FarmableGenericSapling implements IFarmableBasic {
 
-	protected final Block sapling;
-	private final int saplingMeta;
-	private final ItemStack[] windfall;
+    protected final Block sapling;
+    private final int saplingMeta;
+    private final ItemStack[] windfall;
 
-	public FarmableGenericSapling(Block sapling, int saplingMeta, ItemStack... windfall) {
-		this.sapling = sapling;
-		this.saplingMeta = saplingMeta;
-		this.windfall = windfall;
-	}
+    public FarmableGenericSapling(Block sapling, int saplingMeta, ItemStack... windfall) {
+        this.sapling = sapling;
+        this.saplingMeta = saplingMeta;
+        this.windfall = windfall;
+    }
 
-	@Override
-	public boolean isSapling(Block block, int meta) {
-		return block == sapling && (saplingMeta < 0 || meta == saplingMeta);
-	}
+    @Override
+    public boolean isSapling(Block block, int meta) {
+        return block == sapling && (saplingMeta < 0 || meta == saplingMeta);
+    }
 
-	@Override
-	public boolean isMetadataAware() {
-		return saplingMeta >= 0;
-	}
+    @Override
+    public boolean isMetadataAware() {
+        return saplingMeta >= 0;
+    }
 
-	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
-		if (!block.isWood(world, x, y, z)) {
-			return null;
-		}
+    @Override
+    public ICrop getCropAt(World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
+        if (!block.isWood(world, x, y, z)) {
+            return null;
+        }
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
-	}
+        return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
+    }
 
-	@Override
-	public boolean isGermling(ItemStack itemstack) {
+    @Override
+    public boolean isGermling(ItemStack itemstack) {
 
-		if (!ItemStackUtil.equals(sapling, itemstack)) {
-			return false;
-		}
+        if (!ItemStackUtil.equals(sapling, itemstack)) {
+            return false;
+        }
 
-		if (saplingMeta >= 0) {
-			return itemstack.getItemDamage() == saplingMeta;
-		} else {
-			return true;
-		}
-	}
+        if (saplingMeta >= 0) {
+            return itemstack.getItemDamage() == saplingMeta;
+        } else {
+            return true;
+        }
+    }
 
-	@Override
-	public boolean isWindfall(ItemStack itemstack) {
-		for (ItemStack drop : windfall) {
-			if (drop.isItemEqual(itemstack)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    @Override
+    public boolean isWindfall(ItemStack itemstack) {
+        for (ItemStack drop : windfall) {
+            if (drop.isItemEqual(itemstack)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
-	}
-
+    @Override
+    public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+        return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
+    }
 }

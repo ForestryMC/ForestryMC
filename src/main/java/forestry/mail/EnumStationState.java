@@ -10,20 +10,24 @@
  ******************************************************************************/
 package forestry.mail;
 
+import forestry.api.mail.IPostalState;
 import java.util.Locale;
 
-import forestry.api.mail.IPostalState;
-
 public enum EnumStationState implements IPostalState {
-	OK, INSUFFICIENT_OFFER, INSUFFICIENT_TRADE_GOOD, INSUFFICIENT_BUFFER, INSUFFICIENT_PAPER, INSUFFICIENT_STAMPS;
+    OK,
+    INSUFFICIENT_OFFER,
+    INSUFFICIENT_TRADE_GOOD,
+    INSUFFICIENT_BUFFER,
+    INSUFFICIENT_PAPER,
+    INSUFFICIENT_STAMPS;
 
-	@Override
-	public boolean isOk() {
-		return this == OK;
-	}
+    @Override
+    public boolean isOk() {
+        return this == OK;
+    }
 
-	@Override
-	public String getIdentifier() {
-		return this.toString().toLowerCase(Locale.ENGLISH);
-	}
+    @Override
+    public String getIdentifier() {
+        return this.toString().toLowerCase(Locale.ENGLISH);
+    }
 }

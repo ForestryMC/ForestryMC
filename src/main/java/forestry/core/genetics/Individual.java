@@ -10,74 +10,76 @@
  ******************************************************************************/
 package forestry.core.genetics;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IIndividual;
+import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class Individual implements IIndividual {
 
-	protected boolean isAnalyzed = false;
+    protected boolean isAnalyzed = false;
 
-	@Override
-	public boolean isAnalyzed() {
-		return isAnalyzed;
-	}
+    @Override
+    public boolean isAnalyzed() {
+        return isAnalyzed;
+    }
 
-	@Override
-	public boolean analyze() {
-		if (isAnalyzed) {
-			return false;
-		}
+    @Override
+    public boolean analyze() {
+        if (isAnalyzed) {
+            return false;
+        }
 
-		isAnalyzed = true;
-		return true;
-	}
+        isAnalyzed = true;
+        return true;
+    }
 
-	/* SAVING & LOADING */
-	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound == null) {
-			return;
-		}
+    /* SAVING & LOADING */
+    @Override
+    public void readFromNBT(NBTTagCompound nbttagcompound) {
+        if (nbttagcompound == null) {
+            return;
+        }
 
-		isAnalyzed = nbttagcompound.getBoolean("IsAnalyzed");
-	}
+        isAnalyzed = nbttagcompound.getBoolean("IsAnalyzed");
+    }
 
-	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setBoolean("IsAnalyzed", isAnalyzed);
-	}
+    @Override
+    public void writeToNBT(NBTTagCompound nbttagcompound) {
+        nbttagcompound.setBoolean("IsAnalyzed", isAnalyzed);
+    }
 
-	/* IDENTIFICATION */
-	@Override
-	public String getIdent() {
-		return getGenome().getPrimary().getUID();
-	}
+    /* IDENTIFICATION */
+    @Override
+    public String getIdent() {
+        return getGenome().getPrimary().getUID();
+    }
 
-	@Override
-	public String getDisplayName() {
-		return getGenome().getPrimary().getName();
-	}
+    @Override
+    public String getDisplayName() {
+        return getGenome().getPrimary().getName();
+    }
 
-	/* INFORMATION */
-	@Override
-	public boolean hasEffect() {
-		return getGenome().getPrimary().hasEffect();
-	}
+    /* INFORMATION */
+    @Override
+    public boolean hasEffect() {
+        return getGenome().getPrimary().hasEffect();
+    }
 
-	@Override
-	public boolean isSecret() {
-		return getGenome().getPrimary().isSecret();
-	}
+    @Override
+    public boolean isSecret() {
+        return getGenome().getPrimary().isSecret();
+    }
 
-	@Override
-	public boolean isGeneticEqual(IIndividual other) {
-		return getGenome().isGeneticEqual(other.getGenome());
-	}
+    @Override
+    public boolean isGeneticEqual(IIndividual other) {
+        return getGenome().isGeneticEqual(other.getGenome());
+    }
 
-	@Override
-	public boolean isPureBred(IChromosomeType chromosomeType) {
-		return getGenome().getActiveAllele(chromosomeType).getUID().equals(getGenome().getInactiveAllele(chromosomeType).getUID());
-	}
+    @Override
+    public boolean isPureBred(IChromosomeType chromosomeType) {
+        return getGenome()
+                .getActiveAllele(chromosomeType)
+                .getUID()
+                .equals(getGenome().getInactiveAllele(chromosomeType).getUID());
+    }
 }

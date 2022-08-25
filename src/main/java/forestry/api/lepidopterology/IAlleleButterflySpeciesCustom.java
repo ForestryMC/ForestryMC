@@ -13,7 +13,9 @@ package forestry.api.lepidopterology;
 import forestry.api.genetics.IAlleleSpeciesCustom;
 
 public interface IAlleleButterflySpeciesCustom extends IAlleleButterflySpecies, IAlleleSpeciesCustom {
-	IAlleleButterflySpeciesCustom setRarity(float rarity);
-	IAlleleButterflySpeciesCustom setFlightDistance(float flightDistance);
-	IAlleleButterflySpeciesCustom setNocturnal();
+    IAlleleButterflySpeciesCustom setRarity(float rarity);
+
+    IAlleleButterflySpeciesCustom setFlightDistance(float flightDistance);
+
+    IAlleleButterflySpeciesCustom setNocturnal();
 }

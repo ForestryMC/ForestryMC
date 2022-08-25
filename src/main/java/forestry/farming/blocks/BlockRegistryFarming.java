@@ -15,11 +15,11 @@ import forestry.core.items.ItemBlockTyped;
 import forestry.farming.items.ItemBlockFarm;
 
 public class BlockRegistryFarming extends BlockRegistry {
-	public final BlockMushroom mushroom;
-	public final BlockFarm farm;
+    public final BlockMushroom mushroom;
+    public final BlockFarm farm;
 
-	public BlockRegistryFarming() {
-		mushroom = registerBlock(new BlockMushroom(), ItemBlockTyped.class, "mushroom");
-		farm = registerBlock(new BlockFarm(), ItemBlockFarm.class, "ffarm");
-	}
+    public BlockRegistryFarming() {
+        mushroom = registerBlock(new BlockMushroom(), ItemBlockTyped.class, "mushroom");
+        farm = registerBlock(new BlockFarm(), ItemBlockFarm.class, "ffarm");
+    }
 }

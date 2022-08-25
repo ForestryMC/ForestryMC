@@ -10,44 +10,41 @@
  ******************************************************************************/
 package forestry.core.network.packets;
 
-import java.io.IOException;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.ForestryPacket;
+import java.io.IOException;
 
 public abstract class PacketGuiSelect extends ForestryPacket {
-	private int primaryIndex;
-	private int secondaryIndex;
+    private int primaryIndex;
+    private int secondaryIndex;
 
-	protected PacketGuiSelect() {
-	}
+    protected PacketGuiSelect() {}
 
-	protected PacketGuiSelect(int primaryIndex, int secondaryIndex) {
-		this.primaryIndex = primaryIndex;
-		this.secondaryIndex = secondaryIndex;
-	}
+    protected PacketGuiSelect(int primaryIndex, int secondaryIndex) {
+        this.primaryIndex = primaryIndex;
+        this.secondaryIndex = secondaryIndex;
+    }
 
-	@Override
-	public void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeVarInt(primaryIndex);
-		data.writeVarInt(secondaryIndex);
-	}
+    @Override
+    public void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        data.writeVarInt(primaryIndex);
+        data.writeVarInt(secondaryIndex);
+    }
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		primaryIndex = data.readVarInt();
-		secondaryIndex = data.readVarInt();
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {
+        super.readData(data);
+        primaryIndex = data.readVarInt();
+        secondaryIndex = data.readVarInt();
+    }
 
-	public int getPrimaryIndex() {
-		return primaryIndex;
-	}
+    public int getPrimaryIndex() {
+        return primaryIndex;
+    }
 
-	public int getSecondaryIndex() {
-		return secondaryIndex;
-	}
-
+    public int getSecondaryIndex() {
+        return secondaryIndex;
+    }
 }

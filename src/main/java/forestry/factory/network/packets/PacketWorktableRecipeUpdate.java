@@ -10,11 +10,6 @@
  ******************************************************************************/
 package forestry.factory.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
@@ -23,43 +18,45 @@ import forestry.core.network.packets.PacketCoordinates;
 import forestry.core.proxy.Proxies;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.tiles.TileWorktable;
+import java.io.IOException;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * Used to sync the worktable crafting result from Server to Client.
  */
 public class PacketWorktableRecipeUpdate extends PacketCoordinates implements IForestryPacketClient {
-	private MemorizedRecipe recipe;
+    private MemorizedRecipe recipe;
 
-	public PacketWorktableRecipeUpdate() {
-	}
+    public PacketWorktableRecipeUpdate() {}
 
-	public PacketWorktableRecipeUpdate(TileWorktable worktable) {
-		super(worktable);
-		this.recipe = worktable.getCurrentRecipe();
-	}
+    public PacketWorktableRecipeUpdate(TileWorktable worktable) {
+        super(worktable);
+        this.recipe = worktable.getCurrentRecipe();
+    }
 
-	@Override
-	protected void writeData(DataOutputStreamForestry data) throws IOException {
-		super.writeData(data);
-		data.writeStreamable(recipe);
-	}
+    @Override
+    protected void writeData(DataOutputStreamForestry data) throws IOException {
+        super.writeData(data);
+        data.writeStreamable(recipe);
+    }
 
-	@Override
-	public void readData(DataInputStreamForestry data) throws IOException {
-		super.readData(data);
-		recipe = data.readStreamable(MemorizedRecipe.class);
-	}
+    @Override
+    public void readData(DataInputStreamForestry data) throws IOException {
+        super.readData(data);
+        recipe = data.readStreamable(MemorizedRecipe.class);
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
-		TileEntity tile = getTarget(Proxies.common.getRenderWorld());
-		if (tile instanceof TileWorktable) {
-			((TileWorktable) tile).setCurrentRecipe(recipe);
-		}
-	}
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
+        TileEntity tile = getTarget(Proxies.common.getRenderWorld());
+        if (tile instanceof TileWorktable) {
+            ((TileWorktable) tile).setCurrentRecipe(recipe);
+        }
+    }
 
-	@Override
-	public PacketIdClient getPacketId() {
-		return PacketIdClient.WORKTABLE_CRAFTING_UPDATE;
-	}
+    @Override
+    public PacketIdClient getPacketId() {
+        return PacketIdClient.WORKTABLE_CRAFTING_UPDATE;
+    }
 }

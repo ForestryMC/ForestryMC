@@ -10,40 +10,42 @@
  ******************************************************************************/
 package forestry.farming.triggers;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.core.triggers.Trigger;
 import forestry.core.utils.InventoryUtil;
 import forestry.farming.tiles.TileFarmHatch;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowFertilizer extends Trigger {
 
-	private final float threshold;
+    private final float threshold;
 
-	public TriggerLowFertilizer(String tag, float threshold) {
-		super(tag, "lowFertilizer");
-		this.threshold = threshold;
-	}
+    public TriggerLowFertilizer(String tag, float threshold) {
+        super(tag, "lowFertilizer");
+        this.threshold = threshold;
+    }
 
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
-	}
+    @Override
+    public String getDescription() {
+        return super.getDescription() + " < " + threshold * 100 + "%";
+    }
 
-	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
-		if (!(tile instanceof TileFarmHatch)) {
-			return false;
-		}
+    @Override
+    public boolean isTriggerActive(
+            TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+        if (!(tile instanceof TileFarmHatch)) {
+            return false;
+        }
 
-		TileFarmHatch tileHatch = (TileFarmHatch) tile;
-		IInventory fertilizerInventory = tileHatch.getMultiblockLogic().getController().getFarmInventory().getFertilizerInventory();
-		return !InventoryUtil.containsPercent(fertilizerInventory, threshold);
-	}
+        TileFarmHatch tileHatch = (TileFarmHatch) tile;
+        IInventory fertilizerInventory = tileHatch
+                .getMultiblockLogic()
+                .getController()
+                .getFarmInventory()
+                .getFertilizerInventory();
+        return !InventoryUtil.containsPercent(fertilizerInventory, threshold);
+    }
 }

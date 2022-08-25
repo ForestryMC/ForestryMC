@@ -7,7 +7,7 @@ package forestry.core.multiblock;
  */
 public class MultiblockValidationException extends Exception {
 
-	public MultiblockValidationException(String reason) {
-		super(reason);
-	}
+    public MultiblockValidationException(String reason) {
+        super(reason);
+    }
 }

@@ -17,21 +17,20 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class TreeSpawner implements ITreeSpawner {
 
-	@Override
-	public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) {
-		Vec3 look = player.getLookVec();
+    @Override
+    public boolean spawn(ICommandSender sender, String treeName, EntityPlayer player) {
+        Vec3 look = player.getLookVec();
 
-		int x = (int) Math.round(player.posX + (3 * look.xCoord));
-		int y = (int) Math.round(player.posY);
-		int z = (int) Math.round(player.posZ + (3 * look.zCoord));
+        int x = (int) Math.round(player.posX + (3 * look.xCoord));
+        int y = (int) Math.round(player.posY);
+        int z = (int) Math.round(player.posZ + (3 * look.zCoord));
 
-		WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, x, y, z);
-		if (gen == null) {
-			return false;
-		}
+        WorldGenerator gen = TreeGenHelper.getWorldGen(treeName, player, x, y, z);
+        if (gen == null) {
+            return false;
+        }
 
-		TreeGenHelper.generateTree(gen, player, x, y, z);
-		return true;
-	}
-
+        TreeGenHelper.generateTree(gen, player, x, y, z);
+        return true;
+    }
 }

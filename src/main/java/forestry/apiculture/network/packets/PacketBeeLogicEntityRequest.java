@@ -10,42 +10,38 @@
  ******************************************************************************/
 package forestry.apiculture.network.packets;
 
-import java.io.IOException;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeekeepingLogic;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.IForestryPacketServer;
 import forestry.core.network.PacketIdServer;
 import forestry.core.network.packets.PacketEntityUpdate;
+import java.io.IOException;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class PacketBeeLogicEntityRequest extends PacketEntityUpdate implements IForestryPacketServer {
 
-	public PacketBeeLogicEntityRequest() {
-	}
+    public PacketBeeLogicEntityRequest() {}
 
-	public PacketBeeLogicEntityRequest(Entity entity) {
-		super(entity);
-	}
+    public PacketBeeLogicEntityRequest(Entity entity) {
+        super(entity);
+    }
 
-	@Override
-	public PacketIdServer getPacketId() {
-		return PacketIdServer.BEE_LOGIC_ACTIVE_ENTITY_REQUEST;
-	}
+    @Override
+    public PacketIdServer getPacketId() {
+        return PacketIdServer.BEE_LOGIC_ACTIVE_ENTITY_REQUEST;
+    }
 
-	@Override
-	public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
-		Entity entity = getTarget(player.worldObj);
-		if (entity instanceof IBeeHousing) {
-			IBeeHousing beeHousing = (IBeeHousing) entity;
-			IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
-			if (beekeepingLogic != null) {
-				beekeepingLogic.syncToClient(player);
-			}
-		}
-	}
-
+    @Override
+    public void onPacketData(DataInputStreamForestry data, EntityPlayerMP player) throws IOException {
+        Entity entity = getTarget(player.worldObj);
+        if (entity instanceof IBeeHousing) {
+            IBeeHousing beeHousing = (IBeeHousing) entity;
+            IBeekeepingLogic beekeepingLogic = beeHousing.getBeekeepingLogic();
+            if (beekeepingLogic != null) {
+                beekeepingLogic.syncToClient(player);
+            }
+        }
+    }
 }

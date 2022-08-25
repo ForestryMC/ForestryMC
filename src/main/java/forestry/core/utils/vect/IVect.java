@@ -10,31 +10,29 @@
  ******************************************************************************/
 package forestry.core.utils.vect;
 
-import net.minecraft.util.ChunkCoordinates;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
 import forestry.api.farming.FarmDirection;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Represents a position or dimensions.
  */
 public interface IVect {
-	int getX();
+    int getX();
 
-	int getY();
+    int getY();
 
-	int getZ();
+    int getZ();
 
-	IVect add(IVect other);
+    IVect add(IVect other);
 
-	IVect add(int x, int y, int z);
+    IVect add(int x, int y, int z);
 
-	IVect add(ForgeDirection direction);
+    IVect add(ForgeDirection direction);
 
-	IVect add(FarmDirection direction);
+    IVect add(FarmDirection direction);
 
-	IVect add(ChunkCoordinates coordinates);
+    IVect add(ChunkCoordinates coordinates);
 
-	int[] toArray();
+    int[] toArray();
 }

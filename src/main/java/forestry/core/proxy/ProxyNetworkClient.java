@@ -10,17 +10,16 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.network.NetHandlerPlayClient;
-
 import forestry.core.network.IForestryPacketServer;
+import net.minecraft.client.network.NetHandlerPlayClient;
 
 public class ProxyNetworkClient extends ProxyNetwork {
 
-	@Override
-	public void sendToServer(IForestryPacketServer packet) {
-		NetHandlerPlayClient netHandler = Proxies.common.getClientInstance().getNetHandler();
-		if (netHandler != null) {
-			netHandler.addToSendQueue(packet.getPacket());
-		}
-	}
+    @Override
+    public void sendToServer(IForestryPacketServer packet) {
+        NetHandlerPlayClient netHandler = Proxies.common.getClientInstance().getNetHandler();
+        if (netHandler != null) {
+            netHandler.addToSendQueue(packet.getPacket());
+        }
+    }
 }

@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.core.tiles;
 
+import cofh.api.energy.IEnergyHandler;
 import forestry.energy.EnergyManager;
 
-import cofh.api.energy.IEnergyHandler;
-
 public interface IPowerHandler extends IEnergyHandler {
-	EnergyManager getEnergyManager();
+    EnergyManager getEnergyManager();
 }

@@ -16,33 +16,32 @@ import net.minecraft.world.World;
 
 public class BeverageEffectAntidote extends BeverageEffect {
 
-	private float chance = 0.2f;
+    private float chance = 0.2f;
 
-	public BeverageEffectAntidote(int id, float chance) {
-		super(id);
-		this.chance = chance;
-		this.description = "beverage.effect.antidote";
-	}
+    public BeverageEffectAntidote(int id, float chance) {
+        super(id);
+        this.chance = chance;
+        this.description = "beverage.effect.antidote";
+    }
 
-	@Override
-	public void doEffect(World world, EntityPlayer player) {
+    @Override
+    public void doEffect(World world, EntityPlayer player) {
 
-		if (world.rand.nextFloat() >= chance) {
-			return;
-		}
+        if (world.rand.nextFloat() >= chance) {
+            return;
+        }
 
-		player.removePotionEffect(Potion.poison.getId());
-	}
+        player.removePotionEffect(Potion.poison.getId());
+    }
 
-	@Override
-	public String getLevel() {
-		if (chance > 0.5f) {
-			return "III";
-		} else if (chance > 0.2f) {
-			return "II";
-		} else {
-			return "I";
-		}
-	}
-
+    @Override
+    public String getLevel() {
+        if (chance > 0.5f) {
+            return "III";
+        } else if (chance > 0.2f) {
+            return "II";
+        } else {
+            return "I";
+        }
+    }
 }

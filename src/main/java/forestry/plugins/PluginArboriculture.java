@@ -10,21 +10,6 @@
  ******************************************************************************/
 package forestry.plugins;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
-
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.FuelBurnTimeEvent;
-import net.minecraftforge.oredict.OreDictionary;
-
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -33,7 +18,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.api.arboriculture.TreeManager;
@@ -76,367 +60,452 @@ import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
 import forestry.factory.recipes.FabricatorRecipe;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.FuelBurnTimeEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
-@Plugin(pluginID = "Arboriculture", name = "Arboriculture", author = "Binnie & SirSengir", url = Constants.URL, unlocalizedDescription = "for.plugin.arboriculture.description")
+@Plugin(
+        pluginID = "Arboriculture",
+        name = "Arboriculture",
+        author = "Binnie & SirSengir",
+        url = Constants.URL,
+        unlocalizedDescription = "for.plugin.arboriculture.description")
 public class PluginArboriculture extends ForestryPlugin {
 
-	@SidedProxy(clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient", serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
-	public static ProxyArboriculture proxy;
-	public static String treekeepingMode = "NORMAL";
+    @SidedProxy(
+            clientSide = "forestry.arboriculture.proxy.ProxyArboricultureClient",
+            serverSide = "forestry.arboriculture.proxy.ProxyArboriculture")
+    public static ProxyArboriculture proxy;
 
-	public static int modelIdSaplings;
-	public static int modelIdLeaves;
-	public static int modelIdPods;
+    public static String treekeepingMode = "NORMAL";
 
-	public static final List<Block> validFences = new ArrayList<>();
+    public static int modelIdSaplings;
+    public static int modelIdLeaves;
+    public static int modelIdPods;
 
-	public static ItemRegistryArboriculture items;
-	public static BlockRegistryArboriculture blocks;
+    public static final List<Block> validFences = new ArrayList<>();
 
-	@Override
-	protected void setupAPI() {
-		super.setupAPI();
+    public static ItemRegistryArboriculture items;
+    public static BlockRegistryArboriculture blocks;
 
-		TreeManager.treeFactory = new TreeFactory();
-		TreeManager.treeMutationFactory = new TreeMutationFactory();
+    @Override
+    protected void setupAPI() {
+        super.setupAPI();
 
-		TreeManager.woodItemAccess = new WoodItemAccess();
+        TreeManager.treeFactory = new TreeFactory();
+        TreeManager.treeMutationFactory = new TreeMutationFactory();
 
-		// Init tree interface
-		TreeManager.treeRoot = new TreeHelper();
-		AlleleManager.alleleRegistry.registerSpeciesRoot(TreeManager.treeRoot);
+        TreeManager.woodItemAccess = new WoodItemAccess();
 
-		// Modes
-		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.easy);
-		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.normal);
-		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hard);
-		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hardcore);
-		TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.insane);
-	}
+        // Init tree interface
+        TreeManager.treeRoot = new TreeHelper();
+        AlleleManager.alleleRegistry.registerSpeciesRoot(TreeManager.treeRoot);
 
-	@Override
-	protected void registerItemsAndBlocks() {
-		items = new ItemRegistryArboriculture();
-		blocks = new BlockRegistryArboriculture();
-	}
+        // Modes
+        TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.easy);
+        TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.normal);
+        TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hard);
+        TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.hardcore);
+        TreeManager.treeRoot.registerTreekeepingMode(TreekeepingMode.insane);
+    }
 
-	@Override
-	public void preInit() {
-		super.preInit();
+    @Override
+    protected void registerItemsAndBlocks() {
+        items = new ItemRegistryArboriculture();
+        blocks = new BlockRegistryArboriculture();
+    }
 
-		// register for FuelBurnTimeEvent
-		MinecraftForge.EVENT_BUS.register(this);
+    @Override
+    public void preInit() {
+        super.preInit();
 
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			WoodItemAccess.registerLog(blocks.logs, woodType, false);
-			WoodItemAccess.registerPlanks(blocks.planks, woodType, false);
-			WoodItemAccess.registerSlab(blocks.slabs, woodType, false);
-			WoodItemAccess.registerFence(blocks.fences, woodType, false);
-			WoodItemAccess.registerStairs(blocks.stairs, woodType, false);
+        // register for FuelBurnTimeEvent
+        MinecraftForge.EVENT_BUS.register(this);
 
-			WoodItemAccess.registerLog(blocks.logsFireproof, woodType, true);
-			WoodItemAccess.registerPlanks(blocks.planksFireproof, woodType, true);
-			WoodItemAccess.registerSlab(blocks.slabsFireproof, woodType, true);
-			WoodItemAccess.registerFence(blocks.fencesFireproof, woodType, true);
-			WoodItemAccess.registerStairs(blocks.stairsFireproof, woodType, true);
-		}
+        for (EnumWoodType woodType : EnumWoodType.VALUES) {
+            WoodItemAccess.registerLog(blocks.logs, woodType, false);
+            WoodItemAccess.registerPlanks(blocks.planks, woodType, false);
+            WoodItemAccess.registerSlab(blocks.slabs, woodType, false);
+            WoodItemAccess.registerFence(blocks.fences, woodType, false);
+            WoodItemAccess.registerStairs(blocks.stairs, woodType, false);
 
-		MachineDefinition definitionChest = new MachineDefinition(BlockArboricultureType.ARBCHEST.ordinal(),
-				"forestry.ArbChest", TileArboristChest.class, Proxies.render.getRenderChest("arbchest"))
-				.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-		blocks.arboriculture.addDefinition(definitionChest);
+            WoodItemAccess.registerLog(blocks.logsFireproof, woodType, true);
+            WoodItemAccess.registerPlanks(blocks.planksFireproof, woodType, true);
+            WoodItemAccess.registerSlab(blocks.slabsFireproof, woodType, true);
+            WoodItemAccess.registerFence(blocks.fencesFireproof, woodType, true);
+            WoodItemAccess.registerStairs(blocks.stairsFireproof, woodType, true);
+        }
 
-		// Init rendering
-		proxy.initializeRendering();
+        MachineDefinition definitionChest = new MachineDefinition(
+                        BlockArboricultureType.ARBCHEST.ordinal(),
+                        "forestry.ArbChest",
+                        TileArboristChest.class,
+                        Proxies.render.getRenderChest("arbchest"))
+                .setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+        blocks.arboriculture.addDefinition(definitionChest);
 
-		// Register vanilla and forestry fence ids
-		validFences.add(blocks.fences);
-		validFences.add(blocks.fencesFireproof);
-		validFences.add(Blocks.fence);
-		validFences.add(Blocks.fence_gate);
-		validFences.add(Blocks.nether_brick_fence);
+        // Init rendering
+        proxy.initializeRendering();
 
-		// Commands
-		PluginCore.rootCommand.addChildCommand(new CommandTree());
-	}
+        // Register vanilla and forestry fence ids
+        validFences.add(blocks.fences);
+        validFences.add(blocks.fencesFireproof);
+        validFences.add(Blocks.fence);
+        validFences.add(Blocks.fence_gate);
+        validFences.add(Blocks.nether_brick_fence);
 
-	@Override
-	public void doInit() {
-		super.doInit();
+        // Commands
+        PluginCore.rootCommand.addChildCommand(new CommandTree());
+    }
 
-		// Create alleles
-		createAlleles();
-		TreeDefinition.initTrees();
-		registerErsatzGenomes();
+    @Override
+    public void doInit() {
+        super.doInit();
 
-		GameRegistry.registerTileEntity(TileSapling.class, "forestry.Sapling");
-		GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
-		GameRegistry.registerTileEntity(TileWood.class, "forestry.Wood");
-		GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
+        // Create alleles
+        createAlleles();
+        TreeDefinition.initTrees();
+        registerErsatzGenomes();
 
-		blocks.arboriculture.init();
+        GameRegistry.registerTileEntity(TileSapling.class, "forestry.Sapling");
+        GameRegistry.registerTileEntity(TileLeaves.class, "forestry.Leaves");
+        GameRegistry.registerTileEntity(TileWood.class, "forestry.Wood");
+        GameRegistry.registerTileEntity(TileFruitPod.class, "forestry.Pods");
 
-		if (Config.enableVillagers) {
-			VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
-			Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_LUMBERJACK, Constants.TEXTURE_SKIN_LUMBERJACK);
-			VillagerRegistry.instance().registerVillageTradeHandler(Constants.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
-		}
-	}
+        blocks.arboriculture.init();
 
-	@Override
-	public void postInit() {
-		super.postInit();
-		registerDungeonLoot();
-	}
+        if (Config.enableVillagers) {
+            VillagerRegistry.instance().registerVillagerId(Constants.ID_VILLAGER_LUMBERJACK);
+            Proxies.render.registerVillagerSkin(Constants.ID_VILLAGER_LUMBERJACK, Constants.TEXTURE_SKIN_LUMBERJACK);
+            VillagerRegistry.instance()
+                    .registerVillageTradeHandler(Constants.ID_VILLAGER_LUMBERJACK, new VillageHandlerArboriculture());
+        }
+    }
 
-	@Override
-	protected void registerCrates() {
-		ICrateRegistry crateRegistry = StorageManager.crateRegistry;
-		crateRegistry.registerCrate(EnumFruit.CHERRY.getStack(), "cratedCherry");
-		crateRegistry.registerCrate(EnumFruit.WALNUT.getStack(), "cratedWalnut");
-		crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack(), "cratedChestnut");
-		crateRegistry.registerCrate(EnumFruit.LEMON.getStack(), "cratedLemon");
-		crateRegistry.registerCrate(EnumFruit.PLUM.getStack(), "cratedPlum");
-		crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack(), "cratedPapaya");
-		crateRegistry.registerCrate(EnumFruit.DATES.getStack(), "cratedDates");
-	}
+    @Override
+    public void postInit() {
+        super.postInit();
+        registerDungeonLoot();
+    }
 
-	@Override
-	protected void registerRecipes() {
+    @Override
+    protected void registerCrates() {
+        ICrateRegistry crateRegistry = StorageManager.crateRegistry;
+        crateRegistry.registerCrate(EnumFruit.CHERRY.getStack(), "cratedCherry");
+        crateRegistry.registerCrate(EnumFruit.WALNUT.getStack(), "cratedWalnut");
+        crateRegistry.registerCrate(EnumFruit.CHESTNUT.getStack(), "cratedChestnut");
+        crateRegistry.registerCrate(EnumFruit.LEMON.getStack(), "cratedLemon");
+        crateRegistry.registerCrate(EnumFruit.PLUM.getStack(), "cratedPlum");
+        crateRegistry.registerCrate(EnumFruit.PAPAYA.getStack(), "cratedPapaya");
+        crateRegistry.registerCrate(EnumFruit.DATES.getStack(), "cratedDates");
+    }
 
-		RecipeUtil.addSmelting(new ItemStack(blocks.logs, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.coal, 1, 1), 0.15F);
+    @Override
+    protected void registerRecipes() {
 
-		for (EnumWoodType woodType : EnumWoodType.VALUES) {
-			ItemStack planks = TreeManager.woodItemAccess.getPlanks(woodType, false);
-			ItemStack logs = TreeManager.woodItemAccess.getLog(woodType, false);
-			ItemStack slabs = TreeManager.woodItemAccess.getSlab(woodType, false);
-			ItemStack fences = TreeManager.woodItemAccess.getFence(woodType, false);
-			ItemStack stairs = TreeManager.woodItemAccess.getStairs(woodType, false);
+        RecipeUtil.addSmelting(
+                new ItemStack(blocks.logs, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.coal, 1, 1), 0.15F);
 
-			ItemStack fireproofPlanks = TreeManager.woodItemAccess.getPlanks(woodType, true);
-			ItemStack fireproofLogs = TreeManager.woodItemAccess.getLog(woodType, true);
-			ItemStack fireproofSlabs = TreeManager.woodItemAccess.getSlab(woodType, true);
-			ItemStack fireproofFences = TreeManager.woodItemAccess.getFence(woodType, true);
-			ItemStack fireproofStairs = TreeManager.woodItemAccess.getStairs(woodType, true);
+        for (EnumWoodType woodType : EnumWoodType.VALUES) {
+            ItemStack planks = TreeManager.woodItemAccess.getPlanks(woodType, false);
+            ItemStack logs = TreeManager.woodItemAccess.getLog(woodType, false);
+            ItemStack slabs = TreeManager.woodItemAccess.getSlab(woodType, false);
+            ItemStack fences = TreeManager.woodItemAccess.getFence(woodType, false);
+            ItemStack stairs = TreeManager.woodItemAccess.getStairs(woodType, false);
 
-			planks.stackSize = 4;
-			logs.stackSize = 1;
-			RecipeUtil.addShapelessRecipe(planks.copy(), logs.copy());
+            ItemStack fireproofPlanks = TreeManager.woodItemAccess.getPlanks(woodType, true);
+            ItemStack fireproofLogs = TreeManager.woodItemAccess.getLog(woodType, true);
+            ItemStack fireproofSlabs = TreeManager.woodItemAccess.getSlab(woodType, true);
+            ItemStack fireproofFences = TreeManager.woodItemAccess.getFence(woodType, true);
+            ItemStack fireproofStairs = TreeManager.woodItemAccess.getStairs(woodType, true);
 
-			fireproofPlanks.stackSize = 4;
-			fireproofLogs.stackSize = 1;
-			RecipeUtil.addShapelessRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
+            planks.stackSize = 4;
+            logs.stackSize = 1;
+            RecipeUtil.addShapelessRecipe(planks.copy(), logs.copy());
 
-			slabs.stackSize = 6;
-			planks.stackSize = 1;
-			RecipeUtil.addPriorityRecipe(slabs.copy(),
-					"###",
-					'#', planks.copy());
+            fireproofPlanks.stackSize = 4;
+            fireproofLogs.stackSize = 1;
+            RecipeUtil.addShapelessRecipe(fireproofPlanks.copy(), fireproofLogs.copy());
 
-			fireproofSlabs.stackSize = 6;
-			fireproofPlanks.stackSize = 1;
-			RecipeUtil.addPriorityRecipe(fireproofSlabs.copy(),
-					"###",
-					'#', fireproofPlanks.copy());
+            slabs.stackSize = 6;
+            planks.stackSize = 1;
+            RecipeUtil.addPriorityRecipe(slabs.copy(), "###", '#', planks.copy());
 
-			fences.stackSize = 3;
-			planks.stackSize = 1;
-			RecipeUtil.addRecipe(fences.copy(),
-					"#X#",
-					"#X#",
-					'#', planks.copy(), 'X', "stickWood");
+            fireproofSlabs.stackSize = 6;
+            fireproofPlanks.stackSize = 1;
+            RecipeUtil.addPriorityRecipe(fireproofSlabs.copy(), "###", '#', fireproofPlanks.copy());
 
-			fireproofFences.stackSize = 3;
-			fireproofPlanks.stackSize = 1;
-			RecipeUtil.addRecipe(fireproofFences.copy(),
-					"#X#",
-					"#X#",
-					'#', fireproofPlanks.copy(), 'X', "stickWood");
+            fences.stackSize = 3;
+            planks.stackSize = 1;
+            RecipeUtil.addRecipe(fences.copy(), "#X#", "#X#", '#', planks.copy(), 'X', "stickWood");
 
-			stairs.stackSize = 4;
-			planks.stackSize = 1;
-			RecipeUtil.addPriorityRecipe(stairs.copy(),
-					"#  ",
-					"## ",
-					"###",
-					'#', planks.copy());
+            fireproofFences.stackSize = 3;
+            fireproofPlanks.stackSize = 1;
+            RecipeUtil.addRecipe(fireproofFences.copy(), "#X#", "#X#", '#', fireproofPlanks.copy(), 'X', "stickWood");
 
-			fireproofStairs.stackSize = 4;
-			fireproofPlanks.stackSize = 1;
-			RecipeUtil.addPriorityRecipe(fireproofStairs.copy(),
-					"#  ",
-					"## ",
-					"###",
-					'#', fireproofPlanks.copy());
+            stairs.stackSize = 4;
+            planks.stackSize = 1;
+            RecipeUtil.addPriorityRecipe(stairs.copy(), "#  ", "## ", "###", '#', planks.copy());
 
-			// Fabricator recipes
-			if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
-				logs.stackSize = 1;
-				fireproofLogs.stackSize = 1;
-				RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[]{
-						" # ",
-						"#X#",
-						" # ",
-						'#', PluginCore.items.refractoryWax,
-						'X', logs.copy()}));
+            fireproofStairs.stackSize = 4;
+            fireproofPlanks.stackSize = 1;
+            RecipeUtil.addPriorityRecipe(fireproofStairs.copy(), "#  ", "## ", "###", '#', fireproofPlanks.copy());
 
-				planks.stackSize = 1;
-				fireproofPlanks.stackSize = 5;
-				RecipeManagers.fabricatorManager.addRecipe(new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlanks.copy(), new Object[]{
-						"X#X",
-						"#X#",
-						"X#X",
-						'#', PluginCore.items.refractoryWax,
-						'X', planks.copy()}));
-			}
-		}
+            // Fabricator recipes
+            if (PluginManager.Module.FACTORY.isEnabled() && PluginManager.Module.APICULTURE.isEnabled()) {
+                logs.stackSize = 1;
+                fireproofLogs.stackSize = 1;
+                RecipeManagers.fabricatorManager.addRecipe(
+                        new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[] {
+                            " # ", "#X#", " # ", '#', PluginCore.items.refractoryWax, 'X', logs.copy()
+                        }));
 
-		if (PluginManager.Module.FACTORY.isEnabled()) {
-			// Treealyzer
-			RecipeManagers.carpenterManager.addRecipe(100, Fluids.WATER.getFluid(2000), null, items.treealyzer.getItemStack(), "X#X", "X#X", "RDR",
-					'#', "paneGlass",
-					'X', "ingotCopper",
-					'R', "dustRedstone",
-					'D', "gemDiamond");
+                planks.stackSize = 1;
+                fireproofPlanks.stackSize = 5;
+                RecipeManagers.fabricatorManager.addRecipe(
+                        new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlanks.copy(), new Object[] {
+                            "X#X", "#X#", "X#X", '#', PluginCore.items.refractoryWax, 'X', planks.copy()
+                        }));
+            }
+        }
 
-			// SQUEEZER RECIPES
-			int seedOilMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
-			int juiceMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
-			int mulchMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
-			ItemStack mulch = new ItemStack(PluginCore.items.mulch);
-			RecipeManagers.squeezerManager.addRecipe(20, new ItemStack[]{EnumFruit.CHERRY.getStack()}, Fluids.SEEDOIL.getFluid(5 * seedOilMultiplier), mulch, 5);
-			RecipeManagers.squeezerManager.addRecipe(60, new ItemStack[]{EnumFruit.WALNUT.getStack()}, Fluids.SEEDOIL.getFluid(18 * seedOilMultiplier), mulch, 5);
-			RecipeManagers.squeezerManager.addRecipe(70, new ItemStack[]{EnumFruit.CHESTNUT.getStack()}, Fluids.SEEDOIL.getFluid(22 * seedOilMultiplier), mulch, 2);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.LEMON.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 2), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PLUM.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)), mulch, mulchMultiplier * 3);
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.PAPAYA.getStack()}, Fluids.JUICE.getFluid(juiceMultiplier * 3), mulch, (int) Math.floor(mulchMultiplier * 0.5f));
-			RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[]{EnumFruit.DATES.getStack()}, Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)), mulch, mulchMultiplier);
+        if (PluginManager.Module.FACTORY.isEnabled()) {
+            // Treealyzer
+            RecipeManagers.carpenterManager.addRecipe(
+                    100,
+                    Fluids.WATER.getFluid(2000),
+                    null,
+                    items.treealyzer.getItemStack(),
+                    "X#X",
+                    "X#X",
+                    "RDR",
+                    '#',
+                    "paneGlass",
+                    'X',
+                    "ingotCopper",
+                    'R',
+                    "dustRedstone",
+                    'D',
+                    "gemDiamond");
 
-			RecipeUtil.addFermenterRecipes(items.sapling.getItemStack(), ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
-		}
+            // SQUEEZER RECIPES
+            int seedOilMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
+            int juiceMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
+            int mulchMultiplier = ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple");
+            ItemStack mulch = new ItemStack(PluginCore.items.mulch);
+            RecipeManagers.squeezerManager.addRecipe(
+                    20,
+                    new ItemStack[] {EnumFruit.CHERRY.getStack()},
+                    Fluids.SEEDOIL.getFluid(5 * seedOilMultiplier),
+                    mulch,
+                    5);
+            RecipeManagers.squeezerManager.addRecipe(
+                    60,
+                    new ItemStack[] {EnumFruit.WALNUT.getStack()},
+                    Fluids.SEEDOIL.getFluid(18 * seedOilMultiplier),
+                    mulch,
+                    5);
+            RecipeManagers.squeezerManager.addRecipe(
+                    70,
+                    new ItemStack[] {EnumFruit.CHESTNUT.getStack()},
+                    Fluids.SEEDOIL.getFluid(22 * seedOilMultiplier),
+                    mulch,
+                    2);
+            RecipeManagers.squeezerManager.addRecipe(
+                    10,
+                    new ItemStack[] {EnumFruit.LEMON.getStack()},
+                    Fluids.JUICE.getFluid(juiceMultiplier * 2),
+                    mulch,
+                    (int) Math.floor(mulchMultiplier * 0.5f));
+            RecipeManagers.squeezerManager.addRecipe(
+                    10,
+                    new ItemStack[] {EnumFruit.PLUM.getStack()},
+                    Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)),
+                    mulch,
+                    mulchMultiplier * 3);
+            RecipeManagers.squeezerManager.addRecipe(
+                    10,
+                    new ItemStack[] {EnumFruit.PAPAYA.getStack()},
+                    Fluids.JUICE.getFluid(juiceMultiplier * 3),
+                    mulch,
+                    (int) Math.floor(mulchMultiplier * 0.5f));
+            RecipeManagers.squeezerManager.addRecipe(
+                    10,
+                    new ItemStack[] {EnumFruit.DATES.getStack()},
+                    Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)),
+                    mulch,
+                    mulchMultiplier);
 
-		// Grafter
-		RecipeUtil.addRecipe(items.grafter.getItemStack(),
-				"  B",
-				" # ",
-				"#  ",
-				'B', "ingotBronze",
-				'#', "stickWood");
+            RecipeUtil.addFermenterRecipes(
+                    items.sapling.getItemStack(),
+                    ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"),
+                    Fluids.BIOMASS);
+        }
 
-		// ANALYZER
-		RecipeUtil.addRecipe(PluginCore.blocks.core.get(BlockCoreType.ANALYZER),
-				"XTX",
-				" Y ",
-				"X X",
-				'Y', PluginCore.items.sturdyCasing,
-				'T', items.treealyzer,
-				'X', "ingotBronze");
+        // Grafter
+        RecipeUtil.addRecipe(items.grafter.getItemStack(), "  B", " # ", "#  ", 'B', "ingotBronze", '#', "stickWood");
 
-		RecipeUtil.addRecipe(blocks.arboriculture.get(BlockArboricultureType.ARBCHEST),
-				" # ",
-				"XYX",
-				"XXX",
-				'#', "blockGlass",
-				'X', "treeSapling",
-				'Y', "chestWood");
-	}
+        // ANALYZER
+        RecipeUtil.addRecipe(
+                PluginCore.blocks.core.get(BlockCoreType.ANALYZER),
+                "XTX",
+                " Y ",
+                "X X",
+                'Y',
+                PluginCore.items.sturdyCasing,
+                'T',
+                items.treealyzer,
+                'X',
+                "ingotBronze");
 
-	private static void createAlleles() {
+        RecipeUtil.addRecipe(
+                blocks.arboriculture.get(BlockArboricultureType.ARBCHEST),
+                " # ",
+                "XYX",
+                "XXX",
+                '#',
+                "blockGlass",
+                'X',
+                "treeSapling",
+                'Y',
+                "chestWood");
+    }
 
-		TreeBranchDefinition.createAlleles();
+    private static void createAlleles() {
 
-		AlleleFruit.createAlleles();
-		AlleleGrowth.createAlleles();
-		AlleleLeafEffect.createAlleles();
-		AllelePlantType.createAlleles();
-	}
+        TreeBranchDefinition.createAlleles();
 
-	private static void registerErsatzGenomes() {
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 0), TreeDefinition.Oak.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 1), TreeDefinition.Spruce.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 2), TreeDefinition.Birch.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 0), TreeDefinition.AcaciaVanilla.getIndividual());
-		AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 1), TreeDefinition.DarkOak.getIndividual());
+        AlleleFruit.createAlleles();
+        AlleleGrowth.createAlleles();
+        AlleleLeafEffect.createAlleles();
+        AllelePlantType.createAlleles();
+    }
 
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 0), TreeDefinition.Oak.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 1), TreeDefinition.Spruce.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 2), TreeDefinition.Birch.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 3), TreeDefinition.Jungle.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
-		AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 5), TreeDefinition.DarkOak.getIndividual());
-	}
+    private static void registerErsatzGenomes() {
+        AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 0), TreeDefinition.Oak.getIndividual());
+        AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 1), TreeDefinition.Spruce.getIndividual());
+        AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 2), TreeDefinition.Birch.getIndividual());
+        AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 3), TreeDefinition.Jungle.getIndividual());
+        AlleleManager.ersatzSpecimen.put(
+                new ItemStack(Blocks.leaves2, 1, 0), TreeDefinition.AcaciaVanilla.getIndividual());
+        AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 1), TreeDefinition.DarkOak.getIndividual());
 
-	@Override
-	public IFuelHandler getFuelHandler() {
-		return new FuelHandler();
-	}
+        AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 0), TreeDefinition.Oak.getIndividual());
+        AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 1), TreeDefinition.Spruce.getIndividual());
+        AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 2), TreeDefinition.Birch.getIndividual());
+        AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 3), TreeDefinition.Jungle.getIndividual());
+        AlleleManager.ersatzSaplings.put(
+                new ItemStack(Blocks.sapling, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
+        AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 5), TreeDefinition.DarkOak.getIndividual());
+    }
 
-	@Override
-	public IPacketRegistry getPacketRegistry() {
-		return new PacketRegistryArboriculture();
-	}
+    @Override
+    public IFuelHandler getFuelHandler() {
+        return new FuelHandler();
+    }
 
-	@Override
-	public boolean processIMCMessage(IMCMessage message) {
-		if (message.key.equals("add-fence-block") && message.isStringMessage()) {
-			Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
+    @Override
+    public IPacketRegistry getPacketRegistry() {
+        return new PacketRegistryArboriculture();
+    }
 
-			if (block != null && block != Blocks.air) {
-				validFences.add(block);
-			} else {
-				logInvalidIMCMessage(message);
-			}
-			return true;
-		}
-		return super.processIMCMessage(message);
-	}
+    @Override
+    public boolean processIMCMessage(IMCMessage message) {
+        if (message.key.equals("add-fence-block") && message.isStringMessage()) {
+            Block block = GameData.getBlockRegistry().getRaw(message.getStringValue());
 
-	private static void registerDungeonLoot() {
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(items.grafter.getItemStack(), 1, 1, 8));
+            if (block != null && block != Blocks.air) {
+                validFences.add(block);
+            } else {
+                logInvalidIMCMessage(message);
+            }
+            return true;
+        }
+        return super.processIMCMessage(message);
+    }
 
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
-		ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
+    private static void registerDungeonLoot() {
+        ChestGenHooks.addItem(
+                Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                new WeightedRandomChestContent(items.grafter.getItemStack(), 1, 1, 8));
 
-		if (PluginManager.Module.APICULTURE.isEnabled()) {
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Spruce.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
-			ChestGenHooks.addItem(Constants.CHEST_GEN_HOOK_NATURALIST_CHEST, new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
-		}
-	}
+        ChestGenHooks.addItem(
+                Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                new WeightedRandomChestContent(TreeDefinition.Oak.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
+        ChestGenHooks.addItem(
+                Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                new WeightedRandomChestContent(
+                        TreeDefinition.Spruce.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
+        ChestGenHooks.addItem(
+                Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
+        ChestGenHooks.addItem(
+                Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                new WeightedRandomChestContent(TreeDefinition.Larch.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
+        ChestGenHooks.addItem(
+                Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                new WeightedRandomChestContent(TreeDefinition.Lime.getMemberStack(EnumGermlingType.SAPLING), 1, 2, 4));
 
-	private static class FuelHandler implements IFuelHandler {
-		@Override
-		public int getBurnTime(ItemStack fuel) {
-			Item item = fuel.getItem();
+        if (PluginManager.Module.APICULTURE.isEnabled()) {
+            ChestGenHooks.addItem(
+                    Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                    new WeightedRandomChestContent(
+                            TreeDefinition.Oak.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+            ChestGenHooks.addItem(
+                    Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                    new WeightedRandomChestContent(
+                            TreeDefinition.Spruce.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+            ChestGenHooks.addItem(
+                    Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                    new WeightedRandomChestContent(
+                            TreeDefinition.Birch.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+            ChestGenHooks.addItem(
+                    Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                    new WeightedRandomChestContent(
+                            TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
+            ChestGenHooks.addItem(
+                    Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
+                    new WeightedRandomChestContent(
+                            TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
+        }
+    }
 
-			if (items.sapling == item) {
-				return 100;
-			}
+    private static class FuelHandler implements IFuelHandler {
+        @Override
+        public int getBurnTime(ItemStack fuel) {
+            Item item = fuel.getItem();
 
-			return 0;
-		}
-	}
+            if (items.sapling == item) {
+                return 100;
+            }
 
-	@SubscribeEvent
-	public void fuelBurnTimeEvent(FuelBurnTimeEvent fuelBurnTimeEvent) {
-		Item item = fuelBurnTimeEvent.fuel.getItem();
-		Block block = Block.getBlockFromItem(item);
+            return 0;
+        }
+    }
 
-		if (block instanceof IWoodTyped) {
-			IWoodTyped woodTypedBlock = (IWoodTyped) block;
-			if (woodTypedBlock.isFireproof()) {
-				fuelBurnTimeEvent.burnTime = 0;
-				fuelBurnTimeEvent.setResult(Event.Result.DENY);
-			} else if (blocks.slabs == block) {
-				fuelBurnTimeEvent.burnTime = 150;
-				fuelBurnTimeEvent.setResult(Event.Result.DENY);
-			}
-		}
-	}
+    @SubscribeEvent
+    public void fuelBurnTimeEvent(FuelBurnTimeEvent fuelBurnTimeEvent) {
+        Item item = fuelBurnTimeEvent.fuel.getItem();
+        Block block = Block.getBlockFromItem(item);
+
+        if (block instanceof IWoodTyped) {
+            IWoodTyped woodTypedBlock = (IWoodTyped) block;
+            if (woodTypedBlock.isFireproof()) {
+                fuelBurnTimeEvent.burnTime = 0;
+                fuelBurnTimeEvent.setResult(Event.Result.DENY);
+            } else if (blocks.slabs == block) {
+                fuelBurnTimeEvent.burnTime = 150;
+                fuelBurnTimeEvent.setResult(Event.Result.DENY);
+            }
+        }
+    }
 }

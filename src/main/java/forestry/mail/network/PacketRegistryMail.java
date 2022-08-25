@@ -19,14 +19,14 @@ import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
 
 public class PacketRegistryMail extends PacketRegistry {
-	@Override
-	public void registerPackets() {
-		registerServerPacket(new PacketLetterInfoRequest());
-		registerServerPacket(new PacketTraderAddressRequest());
-		registerServerPacket(new PacketLetterTextSet());
-		
-		registerClientPacket(new PacketLetterInfoResponse());
-		registerClientPacket(new PacketTraderAddressResponse());
-		registerClientPacket(new PacketPOBoxInfoUpdate());
-	}
+    @Override
+    public void registerPackets() {
+        registerServerPacket(new PacketLetterInfoRequest());
+        registerServerPacket(new PacketTraderAddressRequest());
+        registerServerPacket(new PacketLetterTextSet());
+
+        registerClientPacket(new PacketLetterInfoResponse());
+        registerClientPacket(new PacketTraderAddressResponse());
+        registerClientPacket(new PacketPOBoxInfoUpdate());
+    }
 }

@@ -16,15 +16,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemForestryBonemeal extends ItemForestry {
-	@Override
-	public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7, float facingX, float facingY, float facingZ) {
-		if (ItemDye.applyBonemeal(itemstack, world, x, y, z, player)) {
-			if (!world.isRemote) {
-				world.playAuxSFX(2005, x, y, z, 0);
-			}
+    @Override
+    public boolean onItemUse(
+            ItemStack itemstack,
+            EntityPlayer player,
+            World world,
+            int x,
+            int y,
+            int z,
+            int par7,
+            float facingX,
+            float facingY,
+            float facingZ) {
+        if (ItemDye.applyBonemeal(itemstack, world, x, y, z, player)) {
+            if (!world.isRemote) {
+                world.playAuxSFX(2005, x, y, z, 0);
+            }
 
-			return true;
-		}
-		return super.onItemUse(itemstack, player, world, x, y, z, par7, facingX, facingY, facingZ);
-	}
+            return true;
+        }
+        return super.onItemUse(itemstack, player, world, x, y, z, par7, facingX, facingY, facingZ);
+    }
 }

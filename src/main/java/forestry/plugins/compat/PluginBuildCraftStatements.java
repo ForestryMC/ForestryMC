@@ -10,66 +10,66 @@
  ******************************************************************************/
 package forestry.plugins.compat;
 
-import java.util.Collection;
-
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import cpw.mods.fml.common.Optional;
-
-import forestry.core.config.Constants;
-import forestry.core.utils.ModUtil;
-import forestry.plugins.ForestryPlugin;
-import forestry.plugins.Plugin;
-
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.ITriggerProvider;
 import buildcraft.api.statements.StatementManager;
+import cpw.mods.fml.common.Optional;
+import forestry.core.config.Constants;
+import forestry.core.utils.ModUtil;
+import forestry.plugins.ForestryPlugin;
+import forestry.plugins.Plugin;
+import java.util.Collection;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
-@Plugin(pluginID = "BC6|Statements", name = "BuildCraft 6 Statements", author = "mezz", url = Constants.URL, unlocalizedDescription = "for.plugin.buildcraft6.description")
+@Plugin(
+        pluginID = "BC6|Statements",
+        name = "BuildCraft 6 Statements",
+        author = "mezz",
+        url = Constants.URL,
+        unlocalizedDescription = "for.plugin.buildcraft6.description")
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public class PluginBuildCraftStatements extends ForestryPlugin implements ITriggerProvider {
 
-	@Override
-	public boolean isAvailable() {
-		return ModUtil.isAPILoaded("buildcraft.api.statements", "[1.0, 2.0)");
-	}
+    @Override
+    public boolean isAvailable() {
+        return ModUtil.isAPILoaded("buildcraft.api.statements", "[1.0, 2.0)");
+    }
 
-	@Override
-	public String getFailMessage() {
-		return "Compatible BuildCraftAPI|statements version not found";
-	}
+    @Override
+    public String getFailMessage() {
+        return "Compatible BuildCraftAPI|statements version not found";
+    }
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public void doInit() {
-		// Add custom trigger handler
-		StatementManager.registerTriggerProvider(this);
-	}
+    @Optional.Method(modid = "BuildCraftAPI|statements")
+    @Override
+    public void doInit() {
+        // Add custom trigger handler
+        StatementManager.registerTriggerProvider(this);
+    }
 
-	/* ITriggerProvider */
+    /* ITriggerProvider */
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
-		TileEntity tile = container.getTile();
-		if (tile instanceof ITriggerProvider) {
-			return ((ITriggerProvider) tile).getInternalTriggers(container);
-		}
+    @Optional.Method(modid = "BuildCraftAPI|statements")
+    @Override
+    public Collection<ITriggerInternal> getInternalTriggers(IStatementContainer container) {
+        TileEntity tile = container.getTile();
+        if (tile instanceof ITriggerProvider) {
+            return ((ITriggerProvider) tile).getInternalTriggers(container);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Optional.Method(modid = "BuildCraftAPI|statements")
-	@Override
-	public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
-		if (tile instanceof ITriggerProvider) {
-			return ((ITriggerProvider) tile).getExternalTriggers(side, tile);
-		}
+    @Optional.Method(modid = "BuildCraftAPI|statements")
+    @Override
+    public Collection<ITriggerExternal> getExternalTriggers(ForgeDirection side, TileEntity tile) {
+        if (tile instanceof ITriggerProvider) {
+            return ((ITriggerProvider) tile).getExternalTriggers(side, tile);
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

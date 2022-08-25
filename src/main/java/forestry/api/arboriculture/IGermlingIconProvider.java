@@ -14,6 +14,7 @@ import net.minecraft.util.IIcon;
  * There is no default implementation because every sapling has a unique icon.
  */
 public interface IGermlingIconProvider {
-	void registerIcons(IIconRegister register);
-	IIcon getIcon(EnumGermlingType type, int renderPass);
+    void registerIcons(IIconRegister register);
+
+    IIcon getIcon(EnumGermlingType type, int renderPass);
 }

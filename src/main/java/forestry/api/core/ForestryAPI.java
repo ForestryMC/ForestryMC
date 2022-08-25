@@ -1,21 +1,20 @@
 /*******************************************************************************
  * Copyright 2011-2014 SirSengir
- * 
+ *
  * This work (the API) is licensed under the "MIT" License, see LICENSE.txt for details.
  ******************************************************************************/
 package forestry.api.core;
 
-import java.util.Set;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Set;
 
 /**
  * Forestry's API is divided into several subcategories to make it easier to understand.
- * 
+ *
  * If you need to distribute API files, try to only include the parts you are actually
  * using to minimize conflicts due to API changes.
- * 
+ *
  *  .core     - Miscallenous base classes and interfaces as well as some basics for tools, armor, game modes and stuff needed by biome mods.
  *  .fuels    - Managers and classes to facilitate adding fuels to various engines and machines.
  *  .recipes  - Managers and helpers to facilitate adding new recipes to various machines.
@@ -25,44 +24,44 @@ import cpw.mods.fml.relauncher.SideOnly;
  *  			\ .apiculture       - Bees.
  *  			\ .arboriculture    - Trees.
  *  			\ .lepidopterology  - Butterflies.
- *  
+ *
  *  Note that if Forestry is not present, all these references will be null.
  */
 public class ForestryAPI {
 
-	/**
-	 * The main mod instance for Forestry.
-	 */
-	public static Object instance;
+    /**
+     * The main mod instance for Forestry.
+     */
+    public static Object instance;
 
-	/**
-	 * A {@link ITextureManager} needed for some things in the API.
-	 */
-	@SideOnly(Side.CLIENT)
-	public static ITextureManager textureManager;
+    /**
+     * A {@link ITextureManager} needed for some things in the API.
+     */
+    @SideOnly(Side.CLIENT)
+    public static ITextureManager textureManager;
 
-	public static IClimateManager climateManager;
+    public static IClimateManager climateManager;
 
-	/**
-	 * The currently active {@link IGameMode}.
-	 */
-	public static IGameMode activeMode;
+    /**
+     * The currently active {@link IGameMode}.
+     */
+    public static IGameMode activeMode;
 
-	/**
-	 * Provides information on certain Forestry constants (Villager IDs, Chest gen keys, etc)
-	 */
-	public static IForestryConstants forestryConstants;
+    /**
+     * Provides information on certain Forestry constants (Villager IDs, Chest gen keys, etc)
+     */
+    public static IForestryConstants forestryConstants;
 
-	/**
-	 * The currently enabled Forestry plugins.
-	 * Can be used to check if certain features are available, for example:
-	 * ForestryAPI.enabledPlugins.contains("APICULTURE")
-	 */
-	public static Set<String> enabledPlugins;
+    /**
+     * The currently enabled Forestry plugins.
+     * Can be used to check if certain features are available, for example:
+     * ForestryAPI.enabledPlugins.contains("APICULTURE")
+     */
+    public static Set<String> enabledPlugins;
 
-	/**
-	 * Instance of the errorStateRegistry for registering errors.
-	 * Also creates new instances of IErrorLogic.
-	 */
-	public static IErrorStateRegistry errorStateRegistry;
+    /**
+     * Instance of the errorStateRegistry for registering errors.
+     * Also creates new instances of IErrorLogic.
+     */
+    public static IErrorStateRegistry errorStateRegistry;
 }

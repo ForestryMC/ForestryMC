@@ -10,25 +10,24 @@
  ******************************************************************************/
 package forestry.arboriculture.items;
 
-import net.minecraftforge.oredict.OreDictionary;
-
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.core.items.ItemRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemRegistryArboriculture extends ItemRegistry {
-	public final ItemGermlingGE sapling;
-	public final ItemGermlingGE pollenFertile;
-	public final ItemTreealyzer treealyzer;
-	public final ItemGrafter grafter;
-	public final ItemGrafter grafterProven;
+    public final ItemGermlingGE sapling;
+    public final ItemGermlingGE pollenFertile;
+    public final ItemTreealyzer treealyzer;
+    public final ItemGrafter grafter;
+    public final ItemGrafter grafterProven;
 
-	public ItemRegistryArboriculture() {
-		sapling = registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
-		OreDictionary.registerOre("treeSapling", sapling.getWildcard());
-		
-		pollenFertile = registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
-		treealyzer = registerItem(new ItemTreealyzer(), "treealyzer");
-		grafter = registerItem(new ItemGrafter(4), "grafter");
-		grafterProven = registerItem(new ItemGrafter(149), "grafterProven");
-	}
+    public ItemRegistryArboriculture() {
+        sapling = registerItem(new ItemGermlingGE(EnumGermlingType.SAPLING), "sapling");
+        OreDictionary.registerOre("treeSapling", sapling.getWildcard());
+
+        pollenFertile = registerItem(new ItemGermlingGE(EnumGermlingType.POLLEN), "pollenFertile");
+        treealyzer = registerItem(new ItemTreealyzer(), "treealyzer");
+        grafter = registerItem(new ItemGrafter(4), "grafter");
+        grafterProven = registerItem(new ItemGrafter(149), "grafterProven");
+    }
 }

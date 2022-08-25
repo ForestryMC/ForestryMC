@@ -10,5 +10,4 @@
  ******************************************************************************/
 package forestry.core.gui;
 
-public interface IGuiHandlerForestry {
-}
+public interface IGuiHandlerForestry {}

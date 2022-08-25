@@ -10,18 +10,16 @@
  ******************************************************************************/
 package forestry.core.access;
 
-import net.minecraft.entity.player.EntityPlayer;
-
 import com.mojang.authlib.GameProfile;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface IOwnable {
 
-	boolean isOwned();
+    boolean isOwned();
 
-	GameProfile getOwner();
+    GameProfile getOwner();
 
-	void setOwner(GameProfile owner);
+    void setOwner(GameProfile owner);
 
-	boolean isOwner(EntityPlayer player);
-
+    boolean isOwner(EntityPlayer player);
 }

@@ -10,44 +10,43 @@
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import net.minecraft.util.StatCollector;
-
 import forestry.api.genetics.IAllele;
+import net.minecraft.util.StatCollector;
 
 public abstract class Allele implements IAllele {
 
-	private final String uid;
-	private final boolean isDominant;
-	private final String unlocalizedName;
+    private final String uid;
+    private final boolean isDominant;
+    private final String unlocalizedName;
 
-	protected Allele(String uid, String unlocalizedName, boolean isDominant) {
-		this.uid = uid;
-		this.isDominant = isDominant;
-		this.unlocalizedName = unlocalizedName;
-	}
+    protected Allele(String uid, String unlocalizedName, boolean isDominant) {
+        this.uid = uid;
+        this.isDominant = isDominant;
+        this.unlocalizedName = unlocalizedName;
+    }
 
-	@Override
-	public String getUID() {
-		return uid;
-	}
+    @Override
+    public String getUID() {
+        return uid;
+    }
 
-	@Override
-	public boolean isDominant() {
-		return isDominant;
-	}
+    @Override
+    public boolean isDominant() {
+        return isDominant;
+    }
 
-	@Override
-	public String getName() {
-		return StatCollector.translateToLocal(getUnlocalizedName());
-	}
+    @Override
+    public String getName() {
+        return StatCollector.translateToLocal(getUnlocalizedName());
+    }
 
-	@Override
-	public String getUnlocalizedName() {
-		return unlocalizedName;
-	}
+    @Override
+    public String getUnlocalizedName() {
+        return unlocalizedName;
+    }
 
-	@Override
-	public String toString() {
-		return uid;
-	}
+    @Override
+    public String toString() {
+        return uid;
+    }
 }

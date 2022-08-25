@@ -10,77 +10,74 @@
  ******************************************************************************/
 package forestry.core.triggers;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import forestry.core.render.TextureManager;
-import forestry.core.utils.StringUtil;
-
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerExternal;
 import buildcraft.api.statements.StatementManager;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.StringUtil;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 
 public abstract class Trigger implements ITriggerExternal {
 
-	private final String uid;
-	private final String unlocalized;
+    private final String uid;
+    private final String unlocalized;
 
-	protected Trigger(String uid) {
-		this(uid, uid);
-	}
+    protected Trigger(String uid) {
+        this(uid, uid);
+    }
 
-	protected Trigger(String uid, String localization) {
-		this.uid = "forestry:" + uid;
-		unlocalized = "trigger." + localization;
-		StatementManager.registerStatement(this);
-	}
+    protected Trigger(String uid, String localization) {
+        this.uid = "forestry:" + uid;
+        unlocalized = "trigger." + localization;
+        StatementManager.registerStatement(this);
+    }
 
-	@Override
-	public String getUniqueTag() {
-		return uid;
-	}
+    @Override
+    public String getUniqueTag() {
+        return uid;
+    }
 
-	@Override
-	public String getDescription() {
-		return StringUtil.localize(unlocalized);
-	}
+    @Override
+    public String getDescription() {
+        return StringUtil.localize(unlocalized);
+    }
 
-	@Override
-	public IStatementParameter createParameter(int index) {
-		return null;
-	}
+    @Override
+    public IStatementParameter createParameter(int index) {
+        return null;
+    }
 
-	@Override
-	public int maxParameters() {
-		return 0;
-	}
+    @Override
+    public int maxParameters() {
+        return 0;
+    }
 
-	@Override
-	public int minParameters() {
-		return 0;
-	}
+    @Override
+    public int minParameters() {
+        return 0;
+    }
 
-	@SideOnly(Side.CLIENT)
-	private IIcon icon;
+    @SideOnly(Side.CLIENT)
+    private IIcon icon;
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon() {
-		return icon;
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon() {
+        return icon;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister register) {
-		icon = TextureManager.registerTex(register, "triggers/" + unlocalized.replace("trigger.", ""));
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister register) {
+        icon = TextureManager.registerTex(register, "triggers/" + unlocalized.replace("trigger.", ""));
+    }
 
-	@Override
-	public IStatement rotateLeft() {
-		return this;
-	}
+    @Override
+    public IStatement rotateLeft() {
+        return this;
+    }
 }

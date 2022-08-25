@@ -10,152 +10,150 @@
  ******************************************************************************/
 package forestry.core.items;
 
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import forestry.api.core.IToolPipette;
 import forestry.core.config.Constants;
 import forestry.core.fluids.PipetteContents;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
+import java.util.List;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
-	public ItemPipette() {
-		super();
-		setMaxStackSize(1);
-		setFull3D();
-	}
+    public ItemPipette() {
+        super();
+        setMaxStackSize(1);
+        setFull3D();
+    }
 
-	/**
-	 * @return true if the item's stackTagCompound needs to be synchronized over SMP.
-	 */
-	@Override
-	public boolean getShareTag() {
-		return true;
-	}
+    /**
+     * @return true if the item's stackTagCompound needs to be synchronized over SMP.
+     */
+    @Override
+    public boolean getShareTag() {
+        return true;
+    }
 
-	@Override
-	public boolean canPipette(ItemStack itemstack) {
-		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
-		return !contained.isFull();
-	}
+    @Override
+    public boolean canPipette(ItemStack itemstack) {
+        PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
+        return !contained.isFull();
+    }
 
-	@Override
-	public int fill(ItemStack itemstack, FluidStack liquid, boolean doFill) {
-		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
+    @Override
+    public int fill(ItemStack itemstack, FluidStack liquid, boolean doFill) {
+        PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
 
-		int limit = getCapacity(itemstack);
-		int filled;
+        int limit = getCapacity(itemstack);
+        int filled;
 
-		if (contained.getContents() == null) {
-			if (liquid.amount > limit) {
-				filled = limit;
-			} else {
-				filled = liquid.amount;
-			}
+        if (contained.getContents() == null) {
+            if (liquid.amount > limit) {
+                filled = limit;
+            } else {
+                filled = liquid.amount;
+            }
 
-			contained.setContents(new FluidStack(liquid, filled));
-			filled = liquid.amount;
-		} else {
-			if (contained.getContents().amount >= limit) {
-				return 0;
-			}
-			if (!contained.getContents().isFluidEqual(liquid)) {
-				return 0;
-			}
+            contained.setContents(new FluidStack(liquid, filled));
+            filled = liquid.amount;
+        } else {
+            if (contained.getContents().amount >= limit) {
+                return 0;
+            }
+            if (!contained.getContents().isFluidEqual(liquid)) {
+                return 0;
+            }
 
-			int space = limit - contained.getContents().amount;
+            int space = limit - contained.getContents().amount;
 
-			if (liquid.amount > space) {
-				filled = space;
-			} else {
-				filled = liquid.amount;
-			}
+            if (liquid.amount > space) {
+                filled = space;
+            } else {
+                filled = liquid.amount;
+            }
 
-			contained.getContents().amount += filled;
-		}
+            contained.getContents().amount += filled;
+        }
 
-		if (doFill) {
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			contained.writeToNBT(nbttagcompound);
-			itemstack.setTagCompound(nbttagcompound);
-			itemstack.setItemDamage(1);
-		}
+        if (doFill) {
+            NBTTagCompound nbttagcompound = new NBTTagCompound();
+            contained.writeToNBT(nbttagcompound);
+            itemstack.setTagCompound(nbttagcompound);
+            itemstack.setItemDamage(1);
+        }
 
-		return filled;
-	}
+        return filled;
+    }
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	@Override
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
-		PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
-		contained.addTooltip(list);
-	}
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Override
+    public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+        PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
+        contained.addTooltip(list);
+    }
 
-	/* ICONS */
-	@SideOnly(Side.CLIENT)
-	private IIcon primaryIcon;
-	@SideOnly(Side.CLIENT)
-	private IIcon secondaryIcon;
+    /* ICONS */
+    @SideOnly(Side.CLIENT)
+    private IIcon primaryIcon;
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void registerIcons(IIconRegister register) {
-		primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
-		secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
-	}
+    @SideOnly(Side.CLIENT)
+    private IIcon secondaryIcon;
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamage(int damage) {
-		if (damage <= 0) {
-			return primaryIcon;
-		} else {
-			return secondaryIcon;
-		}
-	}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerIcons(IIconRegister register) {
+        primaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".0");
+        secondaryIcon = TextureManager.registerTex(register, StringUtil.cleanItemName(this) + ".1");
+    }
 
-	@Override
-	public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
-		PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-		if (contained.getContents() == null || contained.getContents().getFluid().getID() <= 0) {
-			return null;
-		}
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIconFromDamage(int damage) {
+        if (damage <= 0) {
+            return primaryIcon;
+        } else {
+            return secondaryIcon;
+        }
+    }
 
-		int drained = maxDrain;
-		if (contained.getContents().amount < drained) {
-			drained = contained.getContents().amount;
-		}
+    @Override
+    public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
+        PipetteContents contained = new PipetteContents(pipette.getTagCompound());
+        if (contained.getContents() == null
+                || contained.getContents().getFluid().getID() <= 0) {
+            return null;
+        }
 
-		if (doDrain) {
-			contained.getContents().amount -= drained;
+        int drained = maxDrain;
+        if (contained.getContents().amount < drained) {
+            drained = contained.getContents().amount;
+        }
 
-			if (contained.getContents().amount <= 0) {
-				pipette.setTagCompound(null);
-				pipette.setItemDamage(0);
-			} else {
-				NBTTagCompound nbttagcompound = new NBTTagCompound();
-				contained.writeToNBT(nbttagcompound);
-				pipette.setTagCompound(nbttagcompound);
-			}
-		}
+        if (doDrain) {
+            contained.getContents().amount -= drained;
 
-		return new FluidStack(contained.getContents(), drained);
-	}
+            if (contained.getContents().amount <= 0) {
+                pipette.setTagCompound(null);
+                pipette.setItemDamage(0);
+            } else {
+                NBTTagCompound nbttagcompound = new NBTTagCompound();
+                contained.writeToNBT(nbttagcompound);
+                pipette.setTagCompound(nbttagcompound);
+            }
+        }
 
-	@Override
-	public int getCapacity(ItemStack pipette) {
-		return Constants.BUCKET_VOLUME;
-	}
+        return new FluidStack(contained.getContents(), drained);
+    }
+
+    @Override
+    public int getCapacity(ItemStack pipette) {
+        return Constants.BUCKET_VOLUME;
+    }
 }

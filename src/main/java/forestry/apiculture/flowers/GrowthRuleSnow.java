@@ -10,46 +10,45 @@
  ******************************************************************************/
 package forestry.apiculture.flowers;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
-
 import forestry.api.genetics.IFlower;
 import forestry.api.genetics.IFlowerGrowthHelper;
 import forestry.api.genetics.IFlowerGrowthRule;
 import forestry.api.genetics.IFlowerRegistry;
 import forestry.api.genetics.IIndividual;
 import forestry.core.config.Constants;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 
 public class GrowthRuleSnow implements IFlowerGrowthRule {
 
-	@Override
-	public boolean growFlower(IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
-		if (world.getBlock(x, y, z) != Blocks.snow) {
-			return false;
-		}
+    @Override
+    public boolean growFlower(
+            IFlowerRegistry fr, String flowerType, World world, IIndividual individual, int x, int y, int z) {
+        if (world.getBlock(x, y, z) != Blocks.snow) {
+            return false;
+        }
 
-		Block ground = world.getBlock(x, y - 1, z);
-		if (ground != Blocks.dirt && ground != Blocks.grass) {
-			return false;
-		}
+        Block ground = world.getBlock(x, y - 1, z);
+        if (ground != Blocks.dirt && ground != Blocks.grass) {
+            return false;
+        }
 
-		IFlower flower = fr.getRandomPlantableFlower(flowerType, world.rand);
-		return world.setBlock(x, y, z, flower.getBlock(), flower.getMeta(), Constants.FLAG_BLOCK_SYNCH);
-	}
+        IFlower flower = fr.getRandomPlantableFlower(flowerType, world.rand);
+        return world.setBlock(x, y, z, flower.getBlock(), flower.getMeta(), Constants.FLAG_BLOCK_SYNCH);
+    }
 
-	@Override
-	public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, int x, int y, int z) {
-		if (world.getBlock(x, y, z) != Blocks.snow) {
-			return false;
-		}
+    @Override
+    public boolean growFlower(IFlowerGrowthHelper helper, String flowerType, World world, int x, int y, int z) {
+        if (world.getBlock(x, y, z) != Blocks.snow) {
+            return false;
+        }
 
-		Block ground = world.getBlock(x, y - 1, z);
-		if (ground != Blocks.dirt && ground != Blocks.grass) {
-			return false;
-		}
+        Block ground = world.getBlock(x, y - 1, z);
+        if (ground != Blocks.dirt && ground != Blocks.grass) {
+            return false;
+        }
 
-		return helper.plantRandomFlower(flowerType, world, x, y, z);
-	}
-
+        return helper.plantRandomFlower(flowerType, world, x, y, z);
+    }
 }

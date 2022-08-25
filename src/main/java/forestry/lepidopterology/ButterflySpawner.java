@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.lepidopterology;
 
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.lepidopterology.ButterflyManager;
@@ -19,46 +17,50 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
+import net.minecraft.world.World;
 
 public class ButterflySpawner implements ILeafTickHandler {
 
-	@Override
-	public boolean onRandomLeafTick(ITree tree, World world, int x, int y, int z, boolean isDestroyed) {
-		
-		if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
-			return false;
-		}
+    @Override
+    public boolean onRandomLeafTick(ITree tree, World world, int x, int y, int z, boolean isDestroyed) {
 
-		IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates().get(world.rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
-		if (world.rand.nextFloat() >= spawn.getGenome().getPrimary().getRarity() * 0.5f) {
-			return false;
-		}
-		
-		if (world.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
-			return false;
-		}
-		
-		if (!spawn.canSpawn(world, x, y, z)) {
-			return false;
-		}
-		
-		if (world.isAirBlock(x - 1, y, z)) {
-			attemptButterflySpawn(world, spawn, x - 1, y, z);
-		} else if (world.isAirBlock(x + 1, y, z)) {
-			attemptButterflySpawn(world, spawn, x + 1, y, z);
-		} else if (world.isAirBlock(x, y, z - 1)) {
-			attemptButterflySpawn(world, spawn, x, y, z - 1);
-		} else if (world.isAirBlock(x, y, z + 1)) {
-			attemptButterflySpawn(world, spawn, x, y, z + 1);
-		}
-		
-		return false;
-	}
+        if (world.rand.nextFloat()
+                >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
+            return false;
+        }
 
-	private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
-		if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
-			Log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
-		}
-	}
+        IButterfly spawn = ButterflyManager.butterflyRoot
+                .getIndividualTemplates()
+                .get(world.rand.nextInt(
+                        ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
+        if (world.rand.nextFloat() >= spawn.getGenome().getPrimary().getRarity() * 0.5f) {
+            return false;
+        }
 
+        if (world.countEntities(EntityButterfly.class) > PluginLepidopterology.spawnConstraint) {
+            return false;
+        }
+
+        if (!spawn.canSpawn(world, x, y, z)) {
+            return false;
+        }
+
+        if (world.isAirBlock(x - 1, y, z)) {
+            attemptButterflySpawn(world, spawn, x - 1, y, z);
+        } else if (world.isAirBlock(x + 1, y, z)) {
+            attemptButterflySpawn(world, spawn, x + 1, y, z);
+        } else if (world.isAirBlock(x, y, z - 1)) {
+            attemptButterflySpawn(world, spawn, x, y, z - 1);
+        } else if (world.isAirBlock(x, y, z + 1)) {
+            attemptButterflySpawn(world, spawn, x, y, z + 1);
+        }
+
+        return false;
+    }
+
+    private static void attemptButterflySpawn(World world, IButterfly butterfly, double x, double y, double z) {
+        if (ButterflyManager.butterflyRoot.spawnButterflyInWorld(world, butterfly.copy(), x, y + 0.1f, z) != null) {
+            Log.finest("Spawned a butterfly '%s' at %s/%s/%s.", butterfly.getDisplayName(), x, y, z);
+        }
+    }
 }

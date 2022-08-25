@@ -18,10 +18,11 @@ import forestry.api.genetics.IAllele;
 
 public class BeeMutationFactory implements IBeeMutationFactory {
 
-	@Override
-	public IBeeMutationCustom createMutation(IAlleleBeeSpecies parentBee0, IAlleleBeeSpecies parentBee1, IAllele[] result, int chance) {
-		IBeeMutationCustom mutation = new BeeMutation(parentBee0, parentBee1, result, chance);
-		BeeManager.beeRoot.registerMutation(mutation);
-		return mutation;
-	}
+    @Override
+    public IBeeMutationCustom createMutation(
+            IAlleleBeeSpecies parentBee0, IAlleleBeeSpecies parentBee1, IAllele[] result, int chance) {
+        IBeeMutationCustom mutation = new BeeMutation(parentBee0, parentBee1, result, chance);
+        BeeManager.beeRoot.registerMutation(mutation);
+        return mutation;
+    }
 }

@@ -20,10 +20,16 @@ import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.IClimatised;
 import forestry.farming.gui.IFarmLedgerDelegate;
 
-public interface IFarmControllerInternal extends IFarmController, IMultiblockControllerInternal, ISocketable, IClimatised, IRestrictedAccess, IStreamableGui {
-	IFarmLedgerDelegate getFarmLedgerDelegate();
+public interface IFarmControllerInternal
+        extends IFarmController,
+                IMultiblockControllerInternal,
+                ISocketable,
+                IClimatised,
+                IRestrictedAccess,
+                IStreamableGui {
+    IFarmLedgerDelegate getFarmLedgerDelegate();
 
-	IInventoryAdapter getInternalInventory();
+    IInventoryAdapter getInternalInventory();
 
-	ITankManager getTankManager();
+    ITankManager getTankManager();
 }

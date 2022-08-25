@@ -13,7 +13,7 @@ package forestry.factory.blocks;
 import forestry.core.blocks.BlockBase;
 
 public class BlockFactoryTESR extends BlockBase<BlockFactoryTesrType> {
-	public BlockFactoryTESR() {
-		super(true);
-	}
+    public BlockFactoryTESR() {
+        super(true);
+    }
 }

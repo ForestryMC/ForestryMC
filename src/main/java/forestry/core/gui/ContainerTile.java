@@ -11,11 +11,6 @@
 package forestry.core.gui;
 
 import com.google.common.collect.ImmutableSet;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.tileentity.TileEntity;
-
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
 import forestry.core.access.EnumAccess;
@@ -31,111 +26,115 @@ import forestry.core.tiles.IPowerHandler;
 import forestry.core.tiles.TilePowered;
 import forestry.core.tiles.TileUtil;
 import forestry.energy.EnergyManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 public abstract class ContainerTile<T extends TileEntity> extends ContainerForestry {
 
-	protected final T tile;
-	private final IAccessHandler accessHandler;
+    protected final T tile;
+    private final IAccessHandler accessHandler;
 
-	protected ContainerTile(T tile) {
-		this.tile = tile;
+    protected ContainerTile(T tile) {
+        this.tile = tile;
 
-		if (tile instanceof IRestrictedAccess) {
-			accessHandler = ((IRestrictedAccess) tile).getAccessHandler();
-		} else {
-			accessHandler = FakeAccessHandler.getInstance();
-		}
-	}
+        if (tile instanceof IRestrictedAccess) {
+            accessHandler = ((IRestrictedAccess) tile).getAccessHandler();
+        } else {
+            accessHandler = FakeAccessHandler.getInstance();
+        }
+    }
 
-	protected ContainerTile(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
-		this(tileForestry);
+    protected ContainerTile(T tileForestry, InventoryPlayer playerInventory, int xInv, int yInv) {
+        this(tileForestry);
 
-		addPlayerInventory(playerInventory, xInv, yInv);
-	}
+        addPlayerInventory(playerInventory, xInv, yInv);
+    }
 
-	@Override
-	protected final boolean canAccess(EntityPlayer player) {
-		return player != null && accessHandler.allowsAlteration(player);
-	}
+    @Override
+    protected final boolean canAccess(EntityPlayer player) {
+        return player != null && accessHandler.allowsAlteration(player);
+    }
 
-	@Override
-	public final boolean canInteractWith(EntityPlayer entityplayer) {
-		return TileUtil.isUsableByPlayer(entityplayer, tile) && accessHandler.allowsViewing(entityplayer);
-	}
+    @Override
+    public final boolean canInteractWith(EntityPlayer entityplayer) {
+        return TileUtil.isUsableByPlayer(entityplayer, tile) && accessHandler.allowsViewing(entityplayer);
+    }
 
-	private ImmutableSet<IErrorState> previousErrorStates;
-	private int previousEnergyManagerData = 0;
-	private EnumAccess previousAccess;
-	private int previousWorkCounter = 0;
-	private int previousTicksPerWorkCycle = 0;
+    private ImmutableSet<IErrorState> previousErrorStates;
+    private int previousEnergyManagerData = 0;
+    private EnumAccess previousAccess;
+    private int previousWorkCounter = 0;
+    private int previousTicksPerWorkCycle = 0;
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
 
-		if (tile instanceof IErrorLogicSource) {
-			IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
-			ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
+        if (tile instanceof IErrorLogicSource) {
+            IErrorLogicSource errorLogicSource = (IErrorLogicSource) tile;
+            ImmutableSet<IErrorState> errorStates =
+                    errorLogicSource.getErrorLogic().getErrorStates();
 
-			if ((previousErrorStates == null) || !errorStates.equals(previousErrorStates)) {
-				PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
-				sendPacketToCrafters(packet);
-			}
+            if ((previousErrorStates == null) || !errorStates.equals(previousErrorStates)) {
+                PacketErrorUpdate packet = new PacketErrorUpdate(tile, errorLogicSource);
+                sendPacketToCrafters(packet);
+            }
 
-			previousErrorStates = errorStates;
-		}
+            previousErrorStates = errorStates;
+        }
 
-		if (tile instanceof IPowerHandler) {
-			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
-			int energyManagerData = energyManager.toGuiInt();
-			if (energyManagerData != previousEnergyManagerData) {
-				PacketGuiEnergy packet = new PacketGuiEnergy(windowId, energyManagerData);
-				sendPacketToCrafters(packet);
+        if (tile instanceof IPowerHandler) {
+            EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
+            int energyManagerData = energyManager.toGuiInt();
+            if (energyManagerData != previousEnergyManagerData) {
+                PacketGuiEnergy packet = new PacketGuiEnergy(windowId, energyManagerData);
+                sendPacketToCrafters(packet);
 
-				previousEnergyManagerData = energyManagerData;
-			}
-		}
+                previousEnergyManagerData = energyManagerData;
+            }
+        }
 
-		if (tile instanceof IRestrictedAccess) {
-			IRestrictedAccess restrictedAccess = (IRestrictedAccess) tile;
-			IAccessHandler accessHandler = restrictedAccess.getAccessHandler();
-			EnumAccess access = accessHandler.getAccess();
-			if (access != previousAccess) {
-				IForestryPacketClient packet = new PacketAccessUpdate(restrictedAccess, tile);
-				sendPacketToCrafters(packet);
+        if (tile instanceof IRestrictedAccess) {
+            IRestrictedAccess restrictedAccess = (IRestrictedAccess) tile;
+            IAccessHandler accessHandler = restrictedAccess.getAccessHandler();
+            EnumAccess access = accessHandler.getAccess();
+            if (access != previousAccess) {
+                IForestryPacketClient packet = new PacketAccessUpdate(restrictedAccess, tile);
+                sendPacketToCrafters(packet);
 
-				previousAccess = access;
-			}
-		}
+                previousAccess = access;
+            }
+        }
 
-		if (tile instanceof TilePowered) {
-			boolean guiNeedsUpdate = false;
+        if (tile instanceof TilePowered) {
+            boolean guiNeedsUpdate = false;
 
-			TilePowered tilePowered = (TilePowered) tile;
+            TilePowered tilePowered = (TilePowered) tile;
 
-			int workCounter = tilePowered.getWorkCounter();
-			if (workCounter != previousWorkCounter) {
-				guiNeedsUpdate = true;
-				previousWorkCounter = workCounter;
-			}
+            int workCounter = tilePowered.getWorkCounter();
+            if (workCounter != previousWorkCounter) {
+                guiNeedsUpdate = true;
+                previousWorkCounter = workCounter;
+            }
 
-			int ticksPerWorkCycle = tilePowered.getTicksPerWorkCycle();
-			if (ticksPerWorkCycle != previousTicksPerWorkCycle) {
-				guiNeedsUpdate = true;
-				previousTicksPerWorkCycle = ticksPerWorkCycle;
-			}
+            int ticksPerWorkCycle = tilePowered.getTicksPerWorkCycle();
+            if (ticksPerWorkCycle != previousTicksPerWorkCycle) {
+                guiNeedsUpdate = true;
+                previousTicksPerWorkCycle = ticksPerWorkCycle;
+            }
 
-			if (guiNeedsUpdate) {
-				PacketGuiUpdate packet = new PacketGuiUpdate(tilePowered);
-				sendPacketToCrafters(packet);
-			}
-		}
-	}
+            if (guiNeedsUpdate) {
+                PacketGuiUpdate packet = new PacketGuiUpdate(tilePowered);
+                sendPacketToCrafters(packet);
+            }
+        }
+    }
 
-	public void onGuiEnergy(int energyStored) {
-		if (tile instanceof IPowerHandler) {
-			EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
-			energyManager.fromGuiInt(energyStored);
-		}
-	}
+    public void onGuiEnergy(int energyStored) {
+        if (tile instanceof IPowerHandler) {
+            EnergyManager energyManager = ((IPowerHandler) tile).getEnergyManager();
+            energyManager.fromGuiInt(energyStored);
+        }
+    }
 }

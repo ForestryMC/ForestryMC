@@ -14,11 +14,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 
 public interface IContainerSocketed {
-	void handleChipsetClick(int slot);
+    void handleChipsetClick(int slot);
 
-	void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack);
+    void handleChipsetClickServer(int slot, EntityPlayerMP player, ItemStack itemstack);
 
-	void handleSolderingIronClick(int slot);
+    void handleSolderingIronClick(int slot);
 
-	void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack);
+    void handleSolderingIronClickServer(int slot, EntityPlayerMP player, ItemStack itemstack);
 }

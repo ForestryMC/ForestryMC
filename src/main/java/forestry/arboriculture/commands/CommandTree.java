@@ -18,16 +18,15 @@ import forestry.core.commands.SubCommand;
 
 public class CommandTree extends SubCommand {
 
-	public CommandTree() {
-		super("tree");
+    public CommandTree() {
+        super("tree");
 
-		IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
-		ICommandModeHelper modeHelper = new TreeModeHelper();
+        IStatsSaveHelper saveHelper = new TreeStatsSaveHelper();
+        ICommandModeHelper modeHelper = new TreeModeHelper();
 
-		addChildCommand(new CommandTreeSpawn("spawnTree", new TreeSpawner()));
-		addChildCommand(new CommandTreeSpawn("spawnForest", new ForestSpawner()));
-		addChildCommand(new CommandMode(modeHelper));
-		addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
-	}
-
+        addChildCommand(new CommandTreeSpawn("spawnTree", new TreeSpawner()));
+        addChildCommand(new CommandTreeSpawn("spawnForest", new ForestSpawner()));
+        addChildCommand(new CommandMode(modeHelper));
+        addChildCommand(new CommandSaveStats(saveHelper, modeHelper));
+    }
 }

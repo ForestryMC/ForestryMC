@@ -10,40 +10,37 @@
  ******************************************************************************/
 package forestry.core.config;
 
+import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.IConfigElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import net.minecraft.client.gui.GuiScreen;
-
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.IConfigElement;
-
 public class ForestryGuiConfig extends GuiConfig {
 
-	public ForestryGuiConfig(GuiScreen parent) {
-		super(parent, getConfigCategories(), Constants.MOD, true, true, Constants.MOD);
-	}
+    public ForestryGuiConfig(GuiScreen parent) {
+        super(parent, getConfigCategories(), Constants.MOD, true, true, Constants.MOD);
+    }
 
-	private static List<IConfigElement> getConfigCategories() {
-		List<IConfigElement> configElements = new ArrayList<>();
+    private static List<IConfigElement> getConfigCategories() {
+        List<IConfigElement> configElements = new ArrayList<>();
 
-		List<String> commonCategoryNames = Arrays.asList("crafting", "difficulty", "genetics", "performance", "structures", "tweaks", "world");
-		for (String categoryName : commonCategoryNames) {
-			ConfigCategory category = Config.configCommon.getCategory(categoryName);
-			configElements.add(new ConfigElement(category));
-		}
+        List<String> commonCategoryNames =
+                Arrays.asList("crafting", "difficulty", "genetics", "performance", "structures", "tweaks", "world");
+        for (String categoryName : commonCategoryNames) {
+            ConfigCategory category = Config.configCommon.getCategory(categoryName);
+            configElements.add(new ConfigElement(category));
+        }
 
-		List<String> fluidCategoryNames = Arrays.asList("enableFluid", "enableFluidBlock");
-		for (String categoryName : fluidCategoryNames) {
-			ConfigCategory category = Config.configFluid.getCategory(categoryName);
-			configElements.add(new ConfigElement(category));
-		}
+        List<String> fluidCategoryNames = Arrays.asList("enableFluid", "enableFluidBlock");
+        for (String categoryName : fluidCategoryNames) {
+            ConfigCategory category = Config.configFluid.getCategory(categoryName);
+            configElements.add(new ConfigElement(category));
+        }
 
-		return configElements;
-	}
-
+        return configElements;
+    }
 }

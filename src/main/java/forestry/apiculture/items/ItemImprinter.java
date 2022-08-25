@@ -10,27 +10,26 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import forestry.api.core.Tabs;
 import forestry.apiculture.gui.ContainerImprinter;
 import forestry.apiculture.gui.GuiImprinter;
 import forestry.apiculture.inventory.ItemInventoryImprinter;
 import forestry.core.items.ItemWithGui;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class ItemImprinter extends ItemWithGui {
-	public ItemImprinter() {
-		setCreativeTab(Tabs.tabApiculture);
-	}
+    public ItemImprinter() {
+        setCreativeTab(Tabs.tabApiculture);
+    }
 
-	@Override
-	public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
-		return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
-	}
+    @Override
+    public Object getGui(EntityPlayer player, ItemStack heldItem, int data) {
+        return new GuiImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
+    }
 
-	@Override
-	public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
-		return new ContainerImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
-	}
+    @Override
+    public Object getContainer(EntityPlayer player, ItemStack heldItem, int data) {
+        return new ContainerImprinter(player.inventory, new ItemInventoryImprinter(player, heldItem));
+    }
 }

@@ -10,62 +10,60 @@
  ******************************************************************************/
 package forestry.energy.gui;
 
-import net.minecraft.inventory.Container;
-
 import forestry.core.gui.GuiForestryTitled;
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.StringUtil;
+import net.minecraft.inventory.Container;
 
 public abstract class GuiEngine<C extends Container, I extends TileEngine> extends GuiForestryTitled<C, I> {
 
-	protected GuiEngine(String texture, C container, I tile) {
-		super(texture, container, tile);
-	}
+    protected GuiEngine(String texture, C container, I tile) {
+        super(texture, container, tile);
+    }
 
-	@Override
-	public void initGui() {
-		super.initGui();
-		ledgerManager.insert(new EngineLedger());
-	}
+    @Override
+    public void initGui() {
+        super.initGui();
+        ledgerManager.insert(new EngineLedger());
+    }
 
-	protected class EngineLedger extends Ledger {
+    protected class EngineLedger extends Ledger {
 
-		public EngineLedger() {
-			super(ledgerManager, "power");
-			maxHeight = 94;
-		}
+        public EngineLedger() {
+            super(ledgerManager, "power");
+            maxHeight = 94;
+        }
 
-		@Override
-		public void draw(int x, int y) {
+        @Override
+        public void draw(int x, int y) {
 
-			// Draw background
-			drawBackground(x, y);
+            // Draw background
+            drawBackground(x, y);
 
-			// Draw icon
-			drawIcon(TextureManager.getInstance().getDefault("misc/energy"), x + 3, y + 4);
+            // Draw icon
+            drawIcon(TextureManager.getInstance().getDefault("misc/energy"), x + 3, y + 4);
 
-			if (!isFullyOpened()) {
-				return;
-			}
+            if (!isFullyOpened()) {
+                return;
+            }
 
-			drawHeader(StringUtil.localize("gui.energy"), x + 22, y + 8);
+            drawHeader(StringUtil.localize("gui.energy"), x + 22, y + 8);
 
-			drawSubheader(StringUtil.localize("gui.currentOutput") + ':', x + 22, y + 20);
-			drawText(inventory.getCurrentOutput() + " RF/t", x + 22, y + 32);
+            drawSubheader(StringUtil.localize("gui.currentOutput") + ':', x + 22, y + 20);
+            drawText(inventory.getCurrentOutput() + " RF/t", x + 22, y + 32);
 
-			drawSubheader(StringUtil.localize("gui.stored") + ':', x + 22, y + 44);
-			drawText(inventory.getEnergyManager().getEnergyStored(inventory.getOrientation()) + " RF", x + 22, y + 56);
+            drawSubheader(StringUtil.localize("gui.stored") + ':', x + 22, y + 44);
+            drawText(inventory.getEnergyManager().getEnergyStored(inventory.getOrientation()) + " RF", x + 22, y + 56);
 
-			drawSubheader(StringUtil.localize("gui.heat") + ':', x + 22, y + 68);
-			drawText((((double) inventory.getHeat() / (double) 10) + 20.0) + " C", x + 22, y + 80);
-		}
+            drawSubheader(StringUtil.localize("gui.heat") + ':', x + 22, y + 68);
+            drawText((((double) inventory.getHeat() / (double) 10) + 20.0) + " C", x + 22, y + 80);
+        }
 
-		@Override
-		public String getTooltip() {
-			return inventory.getCurrentOutput() + " RF/t";
-		}
-	}
-
+        @Override
+        public String getTooltip() {
+            return inventory.getCurrentOutput() + " RF/t";
+        }
+    }
 }

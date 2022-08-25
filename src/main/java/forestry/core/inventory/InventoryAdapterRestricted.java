@@ -10,57 +10,56 @@
  ******************************************************************************/
 package forestry.core.inventory;
 
+import forestry.core.access.IAccessHandler;
+import forestry.core.config.Constants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-import forestry.core.access.IAccessHandler;
-import forestry.core.config.Constants;
-
 public class InventoryAdapterRestricted extends InventoryAdapter {
-	private final IAccessHandler accessHandler;
+    private final IAccessHandler accessHandler;
 
-	public InventoryAdapterRestricted(int size, String name, IAccessHandler accessHandler) {
-		super(size, name);
-		this.accessHandler = accessHandler;
-	}
+    public InventoryAdapterRestricted(int size, String name, IAccessHandler accessHandler) {
+        super(size, name);
+        this.accessHandler = accessHandler;
+    }
 
-	public InventoryAdapterRestricted(int size, String name, int stackLimit, IAccessHandler accessHandler) {
-		super(size, name, stackLimit);
-		this.accessHandler = accessHandler;
-	}
+    public InventoryAdapterRestricted(int size, String name, int stackLimit, IAccessHandler accessHandler) {
+        super(size, name, stackLimit);
+        this.accessHandler = accessHandler;
+    }
 
-	@Override
-	public final boolean isUseableByPlayer(EntityPlayer player) {
-		return accessHandler.allowsViewing(player);
-	}
+    @Override
+    public final boolean isUseableByPlayer(EntityPlayer player) {
+        return accessHandler.allowsViewing(player);
+    }
 
-	@Override
-	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		if (itemStack == null || !accessHandler.allowsPipeConnections()) {
-			return false;
-		}
+    @Override
+    public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+        if (itemStack == null || !accessHandler.allowsPipeConnections()) {
+            return false;
+        }
 
-		return canSlotAccept(slotIndex, itemStack);
-	}
+        return canSlotAccept(slotIndex, itemStack);
+    }
 
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		if (!accessHandler.allowsPipeConnections()) {
-			return Constants.SLOTS_NONE;
-		}
-		return super.getAccessibleSlotsFromSide(side);
-	}
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side) {
+        if (!accessHandler.allowsPipeConnections()) {
+            return Constants.SLOTS_NONE;
+        }
+        return super.getAccessibleSlotsFromSide(side);
+    }
 
-	@Override
-	public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
-		if (itemStack == null || !accessHandler.allowsPipeConnections()) {
-			return false;
-		}
-		return isItemValidForSlot(slotIndex, itemStack);
-	}
+    @Override
+    public final boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+        if (itemStack == null || !accessHandler.allowsPipeConnections()) {
+            return false;
+        }
+        return isItemValidForSlot(slotIndex, itemStack);
+    }
 
-	@Override
-	public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
-		return itemStack != null && accessHandler.allowsPipeConnections();
-	}
+    @Override
+    public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+        return itemStack != null && accessHandler.allowsPipeConnections();
+    }
 }

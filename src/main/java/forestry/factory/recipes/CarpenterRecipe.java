@@ -10,50 +10,51 @@
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.fluids.FluidStack;
-
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.ShapedRecipeCustom;
+import javax.annotation.Nullable;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipe implements ICarpenterRecipe {
 
-	private final int packagingTime;
-	@Nullable
-	private final FluidStack liquid;
-	@Nullable
-	private final ItemStack box;
-	private final ShapedRecipeCustom internal;
+    private final int packagingTime;
 
-	public CarpenterRecipe(int packagingTime, @Nullable FluidStack liquid, @Nullable ItemStack box, ShapedRecipeCustom internal) {
-		this.packagingTime = packagingTime;
-		this.liquid = liquid;
-		this.box = box;
-		this.internal = internal;
-	}
+    @Nullable
+    private final FluidStack liquid;
 
-	public int getPackagingTime() {
-		return packagingTime;
-	}
+    @Nullable
+    private final ItemStack box;
 
-	@Override
-	@Nullable
-	public ItemStack getBox() {
-		return box;
-	}
+    private final ShapedRecipeCustom internal;
 
-	@Override
-	@Nullable
-	public FluidStack getFluidResource() {
-		return liquid;
-	}
+    public CarpenterRecipe(
+            int packagingTime, @Nullable FluidStack liquid, @Nullable ItemStack box, ShapedRecipeCustom internal) {
+        this.packagingTime = packagingTime;
+        this.liquid = liquid;
+        this.box = box;
+        this.internal = internal;
+    }
 
-	@Override
-	public IDescriptiveRecipe getCraftingGridRecipe() {
-		return internal;
-	}
+    public int getPackagingTime() {
+        return packagingTime;
+    }
+
+    @Override
+    @Nullable
+    public ItemStack getBox() {
+        return box;
+    }
+
+    @Override
+    @Nullable
+    public FluidStack getFluidResource() {
+        return liquid;
+    }
+
+    @Override
+    public IDescriptiveRecipe getCraftingGridRecipe() {
+        return internal;
+    }
 }

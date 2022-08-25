@@ -10,25 +10,25 @@
  ******************************************************************************/
 package forestry.storage.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import forestry.core.gui.ContainerItemInventory;
 import forestry.core.gui.ContainerNaturalistInventory;
 import forestry.core.gui.IGuiSelectable;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.storage.inventory.ItemInventoryBackpackPaged;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
-public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInventoryBackpackPaged> implements IGuiSelectable {
+public class ContainerNaturalistBackpack extends ContainerItemInventory<ItemInventoryBackpackPaged>
+        implements IGuiSelectable {
 
-	public ContainerNaturalistBackpack(EntityPlayer player, ItemInventoryBackpackPaged inventory, int selectedPage) {
-		super(inventory, player.inventory, 18, 120);
+    public ContainerNaturalistBackpack(EntityPlayer player, ItemInventoryBackpackPaged inventory, int selectedPage) {
+        super(inventory, player.inventory, 18, 120);
 
-		ContainerNaturalistInventory.addInventory(this, inventory, selectedPage);
-	}
+        ContainerNaturalistInventory.addInventory(this, inventory, selectedPage);
+    }
 
-	@Override
-	public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
-		inventory.flipPage(player, (short) packet.getPrimaryIndex());
-	}
+    @Override
+    public void handleSelectionRequest(EntityPlayerMP player, PacketGuiSelectRequest packet) {
+        inventory.flipPage(player, (short) packet.getPrimaryIndex());
+    }
 }

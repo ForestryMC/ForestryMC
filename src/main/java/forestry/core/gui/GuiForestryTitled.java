@@ -10,25 +10,24 @@
  ******************************************************************************/
 package forestry.core.gui;
 
+import forestry.core.tiles.ITitled;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.StatCollector;
 
-import forestry.core.tiles.ITitled;
-
 public abstract class GuiForestryTitled<C extends Container, I extends ITitled & IInventory> extends GuiForestry<C, I> {
 
-	protected GuiForestryTitled(String texture, C container, I inventory) {
-		super(texture, container, inventory);
-	}
+    protected GuiForestryTitled(String texture, C container, I inventory) {
+        super(texture, container, inventory);
+    }
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 
-		String name = StatCollector.translateToLocal(inventory.getUnlocalizedTitle());
-		textLayout.line = 6;
-		textLayout.drawCenteredLine(name, 0, fontColor.get("gui.title"));
-		bindTexture(textureFile);
-	}
+        String name = StatCollector.translateToLocal(inventory.getUnlocalizedTitle());
+        textLayout.line = 6;
+        textLayout.drawCenteredLine(name, 0, fontColor.get("gui.title"));
+        bindTexture(textureFile);
+    }
 }

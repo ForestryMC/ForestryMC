@@ -14,7 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public interface IGuiHandlerItem extends IGuiHandlerForestry {
-	Object getGui(EntityPlayer player, ItemStack heldItem, int data);
+    Object getGui(EntityPlayer player, ItemStack heldItem, int data);
 
-	Object getContainer(EntityPlayer player, ItemStack heldItem, int data);
+    Object getContainer(EntityPlayer player, ItemStack heldItem, int data);
 }

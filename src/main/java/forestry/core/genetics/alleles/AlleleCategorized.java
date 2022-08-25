@@ -1,8 +1,7 @@
 package forestry.core.genetics.alleles;
 
-import org.apache.commons.lang3.text.WordUtils;
-
 import net.minecraft.util.StatCollector;
+import org.apache.commons.lang3.text.WordUtils;
 
 /**
  * Alleles that have a category with several values inherit from this class.
@@ -14,20 +13,20 @@ import net.minecraft.util.StatCollector;
  * forestry.allele.fast
  */
 public abstract class AlleleCategorized extends Allele {
-	protected AlleleCategorized(String modId, String category, String valueName, boolean isDominant) {
-		super(getUid(modId, category, valueName), getUnlocalizedName(modId, category, valueName), isDominant);
-	}
+    protected AlleleCategorized(String modId, String category, String valueName, boolean isDominant) {
+        super(getUid(modId, category, valueName), getUnlocalizedName(modId, category, valueName), isDominant);
+    }
 
-	private static String getUid(String modId, String category, String valueName) {
-		return modId + '.' + category + WordUtils.capitalize(valueName);
-	}
+    private static String getUid(String modId, String category, String valueName) {
+        return modId + '.' + category + WordUtils.capitalize(valueName);
+    }
 
-	private static String getUnlocalizedName(String modId, String category, String valueName) {
-		String customName = modId + '.' + "allele." + category + '.' + valueName;
-		if (StatCollector.canTranslate(customName)) {
-			return customName;
-		} else {
-			return modId + '.' + "allele." + valueName;
-		}
-	}
+    private static String getUnlocalizedName(String modId, String category, String valueName) {
+        String customName = modId + '.' + "allele." + category + '.' + valueName;
+        if (StatCollector.canTranslate(customName)) {
+            return customName;
+        } else {
+            return modId + '.' + "allele." + valueName;
+        }
+    }
 }

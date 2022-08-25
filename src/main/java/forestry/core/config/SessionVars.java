@@ -13,32 +13,32 @@ package forestry.core.config;
 import java.util.HashMap;
 
 public class SessionVars {
-	
-	private static final HashMap<String, String> stringVars = new HashMap<>();
-	
-	private static Class<?> openedLedger;
 
-	public static void setOpenedLedger(Class<?> ledgerClass) {
-		openedLedger = ledgerClass;
-	}
+    private static final HashMap<String, String> stringVars = new HashMap<>();
 
-	public static Class<?> getOpenedLedger() {
-		return openedLedger;
-	}
-	
-	public static void setStringVar(String ident, String val) {
-		stringVars.put(ident, val);
-	}
-	
-	public static String getStringVar(String ident) {
-		if (stringVars.containsKey(ident)) {
-			return stringVars.get(ident);
-		}
-		
-		return null;
-	}
-	
-	public static void clearStringVar(String ident) {
-		stringVars.remove(ident);
-	}
+    private static Class<?> openedLedger;
+
+    public static void setOpenedLedger(Class<?> ledgerClass) {
+        openedLedger = ledgerClass;
+    }
+
+    public static Class<?> getOpenedLedger() {
+        return openedLedger;
+    }
+
+    public static void setStringVar(String ident, String val) {
+        stringVars.put(ident, val);
+    }
+
+    public static String getStringVar(String ident) {
+        if (stringVars.containsKey(ident)) {
+            return stringVars.get(ident);
+        }
+
+        return null;
+    }
+
+    public static void clearStringVar(String ident) {
+        stringVars.remove(ident);
+    }
 }

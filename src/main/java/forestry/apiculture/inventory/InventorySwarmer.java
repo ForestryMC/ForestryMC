@@ -10,20 +10,19 @@
  ******************************************************************************/
 package forestry.apiculture.inventory;
 
-import net.minecraft.item.ItemStack;
-
 import forestry.api.apiculture.BeeManager;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.core.utils.ItemStackUtil;
+import net.minecraft.item.ItemStack;
 
 public class InventorySwarmer extends InventoryAdapterTile<TileAlvearySwarmer> {
-	public InventorySwarmer(TileAlvearySwarmer alvearySwarmer) {
-		super(alvearySwarmer, 4, "SwarmInv");
-	}
+    public InventorySwarmer(TileAlvearySwarmer alvearySwarmer) {
+        super(alvearySwarmer, 4, "SwarmInv");
+    }
 
-	@Override
-	public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-		return ItemStackUtil.containsItemStack(BeeManager.inducers.keySet(), itemStack);
-	}
+    @Override
+    public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
+        return ItemStackUtil.containsItemStack(BeeManager.inducers.keySet(), itemStack);
+    }
 }

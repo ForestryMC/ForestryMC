@@ -10,49 +10,47 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-
 import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.api.farming.ICrop;
 import forestry.api.farming.IFarmableBasic;
 import forestry.arboriculture.genetics.TreeGenome;
 import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginArboriculture;
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class FarmableGE implements IFarmableBasic {
-	@Override
-	public boolean isSapling(Block block, int meta) {
-		return PluginArboriculture.blocks.saplingGE == block;
-	}
+    @Override
+    public boolean isSapling(Block block, int meta) {
+        return PluginArboriculture.blocks.saplingGE == block;
+    }
 
-	@Override
-	public ICrop getCropAt(World world, int x, int y, int z) {
-		Block block = world.getBlock(x, y, z);
+    @Override
+    public ICrop getCropAt(World world, int x, int y, int z) {
+        Block block = world.getBlock(x, y, z);
 
-		if (!block.isWood(world, x, y, z)) {
-			return null;
-		}
+        if (!block.isWood(world, x, y, z)) {
+            return null;
+        }
 
-		return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
-	}
+        return new CropBlock(world, block, world.getBlockMetadata(x, y, z), new Vect(x, y, z));
+    }
 
-	@Override
-	public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
-		return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
-	}
+    @Override
+    public boolean plantSaplingAt(EntityPlayer player, ItemStack germling, World world, int x, int y, int z) {
+        return germling.copy().tryPlaceItemIntoWorld(player, world, x, y - 1, z, 1, 0, 0, 0);
+    }
 
-	@Override
-	public boolean isGermling(ItemStack itemstack) {
-		IAlleleTreeSpecies tree = TreeGenome.getSpecies(itemstack);
-		return tree != null;
-	}
+    @Override
+    public boolean isGermling(ItemStack itemstack) {
+        IAlleleTreeSpecies tree = TreeGenome.getSpecies(itemstack);
+        return tree != null;
+    }
 
-	@Override
-	public boolean isWindfall(ItemStack itemstack) {
-		return false;
-	}
-
+    @Override
+    public boolean isWindfall(ItemStack itemstack) {
+        return false;
+    }
 }

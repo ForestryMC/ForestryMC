@@ -14,5 +14,4 @@ public interface IClimateManager {
     float getHumidity(World world, int x, int y, int z);
 
     IClimateProvider getDefaultClimate(World world, int x, int y, int z);
-
 }

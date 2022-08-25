@@ -13,10 +13,10 @@ package forestry.core.gui;
 import net.minecraft.entity.player.EntityPlayer;
 
 public interface IGuiHandlerEntity extends IGuiHandlerForestry {
-	Object getGui(EntityPlayer player, int data);
+    Object getGui(EntityPlayer player, int data);
 
-	Object getContainer(EntityPlayer player, int data);
+    Object getContainer(EntityPlayer player, int data);
 
-	// can't be named getEntityId() for obfuscation reasons
-	int getIdOfEntity();
+    // can't be named getEntityId() for obfuscation reasons
+    int getIdOfEntity();
 }

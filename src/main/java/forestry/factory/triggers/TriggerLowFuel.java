@@ -10,47 +10,44 @@
  ******************************************************************************/
 package forestry.factory.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
+import buildcraft.api.statements.IStatementContainer;
+import buildcraft.api.statements.IStatementParameter;
 import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TilePowered;
 import forestry.core.triggers.Trigger;
-
-import buildcraft.api.statements.IStatementContainer;
-import buildcraft.api.statements.IStatementParameter;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerLowFuel extends Trigger {
 
-	private float threshold = 0.25F;
+    private float threshold = 0.25F;
 
-	public TriggerLowFuel(String tag, float threshold) {
-		super(tag, "lowFuel");
-		this.threshold = threshold;
-	}
+    public TriggerLowFuel(String tag, float threshold) {
+        super(tag, "lowFuel");
+        this.threshold = threshold;
+    }
 
-	@Override
-	public String getDescription() {
-		return super.getDescription() + " < " + threshold * 100 + "%";
-	}
+    @Override
+    public String getDescription() {
+        return super.getDescription() + " < " + threshold * 100 + "%";
+    }
 
-	/**
-	 * Return true if the tile given in parameter activates the trigger, given the parameters.
-	 */
-	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+    /**
+     * Return true if the tile given in parameter activates the trigger, given the parameters.
+     */
+    @Override
+    public boolean isTriggerActive(
+            TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (tile instanceof TilePowered) {
-			return !((TilePowered) tile).hasFuelMin(threshold);
-		}
+        if (tile instanceof TilePowered) {
+            return !((TilePowered) tile).hasFuelMin(threshold);
+        }
 
-		if (tile instanceof TileEngine) {
-			TileEngine tileEngine = (TileEngine) tile;
-			return !tileEngine.hasFuelMin(threshold);
-		}
+        if (tile instanceof TileEngine) {
+            TileEngine tileEngine = (TileEngine) tile;
+            return !tileEngine.hasFuelMin(threshold);
+        }
 
-		return false;
-	}
-
+        return false;
+    }
 }

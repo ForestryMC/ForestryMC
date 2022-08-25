@@ -16,39 +16,38 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Plugin {
 
-	/**
-	 * @return Unique identifier for the plugin, no spaces!
-	 */
-	String pluginID();
+    /**
+     * @return Unique identifier for the plugin, no spaces!
+     */
+    String pluginID();
 
-	/**
-	 * @return Nice and readable plugin name.
-	 */
-	String name();
+    /**
+     * @return Nice and readable plugin name.
+     */
+    String name();
 
-	/**
-	 * @return Plugin author's name.
-	 */
-	String author() default "";
+    /**
+     * @return Plugin author's name.
+     */
+    String author() default "";
 
-	/**
-	 * @return URL of plugin homepage.
-	 */
-	String url() default "";
+    /**
+     * @return URL of plugin homepage.
+     */
+    String url() default "";
 
-	/**
-	 * @return Version of the plugin, if any.
-	 */
-	String version() default "";
+    /**
+     * @return Version of the plugin, if any.
+     */
+    String version() default "";
 
-	/**
-	 * @return Localization key for a short description what the plugin does.
-	 */
-	String unlocalizedDescription() default "";
+    /**
+     * @return Localization key for a short description what the plugin does.
+     */
+    String unlocalizedDescription() default "";
 
-	/**
-	 * @return Not used (yet?).
-	 */
-	String help() default "";
-
+    /**
+     * @return Not used (yet?).
+     */
+    String help() default "";
 }

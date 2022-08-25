@@ -10,26 +10,25 @@
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import net.minecraft.world.IBlockAccess;
-
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.tiles.TileEngine;
 import forestry.core.tiles.TileUtil;
+import net.minecraft.world.IBlockAccess;
 
 public class EngineDefinition extends MachineDefinition {
 
-	public EngineDefinition(IMachinePropertiesTESR properties) {
-		super(properties);
-	}
+    public EngineDefinition(IMachinePropertiesTESR properties) {
+        super(properties);
+    }
 
-	@Override
-	public boolean isSolidOnSide(IBlockAccess world, int x, int y, int z, int side) {
-		TileEngine tile = TileUtil.getTile(world, x, y, z, TileEngine.class);
-		if (tile == null) {
-			return false;
-		}
+    @Override
+    public boolean isSolidOnSide(IBlockAccess world, int x, int y, int z, int side) {
+        TileEngine tile = TileUtil.getTile(world, x, y, z, TileEngine.class);
+        if (tile == null) {
+            return false;
+        }
 
-		return tile.getOrientation().getOpposite().ordinal() == side;
-	}
+        return tile.getOrientation().getOpposite().ordinal() == side;
+    }
 }

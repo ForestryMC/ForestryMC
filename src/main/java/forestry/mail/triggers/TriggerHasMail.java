@@ -10,30 +10,27 @@
  ******************************************************************************/
 package forestry.mail.triggers;
 
-import net.minecraft.tileentity.TileEntity;
-
-import net.minecraftforge.common.util.ForgeDirection;
-
-import forestry.core.triggers.Trigger;
-import forestry.mail.tiles.IMailContainer;
-
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
+import forestry.core.triggers.Trigger;
+import forestry.mail.tiles.IMailContainer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TriggerHasMail extends Trigger {
 
-	public TriggerHasMail() {
-		super("mail.hasMail", "hasMail");
-	}
+    public TriggerHasMail() {
+        super("mail.hasMail", "hasMail");
+    }
 
-	@Override
-	public boolean isTriggerActive(TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
+    @Override
+    public boolean isTriggerActive(
+            TileEntity tile, ForgeDirection side, IStatementContainer source, IStatementParameter[] parameters) {
 
-		if (!(tile instanceof IMailContainer)) {
-			return false;
-		}
+        if (!(tile instanceof IMailContainer)) {
+            return false;
+        }
 
-		return ((IMailContainer) tile).hasMail();
-	}
-
+        return ((IMailContainer) tile).hasMail();
+    }
 }

@@ -15,18 +15,18 @@ import forestry.core.utils.vect.Vect;
 
 public class AlleleArea extends AlleleCategorized implements IAlleleArea {
 
-	private final int[] area;
+    private final int[] area;
 
-	public AlleleArea(String modId, String category, String name, int[] value, boolean isDominant) {
-		super(modId, category, name, isDominant);
-		this.area = value;
-	}
-	
-	public int[] getValue() {
-		return area;
-	}
+    public AlleleArea(String modId, String category, String name, int[] value, boolean isDominant) {
+        super(modId, category, name, isDominant);
+        this.area = value;
+    }
 
-	public Vect getArea() {
-		return new Vect(area);
-	}
+    public int[] getValue() {
+        return area;
+    }
+
+    public Vect getArea() {
+        return new Vect(area);
+    }
 }

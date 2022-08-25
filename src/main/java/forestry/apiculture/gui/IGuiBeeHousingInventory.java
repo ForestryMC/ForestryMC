@@ -10,11 +10,10 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
+import forestry.core.tiles.ITitled;
 import net.minecraft.inventory.IInventory;
 
-import forestry.core.tiles.ITitled;
-
 public interface IGuiBeeHousingInventory extends ITitled, IInventory {
-	/** Returns scaled queen health or breeding progress */
-	int getHealthScaled(int i);
+    /** Returns scaled queen health or breeding progress */
+    int getHealthScaled(int i);
 }

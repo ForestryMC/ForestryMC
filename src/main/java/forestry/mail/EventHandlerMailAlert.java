@@ -10,39 +10,37 @@
  ******************************************************************************/
 package forestry.mail;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-
 import forestry.core.proxy.Proxies;
 import forestry.mail.gui.GuiMailboxInfo;
 import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class EventHandlerMailAlert {
-	@SubscribeEvent
-	public void onRenderTick(TickEvent.RenderTickEvent event) {
-		if (event.phase != Phase.END) {
-			return;
-		}
+    @SubscribeEvent
+    public void onRenderTick(TickEvent.RenderTickEvent event) {
+        if (event.phase != Phase.END) {
+            return;
+        }
 
-		if (Minecraft.getMinecraft().theWorld != null && GuiMailboxInfo.instance.hasPOBoxInfo()) {
-			GuiMailboxInfo.instance.render();
-		}
-	}
+        if (Minecraft.getMinecraft().theWorld != null && GuiMailboxInfo.instance.hasPOBoxInfo()) {
+            GuiMailboxInfo.instance.render();
+        }
+    }
 
-	@SubscribeEvent
-	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		EntityPlayer player = event.player;
-		if (player != null) {
-			MailAddress address = new MailAddress(player.getGameProfile());
-			POBox pobox = PostRegistry.getOrCreatePOBox(player.worldObj, address);
-			if (pobox != null) {
-				Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
-			}
-		}
-	}
+    @SubscribeEvent
+    public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        EntityPlayer player = event.player;
+        if (player != null) {
+            MailAddress address = new MailAddress(player.getGameProfile());
+            POBox pobox = PostRegistry.getOrCreatePOBox(player.worldObj, address);
+            if (pobox != null) {
+                Proxies.net.sendToPlayer(new PacketPOBoxInfoUpdate(pobox.getPOBoxInfo()), player);
+            }
+        }
+    }
 }
