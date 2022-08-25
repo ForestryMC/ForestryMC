@@ -219,13 +219,8 @@ public class PluginHarvestCraft extends ForestryPlugin {
                 ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple") / 2; // vegetables produce less juice
         juiceAmount = Math.max(juiceAmount, 1); // Produce at least 1 mb of juice.
         for (String vegetableName : vegetables) {
-            ItemStack vegetable = GameRegistry.findItemStack(HC, vegetableName + "Item", 1);
             ItemStack vegetableSeed = GameRegistry.findItemStack(HC, vegetableName + "seedItem", 1);
             Block vegetableBlock = GameRegistry.findBlock(HC, "pam" + vegetableName + "Crop");
-            if (vegetable != null) {
-                RecipeManagers.squeezerManager.addRecipe(
-                        10, new ItemStack[] {vegetable}, Fluids.JUICE.getFluid(juiceAmount));
-            }
             if (vegetableSeed != null) {
                 RecipeManagers.squeezerManager.addRecipe(
                         10, new ItemStack[] {vegetableSeed}, Fluids.SEEDOIL.getFluid(seedamount));
