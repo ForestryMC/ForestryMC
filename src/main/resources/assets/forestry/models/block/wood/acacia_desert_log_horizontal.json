@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "forestry:block/wood/heart.acacia_desert",
+    "side": "forestry:block/wood/bark.acacia_desert"
+  }
+}

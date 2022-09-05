@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "forestry:block/wood/heart.balsa",
+    "side": "forestry:block/wood/bark.balsa"
+  }
+}

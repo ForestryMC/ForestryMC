@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/walnut_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/walnut_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/walnut_slab_top"
+    }
+  }
+}

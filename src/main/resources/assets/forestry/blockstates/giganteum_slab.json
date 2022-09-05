@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/giganteum_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/giganteum_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/giganteum_slab_top"
+    }
+  }
+}

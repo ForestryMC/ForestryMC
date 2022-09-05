@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "forestry:block/wood/planks.mahogany",
+    "top": "forestry:block/wood/planks.mahogany",
+    "side": "forestry:block/wood/planks.mahogany"
+  }
+}

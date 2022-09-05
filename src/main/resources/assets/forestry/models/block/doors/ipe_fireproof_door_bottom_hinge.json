@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_rh",
+  "textures": {
+    "bottom": "forestry:block/doors/ipe_lower",
+    "top": "forestry:block/doors/ipe_upper"
+  }
+}

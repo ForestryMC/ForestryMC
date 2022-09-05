@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "forestry:block/wood/planks.plum",
+    "top": "forestry:block/wood/planks.plum",
+    "side": "forestry:block/wood/planks.plum"
+  }
+}

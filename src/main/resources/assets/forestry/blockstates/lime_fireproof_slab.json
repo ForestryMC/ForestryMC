@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/lime_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/lime_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/lime_slab_top"
+    }
+  }
+}

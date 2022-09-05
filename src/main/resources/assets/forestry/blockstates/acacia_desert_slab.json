@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/acacia_desert_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/acacia_desert_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/acacia_desert_slab_top"
+    }
+  }
+}

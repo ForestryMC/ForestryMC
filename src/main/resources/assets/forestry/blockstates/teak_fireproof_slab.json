@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/teak_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/teak_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/teak_slab_top"
+    }
+  }
+}

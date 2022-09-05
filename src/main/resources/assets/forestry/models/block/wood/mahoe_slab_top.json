@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "forestry:block/wood/planks.mahoe",
+    "top": "forestry:block/wood/planks.mahoe",
+    "side": "forestry:block/wood/planks.mahoe"
+  }
+}

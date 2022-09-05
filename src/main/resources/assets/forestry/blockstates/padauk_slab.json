@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/padauk_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/padauk_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/padauk_slab_top"
+    }
+  }
+}

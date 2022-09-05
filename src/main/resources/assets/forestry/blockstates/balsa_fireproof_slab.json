@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/balsa_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/balsa_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/balsa_slab_top"
+    }
+  }
+}

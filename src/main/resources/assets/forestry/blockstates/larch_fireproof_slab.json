@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/larch_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/larch_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/larch_slab_top"
+    }
+  }
+}

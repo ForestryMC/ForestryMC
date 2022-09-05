@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/poplar_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/poplar_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/poplar_slab_top"
+    }
+  }
+}

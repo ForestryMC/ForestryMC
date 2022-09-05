@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "forestry:block/wood/wenge_slab"
+    },
+    "type=double": {
+      "model": "forestry:block/wood/wenge_planks"
+    },
+    "type=top": {
+      "model": "forestry:block/wood/wenge_slab_top"
+    }
+  }
+}

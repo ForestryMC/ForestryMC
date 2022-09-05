@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "forestry:block/wood/planks.poplar",
+    "top": "forestry:block/wood/planks.poplar",
+    "side": "forestry:block/wood/planks.poplar"
+  }
+}
