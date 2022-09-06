@@ -50,6 +50,7 @@ public class ForestryBlockStateProvider extends BlockStateProvider {
 		addVariants(CoreBlocks.DEEPSLATE_APATITE_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/deepslate_apatite_ore")));
 		addVariants(CoreBlocks.TIN_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/tin_ore")));
 		addVariants(CoreBlocks.DEEPSLATE_TIN_ORE.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/deepslate_tin_ore")));
+		addVariants(CoreBlocks.RAW_TIN_BLOCK.block(), new Builder().always(variant -> variant.model(Constants.MOD_ID + ":block/raw_tin_block")));
 	}
 
 	private void addCultivationBlock(FeatureBlock<? extends Block, BlockItem> feature, BlockTypePlanter planter) {

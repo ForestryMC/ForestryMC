@@ -20,14 +20,14 @@ public class ForestryBlockModelProvider extends ModelProvider {
 			registerModel(block, new ModelBuilder().particle(fluid.getFeature().properties().resources[0]));
 		}
 
-		registerCubeAll("apatite_ore");
-		registerCubeAll("deepslate_apatite_ore");
-		registerCubeAll("tin_ore");
-		registerCubeAll("deepslate_tin_ore");
-		registerCubeAll("raw_tin_block");
+		registerCubeAll("apatite_ore", "apatite");
+		registerCubeAll("deepslate_apatite_ore", "deepslate_apatite");
+		registerCubeAll("tin_ore", "tin");
+		registerCubeAll("deepslate_tin_ore", "deepslate_tin");
+		registerCubeAll("raw_tin_block", "raw_tin_block");
 	}
 
-	private void registerCubeAll(String path) {
-		registerModel(path, new ModelBuilder().parent("block/cube_all").texture("all", new ResourceLocation(Constants.MOD_ID, "block/" + path)));
+	private void registerCubeAll(String path, String texturePath) {
+		registerModel(path, new ModelBuilder().parent("block/cube_all").texture("all", new ResourceLocation(Constants.MOD_ID, "block/ores/" + texturePath)));
 	}
 }
