@@ -69,6 +69,10 @@ public class TileAlvearySwarmer extends TileAlveary implements ISidedInventory, 
             setActive(false);
         }
 
+        if (!getBeekeepingLogic().canWork()) {
+            return;
+        }
+
         if (tickCount % 500 != 0) {
             return;
         }
