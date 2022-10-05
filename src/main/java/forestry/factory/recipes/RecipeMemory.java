@@ -14,6 +14,7 @@ import forestry.api.core.INBTTagable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
+import forestry.core.utils.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 
 public class RecipeMemory implements INBTTagable, IStreamable {
 
@@ -54,8 +56,22 @@ public class RecipeMemory implements INBTTagable, IStreamable {
         LinkedList<MemorizedRecipe> validRecipes = new LinkedList<>();
         for (MemorizedRecipe recipe : memorizedRecipes) {
             if (recipe != null) {
-                recipe.calculateRecipeOutput(world);
-                if (isValid(recipe)) {
+                boolean doAdd = false;
+
+                try {
+                    recipe.calculateRecipeOutput(world);
+                    if (isValid(recipe)) {
+                        doAdd = true;
+                    }
+                } catch (Exception ex) {
+                    Log.logThrowable(
+                            Level.ERROR,
+                            "Error validating memorized recipe. This recipe will now be forgotten!",
+                            Integer.MAX_VALUE,
+                            ex);
+                }
+
+                if (doAdd) {
                     validRecipes.add(recipe);
                 }
             }
