@@ -1,4 +1,4 @@
-//version: 1661114848
+//version: 1664372158
 /*
  DO NOT CHANGE THIS FILE!
  Also, you may replace this file at any time if there is an update available.
@@ -8,6 +8,10 @@
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.matthewprenger.cursegradle.CurseArtifact
+import com.matthewprenger.cursegradle.CurseRelation
+import com.modrinth.minotaur.dependencies.ModDependency
+import com.modrinth.minotaur.dependencies.VersionDependency
 import org.gradle.internal.logging.text.StyledTextOutput.Style
 import org.gradle.internal.logging.text.StyledTextOutputFactory
 
@@ -59,6 +63,8 @@ plugins {
     id 'de.undercouch.download' version '5.0.1'
     id 'com.github.gmazzo.buildconfig' version '3.0.3' apply false
     id 'com.diffplug.spotless' version '6.7.2' apply false
+    id 'com.modrinth.minotaur' version '2.+' apply false
+    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
 }
 boolean settingsupdated = verifySettingsGradle()
 settingsupdated = verifyGitAttributes() || settingsupdated
@@ -127,11 +133,16 @@ checkPropertyExists("containsMixinsAndOrCoreModOnly")
 checkPropertyExists("usesShadowedDependencies")
 checkPropertyExists("developmentEnvironmentUserName")
 
-boolean noPublishedSources = project.hasProperty("noPublishedSources") ? project.noPublishedSources.toBoolean() : false
-boolean usesMixinDebug = project.hasProperty('usesMixinDebug') ?: project.usesMixins.toBoolean()
-boolean forceEnableMixins = project.hasProperty('forceEnableMixins') ? project.forceEnableMixins.toBoolean() : false
-String channel = project.hasProperty('channel') ? project.channel : 'stable'
-String mappingsVersion = project.hasProperty('mappingsVersion') ? project.mappingsVersion : '12'
+propertyDefaultIfUnset("noPublishedSources", false)
+propertyDefaultIfUnset("usesMixinDebug", project.usesMixins)
+propertyDefaultIfUnset("forceEnableMixins", false)
+propertyDefaultIfUnset("channel", "stable")
+propertyDefaultIfUnset("mappingsVersion", "12")
+propertyDefaultIfUnset("modrinthProjectId", "")
+propertyDefaultIfUnset("modrinthRelations", "")
+propertyDefaultIfUnset("curseForgeProjectId", "")
+propertyDefaultIfUnset("curseForgeRelations", "")
+
 String javaSourceDir = "src/main/java/"
 String scalaSourceDir = "src/main/scala/"
 String kotlinSourceDir = "src/main/kotlin/"
@@ -651,6 +662,107 @@ publishing {
     }
 }
 
+if (modrinthProjectId.size() != 0) {
+    apply plugin: 'com.modrinth.minotaur'
+
+    File changelogFile = new File("CHANGELOG.md")
+
+    modrinth {
+        token = System.getenv("MODRINTH_TOKEN")
+        projectId = modrinthProjectId
+        versionNumber = identifiedVersion
+        versionType = identifiedVersion.endsWith("-pre") ? "beta" : "release"
+        changelog = changelogFile.exists() ? changelogFile.getText("UTF-8") : ""
+        uploadFile = jar
+        additionalFiles = getSecondaryArtifacts()
+        gameVersions = [minecraftVersion]
+        loaders = ["forge"]
+        debugMode = false
+    }
+
+    if (modrinthRelations.size() != 0) {
+        String[] deps = modrinthRelations.split(";")
+        deps.each { dep ->
+            if (dep.size() == 0) {
+                return
+            }
+            String[] parts = dep.split(":")
+            String[] qual = parts[0].split("-")
+            addModrinthDep(qual[0], qual[1], parts[1])
+        }
+    }
+    tasks.modrinth.dependsOn(build)
+    tasks.publish.dependsOn(tasks.modrinth)
+}
+
+if (curseForgeProjectId.size() != 0) {
+    apply plugin: 'com.matthewprenger.cursegradle'
+
+    File changelogFile = new File("CHANGELOG.md")
+
+    curseforge {
+        apiKey = System.getenv("CURSEFORGE_TOKEN")
+        project {
+            id = curseForgeProjectId
+            if (changelogFile.exists()) {
+                changelogType = "markdown"
+                changelog = changelogFile
+            }
+            releaseType = identifiedVersion.endsWith("-pre") ? "beta" : "release"
+            addGameVersion minecraftVersion
+            addGameVersion "Forge"
+            mainArtifact jar
+            for (artifact in getSecondaryArtifacts()) addArtifact artifact
+        }
+
+        options {
+            javaIntegration = false
+            forgeGradleIntegration = false
+            debug = false
+        }
+    }
+
+    if (curseForgeRelations.size() != 0) {
+        String[] deps = curseForgeRelations.split(";")
+        deps.each { dep ->
+            if (dep.size() == 0) {
+                return
+            }
+            String[] parts = dep.split(":")
+            addCurseForgeRelation(parts[0], parts[1])
+        }
+    }
+    tasks.curseforge.dependsOn(build)
+    tasks.publish.dependsOn(tasks.curseforge)
+}
+
+def addModrinthDep(scope, type, name) {
+    com.modrinth.minotaur.dependencies.Dependency dep;
+    if (!(scope in ["required", "optional", "incompatible", "embedded"])) {
+        throw new Exception("Invalid modrinth dependency scope: " + scope)
+    }
+    switch (type) {
+        case "project":
+            dep = new ModDependency(name, scope)
+            break
+        case "version":
+            dep = new VersionDependency(name, scope)
+            break
+        default:
+            throw new Exception("Invalid modrinth dependency type: " + type)
+    }
+    project.modrinth.dependencies.add(dep)
+}
+
+def addCurseForgeRelation(type, name) {
+    if (!(type in ["requiredDependency", "embeddedLibrary", "optionalDependency", "tool", "incompatible"])) {
+        throw new Exception("Invalid CurseForge relation type: " + type)
+    }
+    CurseArtifact artifact = project.curseforge.curseProjects[0].mainArtifact
+    CurseRelation rel = (artifact.curseRelations ?: (artifact.curseRelations = new CurseRelation()))
+    rel."$type"(name)
+}
+
 // Updating
 task updateBuildScript {
     doLast {
@@ -963,6 +1075,21 @@ def checkPropertyExists(String propertyName) {
     }
 }
 
+def propertyDefaultIfUnset(String propertyName, defaultValue) {
+    if (!project.hasProperty(propertyName) || project.property(propertyName) == "") {
+        project.ext.setProperty(propertyName, defaultValue)
+    }
+}
+
 def getFile(String relativePath) {
     return new File(projectDir, relativePath)
+}
+
+def getSecondaryArtifacts() {
+    // Because noPublishedSources from the beginning of the script is somehow not visible here...
+    boolean noPublishedSources = project.hasProperty("noPublishedSources") ? project.noPublishedSources.toBoolean() : false
+    def secondaryArtifacts = [devJar]
+    if (!noPublishedSources) secondaryArtifacts += [sourcesJar]
+    if (apiPackage) secondaryArtifacts += [apiJar]
+    return secondaryArtifacts
 }

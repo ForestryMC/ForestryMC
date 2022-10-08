@@ -514,19 +514,21 @@ public class Bee extends IndividualLiving implements IBee {
         IBeeModifier beeModeModifier = mode.getBeeModifier();
 
         // Bee genetic speed * beehousing * beekeeping mode
-        float speed = genome.getSpeed()
-                * beeHousingModifier.getProductionModifier(genome, 1f)
+        float speed = genome.getSpeed();
+        float prodModifier = beeHousingModifier.getProductionModifier(genome, 1f)
                 * beeModeModifier.getProductionModifier(genome, 1f);
+        prodModifier /= 4f;
 
         // / Primary Products
         for (Map.Entry<ItemStack, Float> entry : primary.getProductChances().entrySet()) {
-            if (housing.getWorld().rand.nextFloat() < entry.getValue() * speed) {
+            if (housing.getWorld().rand.nextFloat() < getFinalChance(entry.getValue(), speed, prodModifier, 1f)) {
                 products.add(entry.getKey().copy());
             }
         }
         // / Secondary Products
         for (Map.Entry<ItemStack, Float> entry : secondary.getProductChances().entrySet()) {
-            if (housing.getWorld().rand.nextFloat() < Math.round(entry.getValue() / 2) * speed) {
+            if (housing.getWorld().rand.nextFloat()
+                    < getFinalChance(Math.round(entry.getValue() / 2), speed, prodModifier, 1f)) {
                 products.add(entry.getKey().copy());
             }
         }
@@ -535,7 +537,7 @@ public class Bee extends IndividualLiving implements IBee {
         if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
             for (Map.Entry<ItemStack, Float> entry :
                     primary.getSpecialtyChances().entrySet()) {
-                if (housing.getWorld().rand.nextFloat() < entry.getValue() * speed) {
+                if (housing.getWorld().rand.nextFloat() < getFinalChance(entry.getValue(), speed, prodModifier, 1f)) {
                     products.add(entry.getKey().copy());
                 }
             }
@@ -551,6 +553,14 @@ public class Bee extends IndividualLiving implements IBee {
                         housingCoordinates.posY,
                         housingCoordinates.posZ,
                         productsArray);
+    }
+
+    public static float getFinalChance(float chance, float beeSpeed, float productionModifier, float t) {
+        chance *= 100f;
+        return (float) (((1f + t / 6f) * Math.sqrt(chance) * 2f * (1f + beeSpeed)
+                        + Math.pow(productionModifier, Math.cbrt(chance))
+                        - 3f)
+                / 100f);
     }
 
     /* REPRODUCTION */
