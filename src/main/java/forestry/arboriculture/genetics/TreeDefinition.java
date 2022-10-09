@@ -83,7 +83,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
@@ -566,7 +565,7 @@ public enum TreeDefinition implements ITreeDefinition, ITreeGenerator {
 
         @Override
         protected void registerMutations() {
-            registerMutation(Sequioa, Baobab, 1).requireNight().restrictBiomeType(BiomeDictionary.Type.FOREST);
+            registerMutation(Sequioa, Baobab, 1);
         }
     },
     Jungle(
