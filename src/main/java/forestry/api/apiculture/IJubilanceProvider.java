@@ -12,4 +12,8 @@ public interface IJubilanceProvider {
      * Jubilant bees can produce their Specialty products.
      */
     boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing);
+
+    default String getDescription() {
+        return null;
+    }
 }

@@ -10,11 +10,7 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.apiculture.IBee;
+import forestry.api.apiculture.*;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
@@ -297,6 +293,17 @@ public class GuiBeealyzer extends GuiAlyzer {
                 textLayout.newLine();
             }
         }
+
+        String jubilance = null;
+        IAlleleBeeSpecies primary = bee.getGenome().getPrimary();
+        if (primary instanceof IAlleleBeeSpeciesCustom) {
+            IJubilanceProvider provider = ((IAlleleBeeSpeciesCustom) primary).getJubilanceProvider();
+            if (provider != null) jubilance = provider.getDescription();
+        }
+
+        textLayout.newLine();
+        textLayout.newLine();
+        if (jubilance != null) textLayout.drawLine(StringUtil.localizeAndFormat("gui.jubilance", jubilance), COLUMN_0);
 
         textLayout.endPage();
     }

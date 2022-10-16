@@ -16,12 +16,12 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.StringUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
-// import forestry.core.utils.ItemStackUtil;
 
 public class JubilanceRequiresResource implements IJubilanceProvider {
 
@@ -35,20 +35,6 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
     public boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing) {
         World world = housing.getWorld();
         ChunkCoordinates housingCoords = housing.getCoordinates();
-        /*
-        		Block block;
-        		TileEntity tile;
-        		int meta;
-        		int i = 1;
-        		do {
-        			block = world.getBlock(housingCoords.posX, housingCoords.posY - i, housingCoords.posZ);
-        			meta = world.getBlockMetadata(housingCoords.posX, housingCoords.posY - i, housingCoords.posZ);
-        			tile = world.getTileEntity(housingCoords.posX, housingCoords.posY - i, housingCoords.posZ);
-        			i++;
-        		} while (tile instanceof IBeeHousing);
-
-        		return ItemStackUtil.equals(block, meta, blockRequired);
-        */
         ItemStack stk = BlockUtil.getItemStackFromBlockBelow(
                 world,
                 housingCoords.posX,
@@ -56,11 +42,11 @@ public class JubilanceRequiresResource implements IJubilanceProvider {
                 housingCoords.posZ,
                 (TileEntity tile) -> (tile instanceof IBeeHousing));
 
-        return InventoryUtil.isItemEqual(
-                blockRequired,
-                stk,
-                true,
-                true); // ffs dont compare itemsstacks with equal >_> and why tf didnt i got this until i debugged it?
-        // im getting old..
+        return InventoryUtil.isItemEqual(blockRequired, stk, true, true);
+    }
+
+    @Override
+    public String getDescription() {
+        return StringUtil.localizeAndFormat("jubilance.resource", blockRequired.getDisplayName());
     }
 }

@@ -172,6 +172,7 @@ for.gui.inactive=Inactive
 for.gui.life=Life
 for.gui.lifespan=Lifespan
 for.gui.normal=Normal
+for.gui.jubilance=Jubilance: %s
 
 for.gui.escritoire.probe=Examine Specimens
 for.gui.escritoire.instructions=Place a genetic sample in the center to begin. Place more in the left slots and examine them for help.
@@ -355,7 +356,7 @@ for.hints.beebreeding.desc=Crossbreeding drones and princesses of different spec
 for.hints.beebreeding.tag=Breed your bees!
 for.hints.beeflowers.desc=Any bee will need some type of flower in the vicinity. Some rather mundane flowers, others very exotic ones.
 for.hints.beeflowers.tag=Bees need flowers
-for.hints.beejubilance.desc=Only jubilant bees will produce their specialty. Make sure to have them in their preferred climate.
+for.hints.beejubilance.desc=Only jubilant bees will produce their specialty. Make sure to check jubilance requirements in the bee scan.
 for.hints.beejubilance.tag=Make your bee happy!
 for.hints.cooldownloss.desc=Engines going into forced cooldown will also lose a significant chunk of their stored energy.
 for.hints.cooldownloss.tag=Cooldown means energy loss!
@@ -758,6 +759,14 @@ neiintegration.chance.lessThan1=<1%
 neiintegration.handler.forestry.shaped=Forestry Shaped
 neiintegration.handler.forestry.shapeless=Forestry Shapeless
 neiintegration.handler.forestry.fabricator.worth=Worth:
+
+################
+# JUBILANCE
+################
+
+for.jubilance.climate=Needs preffered climate
+for.jubilance.hermit=Will not produce if there are any other living creatures nearby
+for.jubilance.resource=Requires %s as foundation
 
 ################
 # ERRORS

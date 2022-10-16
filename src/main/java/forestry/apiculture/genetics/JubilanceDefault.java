@@ -16,6 +16,7 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IJubilanceProvider;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
+import forestry.core.utils.StringUtil;
 
 public class JubilanceDefault implements IJubilanceProvider {
 
@@ -29,5 +30,10 @@ public class JubilanceDefault implements IJubilanceProvider {
         EnumHumidity humidity = housing.getHumidity();
 
         return temperature == species.getTemperature() && humidity == species.getHumidity();
+    }
+
+    @Override
+    public String getDescription() {
+        return StringUtil.localize("jubilance.climate");
     }
 }

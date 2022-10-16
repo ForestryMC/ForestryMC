@@ -101,6 +101,11 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
     }
 
     @Override
+    public IJubilanceProvider getJubilanceProvider() {
+        return this.jubilanceProvider;
+    }
+
+    @Override
     public IAlleleBeeSpeciesCustom setNocturnal() {
         nocturnal = true;
         return this;
