@@ -20,6 +20,7 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.proxy.Proxies;
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -57,7 +58,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
     private GameProfile username;
 
     @Nullable
-    private World world;
+    private WeakReference<World> world;
 
     protected BreedingTracker(String s) {
         super(s);
@@ -68,7 +69,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
     }
 
     public void setWorld(@Nullable World world) {
-        this.world = world;
+        this.world = new WeakReference<>(world);
     }
 
     @Override
@@ -113,6 +114,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
             Collection<String> discoveredSpecies,
             Collection<String> discoveredMutations,
             Collection<String> researchedMutations) {
+        World world = this.world != null ? this.world.get() : null;
         if (world != null && username != null && username.getName() != null) {
             EntityPlayer player = world.getPlayerEntityByName(username.getName());
             if (player instanceof EntityPlayerMP && !(player instanceof FakePlayer)) {
