@@ -764,7 +764,7 @@ neiintegration.handler.forestry.fabricator.worth=Worth:
 # JUBILANCE
 ################
 
-for.jubilance.climate=Needs preffered climate
+for.jubilance.climate=Needs preferred climate
 for.jubilance.hermit=Will not produce if there are any other living creatures nearby
 for.jubilance.resource=Requires %s as foundation
 
