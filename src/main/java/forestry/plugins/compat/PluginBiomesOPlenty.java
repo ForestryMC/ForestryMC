@@ -126,10 +126,6 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
                 Farmables.farmables
                         .get(FarmableReference.Vegetables.get())
                         .add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
-                if (PluginManager.Module.FACTORY.isEnabled()) {
-                    RecipeManagers.squeezerManager.addRecipe(
-                            10, new ItemStack[] {boPTurnipSeedStack}, Fluids.SEEDOIL.getFluid(amount));
-                }
             }
 
             Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(boPTurnip, 7));
@@ -170,6 +166,14 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
         if (persimmon != null) {
             RecipeManagers.squeezerManager.addRecipe(
                     10, new ItemStack[] {persimmon}, Fluids.JUICE.getFluid(200), mulch, 20);
+        }
+
+        ItemStack boPTurnipSeedStack = GameRegistry.findItemStack(BoP, "turnipSeeds", 1);
+        if (boPTurnipSeedStack != null) {
+            if (PluginManager.Module.FACTORY.isEnabled()) {
+                RecipeManagers.squeezerManager.addRecipe(
+                        10, new ItemStack[] {boPTurnipSeedStack}, Fluids.SEEDOIL.getFluid(amount));
+            }
         }
     }
 
