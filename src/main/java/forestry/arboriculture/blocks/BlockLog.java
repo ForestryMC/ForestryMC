@@ -1,22 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.arboriculture.EnumWoodType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.arboriculture.render.IconProviderWood;
-import forestry.arboriculture.tiles.TileWood;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -25,6 +18,13 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.arboriculture.render.IconProviderWood;
+import forestry.arboriculture.tiles.TileWood;
 
 public class BlockLog extends BlockWood {
 
@@ -46,8 +46,8 @@ public class BlockLog extends BlockWood {
         byte radius = 4;
         int boundary = radius + 1;
 
-        if (world.checkChunksExist(
-                x - boundary, y - boundary, z - boundary, x + boundary, y + boundary, z + boundary)) {
+        if (world
+                .checkChunksExist(x - boundary, y - boundary, z - boundary, x + boundary, y + boundary, z + boundary)) {
             for (int i = -radius; i <= radius; ++i) {
                 for (int j = -radius; j <= radius; ++j) {
                     for (int k = -radius; k <= radius; ++k) {
@@ -81,7 +81,7 @@ public class BlockLog extends BlockWood {
         return meta | b0;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
         for (EnumWoodType woodType : EnumWoodType.VALUES) {

@@ -1,22 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.blocks.IItemTyped;
-import forestry.core.config.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -28,6 +23,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.blocks.IItemTyped;
+import forestry.core.config.Constants;
 
 public class BlockMushroom extends BlockSapling implements IItemTyped {
 
@@ -42,10 +42,9 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
     public BlockMushroom() {
         super();
         setHardness(0.0f);
-        this.generators = new WorldGenerator[] {
-            new WorldGenBigMushroom(MushroomType.BROWN.ordinal()), new WorldGenBigMushroom(MushroomType.RED.ordinal())
-        };
-        this.drops = new ItemStack[] {new ItemStack(Blocks.brown_mushroom), new ItemStack(Blocks.red_mushroom)};
+        this.generators = new WorldGenerator[] { new WorldGenBigMushroom(MushroomType.BROWN.ordinal()),
+                new WorldGenBigMushroom(MushroomType.RED.ordinal()) };
+        this.drops = new ItemStack[] { new ItemStack(Blocks.brown_mushroom), new ItemStack(Blocks.red_mushroom) };
         setCreativeTab(null);
         setTickRandomly(true);
     }
@@ -121,7 +120,7 @@ public class BlockMushroom extends BlockSapling implements IItemTyped {
     }
 
     /* ICONS */
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {

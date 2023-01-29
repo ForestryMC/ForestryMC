@@ -8,6 +8,7 @@ package forestry.api.fuels;
 import net.minecraft.item.ItemStack;
 
 public class FermenterFuel {
+
     /**
      * Item that is a valid fuel for the fermenter (i.e. fertilizer).
      */

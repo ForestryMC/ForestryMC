@@ -5,16 +5,17 @@
  ******************************************************************************/
 package forestry.api.multiblock;
 
-import forestry.api.core.INBTTagable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import forestry.api.core.INBTTagable;
+
 /**
- * Multiblock Logic implements the basic logic for IMultiblockComponent tile entities.
- * Instances must come from MultiblockManager.logicFactory, most of the implementation is hidden.
+ * Multiblock Logic implements the basic logic for IMultiblockComponent tile entities. Instances must come from
+ * MultiblockManager.logicFactory, most of the implementation is hidden.
  *
- * IMultiblockComponent tile entities must wire up the methods in the "Updating and Synchronization" section.
- * As a starting point, you can use MultiblockTileEntityBase.
+ * IMultiblockComponent tile entities must wire up the methods in the "Updating and Synchronization" section. As a
+ * starting point, you can use MultiblockTileEntityBase.
  */
 public interface IMultiblockLogic extends INBTTagable {
 
@@ -46,27 +47,23 @@ public interface IMultiblockLogic extends INBTTagable {
     void onChunkUnload(World world, IMultiblockComponent part);
 
     /**
-     * Writes data for client synchronization.
-     * Use this in Tile.getDescriptionPacket()
+     * Writes data for client synchronization. Use this in Tile.getDescriptionPacket()
      */
     void encodeDescriptionPacket(NBTTagCompound packetData);
 
     /**
-     * Reads data for client synchronization.
-     * Use this in Tile.onDataPacket()
+     * Reads data for client synchronization. Use this in Tile.onDataPacket()
      */
     void decodeDescriptionPacket(NBTTagCompound packetData);
 
     /**
-     * Read the logic's data from file.
-     * Use this in Tile.readFromNBT()
+     * Read the logic's data from file. Use this in Tile.readFromNBT()
      */
     @Override
     void readFromNBT(NBTTagCompound nbttagcompound);
 
     /**
-     * Write the logic's data to file.
-     * Use this in Tile.writeToNBT()
+     * Write the logic's data to file. Use this in Tile.writeToNBT()
      */
     @Override
     void writeToNBT(NBTTagCompound nbttagcompound);

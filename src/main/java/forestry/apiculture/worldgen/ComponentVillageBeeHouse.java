@@ -1,14 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.worldgen;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -38,19 +51,6 @@ import forestry.core.worldgen.IBlockType;
 import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
@@ -67,12 +67,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
         createBuildingBlocks(random);
     }
 
-    public ComponentVillageBeeHouse(
-            StructureVillagePieces.Start startPiece,
-            int componentType,
-            Random random,
-            StructureBoundingBox boundingBox,
-            int coordBaseMode) {
+    public ComponentVillageBeeHouse(StructureVillagePieces.Start startPiece, int componentType, Random random,
+            StructureBoundingBox boundingBox, int coordBaseMode) {
         super(startPiece, componentType, random, boundingBox, coordBaseMode);
 
         isInDesert = startPiece.inDesert;
@@ -104,17 +100,10 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
     }
 
     @SuppressWarnings("rawtypes")
-    public static ComponentVillageBeeHouse buildComponent(
-            StructureVillagePieces.Start startPiece,
-            List par1List,
-            Random random,
-            int par3,
-            int par4,
-            int par5,
-            int par6,
-            int par7) {
-        StructureBoundingBox bbox =
-                StructureBoundingBox.getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 10, 9, 11, par6);
+    public static ComponentVillageBeeHouse buildComponent(StructureVillagePieces.Start startPiece, List par1List,
+            Random random, int par3, int par4, int par5, int par6, int par7) {
+        StructureBoundingBox bbox = StructureBoundingBox
+                .getComponentToAddBoundingBox(par3, par4, par5, 0, 0, 0, 10, 9, 11, par6);
         if (!canVillageGoDeeper(bbox) || StructureComponent.findIntersecting(par1List, bbox) != null) {
             return null;
         }
@@ -193,8 +182,9 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
         // Escritoire
         if (random.nextInt(2) == 0) {
-            IBlockType escritoireBlock =
-                    new BlockTypeTileForestry(PluginCore.blocks.core, BlockCoreType.ESCRITOIRE.ordinal());
+            IBlockType escritoireBlock = new BlockTypeTileForestry(
+                    PluginCore.blocks.core,
+                    BlockCoreType.ESCRITOIRE.ordinal());
             escritoireBlock.setDirection(getRotatedDirection(ForgeDirection.EAST));
             placeBlockAtCurrentPosition(world, escritoireBlock, 1, 1, 3, structBoundingBox);
         }
@@ -202,7 +192,13 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
         placeBlockAtCurrentPosition(world, Blocks.air, 0, 2, 1, 0, structBoundingBox);
         placeBlockAtCurrentPosition(world, Blocks.air, 0, 2, 2, 0, structBoundingBox);
         placeDoorAtCurrentPosition(
-                world, structBoundingBox, random, 2, 1, 0, getMetadataWithOffset(Blocks.wooden_door, 1));
+                world,
+                structBoundingBox,
+                random,
+                2,
+                1,
+                0,
+                getMetadataWithOffset(Blocks.wooden_door, 1));
 
         if (isAirBlockAtCurrentPosition(world, 2, 0, -1, structBoundingBox)
                 && !isAirBlockAtCurrentPosition(world, 2, -1, -1, structBoundingBox)) {
@@ -226,7 +222,13 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
         placeBlockAtCurrentPosition(world, Blocks.torch, 0, 6, 3, 1, structBoundingBox);
 
         placeDoorAtCurrentPosition(
-                world, structBoundingBox, random, 6, 1, 5, getMetadataWithOffset(Blocks.wooden_door, 1));
+                world,
+                structBoundingBox,
+                random,
+                6,
+                1,
+                5,
+                getMetadataWithOffset(Blocks.wooden_door, 1));
 
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -276,8 +278,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
         }
     }
 
-    private void plantFlowerGarden(
-            World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+    private void plantFlowerGarden(World world, StructureBoundingBox box, int minX, int minY, int minZ, int maxX,
+            int maxY, int maxZ) {
 
         if (isInDesert) {
             placeBlockAtCurrentPosition(world, Blocks.cactus, 0, 4, 1, 7, box);
@@ -296,8 +298,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
                             continue;
                         }
 
-                        IFlower flower = FlowerManager.flowerRegistry.getRandomPlantableFlower(
-                                FlowerManager.FlowerTypeVanilla, world.rand);
+                        IFlower flower = FlowerManager.flowerRegistry
+                                .getRandomPlantableFlower(FlowerManager.FlowerTypeVanilla, world.rand);
                         placeBlockAtCurrentPosition(world, flower.getBlock(), flower.getMeta(), j, i, k, box);
                     }
                 }
@@ -344,9 +346,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
         ItemStack randomVillageDrone = getRandomVillageBeeStack(world, xCoord, yCoord, zCoord, EnumBeeType.DRONE);
         apiary.getBeeInventory().setDrone(randomVillageDrone);
 
-        for (int i = InventoryApiary.SLOT_FRAMES_1;
-                i < InventoryApiary.SLOT_FRAMES_1 + InventoryApiary.SLOT_FRAMES_COUNT;
-                i++) {
+        for (int i = InventoryApiary.SLOT_FRAMES_1; i
+                < InventoryApiary.SLOT_FRAMES_1 + InventoryApiary.SLOT_FRAMES_COUNT; i++) {
             ItemStack randomFrame = getRandomFrame(world.rand);
             apiary.setInventorySlotContents(i, randomFrame);
         }
@@ -365,8 +366,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
         }
     }
 
-    private static ItemStack getRandomVillageBeeStack(
-            World world, int xCoord, int yCoord, int zCoord, EnumBeeType beeType) {
+    private static ItemStack getRandomVillageBeeStack(World world, int xCoord, int yCoord, int zCoord,
+            EnumBeeType beeType) {
         IBee randomVillageBee = getRandomVillageBee(world, xCoord, yCoord, zCoord);
         return BeeManager.beeRoot.getMemberStack(randomVillageBee, beeType.ordinal());
     }
@@ -377,8 +378,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
         BiomeGenBase biome = world.getBiomeGenForCoords(xCoord, zCoord);
 
         ArrayList<IBeeGenome> candidates;
-        if (BeeManager.villageBees[1] != null
-                && BeeManager.villageBees[1].size() > 0
+        if (BeeManager.villageBees[1] != null && BeeManager.villageBees[1].size() > 0
                 && world.rand.nextDouble() < 0.2) {
             candidates = BeeManager.villageBees[1];
         } else {
@@ -398,15 +398,15 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
 
         // No valid ones found, return any of the common ones.
         if (valid.isEmpty()) {
-            return BeeManager.beeRoot.getBee(
-                    world, BeeManager.villageBees[0].get(world.rand.nextInt(BeeManager.villageBees[0].size())));
+            return BeeManager.beeRoot
+                    .getBee(world, BeeManager.villageBees[0].get(world.rand.nextInt(BeeManager.villageBees[0].size())));
         }
 
         return BeeManager.beeRoot.getBee(world, valid.get(world.rand.nextInt(valid.size())));
     }
 
-    private static boolean checkBiomeHazard(
-            IBeeGenome genome, EnumTemperature biomeTemperature, EnumHumidity biomeHumidity) {
+    private static boolean checkBiomeHazard(IBeeGenome genome, EnumTemperature biomeTemperature,
+            EnumHumidity biomeHumidity) {
         IAlleleBeeSpecies species = genome.getPrimary();
         return AlleleManager.climateHelper.isWithinLimits(
                 biomeTemperature,
@@ -417,17 +417,8 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
                 genome.getToleranceHumid());
     }
 
-    private void fillBoxWith(
-            World world,
-            StructureBoundingBox box,
-            int par3,
-            int par4,
-            int par5,
-            int par6,
-            int par7,
-            int par8,
-            IBlockType block,
-            boolean replace) {
+    private void fillBoxWith(World world, StructureBoundingBox box, int par3, int par4, int par5, int par6, int par7,
+            int par8, IBlockType block, boolean replace) {
 
         for (int var14 = par4; var14 <= par7; ++var14) {
             for (int var15 = par3; var15 <= par6; ++var15) {
@@ -440,12 +431,7 @@ public class ComponentVillageBeeHouse extends StructureVillagePieces.House1 {
         }
     }
 
-    private void placeBlockAtCurrentPosition(
-            World world,
-            IBlockType block,
-            int par4,
-            int par5,
-            int par6,
+    private void placeBlockAtCurrentPosition(World world, IBlockType block, int par4, int par5, int par6,
             StructureBoundingBox par7StructureBoundingBox) {
         int x = getXWithOffset(par4, par6);
         int y = getYWithOffset(par5);

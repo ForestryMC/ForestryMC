@@ -1,12 +1,8 @@
 package forestry.apiculture.genetics.alleles;
 
-import forestry.api.apiculture.IBeeGenome;
-import forestry.api.apiculture.IBeeHousing;
-import forestry.api.genetics.IEffectData;
-import forestry.core.genetics.EffectData;
-import forestry.core.utils.vect.IVect;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
@@ -14,6 +10,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
+
+import forestry.api.apiculture.IBeeGenome;
+import forestry.api.apiculture.IBeeHousing;
+import forestry.api.genetics.IEffectData;
+import forestry.core.genetics.EffectData;
+import forestry.core.utils.vect.IVect;
 
 public class AlleleEffectFungification extends AlleleEffectThrottled {
 
@@ -105,7 +107,13 @@ public class AlleleEffectFungification extends AlleleEffectThrottled {
         mooshroom.renderYawOffset = cow.renderYawOffset;
         worldObj.spawnEntityInWorld(mooshroom);
         worldObj.spawnParticle(
-                "largeexplode", cow.posX, cow.posY + (double) (cow.height / 2.0F), cow.posZ, 0.0D, 0.0D, 0.0D);
+                "largeexplode",
+                cow.posX,
+                cow.posY + (double) (cow.height / 2.0F),
+                cow.posZ,
+                0.0D,
+                0.0D,
+                0.0D);
     }
 
     private static void doMushroomGrowth(Block block, World world, int blockX, int blockY, int blockZ) {

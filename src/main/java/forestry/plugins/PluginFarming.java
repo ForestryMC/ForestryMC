@@ -1,14 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -37,17 +48,6 @@ import forestry.farming.tiles.TileFarmHatch;
 import forestry.farming.tiles.TileFarmPlain;
 import forestry.farming.tiles.TileFarmValve;
 import forestry.farming.triggers.FarmingTriggers;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 @Plugin(
         pluginID = "Farming",
@@ -86,35 +86,29 @@ public class PluginFarming extends ForestryPlugin {
         Farmables.farmables.get(FarmableReference.Orchard.get()).add(new FarmableBasicFruit(Blocks.carrots, 7));
 
         Farmables.farmables.put(FarmableReference.Shroom.get(), new ArrayList<>());
-        Farmables.farmables
-                .get(FarmableReference.Shroom.get())
+        Farmables.farmables.get(FarmableReference.Shroom.get())
                 .add(new FarmableVanillaMushroom(Blocks.brown_mushroom, 0));
-        Farmables.farmables
-                .get(FarmableReference.Shroom.get())
+        Farmables.farmables.get(FarmableReference.Shroom.get())
                 .add(new FarmableVanillaMushroom(Blocks.red_mushroom, 0));
 
         Farmables.farmables.put(FarmableReference.Wheat.get(), new ArrayList<>());
-        Farmables.farmables
-                .get(FarmableReference.Wheat.get())
+        Farmables.farmables.get(FarmableReference.Wheat.get())
                 .add(new FarmableGenericCrop(new ItemStack(Items.wheat_seeds), Blocks.wheat, 7));
 
         Farmables.farmables.put(FarmableReference.Gourd.get(), new ArrayList<>());
-        Farmables.farmables
-                .get(FarmableReference.Gourd.get())
-                .add(new FarmableGourd(
+        Farmables.farmables.get(FarmableReference.Gourd.get()).add(
+                new FarmableGourd(
                         new ItemStack(Items.pumpkin_seeds),
                         new ItemStack(Blocks.pumpkin_stem),
                         new ItemStack(Blocks.pumpkin)));
-        Farmables.farmables
-                .get(FarmableReference.Gourd.get())
-                .add(new FarmableGourd(
+        Farmables.farmables.get(FarmableReference.Gourd.get()).add(
+                new FarmableGourd(
                         new ItemStack(Items.melon_seeds),
                         new ItemStack(Blocks.melon_stem),
                         new ItemStack(Blocks.melon_block)));
 
         Farmables.farmables.put(FarmableReference.Infernal.get(), new ArrayList<>());
-        Farmables.farmables
-                .get(FarmableReference.Infernal.get())
+        Farmables.farmables.get(FarmableReference.Infernal.get())
                 .add(new FarmableGenericCrop(new ItemStack(Items.nether_wart), Blocks.nether_wart, 3));
 
         Farmables.farmables.put(FarmableReference.Poales.get(), new ArrayList<>());
@@ -124,11 +118,9 @@ public class PluginFarming extends ForestryPlugin {
         Farmables.farmables.get(FarmableReference.Succulentes.get()).add(new FarmableStacked(Blocks.cactus, 3, 0));
 
         Farmables.farmables.put(FarmableReference.Vegetables.get(), new ArrayList<>());
-        Farmables.farmables
-                .get(FarmableReference.Vegetables.get())
+        Farmables.farmables.get(FarmableReference.Vegetables.get())
                 .add(new FarmableGenericCrop(new ItemStack(Items.potato), Blocks.potatoes, 7));
-        Farmables.farmables
-                .get(FarmableReference.Vegetables.get())
+        Farmables.farmables.get(FarmableReference.Vegetables.get())
                 .add(new FarmableGenericCrop(new ItemStack(Items.carrot), Blocks.carrots, 7));
 
         proxy.initializeRendering();
@@ -264,10 +256,11 @@ public class PluginFarming extends ForestryPlugin {
                     throw new RuntimeException("can't find block for " + items[2]);
                 }
 
-                Farmables.farmables
-                        .get(tokens[0])
-                        .add(new FarmableGenericCrop(
-                                new ItemStack(seed, 1, Integer.parseInt(items[1])), crop, Integer.parseInt(items[3])));
+                Farmables.farmables.get(tokens[0]).add(
+                        new FarmableGenericCrop(
+                                new ItemStack(seed, 1, Integer.parseInt(items[1])),
+                                crop,
+                                Integer.parseInt(items[3])));
             } catch (Exception ex) {
                 Log.warning("%s for farm '%s': %s", errormsg, tokens[0], ex.getMessage());
             }
@@ -333,35 +326,61 @@ public class PluginFarming extends ForestryPlugin {
         ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
 
         ChipsetManager.solderManager.addRecipe(
-                layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.COPPER, 1), Circuit.farmArborealManaged);
+                layoutManaged,
+                PluginCore.items.tubes.get(EnumElectronTube.COPPER, 1),
+                Circuit.farmArborealManaged);
+        ChipsetManager.solderManager
+                .addRecipe(layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.TIN, 1), Circuit.farmPeatManaged);
         ChipsetManager.solderManager.addRecipe(
-                layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.TIN, 1), Circuit.farmPeatManaged);
+                layoutManaged,
+                PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
+                Circuit.farmCerealManaged);
         ChipsetManager.solderManager.addRecipe(
-                layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1), Circuit.farmCerealManaged);
+                layoutManaged,
+                PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
+                Circuit.farmVegetableManaged);
         ChipsetManager.solderManager.addRecipe(
-                layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.IRON, 1), Circuit.farmVegetableManaged);
+                layoutManaged,
+                PluginCore.items.tubes.get(EnumElectronTube.BLAZE, 1),
+                Circuit.farmInfernalManaged);
         ChipsetManager.solderManager.addRecipe(
-                layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.BLAZE, 1), Circuit.farmInfernalManaged);
-        ChipsetManager.solderManager.addRecipe(
-                layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1), Circuit.farmShroomManaged);
+                layoutManaged,
+                PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1),
+                Circuit.farmShroomManaged);
 
         ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.COPPER, 1), Circuit.farmOrchardManual);
+                layoutManual,
+                PluginCore.items.tubes.get(EnumElectronTube.COPPER, 1),
+                Circuit.farmOrchardManual);
+        ChipsetManager.solderManager
+                .addRecipe(layoutManual, PluginCore.items.tubes.get(EnumElectronTube.TIN, 1), Circuit.farmPeatManual);
         ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.TIN, 1), Circuit.farmPeatManual);
+                layoutManual,
+                PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
+                Circuit.farmCerealManual);
         ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1), Circuit.farmCerealManual);
+                layoutManual,
+                PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
+                Circuit.farmVegetableManual);
         ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.IRON, 1), Circuit.farmVegetableManual);
+                layoutManual,
+                PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1),
+                Circuit.farmSucculentManual);
         ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.GOLD, 1), Circuit.farmSucculentManual);
+                layoutManual,
+                PluginCore.items.tubes.get(EnumElectronTube.DIAMOND, 1),
+                Circuit.farmPoalesManual);
         ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.DIAMOND, 1), Circuit.farmPoalesManual);
+                layoutManual,
+                PluginCore.items.tubes.get(EnumElectronTube.OBSIDIAN, 1),
+                Circuit.farmGourdManual);
         ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.OBSIDIAN, 1), Circuit.farmGourdManual);
+                layoutManual,
+                PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1),
+                Circuit.farmShroomManual);
         ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.APATITE, 1), Circuit.farmShroomManual);
-        ChipsetManager.solderManager.addRecipe(
-                layoutManual, PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1), Circuit.farmCocoaManual);
+                layoutManual,
+                PluginCore.items.tubes.get(EnumElectronTube.LAPIS, 1),
+                Circuit.farmCocoaManual);
     }
 }

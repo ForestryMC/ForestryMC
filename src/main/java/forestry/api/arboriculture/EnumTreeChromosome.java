@@ -5,6 +5,10 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import java.util.Locale;
+
+import net.minecraftforge.common.EnumPlantType;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleBoolean;
@@ -14,14 +18,13 @@ import forestry.api.genetics.IAllelePlantType;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.ISpeciesRoot;
-import java.util.Locale;
-import net.minecraftforge.common.EnumPlantType;
 
 public enum EnumTreeChromosome implements IChromosomeType {
 
     /**
-     * Determines the following: - WorldGen, including the used wood blocks - {@link IFruitFamily}s supported. Limits which {@link IFruitProvider}
-     * will actually yield fruit with this species. - Native {@link EnumPlantType} for this tree. Combines with the PLANT chromosome.
+     * Determines the following: - WorldGen, including the used wood blocks - {@link IFruitFamily}s supported. Limits
+     * which {@link IFruitProvider} will actually yield fruit with this species. - Native {@link EnumPlantType} for this
+     * tree. Combines with the PLANT chromosome.
      */
     SPECIES(IAlleleTreeSpecies.class),
     /**
@@ -37,7 +40,8 @@ public enum EnumTreeChromosome implements IChromosomeType {
      */
     FERTILITY(IAlleleFloat.class),
     /**
-     * {@link IFruitProvider}, determines if and what fruits are grown on the tree. Limited by the {@link IFruitFamily}s the species supports.
+     * {@link IFruitProvider}, determines if and what fruits are grown on the tree. Limited by the {@link IFruitFamily}s
+     * the species supports.
      */
     FRUITS(IAlleleFruit.class),
     /**
@@ -69,8 +73,7 @@ public enum EnumTreeChromosome implements IChromosomeType {
     /**
      * Determines if the tree can burn.
      */
-    FIREPROOF(IAlleleBoolean.class),
-    ;
+    FIREPROOF(IAlleleBoolean.class),;
 
     Class<? extends IAllele> clss;
 

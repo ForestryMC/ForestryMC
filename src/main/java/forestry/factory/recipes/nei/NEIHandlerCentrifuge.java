@@ -1,14 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes.nei;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -17,29 +27,19 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.nei.PositionedStackAdv;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiCentrifuge;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.PriorityQueue;
-import java.util.Set;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 
 public class NEIHandlerCentrifuge extends RecipeHandlerBase {
 
-    private static final int[][] OUTPUTS =
-            new int[][] {{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
+    private static final int[][] OUTPUTS = new int[][] { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 1 }, { 1, 1 }, { 2, 1 },
+            { 0, 2 }, { 1, 2 }, { 2, 2 } };
 
-    private static final Comparator<Entry<ItemStack, Float>> highestChanceComparator =
-            new Comparator<Entry<ItemStack, Float>>() {
-                @Override
-                public int compare(Entry<ItemStack, Float> o1, Entry<ItemStack, Float> o2) {
-                    return o2.getValue().compareTo(o1.getValue());
-                }
-            };
+    private static final Comparator<Entry<ItemStack, Float>> highestChanceComparator = new Comparator<Entry<ItemStack, Float>>() {
+
+        @Override
+        public int compare(Entry<ItemStack, Float> o1, Entry<ItemStack, Float> o2) {
+            return o2.getValue().compareTo(o1.getValue());
+        }
+    };
 
     public class CachedCentrifugeRecipe extends CachedBaseRecipe {
 
@@ -64,8 +64,9 @@ public class NEIHandlerCentrifuge extends RecipeHandlerBase {
             if (entrySet.size() == 0) {
                 return;
             }
-            PriorityQueue<Entry<ItemStack, Float>> sortByChance =
-                    new PriorityQueue<>(entrySet.size(), highestChanceComparator);
+            PriorityQueue<Entry<ItemStack, Float>> sortByChance = new PriorityQueue<>(
+                    entrySet.size(),
+                    highestChanceComparator);
             sortByChance.addAll(entrySet);
 
             int i = 0;
@@ -74,8 +75,10 @@ public class NEIHandlerCentrifuge extends RecipeHandlerBase {
                 if (i >= OUTPUTS.length) {
                     return;
                 }
-                PositionedStackAdv output =
-                        new PositionedStackAdv(stack.getKey(), 93 + OUTPUTS[i][0] * 18, 8 + OUTPUTS[i][1] * 18);
+                PositionedStackAdv output = new PositionedStackAdv(
+                        stack.getKey(),
+                        93 + OUTPUTS[i][0] * 18,
+                        8 + OUTPUTS[i][1] * 18);
                 output.setChance(stack.getValue());
                 this.outputs.add(output);
                 i++;

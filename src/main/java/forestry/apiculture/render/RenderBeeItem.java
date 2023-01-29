@@ -1,26 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.IBee;
-import forestry.apiculture.entities.EntityBee;
-import forestry.core.proxy.Proxies;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import forestry.api.apiculture.BeeManager;
+import forestry.api.apiculture.IBee;
+import forestry.apiculture.entities.EntityBee;
+import forestry.core.proxy.Proxies;
 
 public class RenderBeeItem implements IItemRenderer {
 
@@ -73,30 +73,24 @@ public class RenderBeeItem implements IItemRenderer {
         entity.setSpecies(bee.getGenome().getPrimary());
         entity.setType(BeeManager.beeRoot.getType(item));
         /*
-        if(scaled)
-        	entity.setScale(butterfly.getSize());
-        else
-        	entity.setScale(EntityButterfly.DEFAULT_BUTTERFLY_SIZE);
+         * if(scaled) entity.setScale(butterfly.getSize()); else
+         * entity.setScale(EntityButterfly.DEFAULT_BUTTERFLY_SIZE);
          */
 
         return bee;
     }
 
-    /*private void renderBeeHalo() {
-
-    	IIcon background = TextureManager.getInstance().getDefault("habitats/desert");
-    	float xPos = 1.0f; float yPos = 1.0f;
-    	float width = 1f; float height = 1f;
-
-    	Proxies.render.bindTexture(SpriteSheet.ITEMS);
-           Tessellator tessellator = Tessellator.instance;
-           tessellator.startDrawingQuads();
-           tessellator.addVertexWithUV((double)(xPos + 0), (double)(yPos + height), 0f, (double)background.getMinU(), (double)background.getMaxV());
-           tessellator.addVertexWithUV((double)(xPos + width), (double)(yPos + height), 0f, (double)background.getMaxU(), (double)background.getMaxV());
-           tessellator.addVertexWithUV((double)(xPos + width), (double)(yPos + 0), 0f, (double)background.getMaxU(), (double)background.getMinV());
-           tessellator.addVertexWithUV((double)(xPos + 0), (double)(yPos + 0), 0f, (double)background.getMinU(), (double)background.getMinV());
-           tessellator.draw();
-    }*/
+    /*
+     * private void renderBeeHalo() { IIcon background = TextureManager.getInstance().getDefault("habitats/desert");
+     * float xPos = 1.0f; float yPos = 1.0f; float width = 1f; float height = 1f;
+     * Proxies.render.bindTexture(SpriteSheet.ITEMS); Tessellator tessellator = Tessellator.instance;
+     * tessellator.startDrawingQuads(); tessellator.addVertexWithUV((double)(xPos + 0), (double)(yPos + height), 0f,
+     * (double)background.getMinU(), (double)background.getMaxV()); tessellator.addVertexWithUV((double)(xPos + width),
+     * (double)(yPos + height), 0f, (double)background.getMaxU(), (double)background.getMaxV());
+     * tessellator.addVertexWithUV((double)(xPos + width), (double)(yPos + 0), 0f, (double)background.getMaxU(),
+     * (double)background.getMinV()); tessellator.addVertexWithUV((double)(xPos + 0), (double)(yPos + 0), 0f,
+     * (double)background.getMinU(), (double)background.getMinV()); tessellator.draw(); }
+     */
 
     private void renderBeeItem(IBee bee, float translateX, float translateY, float translateZ) {
         float yaw = 1;
@@ -134,15 +128,10 @@ public class RenderBeeItem implements IItemRenderer {
     private void renderBeeInInventory(IBee bee) {
 
         /*
-        GL11.glPushMatrix();
-              //GL11.glTranslatef(-0.3f, -2.5f, 0f);
-              GL11.glScalef(-1.0f, 1.0f, 1.0f);
-              //GL11.glScalef((float)Math.PI / 2, 1.0f, 1.0f);
-              GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-              GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-              //GL11.glRotatef(-((float) Math.atan((double) (1 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-              renderBeeHalo();
-              GL11.glPopMatrix();
+         * GL11.glPushMatrix(); //GL11.glTranslatef(-0.3f, -2.5f, 0f); GL11.glScalef(-1.0f, 1.0f, 1.0f);
+         * //GL11.glScalef((float)Math.PI / 2, 1.0f, 1.0f); GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+         * GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F); //GL11.glRotatef(-((float) Math.atan((double) (1 / 40.0F))) *
+         * 20.0F, 1.0F, 0.0F, 0.0F); renderBeeHalo(); GL11.glPopMatrix();
          */
 
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);

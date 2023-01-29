@@ -5,15 +5,17 @@
  ******************************************************************************/
 package forestry.core.errors;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.IErrorState;
 import forestry.core.config.Constants;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
 
 public enum EnumErrorCode implements IErrorState {
+
     @Deprecated
     UNKNOWN("unknown"), // Congratulations, you found a glitch.
     @Deprecated
@@ -26,14 +28,12 @@ public enum EnumErrorCode implements IErrorState {
     // Bees
     TOO_HOT("tooHot"), // The bees are melting in the heat here and unable to work. Use the habitat locator to find a
     // cooler climate.
-    TOO_COLD("tooCold"), // The bees are huddled together to survive the freezing cold here. Use the  habitat locator to
+    TOO_COLD("tooCold"), // The bees are huddled together to survive the freezing cold here. Use the habitat locator to
     // find a warmer climate.
-    TOO_HUMID(
-            "tooHumid"), // The damp climate here has made the bees' wings too damp to fly. Use the  habitat locator to
+    TOO_HUMID("tooHumid"), // The damp climate here has made the bees' wings too damp to fly. Use the habitat locator to
     // find a dryer climate.
-    TOO_ARID(
-            "tooArid",
-            "invalidBiome"), // The dry climate here has made the bees parched and unable do work. Use the  habitat
+    TOO_ARID("tooArid", "invalidBiome"), // The dry climate here has made the bees parched and unable do work. Use the
+                                         // habitat
     // locator to find a wetter climate.
     IS_RAINING("isRaining"), // Only tolerant fliers can work in the rain.
     NOT_GLOOMY("notGloomy"), // The bees can only work in darkness.
@@ -48,9 +48,8 @@ public enum EnumErrorCode implements IErrorState {
 
     // Machines
     NO_RESOURCE("noResource"), // More resources need to be supplied for operation.
-    NO_RESOURCE_INVENTORY(
-            "noResourceInventory",
-            "noResource"), // Resources need to be added to the machine's inventory to craft this recipe.
+    NO_RESOURCE_INVENTORY("noResourceInventory", "noResource"), // Resources need to be added to the machine's inventory
+                                                                // to craft this recipe.
     NO_RESOURCE_LIQUID("noResourceLiquid", "noLiquid"), // More liquid resources need to be supplied for operation.
     NO_RECIPE("noRecipe"), // No matching recipe was found for the supplied resources.
     NO_SPACE_INVENTORY("noSpace"), // Empty this machine's inventory.
@@ -98,8 +97,8 @@ public enum EnumErrorCode implements IErrorState {
     NO_FERTILIZER("noFertilizer"), // Farms require fertilizer for function. Compost is insufficient.
     NO_FARMLAND("noFarmland"), // Smooth sandstone, bricks or stone bricks create a platform the farm will build on.
     NO_LIQUID_FARM("noLiquid") // Depending on rainfall, temperature and humidity farms need to be supplied with varying
-// amounts of water.
-;
+    // amounts of water.
+    ;
 
     private final String name;
     private final String iconName;

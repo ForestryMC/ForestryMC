@@ -1,14 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.FuelBurnTimeEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -60,18 +72,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
 import forestry.factory.recipes.FabricatorRecipe;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.FuelBurnTimeEvent;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(
         pluginID = "Arboriculture",
@@ -146,11 +146,11 @@ public class PluginArboriculture extends ForestryPlugin {
         }
 
         MachineDefinition definitionChest = new MachineDefinition(
-                        BlockArboricultureType.ARBCHEST.ordinal(),
-                        "forestry.ArbChest",
-                        TileArboristChest.class,
-                        Proxies.render.getRenderChest("arbchest"))
-                .setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+                BlockArboricultureType.ARBCHEST.ordinal(),
+                "forestry.ArbChest",
+                TileArboristChest.class,
+                Proxies.render.getRenderChest("arbchest"))
+                        .setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
         blocks.arboriculture.addDefinition(definitionChest);
 
         // Init rendering
@@ -213,7 +213,9 @@ public class PluginArboriculture extends ForestryPlugin {
     protected void registerRecipes() {
 
         RecipeUtil.addSmelting(
-                new ItemStack(blocks.logs, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.coal, 1, 1), 0.15F);
+                new ItemStack(blocks.logs, 1, OreDictionary.WILDCARD_VALUE),
+                new ItemStack(Items.coal, 1, 1),
+                0.15F);
 
         for (EnumWoodType woodType : EnumWoodType.VALUES) {
             ItemStack planks = TreeManager.woodItemAccess.getPlanks(woodType, false);
@@ -265,16 +267,22 @@ public class PluginArboriculture extends ForestryPlugin {
                 logs.stackSize = 1;
                 fireproofLogs.stackSize = 1;
                 RecipeManagers.fabricatorManager.addRecipe(
-                        new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofLogs.copy(), new Object[] {
-                            " # ", "#X#", " # ", '#', PluginCore.items.refractoryWax, 'X', logs.copy()
-                        }));
+                        new FabricatorRecipe(
+                                null,
+                                Fluids.GLASS.getFluid(500),
+                                fireproofLogs.copy(),
+                                new Object[] { " # ", "#X#", " # ", '#', PluginCore.items.refractoryWax, 'X',
+                                        logs.copy() }));
 
                 planks.stackSize = 1;
                 fireproofPlanks.stackSize = 5;
                 RecipeManagers.fabricatorManager.addRecipe(
-                        new FabricatorRecipe(null, Fluids.GLASS.getFluid(500), fireproofPlanks.copy(), new Object[] {
-                            "X#X", "#X#", "X#X", '#', PluginCore.items.refractoryWax, 'X', planks.copy()
-                        }));
+                        new FabricatorRecipe(
+                                null,
+                                Fluids.GLASS.getFluid(500),
+                                fireproofPlanks.copy(),
+                                new Object[] { "X#X", "#X#", "X#X", '#', PluginCore.items.refractoryWax, 'X',
+                                        planks.copy() }));
             }
         }
 
@@ -304,43 +312,43 @@ public class PluginArboriculture extends ForestryPlugin {
             ItemStack mulch = new ItemStack(PluginCore.items.mulch);
             RecipeManagers.squeezerManager.addRecipe(
                     20,
-                    new ItemStack[] {EnumFruit.CHERRY.getStack()},
+                    new ItemStack[] { EnumFruit.CHERRY.getStack() },
                     Fluids.SEEDOIL.getFluid(5 * seedOilMultiplier),
                     mulch,
                     5);
             RecipeManagers.squeezerManager.addRecipe(
                     60,
-                    new ItemStack[] {EnumFruit.WALNUT.getStack()},
+                    new ItemStack[] { EnumFruit.WALNUT.getStack() },
                     Fluids.SEEDOIL.getFluid(18 * seedOilMultiplier),
                     mulch,
                     5);
             RecipeManagers.squeezerManager.addRecipe(
                     70,
-                    new ItemStack[] {EnumFruit.CHESTNUT.getStack()},
+                    new ItemStack[] { EnumFruit.CHESTNUT.getStack() },
                     Fluids.SEEDOIL.getFluid(22 * seedOilMultiplier),
                     mulch,
                     2);
             RecipeManagers.squeezerManager.addRecipe(
                     10,
-                    new ItemStack[] {EnumFruit.LEMON.getStack()},
+                    new ItemStack[] { EnumFruit.LEMON.getStack() },
                     Fluids.JUICE.getFluid(juiceMultiplier * 2),
                     mulch,
                     (int) Math.floor(mulchMultiplier * 0.5f));
             RecipeManagers.squeezerManager.addRecipe(
                     10,
-                    new ItemStack[] {EnumFruit.PLUM.getStack()},
+                    new ItemStack[] { EnumFruit.PLUM.getStack() },
                     Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.5f)),
                     mulch,
                     mulchMultiplier * 3);
             RecipeManagers.squeezerManager.addRecipe(
                     10,
-                    new ItemStack[] {EnumFruit.PAPAYA.getStack()},
+                    new ItemStack[] { EnumFruit.PAPAYA.getStack() },
                     Fluids.JUICE.getFluid(juiceMultiplier * 3),
                     mulch,
                     (int) Math.floor(mulchMultiplier * 0.5f));
             RecipeManagers.squeezerManager.addRecipe(
                     10,
-                    new ItemStack[] {EnumFruit.DATES.getStack()},
+                    new ItemStack[] { EnumFruit.DATES.getStack() },
                     Fluids.JUICE.getFluid((int) Math.floor(juiceMultiplier * 0.25)),
                     mulch,
                     mulchMultiplier);
@@ -395,16 +403,16 @@ public class PluginArboriculture extends ForestryPlugin {
         AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 1), TreeDefinition.Spruce.getIndividual());
         AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 2), TreeDefinition.Birch.getIndividual());
         AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves, 1, 3), TreeDefinition.Jungle.getIndividual());
-        AlleleManager.ersatzSpecimen.put(
-                new ItemStack(Blocks.leaves2, 1, 0), TreeDefinition.AcaciaVanilla.getIndividual());
+        AlleleManager.ersatzSpecimen
+                .put(new ItemStack(Blocks.leaves2, 1, 0), TreeDefinition.AcaciaVanilla.getIndividual());
         AlleleManager.ersatzSpecimen.put(new ItemStack(Blocks.leaves2, 1, 1), TreeDefinition.DarkOak.getIndividual());
 
         AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 0), TreeDefinition.Oak.getIndividual());
         AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 1), TreeDefinition.Spruce.getIndividual());
         AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 2), TreeDefinition.Birch.getIndividual());
         AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 3), TreeDefinition.Jungle.getIndividual());
-        AlleleManager.ersatzSaplings.put(
-                new ItemStack(Blocks.sapling, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
+        AlleleManager.ersatzSaplings
+                .put(new ItemStack(Blocks.sapling, 1, 4), TreeDefinition.AcaciaVanilla.getIndividual());
         AlleleManager.ersatzSaplings.put(new ItemStack(Blocks.sapling, 1, 5), TreeDefinition.DarkOak.getIndividual());
     }
 
@@ -444,7 +452,10 @@ public class PluginArboriculture extends ForestryPlugin {
         ChestGenHooks.addItem(
                 Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
                 new WeightedRandomChestContent(
-                        TreeDefinition.Spruce.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
+                        TreeDefinition.Spruce.getMemberStack(EnumGermlingType.SAPLING),
+                        2,
+                        3,
+                        6));
         ChestGenHooks.addItem(
                 Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
                 new WeightedRandomChestContent(TreeDefinition.Birch.getMemberStack(EnumGermlingType.SAPLING), 2, 3, 6));
@@ -459,27 +470,43 @@ public class PluginArboriculture extends ForestryPlugin {
             ChestGenHooks.addItem(
                     Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
                     new WeightedRandomChestContent(
-                            TreeDefinition.Oak.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+                            TreeDefinition.Oak.getMemberStack(EnumGermlingType.POLLEN),
+                            2,
+                            3,
+                            4));
             ChestGenHooks.addItem(
                     Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
                     new WeightedRandomChestContent(
-                            TreeDefinition.Spruce.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+                            TreeDefinition.Spruce.getMemberStack(EnumGermlingType.POLLEN),
+                            2,
+                            3,
+                            4));
             ChestGenHooks.addItem(
                     Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
                     new WeightedRandomChestContent(
-                            TreeDefinition.Birch.getMemberStack(EnumGermlingType.POLLEN), 2, 3, 4));
+                            TreeDefinition.Birch.getMemberStack(EnumGermlingType.POLLEN),
+                            2,
+                            3,
+                            4));
             ChestGenHooks.addItem(
                     Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
                     new WeightedRandomChestContent(
-                            TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
+                            TreeDefinition.Larch.getMemberStack(EnumGermlingType.POLLEN),
+                            1,
+                            2,
+                            3));
             ChestGenHooks.addItem(
                     Constants.CHEST_GEN_HOOK_NATURALIST_CHEST,
                     new WeightedRandomChestContent(
-                            TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN), 1, 2, 3));
+                            TreeDefinition.Lime.getMemberStack(EnumGermlingType.POLLEN),
+                            1,
+                            2,
+                            3));
         }
     }
 
     private static class FuelHandler implements IFuelHandler {
+
         @Override
         public int getBurnTime(ItemStack fuel) {
             Item item = fuel.getItem();

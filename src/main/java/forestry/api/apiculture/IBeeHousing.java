@@ -5,25 +5,29 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.IClimateProvider;
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.genetics.IHousing;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 
 public interface IBeeHousing extends IHousing, IClimateProvider, IErrorLogicSource {
 
     /**
-     * Used by BeeManager.beeRoot.createBeeHousingModifier(IBeeHousing housing)
-     * to combine bee modifiers from several sources that can change over time.
+     * Used by BeeManager.beeRoot.createBeeHousingModifier(IBeeHousing housing) to combine bee modifiers from several
+     * sources that can change over time.
+     * 
      * @return IBeeModifiers from the housing, frames, etc.
      */
     Iterable<IBeeModifier> getBeeModifiers();
 
     /**
-     * Used by BeeManager.beeRoot.createBeeHousingListener(IBeeHousing housing)
-     * to combine bee listeners from several sources that can change over time.
+     * Used by BeeManager.beeRoot.createBeeHousingListener(IBeeHousing housing) to combine bee listeners from several
+     * sources that can change over time.
+     * 
      * @return IBeeListeners from the housing, multiblock parts, etc.
      */
     Iterable<IBeeListener> getBeeListeners();

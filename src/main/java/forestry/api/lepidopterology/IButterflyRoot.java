@@ -5,16 +5,19 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
 
 public interface IButterflyRoot extends ISpeciesRoot {
 
@@ -48,6 +51,7 @@ public interface IButterflyRoot extends ISpeciesRoot {
 
     /**
      * Spawns the given butterfly in the world.
+     * 
      * @param butterfly
      * @return butterfly entity on success, null otherwise.
      */

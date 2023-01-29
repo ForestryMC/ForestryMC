@@ -1,27 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.IRenderableTile;
 import java.awt.Color;
 import java.util.EnumMap;
 import java.util.Locale;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.IRenderableTile;
 
 public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -76,8 +77,8 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
                 continue;
             }
             String tankLevelString = tankLevel.toString().toLowerCase(Locale.ENGLISH);
-            texturesTankLevels.put(
-                    tankLevel, new ForestryResource("textures/blocks/machine_tank_" + tankLevelString + ".png"));
+            texturesTankLevels
+                    .put(tankLevel, new ForestryResource("textures/blocks/machine_tank_" + tankLevelString + ".png"));
         }
     }
 
@@ -92,17 +93,12 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
         render(generator.getResourceTankInfo(), generator.getProductTankInfo(), generator.getOrientation(), d, d1, d2);
     }
 
-    private void render(
-            TankRenderInfo resourceTankInfo,
-            TankRenderInfo productTankInfo,
-            ForgeDirection orientation,
-            double x,
-            double y,
-            double z) {
+    private void render(TankRenderInfo resourceTankInfo, TankRenderInfo productTankInfo, ForgeDirection orientation,
+            double x, double y, double z) {
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x, (float) y, (float) z);
 
-        float[] angle = {0, 0, 0};
+        float[] angle = { 0, 0, 0 };
 
         if (orientation == null) {
             orientation = ForgeDirection.WEST;
@@ -159,8 +155,8 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
         GL11.glPopMatrix();
     }
 
-    private void renderTank(
-            ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo, float factor) {
+    private void renderTank(ModelRenderer tankModel, ResourceLocation textureBase, TankRenderInfo renderInfo,
+            float factor) {
         Proxies.render.bindTexture(textureBase);
         tankModel.render(factor);
 
@@ -180,5 +176,6 @@ public class RenderMachine extends TileEntitySpecialRenderer implements IBlockRe
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    private static class RenderModelBase extends ModelBase {}
+    private static class RenderModelBase extends ModelBase {
+    }
 }

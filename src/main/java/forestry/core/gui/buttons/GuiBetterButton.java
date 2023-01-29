@@ -1,31 +1,32 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.buttons;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.config.Constants;
 import forestry.core.gui.tooltips.IToolTipProvider;
 import forestry.core.gui.tooltips.ToolTip;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class GuiBetterButton extends GuiButton implements IToolTipProvider {
 
-    private static final ResourceLocation TEXTURE =
-            new ResourceLocation("forestry", Constants.TEXTURE_PATH_GUI + "/buttons.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(
+            "forestry",
+            Constants.TEXTURE_PATH_GUI + "/buttons.png");
     protected IButtonTextureSet texture;
     private ToolTip toolTip;
     private boolean useTexWidth = false;
@@ -78,8 +79,7 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
     }
 
     public boolean isMouseOverButton(int mouseX, int mouseY) {
-        return mouseX >= xPosition
-                && mouseY >= yPosition
+        return mouseX >= xPosition && mouseY >= yPosition
                 && mouseX < xPosition + getWidth()
                 && mouseY < yPosition + getHeight();
     }
@@ -107,7 +107,12 @@ public class GuiBetterButton extends GuiButton implements IToolTipProvider {
         } else {
             drawTexturedModalRect(xPosition, yPosition, xOffset, yOffset + hoverState * h, width / 2, h);
             drawTexturedModalRect(
-                    xPosition + width / 2, yPosition, xOffset + w - width / 2, yOffset + hoverState * h, width / 2, h);
+                    xPosition + width / 2,
+                    yPosition,
+                    xOffset + w - width / 2,
+                    yOffset + hoverState * h,
+                    width / 2,
+                    h);
         }
         mouseDragged(minecraft, mouseX, mouseY);
         drawCenteredString(

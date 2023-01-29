@@ -5,9 +5,11 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import forestry.api.genetics.IGenome;
 import java.util.EnumSet;
+
 import net.minecraftforge.common.EnumPlantType;
+
+import forestry.api.genetics.IGenome;
 
 public interface ITreeGenome extends IGenome {
 
@@ -24,8 +26,8 @@ public interface ITreeGenome extends IGenome {
     float getFertility();
 
     /**
-     * @return Determines either a) how many fruit leaves there are or b) the chance for any fruit leave to drop a sapling. Exact usage determined by the
-     *         IFruitProvider
+     * @return Determines either a) how many fruit leaves there are or b) the chance for any fruit leave to drop a
+     *         sapling. Exact usage determined by the IFruitProvider
      */
     float getYield();
 

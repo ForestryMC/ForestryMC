@@ -1,13 +1,16 @@
 package forestry.farming.logic;
 
-import forestry.core.utils.vect.Vect;
-import forestry.plugins.compat.PluginIC2;
 import java.util.Collection;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import forestry.core.utils.vect.Vect;
+import forestry.plugins.compat.PluginIC2;
+
 public class CropBasicIC2Crop extends Crop {
+
     private final TileEntity tileEntity;
 
     public CropBasicIC2Crop(World world, TileEntity tileEntity, Vect position) {

@@ -8,6 +8,7 @@ package forestry.api.recipes;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
+
 import net.minecraft.item.ItemStack;
 
 public interface ICentrifugeRecipe extends IForestryRecipe {
@@ -22,8 +23,8 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
     Collection<ItemStack> getProducts(Random random);
 
     /**
-     * Returns a list of all possible products and their estimated probabilities (0.0 to 1.0],
-     * to help mods that display recipes
+     * Returns a list of all possible products and their estimated probabilities (0.0 to 1.0], to help mods that display
+     * recipes
      **/
     Map<ItemStack, Float> getAllProducts();
 }

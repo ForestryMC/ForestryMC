@@ -8,6 +8,7 @@ package forestry.api.apiculture;
 import net.minecraft.block.Block;
 
 public interface IJubilanceFactory {
+
     /** The default Jubilance Provider is satisfied when the humidity and temperature are ideal for the bee. */
     IJubilanceProvider getDefault();
 

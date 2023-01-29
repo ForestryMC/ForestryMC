@@ -1,14 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.IFabricatorManager;
 import forestry.api.recipes.IFabricatorRecipe;
@@ -16,14 +24,6 @@ import forestry.api.recipes.RecipeManagers;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class FabricatorRecipeManager implements IFabricatorManager {
 
@@ -31,8 +31,10 @@ public class FabricatorRecipeManager implements IFabricatorManager {
 
     @Override
     public void addRecipe(ItemStack plan, FluidStack molten, ItemStack result, Object[] pattern) {
-        IFabricatorRecipe recipe =
-                new FabricatorRecipe(plan, molten, ShapedRecipeCustom.createShapedRecipe(result, pattern));
+        IFabricatorRecipe recipe = new FabricatorRecipe(
+                plan,
+                molten,
+                ShapedRecipeCustom.createShapedRecipe(result, pattern));
         addRecipe(recipe);
     }
 
@@ -86,7 +88,7 @@ public class FabricatorRecipeManager implements IFabricatorManager {
         HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
         for (IFabricatorRecipe recipe : recipes) {
-            recipeList.put(recipe.getIngredients(), new Object[] {recipe.getRecipeOutput()});
+            recipeList.put(recipe.getIngredients(), new Object[] { recipe.getRecipeOutput() });
         }
 
         return recipeList;

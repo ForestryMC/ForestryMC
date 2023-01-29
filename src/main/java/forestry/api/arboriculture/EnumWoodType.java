@@ -7,9 +7,11 @@ package forestry.api.arboriculture;
 
 import java.util.Locale;
 import java.util.Random;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 public enum EnumWoodType {
+
     LARCH,
     TEAK,
     ACACIA,

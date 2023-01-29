@@ -1,21 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.items;
+
+import net.minecraft.init.Blocks;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import forestry.core.fluids.Fluids;
-import net.minecraft.init.Blocks;
 
 public class ItemRegistryFluids extends ItemRegistry {
+
     public final ItemLiquidContainer canEmpty;
     public final ItemLiquidContainer waxCapsuleEmpty;
     public final ItemLiquidContainer refractoryEmpty;
@@ -36,8 +36,10 @@ public class ItemRegistryFluids extends ItemRegistry {
                 continue;
             }
             for (EnumContainerType type : fluidType.getContainerTypes()) {
-                ItemLiquidContainer liquidContainer =
-                        new ItemLiquidContainer(type, fluidType.getBlock(), fluidType.getColor());
+                ItemLiquidContainer liquidContainer = new ItemLiquidContainer(
+                        type,
+                        fluidType.getBlock(),
+                        fluidType.getColor());
                 fluidType.setProperties(liquidContainer);
 
                 String name = type.getContainerNameKey() + fluidType.getContainerNameKey();

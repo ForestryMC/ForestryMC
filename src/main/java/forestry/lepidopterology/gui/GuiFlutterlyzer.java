@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.gui;
+
+import java.util.ArrayList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleFlowers;
@@ -26,9 +29,6 @@ import forestry.core.utils.StringUtil;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.lepidopterology.inventory.ItemInventoryFlutterlyzer;
 import forestry.plugins.PluginLepidopterology;
-import java.util.ArrayList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiFlutterlyzer extends GuiAlyzer {
 
@@ -108,42 +108,24 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
         drawRow(
                 StringUtil.localize("gui.size"),
-                butterfly
-                        .getGenome()
-                        .getActiveAllele(EnumButterflyChromosome.SIZE)
-                        .getName(),
-                butterfly
-                        .getGenome()
-                        .getInactiveAllele(EnumButterflyChromosome.SIZE)
-                        .getName(),
+                butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SIZE).getName(),
+                butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SIZE).getName(),
                 butterfly,
                 EnumButterflyChromosome.SPEED);
         textLayout.newLine();
 
         drawRow(
                 StringUtil.localize("gui.lifespan"),
-                butterfly
-                        .getGenome()
-                        .getActiveAllele(EnumButterflyChromosome.LIFESPAN)
-                        .getName(),
-                butterfly
-                        .getGenome()
-                        .getInactiveAllele(EnumButterflyChromosome.LIFESPAN)
-                        .getName(),
+                butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.LIFESPAN).getName(),
+                butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.LIFESPAN).getName(),
                 butterfly,
                 EnumButterflyChromosome.LIFESPAN);
         textLayout.newLine();
 
         drawRow(
                 StringUtil.localize("gui.speed"),
-                butterfly
-                        .getGenome()
-                        .getActiveAllele(EnumButterflyChromosome.SPEED)
-                        .getName(),
-                butterfly
-                        .getGenome()
-                        .getInactiveAllele(EnumButterflyChromosome.SPEED)
-                        .getName(),
+                butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.SPEED).getName(),
+                butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.SPEED).getName(),
                 butterfly,
                 EnumButterflyChromosome.SPEED);
         textLayout.newLine();
@@ -162,19 +144,13 @@ public class GuiFlutterlyzer extends GuiAlyzer {
         drawFertilityInfo(
                 butterfly.getGenome().getFertility(),
                 COLUMN_1,
-                getColorCoding(butterfly
-                        .getGenome()
-                        .getActiveAllele(EnumButterflyChromosome.FERTILITY)
-                        .isDominant()),
+                getColorCoding(butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.FERTILITY).isDominant()),
                 8);
         drawFertilityInfo(
                 ((IAlleleInteger) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FERTILITY))
                         .getValue(),
                 COLUMN_2,
-                getColorCoding(butterfly
-                        .getGenome()
-                        .getInactiveAllele(EnumButterflyChromosome.FERTILITY)
-                        .isDominant()),
+                getColorCoding(butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FERTILITY).isDominant()),
                 8);
 
         textLayout.newLine();
@@ -183,8 +159,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
                 StringUtil.localize("gui.flowers"),
                 butterfly.getGenome().getFlowerProvider().getDescription(),
                 ((IAlleleFlowers) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.FLOWER_PROVIDER))
-                        .getProvider()
-                        .getDescription(),
+                        .getProvider().getDescription(),
                 butterfly,
                 EnumButterflyChromosome.FLOWER_PROVIDER);
         textLayout.newLine();
@@ -192,10 +167,7 @@ public class GuiFlutterlyzer extends GuiAlyzer {
         drawRow(
                 StringUtil.localize("gui.effect"),
                 butterfly.getGenome().getEffect().getName(),
-                butterfly
-                        .getGenome()
-                        .getInactiveAllele(EnumButterflyChromosome.EFFECT)
-                        .getName(),
+                butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.EFFECT).getName(),
                 butterfly,
                 EnumButterflyChromosome.EFFECT);
 
@@ -215,18 +187,16 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
         drawRow(
                 StringUtil.localize("gui.climate"),
-                AlleleManager.climateHelper.toDisplay(
-                        butterfly.getGenome().getPrimary().getTemperature()),
-                AlleleManager.climateHelper.toDisplay(
-                        butterfly.getGenome().getPrimary().getTemperature()),
+                AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
+                AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getTemperature()),
                 butterfly,
                 EnumButterflyChromosome.SPECIES);
         textLayout.newLine();
 
-        IAlleleTolerance tempToleranceActive =
-                (IAlleleTolerance) butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
-        IAlleleTolerance tempToleranceInactive = (IAlleleTolerance)
-                butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
+        IAlleleTolerance tempToleranceActive = (IAlleleTolerance) butterfly.getGenome()
+                .getActiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
+        IAlleleTolerance tempToleranceInactive = (IAlleleTolerance) butterfly.getGenome()
+                .getInactiveAllele(EnumButterflyChromosome.TEMPERATURE_TOLERANCE);
         textLayout.drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
         drawToleranceInfo(tempToleranceActive, COLUMN_1);
         drawToleranceInfo(tempToleranceInactive, COLUMN_2);
@@ -235,18 +205,16 @@ public class GuiFlutterlyzer extends GuiAlyzer {
 
         drawRow(
                 StringUtil.localize("gui.humidity"),
-                AlleleManager.climateHelper.toDisplay(
-                        butterfly.getGenome().getPrimary().getHumidity()),
-                AlleleManager.climateHelper.toDisplay(
-                        butterfly.getGenome().getPrimary().getHumidity()),
+                AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
+                AlleleManager.climateHelper.toDisplay(butterfly.getGenome().getPrimary().getHumidity()),
                 butterfly,
                 EnumButterflyChromosome.SPECIES);
         textLayout.newLine();
 
-        IAlleleTolerance humidToleranceActive =
-                (IAlleleTolerance) butterfly.getGenome().getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
-        IAlleleTolerance humidToleranceInactive =
-                (IAlleleTolerance) butterfly.getGenome().getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
+        IAlleleTolerance humidToleranceActive = (IAlleleTolerance) butterfly.getGenome()
+                .getActiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
+        IAlleleTolerance humidToleranceInactive = (IAlleleTolerance) butterfly.getGenome()
+                .getInactiveAllele(EnumButterflyChromosome.HUMIDITY_TOLERANCE);
         textLayout.drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
         drawToleranceInfo(humidToleranceActive, COLUMN_1);
         drawToleranceInfo(humidToleranceInactive, COLUMN_2);
@@ -321,10 +289,13 @@ public class GuiFlutterlyzer extends GuiAlyzer {
         textLayout.newLine();
 
         int x = COLUMN_0;
-        for (ItemStack stack :
-                butterfly.getGenome().getPrimary().getButterflyLoot().keySet()) {
+        for (ItemStack stack : butterfly.getGenome().getPrimary().getButterflyLoot().keySet()) {
             itemRender.renderItemIntoGUI(
-                    fontRendererObj, mc.renderEngine, stack, guiLeft + x, guiTop + textLayout.getLineY());
+                    fontRendererObj,
+                    mc.renderEngine,
+                    stack,
+                    guiLeft + x,
+                    guiTop + textLayout.getLineY());
             x += 18;
             if (x > 148) {
                 x = COLUMN_0;
@@ -339,10 +310,13 @@ public class GuiFlutterlyzer extends GuiAlyzer {
         textLayout.newLine();
 
         x = COLUMN_0;
-        for (ItemStack stack :
-                butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
+        for (ItemStack stack : butterfly.getGenome().getPrimary().getCaterpillarLoot().keySet()) {
             itemRender.renderItemIntoGUI(
-                    fontRendererObj, mc.renderEngine, stack, guiLeft + x, guiTop + textLayout.getLineY());
+                    fontRendererObj,
+                    mc.renderEngine,
+                    stack,
+                    guiLeft + x,
+                    guiTop + textLayout.getLineY());
             x += 18;
             if (x > 148) {
                 x = COLUMN_0;

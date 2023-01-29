@@ -1,25 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
-import cpw.mods.fml.common.registry.GameData;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.oredict.OreDictionary;
 
+import cpw.mods.fml.common.registry.GameData;
+
 public class Stack {
+
     private final String name;
     private final int meta;
 
@@ -73,12 +74,12 @@ public class Stack {
             meta = missingMetaValue;
         } else {
             try {
-                meta = parts[2].equals("*")
-                        ? OreDictionary.WILDCARD_VALUE
+                meta = parts[2].equals("*") ? OreDictionary.WILDCARD_VALUE
                         : NumberFormat.getIntegerInstance().parse(parts[2]).intValue();
             } catch (ParseException e) {
-                Log.warning("ItemStack string (" + stackString
-                        + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
+                Log.warning(
+                        "ItemStack string (" + stackString
+                                + ") has improperly formatted metadata. Suitable metadata are integer values or *.");
                 return null;
             }
         }

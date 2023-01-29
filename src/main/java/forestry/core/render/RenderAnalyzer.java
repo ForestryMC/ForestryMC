@@ -1,17 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.apiculture.render.ModelAnalyzer;
-import forestry.core.tiles.TileAnalyzer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -20,7 +16,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import forestry.apiculture.render.ModelAnalyzer;
+import forestry.core.tiles.TileAnalyzer;
 
 public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -31,6 +31,7 @@ public class RenderAnalyzer extends TileEntitySpecialRenderer implements IBlockR
 
     public RenderAnalyzer(String baseTexture) {
         customRenderItem = new RenderItem() {
+
             @Override
             public boolean shouldBob() {
                 return true;

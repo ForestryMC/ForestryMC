@@ -1,28 +1,30 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
-import forestry.core.gui.tooltips.ToolTipLine;
 import java.awt.Color;
 import java.util.Collection;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+
 import org.lwjgl.opengl.GL11;
 
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
+import forestry.core.gui.tooltips.ToolTipLine;
+
 public class GuiUtil {
+
     public static void drawItemStack(GuiForestry gui, ItemStack stack, int xPos, int yPos) {
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         RenderHelper.enableGUIStandardItemLighting();
@@ -84,11 +86,21 @@ public class GuiUtil {
         int backgroundColorInt = backgroundColor.getRGB();
         gui.drawGradientRect(x - 3, y - 4, x + length + 2, y - 3, backgroundColorInt, backgroundColorInt);
         gui.drawGradientRect(
-                x - 3, y + height + 1, x + length + 2, y + height + 2, backgroundColorInt, backgroundColorInt);
+                x - 3,
+                y + height + 1,
+                x + length + 2,
+                y + height + 2,
+                backgroundColorInt,
+                backgroundColorInt);
         gui.drawGradientRect(x - 3, y - 3, x + length + 2, y + height + 1, backgroundColorInt, backgroundColorInt);
         gui.drawGradientRect(x - 4, y - 3, x - 3, y + height + 1, backgroundColorInt, backgroundColorInt);
         gui.drawGradientRect(
-                x + length + 2, y - 3, x + length + 3, y + height + 1, backgroundColorInt, backgroundColorInt);
+                x + length + 2,
+                y - 3,
+                x + length + 3,
+                y + height + 1,
+                backgroundColorInt,
+                backgroundColorInt);
 
         Color borderColorTop = new Color(80, 0, 255, 80);
         int borderColorTopInt = borderColorTop.getRGB();
@@ -96,10 +108,20 @@ public class GuiUtil {
         int borderColorBottomInt = borderColorBottom.getRGB();
         gui.drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + height, borderColorTopInt, borderColorBottomInt);
         gui.drawGradientRect(
-                x + length + 1, y - 3 + 1, x + length + 2, y + height, borderColorTopInt, borderColorBottomInt);
+                x + length + 1,
+                y - 3 + 1,
+                x + length + 2,
+                y + height,
+                borderColorTopInt,
+                borderColorBottomInt);
         gui.drawGradientRect(x - 3, y - 3, x + length + 2, y - 3 + 1, borderColorTopInt, borderColorTopInt);
         gui.drawGradientRect(
-                x - 3, y + height, x + length + 2, y + height + 1, borderColorBottomInt, borderColorBottomInt);
+                x - 3,
+                y + height,
+                x + length + 2,
+                y + height + 1,
+                borderColorBottomInt,
+                borderColorBottomInt);
 
         boolean firstLine = true;
         for (ToolTipLine tip : toolTips) {

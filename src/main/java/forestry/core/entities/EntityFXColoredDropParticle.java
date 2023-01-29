@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.entities;
 
@@ -71,16 +69,14 @@ public class EntityFXColoredDropParticle extends EntityFX {
             this.motionZ *= 0.699999988079071D;
         }
 
-        Material material = this.worldObj
-                .getBlock(
-                        MathHelper.floor_double(this.posX),
-                        MathHelper.floor_double(this.posY),
-                        MathHelper.floor_double(this.posZ))
-                .getMaterial();
+        Material material = this.worldObj.getBlock(
+                MathHelper.floor_double(this.posX),
+                MathHelper.floor_double(this.posY),
+                MathHelper.floor_double(this.posZ)).getMaterial();
 
         if (material.isLiquid() || material.isSolid()) {
-            double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1)
-                    - BlockLiquid.getLiquidHeightPercent(this.worldObj.getBlockMetadata(
+            double d0 = (double) ((float) (MathHelper.floor_double(this.posY) + 1) - BlockLiquid.getLiquidHeightPercent(
+                    this.worldObj.getBlockMetadata(
                             MathHelper.floor_double(this.posX),
                             MathHelper.floor_double(this.posY),
                             MathHelper.floor_double(this.posZ))));

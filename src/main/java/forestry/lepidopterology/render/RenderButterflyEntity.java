@@ -1,20 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+
+import forestry.lepidopterology.entities.EntityButterfly;
 
 public class RenderButterflyEntity extends RenderLiving {
 
@@ -25,8 +24,8 @@ public class RenderButterflyEntity extends RenderLiving {
         butterflyModel = (ModelButterfly) mainModel;
     }
 
-    private void renderButterfly(
-            EntityButterfly entity, double x, double y, double z, float light, float partialTickTime) {
+    private void renderButterfly(EntityButterfly entity, double x, double y, double z, float light,
+            float partialTickTime) {
         if (!entity.isRenderable()) {
             return;
         }

@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -52,13 +53,14 @@ public interface IFabricatorRecipe extends IForestryRecipe {
 
     /**
      * Returns an Item that is the result of this recipe
+     * 
      * @deprecated since Forestry 4.1. Forestry uses getRecipeOutput() and preservesNbt() to determine the result.
      */
     @Deprecated
     ItemStack getCraftingResult(IInventory craftingInventory);
 
     /**
-     * @param plan The Fabricator plan, the item in the top right slot.
+     * @param plan      The Fabricator plan, the item in the top right slot.
      * @param resources The resources in the crafting grid.
      * @return true if the plan and resources match this recipe.
      * @deprecated since Forestry 4.1. This is handled by Forestry instead.

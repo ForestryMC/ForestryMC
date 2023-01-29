@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 import forestry.core.gui.ContainerTile;
 import forestry.core.gui.slots.SlotOutput;
@@ -18,10 +21,6 @@ import forestry.mail.POBox;
 import forestry.mail.POBoxInfo;
 import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
 import forestry.mail.tiles.TileMailbox;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
 public class ContainerMailbox extends ContainerTile<TileMailbox> {
 
@@ -32,8 +31,8 @@ public class ContainerMailbox extends ContainerTile<TileMailbox> {
 
     public ContainerMailbox(InventoryPlayer playerInventory, TileMailbox tile) {
         super(tile, playerInventory, 35, 145);
-        IInventory inventory =
-                tile.getOrCreateMailInventory(playerInventory.player.worldObj, playerInventory.player.getGameProfile());
+        IInventory inventory = tile
+                .getOrCreateMailInventory(playerInventory.player.worldObj, playerInventory.player.getGameProfile());
 
         if (inventory instanceof POBox) {
             this.mailInventory = (POBox) inventory;

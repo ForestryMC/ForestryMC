@@ -5,9 +5,10 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import net.minecraft.util.IIcon;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.util.IIcon;
 
 @SideOnly(Side.CLIENT)
 public interface ITextureManager {

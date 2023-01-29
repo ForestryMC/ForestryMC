@@ -1,14 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
+
+import java.util.EnumSet;
+import java.util.Random;
+
+import net.minecraft.command.ICommand;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -18,11 +23,6 @@ import forestry.core.ISaveEventHandler;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryDummy;
 import forestry.core.utils.Log;
-import java.util.EnumSet;
-import java.util.Random;
-import net.minecraft.command.ICommand;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
 
 public abstract class ForestryPlugin {
 
@@ -76,7 +76,9 @@ public abstract class ForestryPlugin {
 
         return String.format(
                 "Received an invalid '%s' request '%s' from mod '%s'. Please contact the author and report this issue.",
-                message.key, messageValue, message.getSender());
+                message.key,
+                messageValue,
+                message.getSender());
     }
 
     protected static void logInvalidIMCMessage(IMCMessage message) {
@@ -88,12 +90,7 @@ public abstract class ForestryPlugin {
         return null;
     }
 
-    public void populateChunk(
-            IChunkProvider chunkProvider,
-            World world,
-            Random rand,
-            int chunkX,
-            int chunkZ,
+    public void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ,
             boolean hasVillageGeneratedZ) {}
 
     public void populateChunkRetroGen(World world, Random rand, int chunkX, int chunkZ) {}

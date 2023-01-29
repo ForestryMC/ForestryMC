@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture;
+
+import java.util.Random;
+
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
 
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -18,12 +24,6 @@ import forestry.api.arboriculture.ITreeGenome;
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.IAllele;
 import forestry.plugins.PluginArboriculture;
-import java.util.Random;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
 
 public class VillageHandlerArboriculture implements IVillageTradeHandler {
 
@@ -36,8 +36,10 @@ public class VillageHandlerArboriculture implements IVillageTradeHandler {
         ItemStack randomTreeStack = TreeManager.treeRoot.getMemberStack(randomTree, EnumGermlingType.SAPLING.ordinal());
 
         recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, 8), randomTreeStack));
-        recipeList.add(new MerchantRecipe(
-                new ItemStack(Items.emerald, 2), PluginArboriculture.items.grafterProven.getItemStack()));
+        recipeList.add(
+                new MerchantRecipe(
+                        new ItemStack(Items.emerald, 2),
+                        PluginArboriculture.items.grafterProven.getItemStack()));
 
         EnumWoodType randomWoodType = EnumWoodType.getRandom(random);
         ItemStack planks = TreeManager.woodItemAccess.getPlanks(randomWoodType, false);

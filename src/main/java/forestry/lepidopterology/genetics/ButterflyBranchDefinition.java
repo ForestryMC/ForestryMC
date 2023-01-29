@@ -1,14 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
+
+import java.util.Arrays;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
@@ -18,9 +18,9 @@ import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
-import java.util.Arrays;
 
 public enum ButterflyBranchDefinition implements IBranchDefinition {
+
     Anthocharis,
     Attacus,
     Bassarona,
@@ -64,17 +64,17 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
             AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
             AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.METABOLISM, 3);
             AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FERTILITY, 3);
-            AlleleHelper.instance.set(
-                    defaultTemplate, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
-            AlleleHelper.instance.set(
-                    defaultTemplate, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
+            AlleleHelper.instance
+                    .set(defaultTemplate, EnumButterflyChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
+            AlleleHelper.instance
+                    .set(defaultTemplate, EnumButterflyChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
             AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.NOCTURNAL, false);
             AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.TOLERANT_FLYER, false);
             AlleleHelper.instance.set(defaultTemplate, EnumButterflyChromosome.FIRE_RESIST, false);
-            AlleleHelper.instance.set(
-                    defaultTemplate, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
-            AlleleHelper.instance.set(
-                    defaultTemplate, EnumButterflyChromosome.EFFECT, AlleleButterflyEffect.butterflyNone);
+            AlleleHelper.instance
+                    .set(defaultTemplate, EnumButterflyChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.VANILLA);
+            AlleleHelper.instance
+                    .set(defaultTemplate, EnumButterflyChromosome.EFFECT, AlleleButterflyEffect.butterflyNone);
         }
         return Arrays.copyOf(defaultTemplate, defaultTemplate.length);
     }
@@ -87,9 +87,8 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
     public static void createAlleles() {
         IAlleleRegistry alleleRegistry = AlleleManager.alleleRegistry;
 
-        alleleRegistry
-                .getClassification("class.insecta")
-                .addMemberGroup(alleleRegistry.createAndRegisterClassification(
+        alleleRegistry.getClassification("class.insecta").addMemberGroup(
+                alleleRegistry.createAndRegisterClassification(
                         IClassification.EnumClassLevel.ORDER,
                         "lepidoptera",
                         "Lepidoptera",
@@ -132,7 +131,9 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
                                 Cethosia.getBranch(),
                                 Speyeria.getBranch()),
                         alleleRegistry.createAndRegisterClassification(
-                                IClassification.EnumClassLevel.FAMILY, "lycaenidae", "Lycaenidae"),
+                                IClassification.EnumClassLevel.FAMILY,
+                                "lycaenidae",
+                                "Lycaenidae"),
                         alleleRegistry.createAndRegisterClassification(
                                 IClassification.EnumClassLevel.FAMILY,
                                 "papilionidae",
@@ -140,6 +141,8 @@ public enum ButterflyBranchDefinition implements IBranchDefinition {
                                 Papilio.getBranch(),
                                 Protographium.getBranch()),
                         alleleRegistry.createAndRegisterClassification(
-                                IClassification.EnumClassLevel.FAMILY, "notchidae", "Notchidae")));
+                                IClassification.EnumClassLevel.FAMILY,
+                                "notchidae",
+                                "Notchidae")));
     }
 }

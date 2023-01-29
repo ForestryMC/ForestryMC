@@ -10,13 +10,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * Keeps track of all the IErrorStates for an object.
- * Create a new IErrorLogic instance for your object with ForestryAPI.errorStateRegistry.createErrorLogic().
+ * Keeps track of all the IErrorStates for an object. Create a new IErrorLogic instance for your object with
+ * ForestryAPI.errorStateRegistry.createErrorLogic().
  */
 public interface IErrorLogic extends IErrorSource {
 
     /**
      * Sets the errorState when condition is true, and unsets it when condition is false.
+     * 
      * @return condition
      */
     boolean setCondition(boolean condition, IErrorState errorState);

@@ -1,14 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.multiblock;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.ITriggerExternal;
@@ -18,18 +23,13 @@ import cpw.mods.fml.common.Optional;
 import forestry.api.multiblock.IMultiblockController;
 import forestry.apiculture.blocks.BlockAlveary;
 import forestry.apiculture.trigger.ApicultureTriggers;
-import java.util.ArrayList;
-import java.util.Collection;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraftforge.common.util.ForgeDirection;
 
 @Optional.Interface(iface = "buildcraft.api.statements.ITriggerProvider", modid = "BuildCraftAPI|statements")
 public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
 
     @Override
-    public void onMachineAssembled(
-            IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
+    public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord,
+            ChunkCoordinates maxCoord) {
         super.onMachineAssembled(multiblockController, minCoord, maxCoord);
 
         if (!worldObj.isRemote) {
@@ -38,7 +38,11 @@ public class TileAlvearyPlain extends TileAlveary implements ITriggerProvider {
                 if ((xCoord > minCoord.posX && xCoord < maxCoord.posX)
                         || (zCoord > minCoord.posZ && zCoord < maxCoord.posZ)) {
                     this.worldObj.setBlockMetadataWithNotify(
-                            xCoord, yCoord, zCoord, BlockAlveary.Type.ENTRANCE.ordinal(), 2);
+                            xCoord,
+                            yCoord,
+                            zCoord,
+                            BlockAlveary.Type.ENTRANCE.ordinal(),
+                            2);
                 }
             }
         }

@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
+import java.util.Locale;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleBoolean;
@@ -14,9 +16,9 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.ISpeciesRoot;
-import java.util.Locale;
 
 public enum EnumButterflyChromosome implements IChromosomeType {
+
     /**
      * Species of the bee. Alleles here must implement {@link IAlleleButterflySpecies}.
      */
@@ -38,7 +40,8 @@ public enum EnumButterflyChromosome implements IChromosomeType {
      */
     METABOLISM(IAlleleInteger.class),
     /**
-     * Determines likelyhood of caterpillars and length of caterpillar/pupation phase. Also: Number of max caterpillars after mating?
+     * Determines likelyhood of caterpillars and length of caterpillar/pupation phase. Also: Number of max caterpillars
+     * after mating?
      */
     FERTILITY(IAlleleInteger.class),
     /**
@@ -72,8 +75,7 @@ public enum EnumButterflyChromosome implements IChromosomeType {
     /**
      * Not used yet
      */
-    TERRITORY(IAlleleArea.class),
-    ;
+    TERRITORY(IAlleleArea.class),;
 
     Class<? extends IAllele> clss;
 

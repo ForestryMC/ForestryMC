@@ -1,22 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
-import com.mojang.authlib.GameProfile;
-import forestry.core.access.IOwnable;
 import java.util.UUID;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+
+import com.mojang.authlib.GameProfile;
+import forestry.core.access.IOwnable;
 
 public abstract class PlayerUtil {
 
@@ -47,9 +47,8 @@ public abstract class PlayerUtil {
     }
 
     /**
-     * Get a player for a given World and GameProfile.
-     * If they are not in the World, returns a FakePlayer.
-     * Do not store references to the return value, to prevent worlds staying in memory.
+     * Get a player for a given World and GameProfile. If they are not in the World, returns a FakePlayer. Do not store
+     * references to the return value, to prevent worlds staying in memory.
      */
     public static EntityPlayer getPlayer(World world, GameProfile profile) {
         if (world == null) {

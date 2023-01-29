@@ -1,14 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.Stack;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
@@ -33,19 +46,6 @@ import forestry.core.network.IStreamable;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
 import forestry.plugins.PluginApiculture;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-import java.util.Stack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
 
@@ -335,9 +335,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
         beeInventory.setQueen(queenStack);
 
         // Register the new queen with the breeding tracker
-        BeeManager.beeRoot
-                .getBreedingTracker(housing.getWorld(), housing.getOwner())
-                .registerQueen(princess);
+        BeeManager.beeRoot.getBreedingTracker(housing.getWorld(), housing.getOwner()).registerQueen(princess);
 
         // Remove drone
         beeInventory.getDrone().stackSize--;
@@ -473,6 +471,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
     }
 
     private static class QueenCanWorkCache {
+
         private static final int ticksPerCheckQueenCanWork = 10;
 
         private Set<IErrorState> queenCanWorkCached = Collections.emptySet();
@@ -491,6 +490,7 @@ public class BeekeepingLogic implements IBeekeepingLogic, IStreamable {
     }
 
     private static class PollenHandler {
+
         private static final int MAX_POLLINATION_ATTEMPTS = 20;
 
         private IIndividual pollen;

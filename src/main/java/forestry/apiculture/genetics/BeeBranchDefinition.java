@@ -1,5 +1,8 @@
 package forestry.apiculture.genetics;
 
+import java.util.Arrays;
+import java.util.Locale;
+
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.IAllele;
@@ -8,15 +11,15 @@ import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.genetics.IBranchDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
-import java.util.Arrays;
-import java.util.Locale;
 
 public enum BeeBranchDefinition implements IBranchDefinition {
+
     HONEY("Apis"),
     NOBLE("Probapis"),
     INDUSTRIOUS("Industrapis"),
     HEROIC("Herapis"),
     INFERNAL("Diapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_2);
@@ -26,6 +29,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     AUSTERE("Modapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.BOTH_1);
@@ -35,6 +39,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     TROPICAL("Caldapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.UP_1);
@@ -44,6 +49,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     END("Finapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.FERTILITY, EnumAllele.Fertility.LOW);
@@ -57,6 +63,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     FROZEN("Coagapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.UP_1);
@@ -66,6 +73,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     VENGEFUL("Punapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.TERRITORY, EnumAllele.Territory.LARGEST);
@@ -73,6 +81,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     FESTIVE("Festapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
@@ -82,6 +91,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     AGRARIAN("Rustapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
@@ -91,6 +101,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     BOGGY("Paludapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.MUSHROOMS);
@@ -99,6 +110,7 @@ public enum BeeBranchDefinition implements IBranchDefinition {
         }
     },
     MONASTIC("Monapis") {
+
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
@@ -141,8 +153,8 @@ public enum BeeBranchDefinition implements IBranchDefinition {
             AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
             AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
             AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.FERTILITY, EnumAllele.Fertility.NORMAL);
-            AlleleHelper.instance.set(
-                    defaultTemplate, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
+            AlleleHelper.instance
+                    .set(defaultTemplate, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
             AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.NOCTURNAL, false);
             AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.NONE);
             AlleleHelper.instance.set(defaultTemplate, EnumBeeChromosome.TOLERANT_FLYER, false);

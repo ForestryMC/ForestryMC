@@ -8,6 +8,7 @@ package forestry.api.circuits;
 import java.util.List;
 
 public interface ICircuit {
+
     String getUID();
 
     boolean requiresDiscovery();

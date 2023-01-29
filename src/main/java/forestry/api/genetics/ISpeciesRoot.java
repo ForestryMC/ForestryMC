@@ -5,24 +5,28 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
 /**
- * Describes a class of species (i.e. bees, trees, butterflies), provides helper functions and access to common functionality.
+ * Describes a class of species (i.e. bees, trees, butterflies), provides helper functions and access to common
+ * functionality.
  */
 public interface ISpeciesRoot {
 
     /**
-     * @return A unique identifier for the species class. Should consist of "root" + a common name for the species class in camel-case, i.e. "rootBees", "rootTrees", "rootButterflies".
+     * @return A unique identifier for the species class. Should consist of "root" + a common name for the species class
+     *         in camel-case, i.e. "rootBees", "rootTrees", "rootButterflies".
      */
     String getUID();
 
@@ -37,22 +41,28 @@ public interface ISpeciesRoot {
     int getSpeciesCount();
 
     /**
-     * Used to check whether a given itemstack contains genetic data corresponding to an {@link IIndividual} of this class.
+     * Used to check whether a given itemstack contains genetic data corresponding to an {@link IIndividual} of this
+     * class.
+     * 
      * @param stack itemstack to check.
      * @return true if the itemstack contains an {@link IIndividual} of this class, false otherwise.
      */
     boolean isMember(ItemStack stack);
 
     /**
-     * Used to check whether a given itemstack contains genetic data corresponding to an {@link IIndividual} of this class and matches the given type.
+     * Used to check whether a given itemstack contains genetic data corresponding to an {@link IIndividual} of this
+     * class and matches the given type.
+     * 
      * @param stack itemstack to check.
-     * @param type Integer denoting the type needed to match. (i.e. butterfly vs. butterfly serum; bee queens, princesses, drones; etc.)
+     * @param type  Integer denoting the type needed to match. (i.e. butterfly vs. butterfly serum; bee queens,
+     *              princesses, drones; etc.)
      * @return true if the itemstack contains an {@link IIndividual} of this class, false otherwise.
      */
     boolean isMember(ItemStack stack, int type);
 
     /**
      * Used to check whether the given {@link IIndividual} is member of this class.
+     * 
      * @param individual {@link IIndividual} to check.
      * @return true if the individual is member of this class, false otherwise.
      */
@@ -161,7 +171,8 @@ public interface ISpeciesRoot {
 
     /**
      * Sets an item stack as a valid (generic) research catalyst for this class.
-     * @param itemstack ItemStack to set as suitable.
+     * 
+     * @param itemstack   ItemStack to set as suitable.
      * @param suitability Float between 0 and 1 to indicate suitability.
      */
     void setResearchSuitability(ItemStack itemstack, float suitability);

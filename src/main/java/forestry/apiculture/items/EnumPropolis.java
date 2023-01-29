@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.core.items.ItemOverlay;
 import java.awt.Color;
 import java.util.Locale;
 
+import forestry.core.items.ItemOverlay;
+
 public enum EnumPropolis implements ItemOverlay.IOverlayInfo {
+
     NORMAL(new Color(0xc5b24e)),
     STICKY(new Color(0xc68e57)),
     PULSATING(new Color(0x2ccdb1), true),

@@ -1,14 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes.nei;
+
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.FluidStack;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -22,22 +33,11 @@ import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiSqueezer;
 import forestry.factory.recipes.ISqueezerContainerRecipe;
 import forestry.factory.recipes.SqueezerRecipeManager;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.FluidStack;
 
 public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
-    private static final int[][] INPUTS =
-            new int[][] {{0, 0}, {1, 0}, {2, 0}, {0, 1}, {1, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
+    private static final int[][] INPUTS = new int[][] { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 1 }, { 1, 1 }, { 2, 1 },
+            { 0, 2 }, { 1, 2 }, { 2, 2 } };
 
     public class CachedSqueezerRecipe extends CachedBaseRecipe {
 
@@ -55,8 +55,8 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
                 setTankFluid(recipe.getFluidOutput());
             }
             if (recipe.getRemnants() != null) {
-                this.remnants =
-                        new PositionedStackAdv(recipe.getRemnants(), 92, 49).setChance(recipe.getRemnantsChance());
+                this.remnants = new PositionedStackAdv(recipe.getRemnants(), 92, 49)
+                        .setChance(recipe.getRemnantsChance());
             }
 
             this.processingTime = recipe.getProcessingTime();
@@ -75,7 +75,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
 
             ItemStack emptyContainer = recipe.getEmptyContainer();
             List<ItemStack> ingredients = FluidHelper.getAllFilledContainers(emptyContainer);
-            setIngredients(new Object[] {ingredients});
+            setIngredients(new Object[] { ingredients });
             List<FluidStack> fluids = new ArrayList<>();
             for (ItemStack ingredient : ingredients) {
                 FluidStack fluidStack = FluidHelper.getFluidStackInContainer(ingredient);
@@ -84,8 +84,8 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
             setTankFluid(fluids);
 
             if (recipe.getRemnants() != null) {
-                this.remnants =
-                        new PositionedStackAdv(recipe.getRemnants(), 92, 49).setChance(recipe.getRemnantsChance());
+                this.remnants = new PositionedStackAdv(recipe.getRemnants(), 92, 49)
+                        .setChance(recipe.getRemnantsChance());
             }
 
             this.processingTime = recipe.getProcessingTime();
@@ -242,7 +242,7 @@ public class NEIHandlerSqueezer extends RecipeHandlerBase {
         ISqueezerContainerRecipe containerRecipe = SqueezerRecipeManager.findMatchingContainerRecipe(ingred);
         if (containerRecipe != null) {
             CachedSqueezerRecipe crecipe = new CachedSqueezerRecipe(containerRecipe, true);
-            crecipe.setIngredients(new ItemStack[] {ingred});
+            crecipe.setIngredients(new ItemStack[] { ingred });
             FluidStack fluidStack = FluidHelper.getFluidStackInContainer(ingred);
             crecipe.setTankFluid(fluidStack);
             this.arecipes.add(crecipe);

@@ -1,20 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import com.google.common.collect.LinkedListMultimap;
-import forestry.apiculture.gui.widgets.HabitatSlot;
-import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
-import forestry.core.config.Constants;
-import forestry.core.gui.GuiForestry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,13 +15,23 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
+
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.collect.LinkedListMultimap;
+
+import forestry.apiculture.gui.widgets.HabitatSlot;
+import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
+import forestry.core.config.Constants;
+import forestry.core.gui.GuiForestry;
+
 public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, ItemInventoryHabitatLocator> {
+
     private static final LinkedListMultimap<String, BiomeDictionary.Type> habitats = LinkedListMultimap.create();
 
     static {
@@ -80,10 +83,12 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator, Item
     protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY) {
         super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
-        String str =
-                StatCollector.translateToLocal("item.for.habitatLocator.name").toUpperCase();
+        String str = StatCollector.translateToLocal("item.for.habitatLocator.name").toUpperCase();
         fontRendererObj.drawString(
-                str, startX + 8 + textLayout.getCenteredOffset(str, 138), startY + 16, fontColor.get("gui.screen"));
+                str,
+                startX + 8 + textLayout.getCenteredOffset(str, 138),
+                startY + 16,
+                fontColor.get("gui.screen"));
 
         // Set active according to valid biomes.
         Set<BiomeDictionary.Type> activeBiomeTypes = EnumSet.noneOf(BiomeDictionary.Type.class);

@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.ledgers;
+
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
@@ -16,11 +22,6 @@ import forestry.core.config.SessionVars;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 import forestry.core.render.SpriteSheet;
-import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Side ledger for guis
@@ -33,10 +34,10 @@ public abstract class Ledger {
     protected final int maxTextWidth;
     protected int maxHeight = 24;
 
-    private static final ResourceLocation ledgerTextureRight =
-            new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledger.png");
-    private static final ResourceLocation ledgerTextureLeft =
-            new ForestryResource(Constants.TEXTURE_PATH_GUI + "/ledgerLeft.png");
+    private static final ResourceLocation ledgerTextureRight = new ForestryResource(
+            Constants.TEXTURE_PATH_GUI + "/ledger.png");
+    private static final ResourceLocation ledgerTextureLeft = new ForestryResource(
+            Constants.TEXTURE_PATH_GUI + "/ledgerLeft.png");
 
     private final LedgerManager manager;
 
@@ -138,8 +139,7 @@ public abstract class Ledger {
     }
 
     public boolean intersectsWith(int mouseX, int mouseY) {
-        return mouseX >= currentShiftX
-                && mouseX <= currentShiftX + currentWidth
+        return mouseX >= currentShiftX && mouseX <= currentShiftX + currentWidth
                 && mouseY >= currentShiftY
                 && mouseY <= currentShiftY + getHeight();
     }
@@ -191,8 +191,11 @@ public abstract class Ledger {
         manager.gui.drawTexturedModalRect(x + 4, y, 256 - width + 4, 0, width - 4, 4); // top edge
         manager.gui.drawTexturedModalRect(x, y, 0, 0, 4, 4); // top left corner
 
-        manager.gui.drawTexturedModalRect(
-                x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body + bottom + right
+        manager.gui.drawTexturedModalRect(x + 4, y + 4, 256 - width + 4, 256 - height + 4, width - 4, height - 4); // body
+                                                                                                                   // +
+                                                                                                                   // bottom
+                                                                                                                   // +
+                                                                                                                   // right
 
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
     }

@@ -5,10 +5,12 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import forestry.api.genetics.ISpeciesType;
 import java.util.Locale;
 
+import forestry.api.genetics.ISpeciesType;
+
 public enum EnumBeeType implements ISpeciesType {
+
     DRONE,
     PRINCESS,
     QUEEN,

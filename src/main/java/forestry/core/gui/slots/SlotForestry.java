@@ -1,21 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import forestry.core.gui.tooltips.IToolTipProvider;
-import forestry.core.gui.tooltips.ToolTip;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import forestry.core.gui.tooltips.IToolTipProvider;
+import forestry.core.gui.tooltips.ToolTip;
 
 public class SlotForestry extends Slot implements IToolTipProvider {
 
@@ -110,8 +109,7 @@ public class SlotForestry extends Slot implements IToolTipProvider {
 
     @Override
     public boolean isMouseOver(int mouseX, int mouseY) {
-        return mouseX >= xDisplayPosition
-                && mouseX <= xDisplayPosition + 16
+        return mouseX >= xDisplayPosition && mouseX <= xDisplayPosition + 16
                 && mouseY >= yDisplayPosition
                 && mouseY <= yDisplayPosition + 16;
     }

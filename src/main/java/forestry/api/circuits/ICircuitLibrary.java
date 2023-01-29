@@ -5,4 +5,5 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
-public interface ICircuitLibrary {}
+public interface ICircuitLibrary {
+}

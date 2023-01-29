@@ -1,26 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Config;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.ForestryResource;
 import forestry.mail.POBoxInfo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class GuiMailboxInfo extends Gui {
 
@@ -55,8 +55,10 @@ public class GuiMailboxInfo extends Gui {
         int y = 0;
 
         Minecraft minecraft = Minecraft.getMinecraft();
-        ScaledResolution scaledresolution =
-                new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
+        ScaledResolution scaledresolution = new ScaledResolution(
+                minecraft,
+                minecraft.displayWidth,
+                minecraft.displayHeight);
         if (Config.mailAlertXPosition == XPosition.RIGHT) {
             x = scaledresolution.getScaledWidth() - WIDTH;
         }
@@ -95,15 +97,14 @@ public class GuiMailboxInfo extends Gui {
         if (info.hasMail()) {
             if (this.poInfo == null) {
                 playJingle = true;
-            } else if (this.poInfo.playerLetters != info.playerLetters
-                    || this.poInfo.tradeLetters != info.tradeLetters) {
-                playJingle = true;
-            }
+            } else
+                if (this.poInfo.playerLetters != info.playerLetters || this.poInfo.tradeLetters != info.tradeLetters) {
+                    playJingle = true;
+                }
         }
 
         if (playJingle) {
-            Proxies.common
-                    .getRenderWorld()
+            Proxies.common.getRenderWorld()
                     .playSoundAtEntity(Proxies.common.getClientInstance().thePlayer, "random.levelup", 1.0f, 1.0f);
         }
 

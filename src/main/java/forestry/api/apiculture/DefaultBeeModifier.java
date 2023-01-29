@@ -6,9 +6,8 @@
 package forestry.api.apiculture;
 
 /**
- * Easily extendable default IBeeModifier.
- * By itself, this IBeeModifier does nothing.
- * BeeModifiers should inherit from this class unless they modify everything.
+ * Easily extendable default IBeeModifier. By itself, this IBeeModifier does nothing. BeeModifiers should inherit from
+ * this class unless they modify everything.
  */
 public class DefaultBeeModifier implements IBeeModifier {
 

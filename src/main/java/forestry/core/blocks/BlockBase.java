@@ -1,29 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.access.IAccessHandler;
-import forestry.core.circuits.ISocketable;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.MachineDefinition;
-import forestry.core.tiles.TileBase;
-import forestry.core.tiles.TileForestry;
-import forestry.core.tiles.TileUtil;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.PlayerUtil;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -44,7 +31,21 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.access.IAccessHandler;
+import forestry.core.circuits.ISocketable;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.MachineDefinition;
+import forestry.core.tiles.TileBase;
+import forestry.core.tiles.TileForestry;
+import forestry.core.tiles.TileUtil;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.PlayerUtil;
+
 public class BlockBase<T extends IMachineProperties> extends BlockForestry {
+
     private final List<MachineDefinition> definitions = new ArrayList<>();
     private final boolean hasTESR;
 
@@ -176,8 +177,8 @@ public class BlockBase<T extends IMachineProperties> extends BlockForestry {
     }
 
     @Override
-    public boolean onBlockActivated(
-            World world, int x, int y, int z, EntityPlayer player, int side, float par7, float par8, float par9) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float par7,
+            float par8, float par9) {
         if (player.isSneaking()) {
             return false;
         }
@@ -190,8 +191,7 @@ public class BlockBase<T extends IMachineProperties> extends BlockForestry {
         IAccessHandler access = tile.getAccessHandler();
 
         ItemStack current = player.getCurrentEquippedItem();
-        if (current != null
-                && current.getItem() != Items.bucket
+        if (current != null && current.getItem() != Items.bucket
                 && tile instanceof IFluidHandler
                 && access.allowsAlteration(player)) {
             if (FluidHelper.handleRightClick(
@@ -241,8 +241,8 @@ public class BlockBase<T extends IMachineProperties> extends BlockForestry {
                 ((TileForestry) tile).onRemoval();
             }
             if (tile instanceof ISocketable) {
-                InventoryUtil.dropSockets(
-                        (ISocketable) tile, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+                InventoryUtil
+                        .dropSockets((ISocketable) tile, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
             }
         }
         super.breakBlock(world, x, y, z, block, meta);

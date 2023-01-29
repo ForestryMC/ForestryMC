@@ -1,25 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture;
 
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-import forestry.api.apiculture.EnumBeeType;
-import forestry.apiculture.blocks.BlockApicultureType;
-import forestry.apiculture.genetics.BeeDefinition;
-import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
-import forestry.core.utils.Log;
-import forestry.plugins.PluginApiculture;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -30,6 +21,15 @@ import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
+import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import forestry.api.apiculture.EnumBeeType;
+import forestry.apiculture.blocks.BlockApicultureType;
+import forestry.apiculture.genetics.BeeDefinition;
+import forestry.apiculture.worldgen.ComponentVillageBeeHouse;
+import forestry.core.utils.Log;
+import forestry.plugins.PluginApiculture;
 
 public class VillageHandlerApiculture implements IVillageCreationHandler, IVillageTradeHandler {
 
@@ -44,8 +44,10 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
     @SuppressWarnings("unchecked")
     @Override
     public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
-        ItemStack wildcardPrincess =
-                new ItemStack(PluginApiculture.items.beePrincessGE, 1, OreDictionary.WILDCARD_VALUE);
+        ItemStack wildcardPrincess = new ItemStack(
+                PluginApiculture.items.beePrincessGE,
+                1,
+                OreDictionary.WILDCARD_VALUE);
         ItemStack wildcardDrone = new ItemStack(PluginApiculture.items.beeDroneGE, 4, OreDictionary.WILDCARD_VALUE);
         recipeList.add(new MerchantRecipe(wildcardPrincess, new ItemStack(Items.emerald, 1)));
 
@@ -82,7 +84,9 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
     @Override
     public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int size) {
         return new StructureVillagePieces.PieceWeight(
-                ComponentVillageBeeHouse.class, 15, MathHelper.getRandomIntegerInRange(random, size, 1 + size));
+                ComponentVillageBeeHouse.class,
+                15,
+                MathHelper.getRandomIntegerInRange(random, size, 1 + size));
     }
 
     @Override
@@ -92,15 +96,8 @@ public class VillageHandlerApiculture implements IVillageCreationHandler, IVilla
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Object buildComponent(
-            StructureVillagePieces.PieceWeight villagePiece,
-            StructureVillagePieces.Start startPiece,
-            List pieces,
-            Random random,
-            int p1,
-            int p2,
-            int p3,
-            int p4,
+    public Object buildComponent(StructureVillagePieces.PieceWeight villagePiece,
+            StructureVillagePieces.Start startPiece, List pieces, Random random, int p1, int p2, int p3, int p4,
             int p5) {
         return ComponentVillageBeeHouse.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
     }

@@ -6,6 +6,7 @@
 package forestry.api.genetics;
 
 import java.util.Collection;
+
 import net.minecraft.item.ItemStack;
 
 /**
@@ -28,8 +29,7 @@ public interface IFruitBearer {
     /**
      * Picks the fruits of this tile, resetting it to unripe fruits.
      *
-     * @param tool
-     *            Tool used in picking the fruits. May be null.
+     * @param tool Tool used in picking the fruits. May be null.
      * @return Picked fruits.
      */
     Collection<ItemStack> pickFruit(ItemStack tool);
@@ -42,8 +42,7 @@ public interface IFruitBearer {
     /**
      * Increases the ripeness of the fruit.
      *
-     * @param add
-     *            Float to add to the ripeness. Will truncate to valid values.
+     * @param add Float to add to the ripeness. Will truncate to valid values.
      */
     void addRipeness(float add);
 }

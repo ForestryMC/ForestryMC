@@ -6,6 +6,7 @@
 package forestry.api.mail;
 
 import java.util.Map;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 

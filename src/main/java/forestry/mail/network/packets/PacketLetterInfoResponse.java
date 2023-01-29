@@ -1,16 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.network.packets;
 
+import java.io.IOException;
+import java.util.UUID;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
 import forestry.api.mail.PostManager;
@@ -22,11 +28,6 @@ import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
 import forestry.mail.EnumStationState;
 import forestry.mail.gui.ILetterInfoReceiver;
-import java.io.IOException;
-import java.util.UUID;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 
 public class PacketLetterInfoResponse extends ForestryPacket implements IForestryPacketClient {
 
@@ -126,7 +127,11 @@ public class PacketLetterInfoResponse extends ForestryPacket implements IForestr
             required = data.readItemStacks();
 
             this.tradeInfo = new TradeStationInfo(
-                    address, owner, tradegood, required, EnumStationState.values()[data.readShort()]);
+                    address,
+                    owner,
+                    tradegood,
+                    required,
+                    EnumStationState.values()[data.readShort()]);
         }
     }
 

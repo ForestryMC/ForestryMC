@@ -1,23 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.core.proxy.Proxies;
 import java.util.IllegalFormatException;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+
+import forestry.core.proxy.Proxies;
 
 public class StringUtil {
 
@@ -30,16 +30,11 @@ public class StringUtil {
     }
 
     public static String localize(String key) {
-        return StatCollector.translateToLocal("for." + key)
-                .replace("\\n", "\n")
-                .replace("@", "%")
-                .replace("\\%", "@");
+        return StatCollector.translateToLocal("for." + key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
     }
 
     public static String localizeTile(String key) {
-        return StatCollector.translateToLocal("tile.for." + key)
-                .replace("\\n", "\n")
-                .replace("@", "%")
+        return StatCollector.translateToLocal("tile.for." + key).replace("\\n", "\n").replace("@", "%")
                 .replace("\\%", "@");
     }
 
@@ -51,10 +46,7 @@ public class StringUtil {
      * Same as localizeAndFormat, only without the "for." prefix. Used for specific items.
      */
     public static String localizeAndFormatRaw(String key, Object... args) {
-        String text = StatCollector.translateToLocal(key)
-                .replace("\\n", "\n")
-                .replace("@", "%")
-                .replace("\\%", "@");
+        String text = StatCollector.translateToLocal(key).replace("\\n", "\n").replace("@", "%").replace("\\%", "@");
 
         try {
             return String.format(text, args);
@@ -64,10 +56,8 @@ public class StringUtil {
     }
 
     public static String cleanTags(String tag) {
-        return tag.replaceAll("[Ff]orestry\\p{Punct}", "")
-                .replaceAll("\\.[Ff]or\\p{Punct}", ".")
-                .replaceFirst("^tile\\.", "")
-                .replaceFirst("^item\\.", "");
+        return tag.replaceAll("[Ff]orestry\\p{Punct}", "").replaceAll("\\.[Ff]or\\p{Punct}", ".")
+                .replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
     }
 
     public static String cleanItemName(ItemStack stack) {
@@ -121,8 +111,7 @@ public class StringUtil {
 
         int lineCount = 0;
         for (String string : strings) {
-            lineCount +=
-                    fontRenderer.listFormattedStringToWidth(string, maxWidth).size();
+            lineCount += fontRenderer.listFormattedStringToWidth(string, maxWidth).size();
         }
 
         return lineCount * fontRenderer.FONT_HEIGHT;

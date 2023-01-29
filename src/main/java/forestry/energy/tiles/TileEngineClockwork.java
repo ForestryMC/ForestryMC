@@ -1,25 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.energy.tiles;
 
-import forestry.core.config.Constants;
-import forestry.core.tiles.TemperatureState;
-import forestry.core.tiles.TileEngine;
-import forestry.core.utils.DamageSourceForestry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
+
+import forestry.core.config.Constants;
+import forestry.core.tiles.TemperatureState;
+import forestry.core.tiles.TileEngine;
+import forestry.core.utils.DamageSourceForestry;
 
 public class TileEngineClockwork extends TileEngine {
 
@@ -31,8 +30,8 @@ public class TileEngineClockwork extends TileEngine {
     private static final int ENGINE_CLOCKWORK_ENERGY_PER_CYCLE = 2;
     private static final float ENGINE_CLOCKWORK_WIND_MAX = 8f;
 
-    private static final DamageSourceForestry damageSourceEngineClockwork =
-            new DamageSourceForestry("engine.clockwork");
+    private static final DamageSourceForestry damageSourceEngineClockwork = new DamageSourceForestry(
+            "engine.clockwork");
 
     private float tension = 0.0f;
     private short delay = 0;

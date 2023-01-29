@@ -1,14 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.items;
+
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,17 +40,6 @@ import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.lepidopterology.genetics.ButterflyGenome;
 import forestry.plugins.PluginLepidopterology;
-import java.util.List;
-import java.util.Random;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 
 public class ItemButterflyGE extends ItemGE {
 
@@ -87,7 +87,7 @@ public class ItemButterflyGE extends ItemGE {
         return butterfly.getDisplayName();
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
         addCreativeItems(itemList, true);
@@ -131,14 +131,16 @@ public class ItemButterflyGE extends ItemGE {
         }
 
         if (EntityUtil.spawnEntity(
+                entityItem.worldObj,
+                new EntityButterfly(
                         entityItem.worldObj,
-                        new EntityButterfly(
-                                entityItem.worldObj, butterfly, (int) entityItem.posX, (int) entityItem.posY, (int)
-                                        entityItem.posZ),
-                        entityItem.posX,
-                        entityItem.posY,
-                        entityItem.posZ)
-                != null) {
+                        butterfly,
+                        (int) entityItem.posX,
+                        (int) entityItem.posY,
+                        (int) entityItem.posZ),
+                entityItem.posX,
+                entityItem.posY,
+                entityItem.posZ) != null) {
             if (entityItem.getEntityItem().stackSize > 1) {
                 entityItem.getEntityItem().stackSize--;
             } else {
@@ -158,10 +160,7 @@ public class ItemButterflyGE extends ItemGE {
         }
 
         return getColourFromSpecies(
-                AlleleManager.alleleRegistry
-                        .getIndividual(itemstack)
-                        .getGenome()
-                        .getPrimary(),
+                AlleleManager.alleleRegistry.getIndividual(itemstack).getGenome().getPrimary(),
                 renderPass);
     }
 
@@ -214,17 +213,8 @@ public class ItemButterflyGE extends ItemGE {
     }
 
     @Override
-    public boolean onItemUse(
-            ItemStack itemstack,
-            EntityPlayer player,
-            World world,
-            int x,
-            int y,
-            int z,
-            int par7,
-            float facingX,
-            float facingY,
-            float facingZ) {
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7,
+            float facingX, float facingY, float facingZ) {
 
         if (world.isRemote) {
             return false;

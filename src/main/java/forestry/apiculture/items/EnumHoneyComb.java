@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
 
@@ -14,6 +12,7 @@ import java.awt.Color;
 import java.util.Locale;
 
 public enum EnumHoneyComb {
+
     HONEY(new Color(0xe8d56a), new Color(0xffa12b)),
     COCOA(new Color(0x674016), new Color(0xffb62b), true),
     SIMMERING(new Color(0x981919), new Color(0xffb62b)),

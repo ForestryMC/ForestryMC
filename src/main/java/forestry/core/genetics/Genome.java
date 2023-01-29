@@ -1,16 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 import com.google.common.base.Objects;
+
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleSpecies;
@@ -20,12 +27,6 @@ import forestry.api.genetics.IGenome;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.lepidopterology.EnumButterflyChromosome;
 import forestry.core.config.Config;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 public abstract class Genome implements IGenome {
 
@@ -54,7 +55,8 @@ public abstract class Genome implements IGenome {
         if (chromosomes == null || chromosomes.length != getDefaultTemplate().length) {
             String message = String.format(
                     "Tried to create a genome for '%s' from an invalid chromosome template.\n%s",
-                    getSpeciesRoot().getUID(), chromosomesToString(chromosomes));
+                    getSpeciesRoot().getUID(),
+                    chromosomesToString(chromosomes));
             throw new IllegalArgumentException(message);
         }
 
@@ -70,7 +72,9 @@ public abstract class Genome implements IGenome {
                 String message = String.format(
                         "Tried to create a genome for '%s' from an invalid chromosome template. "
                                 + "Missing chromosome '%s'.\n%s",
-                        getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+                        getSpeciesRoot().getUID(),
+                        chromosomeType.getName(),
+                        chromosomesToString(chromosomes));
                 throw new IllegalArgumentException(message);
             }
 
@@ -79,7 +83,9 @@ public abstract class Genome implements IGenome {
                 String message = String.format(
                         "Tried to create a genome for '%s' from an invalid chromosome template. "
                                 + "Missing primary allele for '%s'.\n%s",
-                        getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+                        getSpeciesRoot().getUID(),
+                        chromosomeType.getName(),
+                        chromosomesToString(chromosomes));
                 throw new IllegalArgumentException(message);
             }
 
@@ -88,7 +94,9 @@ public abstract class Genome implements IGenome {
                 String message = String.format(
                         "Tried to create a genome for '%s' from an invalid chromosome template. "
                                 + "Missing secondary allele for '%s'.\n%s",
-                        getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+                        getSpeciesRoot().getUID(),
+                        chromosomeType.getName(),
+                        chromosomesToString(chromosomes));
                 throw new IllegalArgumentException(message);
             }
 
@@ -97,7 +105,9 @@ public abstract class Genome implements IGenome {
                 String message = String.format(
                         "Tried to create a genome for '%s' from an invalid chromosome template. "
                                 + "Incorrect type for primary allele '%s'.\n%s.",
-                        getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+                        getSpeciesRoot().getUID(),
+                        chromosomeType.getName(),
+                        chromosomesToString(chromosomes));
                 throw new IllegalArgumentException(message);
             }
 
@@ -105,7 +115,9 @@ public abstract class Genome implements IGenome {
                 String message = String.format(
                         "Tried to create a genome for '%s' from an invalid chromosome template. "
                                 + "Incorrect type for secondary allele '%s'.\n%s.",
-                        getSpeciesRoot().getUID(), chromosomeType.getName(), chromosomesToString(chromosomes));
+                        getSpeciesRoot().getUID(),
+                        chromosomeType.getName(),
+                        chromosomesToString(chromosomes));
                 throw new IllegalArgumentException(message);
             }
         }
@@ -124,11 +136,7 @@ public abstract class Genome implements IGenome {
                 continue;
             }
             IChromosome chromosome = chromosomes[i];
-            stringBuilder
-                    .append(chromosomeType.getName())
-                    .append(": ")
-                    .append(chromosome)
-                    .append("\n");
+            stringBuilder.append(chromosomeType.getName()).append(": ").append(chromosome).append("\n");
         }
 
         return stringBuilder.toString();
@@ -141,8 +149,8 @@ public abstract class Genome implements IGenome {
     // NBT RETRIEVAL
 
     /**
-     * Quickly gets the species without loading the whole genome.
-     * We need this because the client uses the species for rendering.
+     * Quickly gets the species without loading the whole genome. We need this because the client uses the species for
+     * rendering.
      */
     protected static IAlleleSpecies getSpeciesDirectly(ItemStack itemStack) {
         NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
@@ -171,8 +179,8 @@ public abstract class Genome implements IGenome {
         return (IAlleleSpecies) activeAllele;
     }
 
-    private static IChromosome getChromosome(
-            ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
+    private static IChromosome getChromosome(ItemStack itemStack, IChromosomeType chromosomeType,
+            ISpeciesRoot speciesRoot) {
         NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
         if (nbtTagCompound == null) {
             return null;
@@ -206,24 +214,24 @@ public abstract class Genome implements IGenome {
 
                 if (Config.clearInvalidChromosomes) {
                     IAllele template = speciesRoot.getDefaultTemplate()[chromosomeOrdinal];
-                    Class<? extends IAllele> chromosomeClass =
-                            speciesRoot.getKaryotype()[chromosomeOrdinal].getAlleleClass();
+                    Class<? extends IAllele> chromosomeClass = speciesRoot.getKaryotype()[chromosomeOrdinal]
+                            .getAlleleClass();
                     if (chromosome.overrideInvalidAlleles(template, chromosomeClass)) {
                         chromosome.writeToNBT(chromosomeNBT);
                     }
                 }
 
                 if (chromosome.hasInvalidAlleles(speciesRoot.getKaryotype()[chromosomeOrdinal].getAlleleClass())) {
-                    throw new RuntimeException("Found Chromosome with invalid Alleles.\nNBTTagCompound: "
-                            + chromosomesNBT + "\nSee config option \"genetics.clear.invalid.chromosomes\".\nMissing: "
-                            + chromosomeNBT);
+                    throw new RuntimeException(
+                            "Found Chromosome with invalid Alleles.\nNBTTagCompound: " + chromosomesNBT
+                                    + "\nSee config option \"genetics.clear.invalid.chromosomes\".\nMissing: "
+                                    + chromosomeNBT);
                 }
             }
         }
 
         // handle old saves that have missing chromosomes
-        IChromosome speciesChromosome =
-                chromosomes[speciesRoot.getKaryotypeKey().ordinal()];
+        IChromosome speciesChromosome = chromosomes[speciesRoot.getKaryotypeKey().ordinal()];
         if (speciesChromosome != null) {
             IAlleleSpecies species = (IAlleleSpecies) speciesChromosome.getActiveAllele();
             IAllele[] template = speciesRoot.getTemplate(species.getUID());
@@ -238,8 +246,8 @@ public abstract class Genome implements IGenome {
         return chromosomes;
     }
 
-    protected static IAllele getActiveAllele(
-            ItemStack itemStack, IChromosomeType chromosomeType, ISpeciesRoot speciesRoot) {
+    protected static IAllele getActiveAllele(ItemStack itemStack, IChromosomeType chromosomeType,
+            ISpeciesRoot speciesRoot) {
         IChromosome chromosome = getChromosome(itemStack, chromosomeType, speciesRoot);
         if (chromosome == null) {
             return null;
@@ -301,16 +309,10 @@ public abstract class Genome implements IGenome {
                 return false;
             }
 
-            if (!chromosome
-                    .getPrimaryAllele()
-                    .getUID()
-                    .equals(otherChromosome.getPrimaryAllele().getUID())) {
+            if (!chromosome.getPrimaryAllele().getUID().equals(otherChromosome.getPrimaryAllele().getUID())) {
                 return false;
             }
-            if (!chromosome
-                    .getSecondaryAllele()
-                    .getUID()
-                    .equals(otherChromosome.getSecondaryAllele().getUID())) {
+            if (!chromosome.getSecondaryAllele().getUID().equals(otherChromosome.getSecondaryAllele().getUID())) {
                 return false;
             }
         }

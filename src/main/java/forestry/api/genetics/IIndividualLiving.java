@@ -26,6 +26,7 @@ public interface IIndividualLiving extends IIndividual {
 
     /**
      * Age the individual.
+     * 
      * @param world
      * @param ageModifier
      */
@@ -33,6 +34,7 @@ public interface IIndividualLiving extends IIndividual {
 
     /**
      * Mate with the given individual.
+     * 
      * @param individual the {@link IIndividual} to mate this one with.
      */
     void mate(IIndividual individual);

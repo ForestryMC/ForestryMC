@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins.compat;
+
+import java.util.ArrayList;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.circuits.ChipsetManager;
@@ -28,9 +31,6 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
-import java.util.ArrayList;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 
 @Plugin(
         pluginID = "ExtraUtilities",
@@ -60,8 +60,7 @@ public class PluginExtraUtilities extends ForestryPlugin {
         Farmables.farmables.put(FarmableReference.Ender.get(), new ArrayList<IFarmable>());
         if (Config.isExUtilEnderLilyEnabled()) {
             Circuit.farmEnderManaged = new CircuitFarmLogic("managedEnder", FarmLogicEnder.class);
-            Farmables.farmables
-                    .get(FarmableReference.Ender.get())
+            Farmables.farmables.get(FarmableReference.Ender.get())
                     .add(new FarmableGenericCrop(new ItemStack(exUEnderLilly, 1, 0), exUEnderLilly, 7));
         }
     }
@@ -73,7 +72,9 @@ public class PluginExtraUtilities extends ForestryPlugin {
         if (PluginManager.Module.FARMING.isEnabled() && Config.isExUtilEnderLilyEnabled()) {
             ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.managed");
             ChipsetManager.solderManager.addRecipe(
-                    layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.ENDER, 1), Circuit.farmEnderManaged);
+                    layoutManaged,
+                    PluginCore.items.tubes.get(EnumElectronTube.ENDER, 1),
+                    Circuit.farmEnderManaged);
         }
     }
 }

@@ -1,17 +1,34 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
+
+import net.minecraft.command.CommandHandler;
+import net.minecraft.command.ICommand;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -41,22 +58,6 @@ import forestry.plugins.compat.PluginNatura;
 import forestry.plugins.compat.PluginPlantMegaPack;
 import forestry.plugins.compat.PluginRotaryCraft;
 import forestry.plugins.compat.PluginWitchery;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Set;
-import net.minecraft.command.CommandHandler;
-import net.minecraft.command.ICommand;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 
 public class PluginManager {
 
@@ -83,6 +84,7 @@ public class PluginManager {
     }
 
     public enum Module {
+
         CORE(new PluginCore(), false),
         FLUIDS(new PluginFluids(), false),
 
@@ -191,8 +193,8 @@ public class PluginManager {
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
 
-        Configuration config =
-                new Configuration(new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
+        Configuration config = new Configuration(
+                new File(Forestry.instance.getConfigFolder(), MODULE_CONFIG_FILE_NAME));
 
         config.load();
         config.addCustomCategoryComment(
@@ -338,12 +340,7 @@ public class PluginManager {
         }
     }
 
-    public static void populateChunk(
-            IChunkProvider chunkProvider,
-            World world,
-            Random rand,
-            int chunkX,
-            int chunkZ,
+    public static void populateChunk(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ,
             boolean hasVillageGenerated) {
         for (Module m : loadedModules) {
             ForestryPlugin plugin = m.instance;

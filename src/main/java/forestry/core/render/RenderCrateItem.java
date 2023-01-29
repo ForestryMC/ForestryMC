@@ -1,17 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.items.ItemCrated;
 import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -25,7 +23,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
+
+import forestry.core.items.ItemCrated;
 
 /**
  * Adapted from RenderTankCartItem by CovertJaguar <http://www.railcraft.info>
@@ -34,8 +35,8 @@ public class RenderCrateItem implements IItemRenderer {
 
     private static final ResourceLocation BLOCK_TEXTURE = TextureMap.locationBlocksTexture;
     private static final ResourceLocation ITEM_TEXTURE = TextureMap.locationItemsTexture;
-    private static final ResourceLocation GLINT_TEXTURE =
-            new ResourceLocation("textures/misc/enchanted_item_glint.png");
+    private static final ResourceLocation GLINT_TEXTURE = new ResourceLocation(
+            "textures/misc/enchanted_item_glint.png");
 
     private static final float PIXEL = 1.0f / 16.0f;
 
@@ -114,8 +115,8 @@ public class RenderCrateItem implements IItemRenderer {
             float uv3 = icon.getMinV();
             float uv4 = icon.getMaxV();
 
-            ItemRenderer.renderItemIn2D(
-                    tessellator, uv2, uv3, uv1, uv4, icon.getIconWidth(), icon.getIconHeight(), PIXEL);
+            ItemRenderer
+                    .renderItemIn2D(tessellator, uv2, uv3, uv1, uv4, icon.getIconWidth(), icon.getIconHeight(), PIXEL);
         }
 
         GL11.glPopMatrix();
@@ -139,7 +140,10 @@ public class RenderCrateItem implements IItemRenderer {
         float offsetZ = PIXEL + 0.021875F;
 
         GL11.glRotatef(
-                (((float) entity.age + 1.0F) / 20.0F + entity.hoverStart) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
+                (((float) entity.age + 1.0F) / 20.0F + entity.hoverStart) * (180F / (float) Math.PI),
+                0.0F,
+                1.0F,
+                0.0F);
         GL11.glTranslatef(-0.5F, -0.25F, -(offsetZ * (float) iterations / 2.0F));
 
         for (int count = 0; count < iterations; ++count) {
@@ -201,7 +205,14 @@ public class RenderCrateItem implements IItemRenderer {
             }
 
             ItemRenderer.renderItemIn2D(
-                    tessellator, maxU, minV, minU, maxV, icon.getIconWidth(), icon.getIconHeight(), PIXEL);
+                    tessellator,
+                    maxU,
+                    minV,
+                    minU,
+                    maxV,
+                    icon.getIconWidth(),
+                    icon.getIconHeight(),
+                    PIXEL);
 
             if (stack.hasEffect(pass)) {
                 GL11.glPushAttrib(GL11.GL_ENABLE_BIT);

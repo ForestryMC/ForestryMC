@@ -1,34 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.arboriculture.EnumGermlingType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.IToolScoop;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IIndividual;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IAlleleButterflySpecies;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.api.lepidopterology.IButterflyGenome;
-import forestry.api.lepidopterology.IButterflyRoot;
-import forestry.api.lepidopterology.IEntityButterfly;
-import forestry.api.lepidopterology.ILepidopteristTracker;
-import forestry.core.utils.ItemStackUtil;
-import forestry.lepidopterology.genetics.Butterfly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFlower;
@@ -51,6 +30,26 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.IPlantable;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.arboriculture.EnumGermlingType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.IToolScoop;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IIndividual;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IAlleleButterflySpecies;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.api.lepidopterology.IButterflyGenome;
+import forestry.api.lepidopterology.IButterflyRoot;
+import forestry.api.lepidopterology.IEntityButterfly;
+import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.core.utils.ItemStackUtil;
+import forestry.lepidopterology.genetics.Butterfly;
 
 public class EntityButterfly extends EntityCreature implements IEntityButterfly {
 
@@ -208,8 +207,8 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
         }
 
         if (!worldObj.getEntitiesWithinAABB(
-                        EntityButterfly.class, AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1))
-                .isEmpty()) {
+                EntityButterfly.class,
+                AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)).isEmpty()) {
             weight -= 1.0f;
         }
 
@@ -296,8 +295,8 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
     public void setIndividual(IButterfly butterfly) {
         if (butterfly == null) {
-            butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(
-                    ButterflyManager.butterflyRoot.getDefaultTemplate());
+            butterfly = ButterflyManager.butterflyRoot
+                    .templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
         }
         contained = butterfly;
 

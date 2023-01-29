@@ -8,7 +8,7 @@ package forestry.api.core;
 import net.minecraft.creativetab.CreativeTabs;
 
 /**
- *  References to the specialised tabs added by Forestry to creative inventory.
+ * References to the specialised tabs added by Forestry to creative inventory.
  */
 public class Tabs {
 

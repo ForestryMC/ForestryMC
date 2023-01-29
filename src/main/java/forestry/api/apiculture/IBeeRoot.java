@@ -5,14 +5,17 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.ISpeciesRoot;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.ISpeciesRoot;
 
 public interface IBeeRoot extends ISpeciesRoot {
 
@@ -69,8 +72,7 @@ public interface IBeeRoot extends ISpeciesRoot {
     boolean isMated(ItemStack stack);
 
     /**
-     * @param genome
-     *            Valid {@link IBeeGenome}
+     * @param genome Valid {@link IBeeGenome}
      * @return {@link IBee} from the passed genome
      */
     IBee getBee(World world, IBeeGenome genome);
@@ -78,10 +80,8 @@ public interface IBeeRoot extends ISpeciesRoot {
     /**
      * Creates an IBee suitable for a queen containing the necessary second genome for the mate.
      *
-     * @param genome
-     *            Valid {@link IBeeGenome}
-     * @param mate
-     *            Valid {@link IBee} representing the mate.
+     * @param genome Valid {@link IBeeGenome}
+     * @param mate   Valid {@link IBee} representing the mate.
      * @return Mated {@link IBee} from the passed genomes.
      */
     IBee getBee(World world, IBeeGenome genome, IBee mate);
@@ -109,20 +109,19 @@ public interface IBeeRoot extends ISpeciesRoot {
 
     /* MISC */
     /**
-     * Creates beekeepingLogic for a housing.
-     * Should be used when the housing is created, see IBeekeepingLogic
+     * Creates beekeepingLogic for a housing. Should be used when the housing is created, see IBeekeepingLogic
      */
     IBeekeepingLogic createBeekeepingLogic(IBeeHousing housing);
 
     /**
-     * Combines multiple modifiers from an IBeeHousing into one.
-     * Stays up to date with changes to the housing's modifiers.
+     * Combines multiple modifiers from an IBeeHousing into one. Stays up to date with changes to the housing's
+     * modifiers.
      */
     IBeeModifier createBeeHousingModifier(IBeeHousing housing);
 
     /**
-     * Combines multiple listeners from an IBeeHousing into one.
-     * Stays up to date with changes to the housing's listeners.
+     * Combines multiple listeners from an IBeeHousing into one. Stays up to date with changes to the housing's
+     * listeners.
      */
     IBeeListener createBeeHousingListener(IBeeHousing housing);
 }

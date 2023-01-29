@@ -6,6 +6,7 @@
 package forestry.api.recipes;
 
 import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -17,13 +18,14 @@ public interface ICarpenterRecipe extends IForestryRecipe {
     int getPackagingTime();
 
     /**
-     * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's output.
+     * @return the crafting grid recipe. The crafting recipe's getRecipeOutput() is used as the ICarpenterRecipe's
+     *         output.
      */
     IDescriptiveRecipe getCraftingGridRecipe();
 
     /**
-     * @return the box required for this recipe. return null if there is no required box.
-     * Examples of boxes are the Forestry cartons and crates.
+     * @return the box required for this recipe. return null if there is no required box. Examples of boxes are the
+     *         Forestry cartons and crates.
      */
     @Nullable
     ItemStack getBox();

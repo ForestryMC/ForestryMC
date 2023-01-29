@@ -1,28 +1,29 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.recipes.IFabricatorSmeltingManager;
-import forestry.api.recipes.IFabricatorSmeltingRecipe;
-import forestry.core.utils.ItemStackUtil;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.api.recipes.IFabricatorSmeltingManager;
+import forestry.api.recipes.IFabricatorSmeltingRecipe;
+import forestry.core.utils.ItemStackUtil;
+
 public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManager {
+
     public static final Set<IFabricatorSmeltingRecipe> recipes = new HashSet<>();
 
     public static IFabricatorSmeltingRecipe findMatchingSmelting(ItemStack resource) {
@@ -67,7 +68,7 @@ public class FabricatorSmeltingRecipeManager implements IFabricatorSmeltingManag
         HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
         for (IFabricatorSmeltingRecipe recipe : recipes) {
-            recipeList.put(new Object[] {recipe.getResource()}, new Object[] {recipe.getProduct()});
+            recipeList.put(new Object[] { recipe.getResource() }, new Object[] { recipe.getProduct() });
         }
 
         return recipeList;

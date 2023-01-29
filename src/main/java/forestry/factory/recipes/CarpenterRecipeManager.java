@@ -1,14 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
@@ -16,15 +25,6 @@ import forestry.api.recipes.IDescriptiveRecipe;
 import forestry.core.recipes.RecipeUtil;
 import forestry.core.recipes.ShapedRecipeCustom;
 import forestry.core.utils.ItemStackUtil;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 public class CarpenterRecipeManager implements ICarpenterManager {
 
@@ -44,7 +44,10 @@ public class CarpenterRecipeManager implements ICarpenterManager {
     @Override
     public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object materials[]) {
         ICarpenterRecipe recipe = new CarpenterRecipe(
-                packagingTime, liquid, box, ShapedRecipeCustom.createShapedRecipe(product, materials));
+                packagingTime,
+                liquid,
+                box,
+                ShapedRecipeCustom.createShapedRecipe(product, materials));
         addRecipe(recipe);
     }
 
@@ -57,8 +60,8 @@ public class CarpenterRecipeManager implements ICarpenterManager {
         return null;
     }
 
-    public static boolean matches(
-            ICarpenterRecipe recipe, FluidStack resource, ItemStack item, IInventory inventoryCrafting) {
+    public static boolean matches(ICarpenterRecipe recipe, FluidStack resource, ItemStack item,
+            IInventory inventoryCrafting) {
         if (recipe == null) {
             return false;
         }
@@ -133,7 +136,7 @@ public class CarpenterRecipeManager implements ICarpenterManager {
         for (ICarpenterRecipe recipe : recipes) {
             recipeList.put(
                     recipe.getCraftingGridRecipe().getIngredients(),
-                    new Object[] {recipe.getCraftingGridRecipe().getRecipeOutput()});
+                    new Object[] { recipe.getCraftingGridRecipe().getRecipeOutput() });
         }
 
         return recipeList;

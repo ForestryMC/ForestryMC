@@ -1,14 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins.compat;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.recipes.RecipeManagers;
@@ -20,9 +22,6 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginManager;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 @Plugin(
         pluginID = "Erebus",
@@ -55,7 +54,7 @@ public class PluginErebus extends ForestryPlugin {
             if (PluginManager.Module.APICULTURE.isEnabled()) {
                 remnants = PluginApiculture.items.propolis.get(EnumPropolis.NORMAL, 1);
             }
-            RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] {honeyDrip}, honeyOutput, remnants, 5);
+            RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] { honeyDrip }, honeyOutput, remnants, 5);
         }
     }
 }

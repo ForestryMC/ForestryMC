@@ -9,12 +9,14 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 /**
- * A basic form of {@link IFarmable}. It adds one more variant of isSapling, allowing much better runtime performance than otherwise.
+ * A basic form of {@link IFarmable}. It adds one more variant of isSapling, allowing much better runtime performance
+ * than otherwise.
  */
 public interface IFarmableBasic extends IFarmable {
 
     /**
-     * @return true if the block at the given location is a "sapling" for this type, i.e. a non-harvestable immature version of the crop.
+     * @return true if the block at the given location is a "sapling" for this type, i.e. a non-harvestable immature
+     *         version of the crop.
      */
     default boolean isSaplingAt(World world, int x, int y, int z) {
         return world.blockExists(x, y, z)
@@ -22,7 +24,8 @@ public interface IFarmableBasic extends IFarmable {
     }
 
     /**
-     * @return true if given block at the given location is a "sapling" for this type, i.e. a non-harvestable immature version of the crop.
+     * @return true if given block at the given location is a "sapling" for this type, i.e. a non-harvestable immature
+     *         version of the crop.
      */
     boolean isSapling(Block block, int meta);
 

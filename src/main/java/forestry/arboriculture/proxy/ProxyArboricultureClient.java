@@ -1,14 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.proxy;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.world.ColorizerFoliage;
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import forestry.arboriculture.render.RenderFenceItem;
@@ -21,13 +25,9 @@ import forestry.arboriculture.render.RenderSaplingBlock;
 import forestry.arboriculture.render.RenderSlabItem;
 import forestry.arboriculture.render.RenderStairItem;
 import forestry.plugins.PluginArboriculture;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ProxyArboricultureClient extends ProxyArboriculture {
+
     @Override
     public void initializeRendering() {
         PluginArboriculture.modelIdSaplings = RenderingRegistry.getNextAvailableRenderId();

@@ -12,9 +12,8 @@ import net.minecraft.item.ItemStack;
 public interface ICrateRegistry {
 
     /**
-     * Makes a new crate, registers it with the game registry with uid,
-     * and creates crating and uncrating recipes for the Carpenter.
-     * The icon is rendered automatically from the contained item.
+     * Makes a new crate, registers it with the game registry with uid, and creates crating and uncrating recipes for
+     * the Carpenter. The icon is rendered automatically from the contained item.
      *
      * Can only be called during the Init stage.
      */

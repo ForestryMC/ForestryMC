@@ -5,15 +5,18 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IEffectData;
-import forestry.api.genetics.IIndividual;
-import forestry.api.world.ITreeGenData;
 import java.util.EnumSet;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.EnumPlantType;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IEffectData;
+import forestry.api.genetics.IIndividual;
+import forestry.api.world.ITreeGenData;
 
 public interface ITree extends IIndividual, ITreeGenData {
 

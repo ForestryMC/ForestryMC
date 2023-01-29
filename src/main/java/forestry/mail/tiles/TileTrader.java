@@ -1,14 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.tiles;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
@@ -33,16 +43,6 @@ import forestry.mail.gui.GuiTrader;
 import forestry.mail.inventory.InventoryTradeStation;
 import forestry.mail.network.packets.PacketTraderAddressResponse;
 import forestry.mail.triggers.MailTriggers;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileTrader extends TileBase {
 
@@ -115,8 +115,8 @@ public class TileTrader extends TileBase {
     /* UPDATING */
 
     /**
-     * The trade station should show errors for missing stamps and paper first.
-     * Once it is able to send letters, it should display other error states.
+     * The trade station should show errors for missing stamps and paper first. Once it is able to send letters, it
+     * should display other error states.
      */
     @Override
     public void updateServerSide() {
@@ -139,7 +139,10 @@ public class TileTrader extends TileBase {
 
         if (tradeGood != null) {
             boolean hasSupplies = hasItemCount(
-                    TradeStation.SLOT_SEND_BUFFER, TradeStation.SLOT_SEND_BUFFER_COUNT, tradeGood, tradeGood.stackSize);
+                    TradeStation.SLOT_SEND_BUFFER,
+                    TradeStation.SLOT_SEND_BUFFER_COUNT,
+                    tradeGood,
+                    tradeGood.stackSize);
             errorLogic.setCondition(!hasSupplies, EnumErrorCode.NO_SUPPLIES);
         }
 
@@ -161,8 +164,8 @@ public class TileTrader extends TileBase {
     }
 
     /**
-     * Returns true if there are 'itemCount' of 'item' in the inventory
-     * wildcard when item == null, counts all types of items
+     * Returns true if there are 'itemCount' of 'item' in the inventory wildcard when item == null, counts all types of
+     * items
      */
     private boolean hasItemCount(int startSlot, int countSlots, ItemStack item, int itemCount) {
         int count = 0;
@@ -185,8 +188,8 @@ public class TileTrader extends TileBase {
     }
 
     /**
-     * Returns the percentage of the inventory that is occupied by 'item'
-     * if item == null, returns the percentage occupied by all kinds of items
+     * Returns the percentage of the inventory that is occupied by 'item' if item == null, returns the percentage
+     * occupied by all kinds of items
      */
     private float percentOccupied(int startSlot, int countSlots, ItemStack item) {
         int count = 0;
@@ -210,7 +213,10 @@ public class TileTrader extends TileBase {
 
     public boolean hasPaperMin(int count) {
         return hasItemCount(
-                TradeStation.SLOT_LETTERS_1, TradeStation.SLOT_LETTERS_COUNT, new ItemStack(Items.paper), count);
+                TradeStation.SLOT_LETTERS_1,
+                TradeStation.SLOT_LETTERS_COUNT,
+                new ItemStack(Items.paper),
+                count);
     }
 
     public boolean hasInputBufMin(float percentage) {
@@ -295,8 +301,7 @@ public class TileTrader extends TileBase {
 
             if (hasValidTradeAddress & hasUniqueTradeAddress) {
                 this.address = address;
-                PostManager.postRegistry.getOrCreateTradeStation(
-                        worldObj, getAccessHandler().getOwner(), address);
+                PostManager.postRegistry.getOrCreateTradeStation(worldObj, getAccessHandler().getOwner(), address);
             }
         } else {
             this.address = address;
@@ -310,8 +315,8 @@ public class TileTrader extends TileBase {
             return super.getInternalInventory();
         }
 
-        return (TradeStation) PostManager.postRegistry.getOrCreateTradeStation(
-                worldObj, getAccessHandler().getOwner(), address);
+        return (TradeStation) PostManager.postRegistry
+                .getOrCreateTradeStation(worldObj, getAccessHandler().getOwner(), address);
     }
 
     /* ITRIGGERPROVIDER */

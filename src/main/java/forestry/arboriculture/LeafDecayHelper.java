@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 
 /** Based on vanilla leaf decay, but accepts leaves that are connected further from a trunk */
 public abstract class LeafDecayHelper {
+
     private static final short SUSTAINS_LEAVES = 0;
     private static final short NOT_SUSTAINS_LEAVES = -1;
     private static final short IS_LEAVES = -2;
@@ -37,24 +38,21 @@ public abstract class LeafDecayHelper {
 
                             if (!block.canSustainLeaves(world, x + xOffset, y + yOffset, z + zOffset)) {
                                 if (block.isLeaves(world, x + xOffset, y + yOffset, z + zOffset)) {
-                                    leafDecayValues[
-                                            (xOffset + arrayOffset) * xArrayMult
-                                                    + (yOffset + arrayOffset) * yArrayMult
-                                                    + zOffset
-                                                    + arrayOffset] = IS_LEAVES;
+                                    leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                            + (yOffset + arrayOffset) * yArrayMult
+                                            + zOffset
+                                            + arrayOffset] = IS_LEAVES;
                                 } else {
-                                    leafDecayValues[
-                                            (xOffset + arrayOffset) * xArrayMult
-                                                    + (yOffset + arrayOffset) * yArrayMult
-                                                    + zOffset
-                                                    + arrayOffset] = NOT_SUSTAINS_LEAVES;
+                                    leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                            + (yOffset + arrayOffset) * yArrayMult
+                                            + zOffset
+                                            + arrayOffset] = NOT_SUSTAINS_LEAVES;
                                 }
                             } else {
-                                leafDecayValues[
-                                        (xOffset + arrayOffset) * xArrayMult
-                                                + (yOffset + arrayOffset) * yArrayMult
-                                                + zOffset
-                                                + arrayOffset] = SUSTAINS_LEAVES;
+                                leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                        + (yOffset + arrayOffset) * yArrayMult
+                                        + zOffset
+                                        + arrayOffset] = SUSTAINS_LEAVES;
                             }
                         }
                     }
@@ -64,88 +62,68 @@ public abstract class LeafDecayHelper {
                     for (int xOffset = -radius; xOffset <= radius; ++xOffset) {
                         for (int yOffset = -radius; yOffset <= radius; ++yOffset) {
                             for (int zOffset = -radius; zOffset <= radius; ++zOffset) {
-                                if (leafDecayValues[
-                                                (xOffset + arrayOffset) * xArrayMult
-                                                        + (yOffset + arrayOffset) * yArrayMult
-                                                        + zOffset
-                                                        + arrayOffset]
-                                        == sustainedValue - 1) {
-                                    if (leafDecayValues[
-                                                    (xOffset + arrayOffset - 1) * xArrayMult
-                                                            + (yOffset + arrayOffset) * yArrayMult
-                                                            + zOffset
-                                                            + arrayOffset]
-                                            == IS_LEAVES) {
-                                        leafDecayValues[
-                                                (xOffset + arrayOffset - 1) * xArrayMult
-                                                        + (yOffset + arrayOffset) * yArrayMult
-                                                        + zOffset
-                                                        + arrayOffset] = sustainedValue;
+                                if (leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                        + (yOffset + arrayOffset) * yArrayMult
+                                        + zOffset
+                                        + arrayOffset] == sustainedValue - 1) {
+                                    if (leafDecayValues[(xOffset + arrayOffset - 1) * xArrayMult
+                                            + (yOffset + arrayOffset) * yArrayMult
+                                            + zOffset
+                                            + arrayOffset] == IS_LEAVES) {
+                                        leafDecayValues[(xOffset + arrayOffset - 1) * xArrayMult
+                                                + (yOffset + arrayOffset) * yArrayMult
+                                                + zOffset
+                                                + arrayOffset] = sustainedValue;
                                     }
 
-                                    if (leafDecayValues[
-                                                    (xOffset + arrayOffset + 1) * xArrayMult
-                                                            + (yOffset + arrayOffset) * yArrayMult
-                                                            + zOffset
-                                                            + arrayOffset]
-                                            == IS_LEAVES) {
-                                        leafDecayValues[
-                                                (xOffset + arrayOffset + 1) * xArrayMult
-                                                        + (yOffset + arrayOffset) * yArrayMult
-                                                        + zOffset
-                                                        + arrayOffset] = sustainedValue;
+                                    if (leafDecayValues[(xOffset + arrayOffset + 1) * xArrayMult
+                                            + (yOffset + arrayOffset) * yArrayMult
+                                            + zOffset
+                                            + arrayOffset] == IS_LEAVES) {
+                                        leafDecayValues[(xOffset + arrayOffset + 1) * xArrayMult
+                                                + (yOffset + arrayOffset) * yArrayMult
+                                                + zOffset
+                                                + arrayOffset] = sustainedValue;
                                     }
 
-                                    if (leafDecayValues[
-                                                    (xOffset + arrayOffset) * xArrayMult
-                                                            + (yOffset + arrayOffset - 1) * yArrayMult
-                                                            + zOffset
-                                                            + arrayOffset]
-                                            == IS_LEAVES) {
-                                        leafDecayValues[
-                                                (xOffset + arrayOffset) * xArrayMult
-                                                        + (yOffset + arrayOffset - 1) * yArrayMult
-                                                        + zOffset
-                                                        + arrayOffset] = sustainedValue;
+                                    if (leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                            + (yOffset + arrayOffset - 1) * yArrayMult
+                                            + zOffset
+                                            + arrayOffset] == IS_LEAVES) {
+                                        leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                                + (yOffset + arrayOffset - 1) * yArrayMult
+                                                + zOffset
+                                                + arrayOffset] = sustainedValue;
                                     }
 
-                                    if (leafDecayValues[
-                                                    (xOffset + arrayOffset) * xArrayMult
-                                                            + (yOffset + arrayOffset + 1) * yArrayMult
-                                                            + zOffset
-                                                            + arrayOffset]
-                                            == IS_LEAVES) {
-                                        leafDecayValues[
-                                                (xOffset + arrayOffset) * xArrayMult
-                                                        + (yOffset + arrayOffset + 1) * yArrayMult
-                                                        + zOffset
-                                                        + arrayOffset] = sustainedValue;
+                                    if (leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                            + (yOffset + arrayOffset + 1) * yArrayMult
+                                            + zOffset
+                                            + arrayOffset] == IS_LEAVES) {
+                                        leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                                + (yOffset + arrayOffset + 1) * yArrayMult
+                                                + zOffset
+                                                + arrayOffset] = sustainedValue;
                                     }
 
-                                    if (leafDecayValues[
-                                                    (xOffset + arrayOffset) * xArrayMult
-                                                            + (yOffset + arrayOffset) * yArrayMult
-                                                            + (zOffset + arrayOffset - 1)]
-                                            == IS_LEAVES) {
-                                        leafDecayValues[
-                                                (xOffset + arrayOffset) * xArrayMult
-                                                        + (yOffset + arrayOffset) * yArrayMult
-                                                        + (zOffset + arrayOffset - 1)] = sustainedValue;
+                                    if (leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                            + (yOffset + arrayOffset) * yArrayMult
+                                            + (zOffset + arrayOffset - 1)] == IS_LEAVES) {
+                                        leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                                + (yOffset + arrayOffset) * yArrayMult
+                                                + (zOffset + arrayOffset - 1)] = sustainedValue;
                                     }
 
-                                    if (leafDecayValues[
-                                                    (xOffset + arrayOffset) * xArrayMult
-                                                            + (yOffset + arrayOffset) * yArrayMult
-                                                            + zOffset
-                                                            + arrayOffset
-                                                            + 1]
-                                            == IS_LEAVES) {
-                                        leafDecayValues[
-                                                (xOffset + arrayOffset) * xArrayMult
-                                                        + (yOffset + arrayOffset) * yArrayMult
-                                                        + zOffset
-                                                        + arrayOffset
-                                                        + 1] = sustainedValue;
+                                    if (leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                            + (yOffset + arrayOffset) * yArrayMult
+                                            + zOffset
+                                            + arrayOffset
+                                            + 1] == IS_LEAVES) {
+                                        leafDecayValues[(xOffset + arrayOffset) * xArrayMult
+                                                + (yOffset + arrayOffset) * yArrayMult
+                                                + zOffset
+                                                + arrayOffset
+                                                + 1] = sustainedValue;
                                     }
                                 }
                             }

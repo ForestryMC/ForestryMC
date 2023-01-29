@@ -1,25 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.inventory;
+
+import java.io.IOException;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.core.config.Constants;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.utils.InventoryUtil;
-import java.io.IOException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * With permission from Krapht.
@@ -49,17 +49,19 @@ public class InventoryAdapter implements IInventoryAdapter, IStreamable {
         return this;
     }
 
-    //	public InventoryAdapter enableDebug() {
-    //		this.debug = true;
-    //		return this;
-    //	}
+    // public InventoryAdapter enableDebug() {
+    // this.debug = true;
+    // return this;
+    // }
 
     /**
      * @return Copy of this inventory. Stacks are copies.
      */
     public InventoryAdapter copy() {
         InventoryAdapter copy = new InventoryAdapter(
-                inventory.getSizeInventory(), inventory.getInventoryName(), inventory.getInventoryStackLimit());
+                inventory.getSizeInventory(),
+                inventory.getInventoryName(),
+                inventory.getInventoryStackLimit());
 
         for (int i = 0; i < inventory.getSizeInventory(); i++) {
             if (inventory.getStackInSlot(i) != null) {

@@ -1,16 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.multiblock;
 
+import java.util.Collections;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.biome.BiomeGenBase;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.IBeeHousingInventory;
 import forestry.api.apiculture.IBeeListener;
 import forestry.api.apiculture.IBeeModifier;
@@ -19,13 +25,9 @@ import forestry.apiculture.FakeBeekeepingLogic;
 import forestry.core.inventory.FakeInventoryAdapter;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
-import java.util.Collections;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class FakeAlvearyController extends FakeMultiblockController implements IAlvearyControllerInternal {
+
     public static final FakeAlvearyController instance = new FakeAlvearyController();
 
     private FakeAlvearyController() {}
@@ -91,6 +93,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
     }
 
     private static class FakeBeeHousingInventory implements IBeeHousingInventory {
+
         public static final FakeBeeHousingInventory instance = new FakeBeeHousingInventory();
 
         private FakeBeeHousingInventory() {}

@@ -5,13 +5,15 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import java.util.Collection;
+
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.EnumPlantType;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IFruitFamily;
-import java.util.Collection;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.EnumPlantType;
 
 public interface IAlleleTreeSpecies extends IAlleleSpecies {
 

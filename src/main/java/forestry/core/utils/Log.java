@@ -1,19 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.core.config.Constants;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.MessageFormatMessage;
+
+import forestry.core.config.Constants;
 
 public abstract class Log {
 
@@ -131,9 +130,7 @@ public abstract class Log {
 
         if (classFile != null) {
             msg = new StringBuilder(mod);
-            msg.append(" API error: ")
-                    .append(classFile.getSimpleName())
-                    .append(" is loaded from ")
+            msg.append(" API error: ").append(classFile.getSimpleName()).append(" is loaded from ")
                     .append(classFile.getProtectionDomain().getCodeSource().getLocation());
             log(Level.ERROR, msg.toString());
         }

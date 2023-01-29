@@ -5,14 +5,16 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import java.util.List;
+import java.util.Set;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.BiomeGenBase;
+
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IEffectData;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IIndividualLiving;
-import java.util.List;
-import java.util.Set;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.BiomeGenBase;
 
 /**
  * Other implementations than Forestry's default one are not supported.
@@ -43,6 +45,7 @@ public interface IBee extends IIndividualLiving {
 
     /**
      * Set the natural flag on this bee.
+     * 
      * @param flag
      */
     void setIsNatural(boolean flag);
@@ -58,6 +61,7 @@ public interface IBee extends IIndividualLiving {
 
     /**
      * Determines whether the queen can work.
+     * 
      * @param housing the {@link IBeeHousing} the bee currently resides in.
      * @return an empty set if the queen can work, a set of error states if the queen can not work
      */

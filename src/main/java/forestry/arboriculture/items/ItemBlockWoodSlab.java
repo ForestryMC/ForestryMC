@@ -1,17 +1,19 @@
 package forestry.arboriculture.items;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumWoodType;
 import forestry.arboriculture.blocks.BlockSlab;
 import forestry.arboriculture.tiles.TileWood;
 import forestry.core.tiles.TileUtil;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class ItemBlockWoodSlab extends ItemBlockWood {
+
     private final BlockSlab slab;
     private final BlockSlab doubleSlab;
     private final boolean isDoubleSlab;
@@ -24,17 +26,8 @@ public class ItemBlockWoodSlab extends ItemBlockWood {
     }
 
     @Override
-    public boolean onItemUse(
-            ItemStack itemStack,
-            EntityPlayer player,
-            World world,
-            int x,
-            int y,
-            int z,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side,
+            float hitX, float hitY, float hitZ) {
         if (isDoubleSlab) {
             return super.onItemUse(itemStack, player, world, x, y, z, side, hitX, hitY, hitZ);
         } else if (itemStack.stackSize == 0) {
@@ -138,8 +131,8 @@ public class ItemBlockWoodSlab extends ItemBlockWood {
         }
     }
 
-    private boolean func_150946_a(
-            ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side) {
+    private boolean func_150946_a(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z,
+            int side) {
         if (side == 0) {
             --y;
         }

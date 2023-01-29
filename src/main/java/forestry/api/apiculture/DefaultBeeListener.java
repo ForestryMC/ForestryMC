@@ -8,11 +8,11 @@ package forestry.api.apiculture;
 import forestry.api.genetics.IIndividual;
 
 /**
- * Easily extendable default IBeeListener.
- * By itself, this IBeeListener does nothing.
- * BeeListeners should inherit from this class unless they need to listen for everything.
+ * Easily extendable default IBeeListener. By itself, this IBeeListener does nothing. BeeListeners should inherit from
+ * this class unless they need to listen for everything.
  */
 public class DefaultBeeListener implements IBeeListener {
+
     @Override
     public void wearOutEquipment(int amount) {}
 

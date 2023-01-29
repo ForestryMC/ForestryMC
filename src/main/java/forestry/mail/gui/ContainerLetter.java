@@ -1,16 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
 
+import java.util.Iterator;
+import java.util.UUID;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -26,11 +32,6 @@ import forestry.mail.Letter;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
 import forestry.mail.network.packets.PacketLetterTextSet;
-import java.util.Iterator;
-import java.util.UUID;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 
 public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter> implements ILetterInfoReceiver {
 
@@ -102,8 +103,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
     }
 
     public void advanceCarrierType() {
-        Iterator<IPostalCarrier> it =
-                PostManager.postRegistry.getRegisteredCarriers().values().iterator();
+        Iterator<IPostalCarrier> it = PostManager.postRegistry.getRegisteredCarriers().values().iterator();
         while (it.hasNext()) {
             if (it.next().getType().equals(carrierType)) {
                 break;
@@ -114,11 +114,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
         if (it.hasNext()) {
             postal = it.next();
         } else {
-            postal = PostManager.postRegistry
-                    .getRegisteredCarriers()
-                    .values()
-                    .iterator()
-                    .next();
+            postal = PostManager.postRegistry.getRegisteredCarriers().values().iterator().next();
         }
 
         setCarrierType(postal.getType());
@@ -141,8 +137,7 @@ public class ContainerLetter extends ContainerItemInventory<ItemInventoryLetter>
     private static IMailAddress getRecipient(String recipientName, EnumAddressee type) {
         switch (type) {
             case PLAYER: {
-                GameProfile gameProfile =
-                        MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
+                GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(recipientName);
                 if (gameProfile == null) {
                     gameProfile = new GameProfile(new UUID(0, 0), recipientName);
                 }

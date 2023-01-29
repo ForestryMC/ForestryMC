@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes.nei;
+
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.FluidStack;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
@@ -18,13 +25,6 @@ import forestry.core.recipes.nei.NEIUtils;
 import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiStill;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.FluidStack;
 
 public class NEIHandlerStill extends RecipeHandlerBase {
 
@@ -34,20 +34,22 @@ public class NEIHandlerStill extends RecipeHandlerBase {
 
         public CachedStillRecipe(IStillRecipe recipe) {
             if (recipe.getInput() != null) {
-                this.tanks.add(new PositionedFluidTank(
-                        recipe.getInput(),
-                        10000,
-                        new Rectangle(30, 4, 16, 58),
-                        NEIHandlerStill.this.getGuiTexture(),
-                        new Point(176, 0)));
+                this.tanks.add(
+                        new PositionedFluidTank(
+                                recipe.getInput(),
+                                10000,
+                                new Rectangle(30, 4, 16, 58),
+                                NEIHandlerStill.this.getGuiTexture(),
+                                new Point(176, 0)));
             }
             if (recipe.getOutput() != null) {
-                this.tanks.add(new PositionedFluidTank(
-                        recipe.getOutput(),
-                        10000,
-                        new Rectangle(120, 4, 16, 58),
-                        NEIHandlerStill.this.getGuiTexture(),
-                        new Point(176, 0)));
+                this.tanks.add(
+                        new PositionedFluidTank(
+                                recipe.getOutput(),
+                                10000,
+                                new Rectangle(120, 4, 16, 58),
+                                NEIHandlerStill.this.getGuiTexture(),
+                                new Point(176, 0)));
             }
         }
 

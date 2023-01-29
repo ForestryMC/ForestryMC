@@ -1,21 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.config;
 
-import com.google.common.collect.LinkedListMultimap;
-import forestry.Forestry;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
-import forestry.mail.gui.GuiMailboxInfo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -25,8 +17,17 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Property;
+
+import com.google.common.collect.LinkedListMultimap;
+
+import forestry.Forestry;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.Log;
+import forestry.core.utils.StringUtil;
+import forestry.mail.gui.GuiMailboxInfo;
 
 public class Config {
 
@@ -145,16 +146,16 @@ public class Config {
 
         configCommon = new LocalizedConfiguration(configFileCommon, "1.2.0");
 
-        gameMode = configCommon.getStringLocalized(
-                "difficulty", "game.mode", "EASY", new String[] {"OP, EASY, NORMAL, HARD"});
+        gameMode = configCommon
+                .getStringLocalized("difficulty", "game.mode", "EASY", new String[] { "OP, EASY, NORMAL, HARD" });
 
         boolean recreate = configCommon.getBooleanLocalized("difficulty", "recreate.definitions", true);
         if (recreate) {
             Log.info("Recreating all gamemode definitions from the defaults. This may be caused by an upgrade");
 
             String recreateDefinitionsComment = StringUtil.localize("config.difficulty.recreate.definitions.comment");
-            Property property =
-                    configCommon.get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
+            Property property = configCommon
+                    .get("difficulty", "recreate.definitions", true, recreateDefinitionsComment);
             property.set(false);
 
             // Make sure the default mode files are there.
@@ -186,10 +187,10 @@ public class Config {
             Log.info("Enabled retrogen.");
         }
 
-        generateBeehivesAmount = configCommon.getFloatLocalized(
-                "world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
-        generateBeehivesDebug =
-                configCommon.getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
+        generateBeehivesAmount = configCommon
+                .getFloatLocalized("world.generate.beehives", "amount", generateBeehivesAmount, 0.0f, 10.0f);
+        generateBeehivesDebug = configCommon
+                .getBooleanLocalized("world.generate.beehives", "debug", generateBeehivesDebug);
 
         generateApatiteOre = configCommon.getBooleanLocalized("world.generate.ore", "apatite", generateApatiteOre);
         generateCopperOre = configCommon.getBooleanLocalized("world.generate.ore", "copper", generateCopperOre);
@@ -200,10 +201,10 @@ public class Config {
         craftingBronzeEnabled = configCommon.getBooleanLocalized("crafting", "bronze", craftingBronzeEnabled);
         craftingStampsEnabled = configCommon.getBooleanLocalized("crafting.stamps", "enabled", true);
 
-        String[] allStamps = new String[] {"1n", "2n", "5n", "10n", "20n", "50n", "100n"};
-        String[] defaultCollectors = new String[] {"20n", "50n", "100n"};
-        String[] stamps =
-                configCommon.getStringListLocalized("crafting.stamps", "disabled", defaultCollectors, allStamps);
+        String[] allStamps = new String[] { "1n", "2n", "5n", "10n", "20n", "50n", "100n" };
+        String[] defaultCollectors = new String[] { "20n", "50n", "100n" };
+        String[] stamps = configCommon
+                .getStringListLocalized("crafting.stamps", "disabled", defaultCollectors, allStamps);
         try {
             collectorStamps.addAll(Arrays.asList(stamps));
         } catch (Exception ex) {
@@ -213,33 +214,52 @@ public class Config {
             collectorStamps.addAll(Arrays.asList(defaultCollectors));
         }
 
-        clearInvalidChromosomes =
-                configCommon.getBooleanLocalized("genetics", "clear.invalid.chromosomes", clearInvalidChromosomes);
-        pollinateVanillaTrees =
-                configCommon.getBooleanLocalized("genetics", "pollinate.vanilla.trees", pollinateVanillaTrees);
+        clearInvalidChromosomes = configCommon
+                .getBooleanLocalized("genetics", "clear.invalid.chromosomes", clearInvalidChromosomes);
+        pollinateVanillaTrees = configCommon
+                .getBooleanLocalized("genetics", "pollinate.vanilla.trees", pollinateVanillaTrees);
         researchMutationBoostMultiplier = configCommon.getFloatLocalized(
-                "genetics.research.boost", "multiplier", researchMutationBoostMultiplier, 1.0f, 1000.f);
+                "genetics.research.boost",
+                "multiplier",
+                researchMutationBoostMultiplier,
+                1.0f,
+                1000.f);
         maxResearchMutationBoostPercent = configCommon.getFloatLocalized(
-                "genetics.research.boost", "max.percent", maxResearchMutationBoostPercent, 0.0f, 100.0f);
+                "genetics.research.boost",
+                "max.percent",
+                maxResearchMutationBoostPercent,
+                0.0f,
+                100.0f);
 
         dungeonLootRare = configCommon.getBooleanLocalized("difficulty", "loot.rare", dungeonLootRare);
 
-        enableBackpackResupply =
-                configCommon.getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
+        enableBackpackResupply = configCommon
+                .getBooleanLocalized("performance", "backpacks.resupply", enableBackpackResupply);
 
-        enableCraftingTimeout =
-                configCommon.getBooleanLocalized("optimization", "enable.crafting.timeout", enableCraftingTimeout);
-        craftingTimeout = configCommon.getIntLocalized(
-                "optimization",
-                "crafting.timeout",
-                craftingTimeout,
-                50,
-                2000); // min 50ms, default 200ms, max 2000 ms. Integer.MAX_VALUE is ~ 2100 ms because of multiplication
+        enableCraftingTimeout = configCommon
+                .getBooleanLocalized("optimization", "enable.crafting.timeout", enableCraftingTimeout);
+        craftingTimeout = configCommon.getIntLocalized("optimization", "crafting.timeout", craftingTimeout, 50, 2000); // min
+                                                                                                                       // 50ms,
+                                                                                                                       // default
+                                                                                                                       // 200ms,
+                                                                                                                       // max
+                                                                                                                       // 2000
+                                                                                                                       // ms.
+                                                                                                                       // Integer.MAX_VALUE
+                                                                                                                       // is
+                                                                                                                       // ~
+                                                                                                                       // 2100
+                                                                                                                       // ms
+                                                                                                                       // because
+                                                                                                                       // of
+                                                                                                                       // multiplication
         // by 1,000,000
-        cacheWorktableRecipes =
-                configCommon.getBooleanLocalized("optimization", "cache.worktable.recipes", cacheWorktableRecipes);
+        cacheWorktableRecipes = configCommon
+                .getBooleanLocalized("optimization", "cache.worktable.recipes", cacheWorktableRecipes);
         promoteWorktableRecipesToFrontOfGlobalRecipemap = configCommon.getBooleanLocalized(
-                "optimization", "promote.worktable.recipes", promoteWorktableRecipesToFrontOfGlobalRecipemap);
+                "optimization",
+                "promote.worktable.recipes",
+                promoteWorktableRecipesToFrontOfGlobalRecipemap);
 
         // move legacy mail property
         configCommon.moveProperty("tweaks.gui", "mail.alert", "tweaks.gui.mail.alert");
@@ -247,9 +267,15 @@ public class Config {
 
         mailAlertEnabled = configCommon.getBooleanLocalized("tweaks.gui.mail.alert", "enabled", mailAlertEnabled);
         mailAlertXPosition = configCommon.getEnumLocalized(
-                "tweaks.gui.mail.alert", "xPosition", mailAlertXPosition, GuiMailboxInfo.XPosition.values());
+                "tweaks.gui.mail.alert",
+                "xPosition",
+                mailAlertXPosition,
+                GuiMailboxInfo.XPosition.values());
         mailAlertYPosition = configCommon.getEnumLocalized(
-                "tweaks.gui.mail.alert", "yPosition", mailAlertYPosition, GuiMailboxInfo.YPosition.values());
+                "tweaks.gui.mail.alert",
+                "yPosition",
+                mailAlertYPosition,
+                GuiMailboxInfo.YPosition.values());
 
         guiTabSpeed = configCommon.getIntLocalized("tweaks.gui.tabs", "speed", guiTabSpeed, 1, 50);
         enableHints = configCommon.getBooleanLocalized("tweaks.gui.tabs", "hints", enableHints);
@@ -260,14 +286,14 @@ public class Config {
         farmSize = configCommon.getIntLocalized("tweaks.farms", "size", farmSize, 1, 3);
         squareFarms = configCommon.getBooleanLocalized("tweaks.farms", "square", squareFarms);
         enableExUtilEnderLily = configCommon.getBooleanLocalized("tweaks.farms", "enderlily", enableExUtilEnderLily);
-        enableMagicalCropsSupport =
-                configCommon.getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
+        enableMagicalCropsSupport = configCommon
+                .getBooleanLocalized("tweaks.farms", "magicalcrops", enableMagicalCropsSupport);
 
-        String[] availableStructures =
-                new String[] {"alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4", "farm5x5"};
+        String[] availableStructures = new String[] { "alveary3x3", "farm3x3", "farm3x4", "farm3x5", "farm4x4",
+                "farm5x5" };
         String[] disabledStructureArray = disabledStructures.toArray(new String[disabledStructures.size()]);
-        disabledStructureArray = configCommon.getStringListLocalized(
-                "structures", "disabled", disabledStructureArray, availableStructures);
+        disabledStructureArray = configCommon
+                .getStringListLocalized("structures", "disabled", disabledStructureArray, availableStructures);
 
         disabledStructures.addAll(Arrays.asList(disabledStructureArray));
         for (String str : disabledStructures) {
@@ -293,10 +319,10 @@ public class Config {
             }
 
             boolean enabledFluidBlock = !Config.disabledBlocks.contains(fluid.getTag());
-            String enableFluidBlockComment =
-                    StringUtil.localizeAndFormatRaw("for.config.fluid.blocks.enable.format", fluidName);
-            enabledFluidBlock = configFluid.getBoolean(
-                    "enableFluidBlock", fluid.getTag(), enabledFluidBlock, enableFluidBlockComment);
+            String enableFluidBlockComment = StringUtil
+                    .localizeAndFormatRaw("for.config.fluid.blocks.enable.format", fluidName);
+            enabledFluidBlock = configFluid
+                    .getBoolean("enableFluidBlock", fluid.getTag(), enabledFluidBlock, enableFluidBlockComment);
             if (!enabledFluidBlock) {
                 Config.disabledBlocks.add(fluid.getTag());
             }

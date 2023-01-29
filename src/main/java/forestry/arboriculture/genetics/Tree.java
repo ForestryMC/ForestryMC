@@ -1,16 +1,34 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
@@ -33,22 +51,6 @@ import forestry.core.config.Config;
 import forestry.core.genetics.Chromosome;
 import forestry.core.genetics.Individual;
 import forestry.core.utils.StringUtil;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
-import javax.annotation.Nullable;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class Tree extends Individual implements ITree, IPlantable {
 
@@ -288,9 +290,7 @@ public class Tree extends Individual implements ITree, IPlantable {
 
     @Override
     public boolean isPureBred(EnumTreeChromosome chromosome) {
-        return genome.getActiveAllele(chromosome)
-                .getUID()
-                .equals(genome.getInactiveAllele(chromosome).getUID());
+        return genome.getActiveAllele(chromosome).getUID().equals(genome.getInactiveAllele(chromosome).getUID());
     }
 
     @Override
@@ -311,10 +311,9 @@ public class Tree extends Individual implements ITree, IPlantable {
         IAlleleTreeSpecies primary = genome.getPrimary();
         IAlleleTreeSpecies secondary = genome.getSecondary();
         if (!isPureBred(EnumTreeChromosome.SPECIES)) {
-            list.add(EnumChatFormatting.BLUE
-                    + StringUtil.localize("trees.hybrid")
-                            .replaceAll("%PRIMARY", primary.getName())
-                            .replaceAll("%SECONDARY", secondary.getName()));
+            list.add(
+                    EnumChatFormatting.BLUE + StringUtil.localize("trees.hybrid")
+                            .replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
         }
 
         String sappiness = EnumChatFormatting.GOLD + "S: "
@@ -326,8 +325,7 @@ public class Tree extends Individual implements ITree, IPlantable {
         String girth = EnumChatFormatting.AQUA + "G: " + String.format("%sx%s", genome.getGirth(), genome.getGirth());
         String saplings = EnumChatFormatting.YELLOW + "S: "
                 + genome.getActiveAllele(EnumTreeChromosome.FERTILITY).getName();
-        String yield = EnumChatFormatting.WHITE + "Y: "
-                + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
+        String yield = EnumChatFormatting.WHITE + "Y: " + genome.getActiveAllele(EnumTreeChromosome.YIELD).getName();
         list.add(String.format("%s, %s", saplings, maturation));
         list.add(String.format("%s, %s", height, girth));
         list.add(String.format("%s, %s", yield, sappiness));
@@ -343,8 +341,10 @@ public class Tree extends Individual implements ITree, IPlantable {
             if (!canBearFruit()) {
                 strike = EnumChatFormatting.STRIKETHROUGH.toString();
             }
-            list.add(strike + EnumChatFormatting.GREEN + "F: "
-                    + StringUtil.localize(genome.getFruitProvider().getDescription()));
+            list.add(
+                    strike + EnumChatFormatting.GREEN
+                            + "F: "
+                            + StringUtil.localize(genome.getFruitProvider().getDescription()));
         }
     }
 
@@ -392,14 +392,8 @@ public class Tree extends Individual implements ITree, IPlantable {
         return new Tree(new TreeGenome(chromosomes));
     }
 
-    private static IChromosome[] mutateSpecies(
-            World world,
-            @Nullable GameProfile playerProfile,
-            int x,
-            int y,
-            int z,
-            ITreeGenome genomeOne,
-            ITreeGenome genomeTwo) {
+    private static IChromosome[] mutateSpecies(World world, @Nullable GameProfile playerProfile, int x, int y, int z,
+            ITreeGenome genomeOne, ITreeGenome genomeTwo) {
 
         IChromosome[] parent1 = genomeOne.getChromosomes();
         IChromosome[] parent2 = genomeTwo.getChromosomes();
@@ -459,9 +453,7 @@ public class Tree extends Individual implements ITree, IPlantable {
     /* PRODUCTION */
     @Override
     public boolean canBearFruit() {
-        return genome.getPrimary()
-                .getSuitableFruit()
-                .contains(genome.getFruitProvider().getFamily());
+        return genome.getPrimary().getSuitableFruit().contains(genome.getFruitProvider().getFamily());
     }
 
     @Override

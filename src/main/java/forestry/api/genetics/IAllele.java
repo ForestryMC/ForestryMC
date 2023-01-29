@@ -6,9 +6,11 @@
 package forestry.api.genetics;
 
 /**
- * An {@link IIndividual}'s {@link IGenome} is composed of {@link IChromosome}s consisting each of a primary and secondary {@link IAllele}.
+ * An {@link IIndividual}'s {@link IGenome} is composed of {@link IChromosome}s consisting each of a primary and
+ * secondary {@link IAllele}.
  *
- * {@link IAllele}s hold all information regarding an {@link IIndividual}'s traits, from species to size, temperature tolerances, etc.
+ * {@link IAllele}s hold all information regarding an {@link IIndividual}'s traits, from species to size, temperature
+ * tolerances, etc.
  *
  * Should be extended for different types of alleles. ISpeciesAllele, IBiomeAllele, etc.
  *

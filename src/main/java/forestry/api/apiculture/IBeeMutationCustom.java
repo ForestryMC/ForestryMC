@@ -7,4 +7,5 @@ package forestry.api.apiculture;
 
 import forestry.api.genetics.IMutationCustom;
 
-public interface IBeeMutationCustom extends IBeeMutation, IMutationCustom {}
+public interface IBeeMutationCustom extends IBeeMutation, IMutationCustom {
+}

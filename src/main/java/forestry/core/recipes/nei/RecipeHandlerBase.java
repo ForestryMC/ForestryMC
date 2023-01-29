@@ -1,14 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.recipes.nei;
+
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIClientConfig;
@@ -16,13 +24,6 @@ import codechicken.nei.PositionedStack;
 import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements IRecipeHandlerBase {
 
@@ -65,8 +66,7 @@ public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements
 
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
-        if (outputId.equals("liquid")
-                && results[0] instanceof FluidStack
+        if (outputId.equals("liquid") && results[0] instanceof FluidStack
                 && ((FluidStack) results[0]).getFluid() != null) {
             this.loadCraftingRecipes((FluidStack) results[0]);
         } else if (outputId.equals(this.getRecipeID())) {
@@ -90,8 +90,7 @@ public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements
 
     @Override
     public void loadUsageRecipes(String inputId, Object... ingredients) {
-        if (inputId.equals("liquid")
-                && ingredients[0] instanceof FluidStack
+        if (inputId.equals("liquid") && ingredients[0] instanceof FluidStack
                 && ((FluidStack) ingredients[0]).getFluid() != null) {
             this.loadUsageRecipes((FluidStack) ingredients[0]);
         } else {
@@ -126,21 +125,22 @@ public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements
     }
 
     @Override
-    public List<String> handleItemTooltip(
-            GuiRecipe guiRecipe, ItemStack itemStack, List<String> currenttip, int recipe) {
+    public List<String> handleItemTooltip(GuiRecipe guiRecipe, ItemStack itemStack, List<String> currenttip,
+            int recipe) {
         super.handleItemTooltip(guiRecipe, itemStack, currenttip, recipe);
         CachedBaseRecipe crecipe = (CachedBaseRecipe) this.arecipes.get(recipe);
         Point mouse = GuiDraw.getMousePosition();
         Point offset = guiRecipe.getRecipePosition(recipe);
         Point relMouse = new Point(
-                mouse.x - (guiRecipe.width - 176) / 2 - offset.x, mouse.y - (guiRecipe.height - 166) / 2 - offset.y);
+                mouse.x - (guiRecipe.width - 176) / 2 - offset.x,
+                mouse.y - (guiRecipe.height - 166) / 2 - offset.y);
 
         currenttip = this.provideItemTooltip(guiRecipe, itemStack, currenttip, crecipe, relMouse);
         return currenttip;
     }
 
-    public List<String> provideTooltip(
-            GuiRecipe guiRecipe, List<String> currenttip, CachedBaseRecipe crecipe, Point relMouse) {
+    public List<String> provideTooltip(GuiRecipe guiRecipe, List<String> currenttip, CachedBaseRecipe crecipe,
+            Point relMouse) {
         if (crecipe.getFluidTanks() != null) {
             for (PositionedFluidTank tank : crecipe.getFluidTanks()) {
                 if (tank.position.contains(relMouse)) {
@@ -151,27 +151,20 @@ public abstract class RecipeHandlerBase extends TemplateRecipeHandler implements
         return currenttip;
     }
 
-    public List<String> provideItemTooltip(
-            GuiRecipe guiRecipe,
-            ItemStack itemStack,
-            List<String> currenttip,
-            CachedBaseRecipe crecipe,
-            Point relMouse) {
+    public List<String> provideItemTooltip(GuiRecipe guiRecipe, ItemStack itemStack, List<String> currenttip,
+            CachedBaseRecipe crecipe, Point relMouse) {
         for (PositionedStack stack : crecipe.getIngredients()) {
-            if (stack instanceof PositionedStackAdv
-                    && ((PositionedStackAdv) stack).getRect().contains(relMouse)) {
+            if (stack instanceof PositionedStackAdv && ((PositionedStackAdv) stack).getRect().contains(relMouse)) {
                 currenttip = ((PositionedStackAdv) stack).handleTooltip(guiRecipe, currenttip);
             }
         }
         for (PositionedStack stack : crecipe.getOtherStacks()) {
-            if (stack instanceof PositionedStackAdv
-                    && ((PositionedStackAdv) stack).getRect().contains(relMouse)) {
+            if (stack instanceof PositionedStackAdv && ((PositionedStackAdv) stack).getRect().contains(relMouse)) {
                 currenttip = ((PositionedStackAdv) stack).handleTooltip(guiRecipe, currenttip);
             }
         }
         PositionedStack stack = crecipe.getResult();
-        if (stack instanceof PositionedStackAdv
-                && ((PositionedStackAdv) stack).getRect().contains(relMouse)) {
+        if (stack instanceof PositionedStackAdv && ((PositionedStackAdv) stack).getRect().contains(relMouse)) {
             currenttip = ((PositionedStackAdv) stack).handleTooltip(guiRecipe, currenttip);
         }
         return currenttip;

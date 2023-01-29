@@ -5,11 +5,13 @@
  ******************************************************************************/
 package forestry.api.lepidopterology;
 
-import forestry.api.genetics.IAlleleSpecies;
 import java.util.EnumSet;
 import java.util.Map;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.BiomeDictionary;
+
+import forestry.api.genetics.IAlleleSpecies;
 
 public interface IAlleleButterflySpecies extends IAlleleSpecies {
 
@@ -41,7 +43,8 @@ public interface IAlleleButterflySpecies extends IAlleleSpecies {
     float getRarity();
 
     /**
-     * @return Float representing the distance below which this butterfly will take flight if it detects a player which is not sneaking.
+     * @return Float representing the distance below which this butterfly will take flight if it detects a player which
+     *         is not sneaking.
      */
     float getFlightDistance();
 

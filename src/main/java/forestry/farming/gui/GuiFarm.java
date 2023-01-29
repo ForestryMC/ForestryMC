@@ -1,14 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.gui;
+
+import net.minecraft.entity.player.EntityPlayer;
 
 import forestry.api.farming.FarmDirection;
 import forestry.core.config.Constants;
@@ -19,7 +19,6 @@ import forestry.core.gui.widgets.TankWidget;
 import forestry.farming.gui.widgets.FarmLogicSlot;
 import forestry.farming.multiblock.IFarmControllerInternal;
 import forestry.farming.tiles.TileFarm;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiFarm extends GuiForestryTitled<ContainerFarm, TileFarm> {
 

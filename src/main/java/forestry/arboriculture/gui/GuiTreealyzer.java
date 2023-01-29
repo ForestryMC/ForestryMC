@@ -1,14 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.gui;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.EnumPlantType;
 
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -29,14 +37,6 @@ import forestry.core.gui.ContainerAlyzer;
 import forestry.core.gui.GuiAlyzer;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginArboriculture;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.EnumPlantType;
 
 public class GuiTreealyzer extends GuiAlyzer {
 
@@ -110,9 +110,11 @@ public class GuiTreealyzer extends GuiAlyzer {
         textLayout.newLine();
 
         {
-            String customPrimaryTreeKey = "trees.custom.treealyzer." + type.getName() + "."
+            String customPrimaryTreeKey = "trees.custom.treealyzer." + type.getName()
+                    + "."
                     + tree.getGenome().getPrimary().getUnlocalizedName().replace("trees.species.", "");
-            String customSecondaryTreeKey = "trees.custom.treealyzer." + type.getName() + "."
+            String customSecondaryTreeKey = "trees.custom.treealyzer." + type.getName()
+                    + "."
                     + tree.getGenome().getSecondary().getUnlocalizedName().replace("trees.species.", "");
 
             drawSpeciesRow(
@@ -158,8 +160,8 @@ public class GuiTreealyzer extends GuiAlyzer {
         String no = StringUtil.localize("no");
 
         AlleleBoolean primaryFireproof = (AlleleBoolean) tree.getGenome().getActiveAllele(EnumTreeChromosome.FIREPROOF);
-        AlleleBoolean secondaryFireproof =
-                (AlleleBoolean) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FIREPROOF);
+        AlleleBoolean secondaryFireproof = (AlleleBoolean) tree.getGenome()
+                .getInactiveAllele(EnumTreeChromosome.FIREPROOF);
 
         textLayout.drawLine(StringUtil.localize("gui.fireproof"), COLUMN_0);
         drawLine(
@@ -203,8 +205,7 @@ public class GuiTreealyzer extends GuiAlyzer {
                 EnumTreeChromosome.GROWTH,
                 false);
         drawLine(
-                ((IAlleleGrowth) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GROWTH))
-                        .getProvider()
+                ((IAlleleGrowth) tree.getGenome().getInactiveAllele(EnumTreeChromosome.GROWTH)).getProvider()
                         .getDescription(),
                 COLUMN_2,
                 tree,
@@ -215,21 +216,13 @@ public class GuiTreealyzer extends GuiAlyzer {
 
         textLayout.drawLine(StringUtil.localize("gui.native"), COLUMN_0);
         textLayout.drawLine(
-                StringUtil.localize("gui."
-                        + tree.getGenome()
-                                .getPrimary()
-                                .getPlantType()
-                                .toString()
-                                .toLowerCase(Locale.ENGLISH)),
+                StringUtil.localize(
+                        "gui." + tree.getGenome().getPrimary().getPlantType().toString().toLowerCase(Locale.ENGLISH)),
                 COLUMN_1,
                 speciesDominance0);
         textLayout.drawLine(
-                StringUtil.localize("gui."
-                        + tree.getGenome()
-                                .getSecondary()
-                                .getPlantType()
-                                .toString()
-                                .toLowerCase(Locale.ENGLISH)),
+                StringUtil.localize(
+                        "gui." + tree.getGenome().getSecondary().getPlantType().toString().toLowerCase(Locale.ENGLISH)),
                 COLUMN_2,
                 speciesDominance1);
 
@@ -252,8 +245,7 @@ public class GuiTreealyzer extends GuiAlyzer {
             }
             if (activeTolerated.size() > i) {
                 drawLine(
-                        StringUtil.localize(
-                                "gui." + activeTolerated.get(i).toString().toLowerCase(Locale.ENGLISH)),
+                        StringUtil.localize("gui." + activeTolerated.get(i).toString().toLowerCase(Locale.ENGLISH)),
                         COLUMN_1,
                         tree,
                         EnumTreeChromosome.PLANT,
@@ -261,8 +253,7 @@ public class GuiTreealyzer extends GuiAlyzer {
             }
             if (inactiveTolerated.size() > i) {
                 drawLine(
-                        StringUtil.localize(
-                                "gui." + inactiveTolerated.get(i).toString().toLowerCase(Locale.ENGLISH)),
+                        StringUtil.localize("gui." + inactiveTolerated.get(i).toString().toLowerCase(Locale.ENGLISH)),
                         COLUMN_2,
                         tree,
                         EnumTreeChromosome.PLANT,
@@ -273,10 +264,8 @@ public class GuiTreealyzer extends GuiAlyzer {
 
         // FRUITS
         textLayout.drawLine(StringUtil.localize("gui.supports"), COLUMN_0);
-        List<IFruitFamily> families0 =
-                new ArrayList<>(tree.getGenome().getPrimary().getSuitableFruit());
-        List<IFruitFamily> families1 =
-                new ArrayList<>(tree.getGenome().getSecondary().getSuitableFruit());
+        List<IFruitFamily> families0 = new ArrayList<>(tree.getGenome().getPrimary().getSuitableFruit());
+        List<IFruitFamily> families1 = new ArrayList<>(tree.getGenome().getSecondary().getSuitableFruit());
 
         max = Math.max(families0.size(), families1.size());
         for (int i = 0; i < max; i++) {
@@ -295,8 +284,7 @@ public class GuiTreealyzer extends GuiAlyzer {
         textLayout.newLine();
         textLayout.newLine();
 
-        int fruitDominance0 = getColorCoding(
-                tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).isDominant());
+        int fruitDominance0 = getColorCoding(tree.getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).isDominant());
         int fruitDominance1 = getColorCoding(
                 tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS).isDominant());
 
@@ -313,17 +301,12 @@ public class GuiTreealyzer extends GuiAlyzer {
 
         strike = "";
         IAllele fruit1 = tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS);
-        if (!tree.getGenome()
-                        .getSecondary()
-                        .getSuitableFruit()
-                        .contains(((IAlleleFruit) fruit1).getProvider().getFamily())
-                && fruit1 != AlleleFruit.fruitNone) {
+        if (!tree.getGenome().getSecondary().getSuitableFruit()
+                .contains(((IAlleleFruit) fruit1).getProvider().getFamily()) && fruit1 != AlleleFruit.fruitNone) {
             strike = EnumChatFormatting.STRIKETHROUGH.toString();
         }
         textLayout.drawLine(
-                strike
-                        + StringUtil.localize(
-                                ((IAlleleFruit) fruit1).getProvider().getDescription()),
+                strike + StringUtil.localize(((IAlleleFruit) fruit1).getProvider().getDescription()),
                 COLUMN_2,
                 fruitDominance1);
 
@@ -332,8 +315,7 @@ public class GuiTreealyzer extends GuiAlyzer {
         textLayout.drawLine(StringUtil.localize("gui.family"), COLUMN_0);
         IFruitFamily primary = tree.getGenome().getFruitProvider().getFamily();
         IFruitFamily secondary = ((IAlleleFruit) tree.getGenome().getInactiveAllele(EnumTreeChromosome.FRUITS))
-                .getProvider()
-                .getFamily();
+                .getProvider().getFamily();
 
         if (primary != null) {
             textLayout.drawLine(primary.getName(), COLUMN_1, fruitDominance0);
@@ -355,7 +337,11 @@ public class GuiTreealyzer extends GuiAlyzer {
         int x = COLUMN_0;
         for (ItemStack stack : tree.getProduceList()) {
             itemRender.renderItemIntoGUI(
-                    fontRendererObj, mc.renderEngine, stack, guiLeft + x, guiTop + textLayout.getLineY());
+                    fontRendererObj,
+                    mc.renderEngine,
+                    stack,
+                    guiLeft + x,
+                    guiTop + textLayout.getLineY());
             x += 18;
             if (x > 148) {
                 x = COLUMN_0;
@@ -374,7 +360,11 @@ public class GuiTreealyzer extends GuiAlyzer {
         x = COLUMN_0;
         for (ItemStack stack : tree.getSpecialtyList()) {
             itemRender.renderItemIntoGUI(
-                    fontRendererObj, mc.renderEngine, stack, guiLeft + x, guiTop + textLayout.getLineY());
+                    fontRendererObj,
+                    mc.renderEngine,
+                    stack,
+                    guiLeft + x,
+                    guiTop + textLayout.getLineY());
             x += 18;
             if (x > 148) {
                 x = COLUMN_0;

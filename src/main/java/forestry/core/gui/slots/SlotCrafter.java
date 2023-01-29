@@ -1,29 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.slots;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import forestry.factory.tiles.ICrafterWorktable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import forestry.factory.tiles.ICrafterWorktable;
 
 public class SlotCrafter extends SlotCrafting {
 
     private final IInventory craftMatrix;
     private final ICrafterWorktable crafter;
 
-    public SlotCrafter(
-            EntityPlayer player, IInventory craftMatrix, ICrafterWorktable crafter, int slot, int xPos, int yPos) {
+    public SlotCrafter(EntityPlayer player, IInventory craftMatrix, ICrafterWorktable crafter, int slot, int xPos,
+            int yPos) {
         super(player, craftMatrix, craftMatrix, slot, xPos, yPos);
         this.craftMatrix = craftMatrix;
         this.crafter = crafter;

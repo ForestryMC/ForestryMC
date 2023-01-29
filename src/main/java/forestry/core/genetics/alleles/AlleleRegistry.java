@@ -1,17 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+
 import com.google.common.collect.HashMultimap;
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleHandler;
 import forestry.api.genetics.IAlleleRegistry;
@@ -26,13 +34,6 @@ import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.genetics.Classification;
 import forestry.core.genetics.ItemResearchNote.EnumNoteType;
 import forestry.plugins.PluginCore;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import net.minecraft.item.ItemStack;
 
 public class AlleleRegistry implements IAlleleRegistry {
 
@@ -162,8 +163,11 @@ public class AlleleRegistry implements IAlleleRegistry {
     public void registerAllele(IAllele allele, IChromosomeType... chromosomeTypes) {
         for (IChromosomeType chromosomeType : chromosomeTypes) {
             if (!chromosomeType.getAlleleClass().isAssignableFrom(allele.getClass())) {
-                throw new IllegalArgumentException("Allele class (" + allele.getClass()
-                        + ") does not match chromosome type (" + chromosomeType.getAlleleClass() + ").");
+                throw new IllegalArgumentException(
+                        "Allele class (" + allele.getClass()
+                                + ") does not match chromosome type ("
+                                + chromosomeType.getAlleleClass()
+                                + ").");
             }
             allelesByType.put(chromosomeType, allele);
             typesByAllele.put(allele, chromosomeType);
@@ -206,9 +210,11 @@ public class AlleleRegistry implements IAlleleRegistry {
     public void registerClassification(IClassification branch) {
 
         if (classificationMap.containsKey(branch.getUID())) {
-            throw new RuntimeException(String.format(
-                    "Could not add new classification '%s', because the key is already taken by %s.",
-                    branch.getUID(), classificationMap.get(branch.getUID())));
+            throw new RuntimeException(
+                    String.format(
+                            "Could not add new classification '%s', because the key is already taken by %s.",
+                            branch.getUID(),
+                            classificationMap.get(branch.getUID())));
         }
 
         classificationMap.put(branch.getUID(), branch);
@@ -228,8 +234,8 @@ public class AlleleRegistry implements IAlleleRegistry {
     }
 
     @Override
-    public IClassification createAndRegisterClassification(
-            EnumClassLevel level, String uid, String scientific, IClassification... members) {
+    public IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific,
+            IClassification... members) {
         IClassification classification = new Classification(level, uid, scientific);
         for (IClassification member : members) {
             classification.addMemberGroup(member);

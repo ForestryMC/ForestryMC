@@ -6,11 +6,13 @@
 package forestry.api.core;
 
 /**
- *  Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or spawn at a given location.
+ * Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or
+ * spawn at a given location.
  *
- *  This enum concerns humidity.
+ * This enum concerns humidity.
  */
 public enum EnumHumidity {
+
     ARID("Arid"),
     NORMAL("Normal"),
     DAMP("Damp");
@@ -26,8 +28,9 @@ public enum EnumHumidity {
     }
 
     /**
-     * Determines the EnumHumidity given a floating point representation of Minecraft Rainfall.
-     * To check if rainfall is possible in a biome, use BiomeHelper.canRainOrSnow().
+     * Determines the EnumHumidity given a floating point representation of Minecraft Rainfall. To check if rainfall is
+     * possible in a biome, use BiomeHelper.canRainOrSnow().
+     * 
      * @param rawHumidity raw rainfall value
      * @return EnumHumidity corresponding to rainfall value
      */

@@ -1,14 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.blocks;
+
+import javax.annotation.Nullable;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
@@ -17,10 +17,11 @@ import forestry.core.tiles.TileAnalyzer;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.tiles.TileForestry;
 import forestry.plugins.PluginApiculture;
-import javax.annotation.Nullable;
 
 public enum BlockCoreType implements IMachinePropertiesTESR {
+
     ANALYZER(TileAnalyzer.class, "Analyzer") {
+
         @Nullable
         @Override
         public IBlockRenderer getRenderer() {
@@ -28,6 +29,7 @@ public enum BlockCoreType implements IMachinePropertiesTESR {
         }
     },
     ESCRITOIRE(TileEscritoire.class, "Escritoire") {
+
         @Nullable
         @Override
         public IBlockRenderer getRenderer() {

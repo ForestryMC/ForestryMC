@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.storage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import forestry.api.storage.BackpackResupplyEvent;
@@ -16,13 +23,6 @@ import forestry.core.IResupplyHandler;
 import forestry.core.inventory.ItemInventory;
 import forestry.storage.inventory.ItemInventoryBackpack;
 import forestry.storage.items.ItemBackpack;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ContainerPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ResupplyHandler implements IResupplyHandler {
 
@@ -59,8 +59,10 @@ public class ResupplyHandler implements IResupplyHandler {
 
             // Load their inventory
             ItemBackpack backpackItem = ((ItemBackpack) backpack.getItem());
-            ItemInventory backpackInventory =
-                    new ItemInventoryBackpack(player, backpackItem.getBackpackSize(), backpack);
+            ItemInventory backpackInventory = new ItemInventoryBackpack(
+                    player,
+                    backpackItem.getBackpackSize(),
+                    backpack);
 
             Event event = new BackpackResupplyEvent(player, backpackItem.getDefinition(), backpackInventory);
             MinecraftForge.EVENT_BUS.post(event);

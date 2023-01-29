@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
+
+import java.util.Collection;
+import java.util.Stack;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.ICrop;
@@ -19,14 +25,9 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.IVect;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
-import java.util.Collection;
-import java.util.Stack;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class FarmLogicCrops extends FarmLogicWatered {
+
     private static final ItemStack farmland = new ItemStack(Blocks.farmland, 1, OreDictionary.WILDCARD_VALUE);
     private final Iterable<IFarmable> seeds;
 

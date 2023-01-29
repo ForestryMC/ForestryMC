@@ -1,24 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.blocks;
 
-import com.google.common.collect.ImmutableMap;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.core.Tabs;
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.StringUtil;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
 import net.minecraft.block.BlockTorch;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -44,6 +34,17 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.google.common.collect.ImmutableMap;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.core.Tabs;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.StringUtil;
+
 public class BlockCandle extends BlockTorch {
 
     private static final ImmutableMap<String, Integer> colours;
@@ -51,27 +52,18 @@ public class BlockCandle extends BlockTorch {
     public static final String colourTagName = "colour";
 
     static {
-        colours = ImmutableMap.<String, Integer>builder()
-                .put("dyeWhite", new Color(255, 255, 255).getRGB())
-                .put("dyeOrange", new Color(219, 125, 62).getRGB())
-                .put("dyeMagenta", new Color(255, 20, 255).getRGB())
+        colours = ImmutableMap.<String, Integer>builder().put("dyeWhite", new Color(255, 255, 255).getRGB())
+                .put("dyeOrange", new Color(219, 125, 62).getRGB()).put("dyeMagenta", new Color(255, 20, 255).getRGB())
                 .put("dyeLightBlue", new Color(107, 138, 201).getRGB())
-                .put("dyeYellow", new Color(255, 255, 20).getRGB())
-                .put("dyeLime", new Color(20, 255, 20).getRGB())
-                .put("dyePink", new Color(208, 132, 153).getRGB())
-                .put("dyeGray", new Color(74, 74, 74).getRGB())
-                .put("dyeLightGray", new Color(154, 161, 161).getRGB())
-                .put("dyeCyan", new Color(20, 255, 255).getRGB())
-                .put("dyePurple", new Color(126, 61, 181).getRGB())
-                .put("dyeBlue", new Color(20, 20, 255).getRGB())
-                .put("dyeBrown", new Color(79, 50, 31).getRGB())
-                .put("dyeGreen", new Color(53, 70, 27).getRGB())
-                .put("dyeRed", new Color(150, 52, 48).getRGB())
-                .put("dyeBlack", new Color(20, 20, 20).getRGB())
-                .build();
+                .put("dyeYellow", new Color(255, 255, 20).getRGB()).put("dyeLime", new Color(20, 255, 20).getRGB())
+                .put("dyePink", new Color(208, 132, 153).getRGB()).put("dyeGray", new Color(74, 74, 74).getRGB())
+                .put("dyeLightGray", new Color(154, 161, 161).getRGB()).put("dyeCyan", new Color(20, 255, 255).getRGB())
+                .put("dyePurple", new Color(126, 61, 181).getRGB()).put("dyeBlue", new Color(20, 20, 255).getRGB())
+                .put("dyeBrown", new Color(79, 50, 31).getRGB()).put("dyeGreen", new Color(53, 70, 27).getRGB())
+                .put("dyeRed", new Color(150, 52, 48).getRGB()).put("dyeBlack", new Color(20, 20, 20).getRGB()).build();
 
-        lightingItems =
-                new HashSet<>(Arrays.asList(Items.flint_and_steel, Items.flint, Item.getItemFromBlock(Blocks.torch)));
+        lightingItems = new HashSet<>(
+                Arrays.asList(Items.flint_and_steel, Items.flint, Item.getItemFromBlock(Blocks.torch)));
     }
 
     @SideOnly(Side.CLIENT)
@@ -147,23 +139,15 @@ public class BlockCandle extends BlockTorch {
         return i;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
         itemList.add(new ItemStack(this, 1, 0));
     }
 
     @Override
-    public boolean onBlockActivated(
-            World world,
-            int x,
-            int y,
-            int z,
-            EntityPlayer player,
-            int facing,
-            float facingX,
-            float facingY,
-            float facingZ) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float facingX,
+            float facingY, float facingZ) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (!(tileEntity instanceof TileCandle)) {
             return false;
@@ -235,8 +219,8 @@ public class BlockCandle extends BlockTorch {
     }
 
     /* DROP HANDLING */
-    // Hack: 	When harvesting we need to get the drops in onBlockHarvested,
-    // 			because Mojang destroys the block and tile before calling getDrops.
+    // Hack: When harvesting we need to get the drops in onBlockHarvested,
+    // because Mojang destroys the block and tile before calling getDrops.
     private final ThreadLocal<ItemStack> drop = new ThreadLocal<>();
 
     @Override

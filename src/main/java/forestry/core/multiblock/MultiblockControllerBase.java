@@ -1,8 +1,5 @@
 package forestry.core.multiblock;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.core.utils.Log;
-import forestry.core.utils.StringUtil;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,7 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
 import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -19,13 +18,18 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.core.utils.Log;
+import forestry.core.utils.StringUtil;
+
 /**
- * This class contains the base logic for "multiblock controllers". Conceptually, they are
- * meta-TileEntities. They govern the logic for an associated group of TileEntities.
+ * This class contains the base logic for "multiblock controllers". Conceptually, they are meta-TileEntities. They
+ * govern the logic for an associated group of TileEntities.
  *
  * Subordinate TileEntities implement the IMultiblockComponent class and, generally, should not have an update() loop.
  */
 public abstract class MultiblockControllerBase implements IMultiblockControllerInternal {
+
     // Multiblock stuff - do not mess with
     protected World worldObj;
 
@@ -44,23 +48,23 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
     protected HashSet<IMultiblockComponent> connectedParts;
 
-    /** This is a deterministically-picked coordinate that identifies this
-     * multiblock uniquely in its dimension.
-     * Currently, this is the coord with the lowest X, Y and Z coordinates, in that order of evaluation.
-     * i.e. If something has a lower X but higher Y/Z coordinates, it will still be the reference.
-     * If something has the same X but a lower Y coordinate, it will be the reference. Etc.
+    /**
+     * This is a deterministically-picked coordinate that identifies this multiblock uniquely in its dimension.
+     * Currently, this is the coord with the lowest X, Y and Z coordinates, in that order of evaluation. i.e. If
+     * something has a lower X but higher Y/Z coordinates, it will still be the reference. If something has the same X
+     * but a lower Y coordinate, it will be the reference. Etc.
      */
     private ChunkCoordinates referenceCoord;
 
     /**
-     * Minimum bounding box coordinate. Blocks do not necessarily exist at this coord if your machine
-     * is not a cube/rectangular prism.
+     * Minimum bounding box coordinate. Blocks do not necessarily exist at this coord if your machine is not a
+     * cube/rectangular prism.
      */
     private ChunkCoordinates minimumCoord;
 
     /**
-     * Maximum bounding box coordinate. Blocks do not necessarily exist at this coord if your machine
-     * is not a cube/rectangular prism.
+     * Maximum bounding box coordinate. Blocks do not necessarily exist at this coord if your machine is not a
+     * cube/rectangular prism.
      */
     private ChunkCoordinates maximumCoord;
 
@@ -95,8 +99,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     }
 
     /**
-     * Call when a block with cached save-delegate data is added to the multiblock.
-     * The part will be notified that the data has been used after this call completes.
+     * Call when a block with cached save-delegate data is added to the multiblock. The part will be notified that the
+     * data has been used after this call completes.
+     * 
      * @param part The NBT tag containing this controller's data.
      */
     protected abstract void onAttachedPartWithMultiblockData(IMultiblockComponent part, NBTTagCompound data);
@@ -109,7 +114,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
             Log.warning(
                     "[%s] Controller %s is double-adding part %d @ %s. This is unusual. "
                             + "If you encounter odd behavior, please tear down the machine and rebuild it.",
-                    (worldObj.isRemote ? "CLIENT" : "SERVER"), hashCode(), part.hashCode(), coord);
+                    (worldObj.isRemote ? "CLIENT" : "SERVER"),
+                    hashCode(),
+                    part.hashCode(),
+                    coord);
         }
 
         MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
@@ -169,12 +177,14 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
 
     /**
      * Called when a new part is added to the machine. Good time to register things into lists.
+     * 
      * @param newPart The part being added.
      */
     protected abstract void onBlockAdded(IMultiblockComponent newPart);
 
     /**
      * Called when a part is removed from the machine. Good time to clean up lists.
+     * 
      * @param oldPart The part being removed.
      */
     protected abstract void onBlockRemoved(IMultiblockComponent oldPart);
@@ -190,20 +200,21 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     protected void onMachineRestored() {}
 
     /**
-     * Called when a machine is paused from an assembled state
-     * This generally only happens due to chunk-loads and other "system" events.
+     * Called when a machine is paused from an assembled state This generally only happens due to chunk-loads and other
+     * "system" events.
      */
     protected void onMachinePaused() {}
 
     /**
-     * Called when a machine is disassembled from an assembled state.
-     * This happens due to user or in-game actions (e.g. explosions)
+     * Called when a machine is disassembled from an assembled state. This happens due to user or in-game actions (e.g.
+     * explosions)
      */
     protected void onMachineDisassembled() {}
 
     /**
-     * Callback whenever a part is removed (or will very shortly be removed) from a controller.
-     * Do housekeeping/callbacks, also nulls min/max coords.
+     * Callback whenever a part is removed (or will very shortly be removed) from a controller. Do
+     * housekeeping/callbacks, also nulls min/max coords.
+     * 
      * @param part The part being removed.
      */
     private void onDetachBlock(IMultiblockComponent part) {
@@ -299,9 +310,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     }
 
     /**
-     * Called when a machine becomes "whole" and should begin
-     * functioning as a game-logically finished machine.
-     * Calls onMachineAssembled on all attached parts.
+     * Called when a machine becomes "whole" and should begin functioning as a game-logically finished machine. Calls
+     * onMachineAssembled on all attached parts.
      */
     private void assembleMachine(AssemblyState oldState) {
         this.assemblyState = AssemblyState.Assembled;
@@ -318,10 +328,8 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     }
 
     /**
-     * Called when the machine needs to be disassembled.
-     * It is not longer "whole" and should not be functional, usually
-     * as a result of a block being removed.
-     * Calls onMachineBroken on all attached parts.
+     * Called when the machine needs to be disassembled. It is not longer "whole" and should not be functional, usually
+     * as a result of a block being removed. Calls onMachineBroken on all attached parts.
      */
     private void disassembleMachine() {
         this.assemblyState = AssemblyState.Disassembled;
@@ -363,16 +371,16 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     }
 
     /**
-     * Called when this machine is consumed by another controller.
-     * Essentially, forcibly tear down this object.
+     * Called when this machine is consumed by another controller. Essentially, forcibly tear down this object.
+     * 
      * @param otherController The controller consuming this controller.
      */
     @Override
     public void _onAssimilated(IMultiblockControllerInternal otherController) {
         if (referenceCoord != null) {
             if (worldObj.getChunkProvider().chunkExists(referenceCoord.posX >> 4, referenceCoord.posZ >> 4)) {
-                TileEntity te =
-                        this.worldObj.getTileEntity(referenceCoord.posX, referenceCoord.posY, referenceCoord.posZ);
+                TileEntity te = this.worldObj
+                        .getTileEntity(referenceCoord.posX, referenceCoord.posY, referenceCoord.posZ);
                 if (te instanceof IMultiblockComponent) {
                     IMultiblockComponent part = (IMultiblockComponent) te;
                     MultiblockLogic logic = (MultiblockLogic) part.getMultiblockLogic();
@@ -386,18 +394,17 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     }
 
     /**
-     * Callback. Called after this controller assimilates all the blocks
-     * from another controller.
-     * Use this to absorb that controller's game data.
+     * Callback. Called after this controller assimilates all the blocks from another controller. Use this to absorb
+     * that controller's game data.
+     * 
      * @param assimilated The controller whose uniqueness was added to our own.
      */
     protected abstract void onAssimilate(IMultiblockControllerInternal assimilated);
 
     /**
-     * Callback. Called after this controller is assimilated into another controller.
-     * All blocks have been stripped out of this object and handed over to the
-     * other controller.
-     * This is intended primarily for cleanup.
+     * Callback. Called after this controller is assimilated into another controller. All blocks have been stripped out
+     * of this object and handed over to the other controller. This is intended primarily for cleanup.
+     * 
      * @param assimilator The controller which has assimilated this controller.
      */
     @Override
@@ -423,8 +430,7 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         } else if (updateServer(tickCount)) {
             // If this returns true, the server has changed its internal data.
             // If our chunks are loaded (they should be), we must mark our chunks as dirty.
-            if (minimumCoord != null
-                    && maximumCoord != null
+            if (minimumCoord != null && maximumCoord != null
                     && this.worldObj.checkChunksExist(
                             minimumCoord.posX,
                             minimumCoord.posY,
@@ -450,17 +456,17 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     }
 
     /**
-     * The server-side update loop! Use this similarly to a TileEntity's update loop.
-     * You do not need to call your superclass' update() if you're directly
-     * derived from MultiblockControllerBase. This is a callback.
-     * Note that this will only be called when the machine is assembled.
+     * The server-side update loop! Use this similarly to a TileEntity's update loop. You do not need to call your
+     * superclass' update() if you're directly derived from MultiblockControllerBase. This is a callback. Note that this
+     * will only be called when the machine is assembled.
+     * 
      * @return True if the multiblock should save data, i.e. its internal game state has changed. False otherwise.
      */
     protected abstract boolean updateServer(int tickCount);
 
     /**
-     * Client-side update loop. Generally, this shouldn't do anything, but if you want
-     * to do some interpolation or something, do it here.
+     * Client-side update loop. Generally, this shouldn't do anything, but if you want to do some interpolation or
+     * something, do it here.
      */
     protected abstract void updateClient(int tickCount);
 
@@ -473,30 +479,41 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     /**
      * @param level the level of the block on the multiblock, starting at 0 for the bottom.
      * @param world World object for the world in which this controller is located.
-     * @param x X coordinate of the block being tested
-     * @param y Y coordinate of the block being tested
-     * @param z Z coordinate of the block being tested
+     * @param x     X coordinate of the block being tested
+     * @param y     Y coordinate of the block being tested
+     * @param z     Z coordinate of the block being tested
      * @throws MultiblockValidationException if the tested block is not allowed on the machine's side faces
      */
     protected void isBlockGoodForExteriorLevel(int level, World world, int x, int y, int z)
             throws MultiblockValidationException {
         Block block = world.getBlock(x, y, z);
-        throw new MultiblockValidationException(StringUtil.localizeAndFormatRaw(
-                "for.multiblock.error.invalid.interior", x, y, z, block.getLocalizedName()));
+        throw new MultiblockValidationException(
+                StringUtil.localizeAndFormatRaw(
+                        "for.multiblock.error.invalid.interior",
+                        x,
+                        y,
+                        z,
+                        block.getLocalizedName()));
     }
 
     /**
      * The interior is any block that does not touch blocks outside the machine.
+     * 
      * @param world World object for the world in which this controller is located.
-     * @param x X coordinate of the block being tested
-     * @param y Y coordinate of the block being tested
-     * @param z Z coordinate of the block being tested
+     * @param x     X coordinate of the block being tested
+     * @param y     Y coordinate of the block being tested
+     * @param z     Z coordinate of the block being tested
      * @throws MultiblockValidationException if the tested block is not allowed in the machine's interior
      */
     protected void isBlockGoodForInterior(World world, int x, int y, int z) throws MultiblockValidationException {
         Block block = world.getBlock(x, y, z);
-        throw new MultiblockValidationException(StringUtil.localizeAndFormatRaw(
-                "for.multiblock.error.invalid.interior", x, y, z, block.getLocalizedName()));
+        throw new MultiblockValidationException(
+                StringUtil.localizeAndFormatRaw(
+                        "for.multiblock.error.invalid.interior",
+                        x,
+                        y,
+                        z,
+                        block.getLocalizedName()));
     }
 
     @Override
@@ -577,12 +594,13 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         ChunkCoordinates maxCoord = getMaximumCoord();
 
         return new ChunkCoordinates(
-                (minCoord.posX + maxCoord.posX) / 2, maxCoord.posY, (minCoord.posZ + maxCoord.posZ) / 2);
+                (minCoord.posX + maxCoord.posX) / 2,
+                maxCoord.posY,
+                (minCoord.posZ + maxCoord.posZ) / 2);
     }
 
     protected final boolean isCoordInMultiblock(int x, int y, int z) {
-        return (x >= minimumCoord.posX && x <= maximumCoord.posX)
-                && (y >= minimumCoord.posY && y <= maximumCoord.posY)
+        return (x >= minimumCoord.posX && x <= maximumCoord.posX) && (y >= minimumCoord.posY && y <= maximumCoord.posY)
                 && (z >= minimumCoord.posZ && z <= maximumCoord.posZ);
     }
 
@@ -623,14 +641,17 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
             } else {
                 Log.severe(
                         "My Controller (%d): size (%d), parts: %s",
-                        hashCode(), connectedParts.size(), getPartsListString());
+                        hashCode(),
+                        connectedParts.size(),
+                        getPartsListString());
                 Log.severe(
                         "Other Controller (%d): size (%d), coords: %s",
                         otherController.hashCode(),
                         otherController.getComponents().size(),
                         otherController.getPartsListString());
                 throw new IllegalArgumentException(
-                        "[" + (worldObj.isRemote ? "CLIENT" : "SERVER") + "] "
+                        "[" + (worldObj.isRemote ? "CLIENT" : "SERVER")
+                                + "] "
                                 + "Two controllers with the same reference coord that somehow both have valid parts - this should never happen!");
             }
         }
@@ -680,7 +701,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
         connectedParts.removeAll(deadParts);
         Log.warning(
                 "[%s] Controller found %d dead parts during an audit, %d parts remain attached",
-                worldObj.isRemote ? "CLIENT" : "SERVER", deadParts.size(), connectedParts.size());
+                worldObj.isRemote ? "CLIENT" : "SERVER",
+                deadParts.size(),
+                connectedParts.size());
     }
 
     @Override
@@ -761,8 +784,10 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
             MultiblockLogic partLogic = (MultiblockLogic) part.getMultiblockLogic();
             partLogic.setVisited();
 
-            List<IMultiblockComponent> nearbyParts =
-                    MultiblockUtil.getNeighboringParts(worldObj, part); // Chunk-safe on server, but not on client
+            List<IMultiblockComponent> nearbyParts = MultiblockUtil.getNeighboringParts(worldObj, part); // Chunk-safe
+                                                                                                         // on server,
+                                                                                                         // but not on
+                                                                                                         // client
             for (IMultiblockComponent nearbyPart : nearbyParts) {
                 // Ignore different machines
                 MultiblockLogic nearbyPartLogic = (MultiblockLogic) nearbyPart.getMultiblockLogic();
@@ -860,10 +885,9 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     /**
      * Marks the reference coord dirty & updateable.
      *
-     * On the server, this will mark the for a data-update, so that
-     * nearby clients will receive an updated description packet from the server
-     * after a short time. The block's chunk will also be marked dirty and the
-     * block's chunk will be saved to disk the next time chunks are saved.
+     * On the server, this will mark the for a data-update, so that nearby clients will receive an updated description
+     * packet from the server after a short time. The block's chunk will also be marked dirty and the block's chunk will
+     * be saved to disk the next time chunks are saved.
      *
      * On the client, this will mark the block for a rendering update.
      */
@@ -877,11 +901,11 @@ public abstract class MultiblockControllerBase implements IMultiblockControllerI
     /**
      * Marks the reference coord dirty.
      *
-     * On the server, this marks the reference coord's chunk as dirty; the block (and chunk)
-     * will be saved to disk the next time chunks are saved. This does NOT mark it dirty for
-     * a description-packet update.
+     * On the server, this marks the reference coord's chunk as dirty; the block (and chunk) will be saved to disk the
+     * next time chunks are saved. This does NOT mark it dirty for a description-packet update.
      *
      * On the client, does nothing.
+     * 
      * @see MultiblockControllerBase#markReferenceCoordForUpdate()
      */
     protected void markReferenceCoordDirty() {

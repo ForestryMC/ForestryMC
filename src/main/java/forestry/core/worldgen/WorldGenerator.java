@@ -1,14 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.worldgen;
+
+import java.util.Random;
+
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -16,11 +21,6 @@ import forestry.core.blocks.BlockResourceOre;
 import forestry.core.config.Config;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
-import java.util.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 
 public class WorldGenerator implements IWorldGenerator {
 
@@ -33,12 +33,7 @@ public class WorldGenerator implements IWorldGenerator {
     }
 
     @Override
-    public void generate(
-            Random random,
-            int chunkX,
-            int chunkZ,
-            World world,
-            IChunkProvider chunkGenerator,
+    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator,
             IChunkProvider chunkProvider) {
         generateWorld(random, chunkX, chunkZ, world);
     }
@@ -47,7 +42,12 @@ public class WorldGenerator implements IWorldGenerator {
     public void populateChunk(PopulateChunkEvent.Post event) {
         // / PLUGIN WORLD GENERATION
         PluginManager.populateChunk(
-                event.chunkProvider, event.world, event.rand, event.chunkX, event.chunkZ, event.hasVillageGenerated);
+                event.chunkProvider,
+                event.world,
+                event.rand,
+                event.chunkX,
+                event.chunkZ,
+                event.hasVillageGenerated);
     }
 
     public void retroGen(Random random, int chunkX, int chunkZ, World world) {
@@ -60,11 +60,17 @@ public class WorldGenerator implements IWorldGenerator {
 
         if (apatiteGenerator == null) {
             apatiteGenerator = new WorldGenMinableMeta(
-                    PluginCore.blocks.resources, BlockResourceOre.ResourceType.APATITE.ordinal(), 36);
+                    PluginCore.blocks.resources,
+                    BlockResourceOre.ResourceType.APATITE.ordinal(),
+                    36);
             copperGenerator = new WorldGenMinableMeta(
-                    PluginCore.blocks.resources, BlockResourceOre.ResourceType.COPPER.ordinal(), 6);
+                    PluginCore.blocks.resources,
+                    BlockResourceOre.ResourceType.COPPER.ordinal(),
+                    6);
             tinGenerator = new WorldGenMinableMeta(
-                    PluginCore.blocks.resources, BlockResourceOre.ResourceType.TIN.ordinal(), 6);
+                    PluginCore.blocks.resources,
+                    BlockResourceOre.ResourceType.TIN.ordinal(),
+                    6);
         }
 
         // shift to world coordinates

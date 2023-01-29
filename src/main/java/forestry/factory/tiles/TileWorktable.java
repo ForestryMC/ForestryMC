@@ -1,14 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.tiles;
+
+import java.io.IOException;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
 import forestry.core.config.Config;
 import forestry.core.inventory.InventoryAdapterTile;
@@ -26,16 +34,9 @@ import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.inventory.InventoryWorktable;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
-import java.io.IOException;
-import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
 public class TileWorktable extends TileBase implements ICrafterWorktable {
+
     private final RecipeMemory recipeMemory;
     private final InventoryAdapterTile craftingDisplay;
     private MemorizedRecipe currentRecipe;
@@ -139,8 +140,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
         ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
         ItemStack[] inventory = InventoryUtil.getStacks(this);
-        InventoryCraftingForestry crafting =
-                RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
+        InventoryCraftingForestry crafting = RecipeUtil
+                .getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
 
         return crafting != null;
     }
@@ -153,8 +154,8 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
         ItemStack[] recipeItems = InventoryUtil.getStacks(currentRecipe.getCraftMatrix());
         ItemStack[] inventory = InventoryUtil.getStacks(this);
-        InventoryCraftingForestry crafting =
-                RecipeUtil.getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
+        InventoryCraftingForestry crafting = RecipeUtil
+                .getCraftRecipe(recipeItems, inventory, worldObj, currentRecipe.getRecipeOutput());
         if (crafting == null) {
             return false;
         }
@@ -195,8 +196,7 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
                 continue;
             }
 
-            if (container != null
-                    && container.isItemStackDamageable()
+            if (container != null && container.isItemStackDamageable()
                     && container.getItemDamage() > container.getMaxDamage()) {
                 MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(player, container));
                 continue;
@@ -247,7 +247,9 @@ public class TileWorktable extends TileBase implements ICrafterWorktable {
 
     public IInventory getCraftingDisplay() {
         return new InventoryMapper(
-                craftingDisplay, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+                craftingDisplay,
+                InventoryGhostCrafting.SLOT_CRAFTING_1,
+                InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
     }
 
     public void clearCraftMatrix() {

@@ -1,16 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.world.ITreeGenData;
 import forestry.arboriculture.tiles.TileTreeContainer;
 import forestry.core.tiles.TileUtil;
@@ -18,18 +27,11 @@ import forestry.core.utils.BlockUtil;
 import forestry.core.worldgen.BlockType;
 import forestry.core.worldgen.BlockTypeVoid;
 import forestry.core.worldgen.WorldGenBase;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class WorldGenArboriculture extends WorldGenBase {
 
     enum Direction {
+
         NORTH(ForgeDirection.NORTH),
         SOUTH(ForgeDirection.SOUTH),
         WEST(ForgeDirection.WEST),
@@ -120,20 +122,14 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
         return generateTreeTrunk(world, height, girth, vinesChance, ForgeDirection.UNKNOWN, 0);
     }
 
-    protected List<ChunkCoordinates> generateTreeTrunk(
-            World world, int height, int girth, float vinesChance, ForgeDirection leanDirection, float leanAmount) {
+    protected List<ChunkCoordinates> generateTreeTrunk(World world, int height, int girth, float vinesChance,
+            ForgeDirection leanDirection, float leanAmount) {
         return generateTreeTrunk(world, height, girth, 0, vinesChance, leanDirection, leanAmount);
     }
 
     /** Returns a list of trunk top coordinates */
-    protected List<ChunkCoordinates> generateTreeTrunk(
-            World world,
-            int height,
-            int girth,
-            int yStart,
-            float vinesChance,
-            ForgeDirection leanDirection,
-            float leanAmount) {
+    protected List<ChunkCoordinates> generateTreeTrunk(World world, int height, int girth, int yStart,
+            float vinesChance, ForgeDirection leanDirection, float leanAmount) {
         List<ChunkCoordinates> treeTops = new ArrayList<>();
 
         final int leanStartY = (int) Math.floor(height * 0.33f);
@@ -241,27 +237,13 @@ public abstract class WorldGenArboriculture extends WorldGenBase {
         }
     }
 
-    protected List<ChunkCoordinates> generateBranches(
-            World world,
-            final int startY,
-            int xOffset,
-            int zOffset,
-            float spreadY,
-            float spreadXZ,
-            int radius,
-            int count) {
+    protected List<ChunkCoordinates> generateBranches(World world, final int startY, int xOffset, int zOffset,
+            float spreadY, float spreadXZ, int radius, int count) {
         return generateBranches(world, startY, xOffset, zOffset, spreadY, spreadXZ, radius, count, 1.0f);
     }
 
-    protected List<ChunkCoordinates> generateBranches(
-            World world,
-            final int startY,
-            final int xOffset,
-            final int zOffset,
-            final float spreadY,
-            final float spreadXZ,
-            int radius,
-            final int count,
+    protected List<ChunkCoordinates> generateBranches(World world, final int startY, final int xOffset,
+            final int zOffset, final float spreadY, final float spreadXZ, int radius, final int count,
             final float chance) {
         List<ChunkCoordinates> branchEnds = new ArrayList<>();
         if (radius < 1) {

@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.multiblock;
+
+import java.util.Stack;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmInventory;
@@ -24,15 +31,9 @@ import forestry.core.utils.SlotUtil;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
 import ic2.api.item.IC2Items;
-import java.util.Stack;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
 
 public class InventoryFarm extends InventoryAdapterRestricted implements IFarmInventory {
+
     public static final int SLOT_RESOURCES_1 = 0;
     public static final int SLOT_RESOURCES_COUNT = 6;
     public static final int SLOT_GERMLINGS_1 = 6;
@@ -45,8 +46,7 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
     public static final int SLOT_CAN = 21;
     public static final int SLOT_CAN_COUNT = 1;
 
-    public static final int SLOT_COUNT = SLOT_RESOURCES_COUNT
-            + SLOT_GERMLINGS_COUNT
+    public static final int SLOT_COUNT = SLOT_RESOURCES_COUNT + SLOT_GERMLINGS_COUNT
             + SLOT_PRODUCTION_COUNT
             + SLOT_FERTILIZER_COUNT
             + SLOT_CAN_COUNT;
@@ -95,8 +95,8 @@ public class InventoryFarm extends InventoryAdapterRestricted implements IFarmIn
 
     @Override
     public void removeResources(ItemStack[] resources) {
-        EntityPlayer player = PlayerUtil.getPlayer(
-                farmController.getWorld(), farmController.getAccessHandler().getOwner());
+        EntityPlayer player = PlayerUtil
+                .getPlayer(farmController.getWorld(), farmController.getAccessHandler().getOwner());
         InventoryUtil.removeSets(resourcesInventory, 1, resources, player, false, true, false, true);
     }
 

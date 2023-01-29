@@ -1,14 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.circuits;
+
+import java.util.Locale;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
@@ -18,10 +22,6 @@ import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
 import forestry.core.inventory.ItemInventorySolderingIron;
 import forestry.core.utils.StringUtil;
-import java.util.Locale;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemInventorySolderingIron> {
 
@@ -52,7 +52,8 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
                 description = "(" + StringUtil.localize("gui.noeffect") + ")";
             } else {
                 description = StringUtil.localize(recipe.getCircuit().getName()) + " ("
-                        + recipe.getCircuit().getLimit() + ")";
+                        + recipe.getCircuit().getLimit()
+                        + ")";
             }
 
             int row = i * 20;
@@ -66,7 +67,10 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron, ItemIn
                         String farmDirectionString = farmDirection.toString().toLowerCase(Locale.ENGLISH);
                         String localizedDirection = StringUtil.localize("gui.solder." + farmDirectionString);
                         fontRendererObj.drawString(
-                                localizedDirection, guiLeft + 17, guiTop + 36 + row, fontColor.get("gui.screen"));
+                                localizedDirection,
+                                guiLeft + 17,
+                                guiTop + 36 + row,
+                                fontColor.get("gui.screen"));
                     }
                 } catch (Throwable ignored) {
                     // older circuit layouts do not have getSocketType()

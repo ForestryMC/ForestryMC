@@ -1,25 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.inventory;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.apiculture.IBee;
 import forestry.apiculture.genetics.Bee;
 import forestry.core.inventory.ItemInventory;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemInventoryImprinter extends ItemInventory {
+
     private static final short specimenSlot = 0;
     private static final short imprintedSlot = 1;
 
@@ -63,35 +63,20 @@ public class ItemInventoryImprinter extends ItemInventory {
     }
 
     public IAlleleBeeSpecies getPrimary() {
-        return BeeManager.beeRoot
-                .getIndividualTemplates()
-                .get(primaryIndex)
-                .getGenome()
-                .getPrimary();
+        return BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getGenome().getPrimary();
     }
 
     public IAlleleBeeSpecies getSecondary() {
-        return BeeManager.beeRoot
-                .getIndividualTemplates()
-                .get(secondaryIndex)
-                .getGenome()
-                .getPrimary();
+        return BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getGenome().getPrimary();
     }
 
     public IBee getSelectedBee() {
-        return new Bee(BeeManager.beeRoot.templateAsGenome(
-                BeeManager.beeRoot
-                        .getGenomeTemplates()
-                        .get(BeeManager.beeRoot
-                                .getIndividualTemplates()
-                                .get(primaryIndex)
-                                .getIdent()),
-                BeeManager.beeRoot
-                        .getGenomeTemplates()
-                        .get(BeeManager.beeRoot
-                                .getIndividualTemplates()
-                                .get(secondaryIndex)
-                                .getIdent())));
+        return new Bee(
+                BeeManager.beeRoot.templateAsGenome(
+                        BeeManager.beeRoot.getGenomeTemplates()
+                                .get(BeeManager.beeRoot.getIndividualTemplates().get(primaryIndex).getIdent()),
+                        BeeManager.beeRoot.getGenomeTemplates()
+                                .get(BeeManager.beeRoot.getIndividualTemplates().get(secondaryIndex).getIdent())));
     }
 
     public int getPrimaryIndex() {

@@ -1,16 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.apiculture.BeeManager;
@@ -30,16 +39,9 @@ import forestry.apiculture.genetics.DefaultBeeIconProvider;
 import forestry.apiculture.genetics.JubilanceDefault;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.utils.ItemStackUtil;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 
 public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpeciesCustom {
+
     private final Map<ItemStack, Float> productChances = new HashMap<>();
     private final Map<ItemStack, Float> specialtyChances = new HashMap<>();
 
@@ -48,16 +50,8 @@ public class AlleleBeeSpecies extends AlleleSpecies implements IAlleleBeeSpecies
     private IJubilanceProvider jubilanceProvider;
     private boolean nocturnal = false;
 
-    public AlleleBeeSpecies(
-            String uid,
-            String unlocalizedName,
-            String authority,
-            String unlocalizedDescription,
-            boolean dominant,
-            IClassification branch,
-            String binomial,
-            int primaryColor,
-            int secondaryColor) {
+    public AlleleBeeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription,
+            boolean dominant, IClassification branch, String binomial, int primaryColor, int secondaryColor) {
         super(uid, unlocalizedName, authority, unlocalizedDescription, dominant, branch, binomial);
 
         beeIconProvider = DefaultBeeIconProvider.instance;

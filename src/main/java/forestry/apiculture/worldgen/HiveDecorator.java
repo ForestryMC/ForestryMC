@@ -1,23 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
-import forestry.core.config.Config;
-import forestry.core.config.Constants;
-import forestry.plugins.PluginApiculture;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -26,18 +20,19 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
+import forestry.core.config.Config;
+import forestry.core.config.Constants;
+import forestry.plugins.PluginApiculture;
+
 public abstract class HiveDecorator {
 
     @SuppressWarnings("rawtypes")
-    private static final EventType EVENT_TYPE =
-            EnumHelper.addEnum(EventType.class, "FORESTRY_HIVES", new Class[0], new Object[0]);
+    private static final EventType EVENT_TYPE = EnumHelper
+            .addEnum(EventType.class, "FORESTRY_HIVES", new Class[0], new Object[0]);
 
-    public static void decorateHives(
-            IChunkProvider chunkProvider,
-            World world,
-            Random rand,
-            int chunkX,
-            int chunkZ,
+    public static void decorateHives(IChunkProvider chunkProvider, World world, Random rand, int chunkX, int chunkZ,
             boolean hasVillageGenerated) {
         if (!TerrainGen.populate(chunkProvider, world, rand, chunkX, chunkZ, hasVillageGenerated, EVENT_TYPE)) {
             return;

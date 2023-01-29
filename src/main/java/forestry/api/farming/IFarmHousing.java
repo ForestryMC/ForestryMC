@@ -5,9 +5,10 @@
  ******************************************************************************/
 package forestry.api.farming;
 
-import forestry.api.core.IErrorLogicSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.core.IErrorLogicSource;
 
 public interface IFarmHousing extends IErrorLogicSource {
 
@@ -29,9 +30,8 @@ public interface IFarmHousing extends IErrorLogicSource {
     void removeLiquid(FluidStack liquid);
 
     /**
-     * Callback for {@link IFarmLogic}s to plant a sapling, seed, germling, stem.
-     * Will remove the appropriate germling from the farm's inventory.
-     * It's up to the logic to only call this on a valid location.
+     * Callback for {@link IFarmLogic}s to plant a sapling, seed, germling, stem. Will remove the appropriate germling
+     * from the farm's inventory. It's up to the logic to only call this on a valid location.
      *
      * @return true if planting was successful, false otherwise.
      */

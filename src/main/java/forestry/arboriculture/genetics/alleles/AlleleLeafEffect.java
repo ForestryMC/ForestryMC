@@ -1,14 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
+
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 import forestry.api.arboriculture.EnumTreeChromosome;
 import forestry.api.arboriculture.IAlleleLeafEffect;
@@ -18,11 +19,10 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.genetics.alleles.AlleleCategorized;
 import forestry.core.utils.vect.Vect;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 
 public class AlleleLeafEffect extends AlleleCategorized implements IAlleleLeafEffect {
-    private static final int[] DEFAULT_EFFECT_AREA = new int[] {12, 12, 12};
+
+    private static final int[] DEFAULT_EFFECT_AREA = new int[] { 12, 12, 12 };
 
     public static Allele leavesNone;
 

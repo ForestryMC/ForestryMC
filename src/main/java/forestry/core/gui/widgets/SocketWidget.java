@@ -1,14 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.widgets;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 
 import forestry.core.circuits.ISocketable;
 import forestry.core.circuits.ISolderingIron;
@@ -18,11 +22,6 @@ import forestry.core.gui.IContainerSocketed;
 import forestry.core.gui.tooltips.ToolTip;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 
 public class SocketWidget extends Widget {
 
@@ -39,13 +38,12 @@ public class SocketWidget extends Widget {
     public void draw(int startX, int startY) {
         ItemStack socketStack = tile.getSocket(slot);
         if (socketStack != null) {
-            GuiForestry.getItemRenderer()
-                    .renderItemIntoGUI(
-                            manager.minecraft.fontRenderer,
-                            manager.minecraft.renderEngine,
-                            socketStack,
-                            startX + xPos,
-                            startY + yPos);
+            GuiForestry.getItemRenderer().renderItemIntoGUI(
+                    manager.minecraft.fontRenderer,
+                    manager.minecraft.renderEngine,
+                    socketStack,
+                    startX + xPos,
+                    startY + yPos);
         }
     }
 
@@ -55,6 +53,7 @@ public class SocketWidget extends Widget {
     }
 
     private final ToolTip toolTip = new ToolTip(250) {
+
         @SuppressWarnings("unchecked")
         @Override
         public void refresh() {

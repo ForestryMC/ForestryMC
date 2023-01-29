@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.multiblock;
+
+import java.io.IOException;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeHousingInventory;
@@ -35,21 +41,10 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.ITitled;
-import java.io.IOException;
-import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.biome.BiomeGenBase;
 
-public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary>
-        implements IBeeHousing,
-                IAlvearyComponent,
-                IRestrictedAccess,
-                IStreamableGui,
-                ITitled,
-                IClimatised,
-                IHintSource {
+public abstract class TileAlveary extends MultiblockTileEntityForestry<MultiblockLogicAlveary> implements IBeeHousing,
+        IAlvearyComponent, IRestrictedAccess, IStreamableGui, ITitled, IClimatised, IHintSource {
+
     private final String unlocalizedTitle;
 
     protected TileAlveary() {
@@ -67,8 +62,8 @@ public abstract class TileAlveary extends MultiblockTileEntityForestry<Multibloc
     }
 
     @Override
-    public void onMachineAssembled(
-            IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
+    public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord,
+            ChunkCoordinates maxCoord) {
         // Re-render this block on the client
         if (worldObj.isRemote) {
             this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

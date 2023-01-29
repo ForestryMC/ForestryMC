@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.items;
+
+import java.util.List;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -33,13 +40,6 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.StringUtil;
-import java.util.List;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 
 public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
 
@@ -86,13 +86,13 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
         }
         IAlleleSpecies species = getSpecies(itemstack);
 
-        String customTreeKey = "trees.custom." + type.getName() + "."
+        String customTreeKey = "trees.custom." + type.getName()
+                + "."
                 + species.getUnlocalizedName().replace("trees.species.", "");
         if (StringUtil.canTranslate(customTreeKey)) {
             return StringUtil.localize(customTreeKey);
         }
-        return StringUtil.localize("trees.grammar." + type.getName())
-                .replaceAll("%SPECIES", species.getName())
+        return StringUtil.localize("trees.grammar." + type.getName()).replaceAll("%SPECIES", species.getName())
                 .replaceAll("%TYPE", StringUtil.localize("trees.grammar." + type.getName() + ".type"));
     }
 
@@ -102,7 +102,7 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
         addCreativeItems(itemList, true);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void addCreativeItems(List itemList, boolean hideSecrets) {
         for (IIndividual individual : TreeManager.treeRoot.getIndividualTemplates()) {
             // Don't show secrets unless ordered to.
@@ -149,17 +149,8 @@ public class ItemGermlingGE extends ItemGE implements IVariableFermentable {
     }
 
     @Override
-    public boolean onItemUse(
-            ItemStack itemstack,
-            EntityPlayer player,
-            World world,
-            int x,
-            int y,
-            int z,
-            int par7,
-            float facingX,
-            float facingY,
-            float facingZ) {
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int par7,
+            float facingX, float facingY, float facingZ) {
         ITree tree = TreeManager.treeRoot.getMember(itemstack);
         if (tree == null) {
             return false;

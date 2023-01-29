@@ -1,16 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins.compat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.google.common.collect.ImmutableMap;
+
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
@@ -58,15 +68,6 @@ import ic2.api.crops.ICropTile;
 import ic2.api.item.IC2Items;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.Recipes;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 @Plugin(
         pluginID = "IC2",
@@ -129,7 +130,8 @@ public class PluginIC2 extends ForestryPlugin {
         BlockRegistryEnergy energyBlocks = PluginEnergy.blocks;
         if (energyBlocks != null) {
             energyBlocks.engine.addDefinitions(
-                    new EngineDefinition(BlockEngineType.ELECTRIC), new EngineDefinition(BlockEngineType.GENERATOR));
+                    new EngineDefinition(BlockEngineType.ELECTRIC),
+                    new EngineDefinition(BlockEngineType.GENERATOR));
         }
 
         emptyCell = IC2Items.getItem("cell");
@@ -249,7 +251,9 @@ public class PluginIC2 extends ForestryPlugin {
 
         if (plantBall != null) {
             RecipeUtil.addFermenterRecipes(
-                    plantBall, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat") * 9, Fluids.BIOMASS);
+                    plantBall,
+                    ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat") * 9,
+                    Fluids.BIOMASS);
         }
         if (compressedPlantBall != null) {
             RecipeUtil.addFermenterRecipes(
@@ -261,8 +265,8 @@ public class PluginIC2 extends ForestryPlugin {
         if (PluginManager.Module.APICULTURE.isEnabled()) {
             if (resin != null) {
                 ItemRegistryApiculture beeItems = PluginApiculture.items;
-                RecipeManagers.centrifugeManager.addRecipe(
-                        20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(resin, 1.0f));
+                RecipeManagers.centrifugeManager
+                        .addRecipe(20, beeItems.propolis.get(EnumPropolis.NORMAL, 1), ImmutableMap.of(resin, 1.0f));
             } else {
                 Log.fine("Missing IC2 resin, skipping centrifuge recipe for propolis to resin.");
             }
@@ -270,7 +274,9 @@ public class PluginIC2 extends ForestryPlugin {
 
         if (rubbersapling != null) {
             RecipeUtil.addFermenterRecipes(
-                    rubbersapling, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+                    rubbersapling,
+                    ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"),
+                    Fluids.BIOMASS);
         } else {
             Log.fine("Missing IC2 rubber sapling, skipping fermenter recipe for converting rubber sapling to biomass.");
         }
@@ -280,7 +286,10 @@ public class PluginIC2 extends ForestryPlugin {
             String resinName = GameData.getItemRegistry().getNameForObject(resin.getItem());
             String imc = String.format(
                     "farmArboreal@%s.%s.%s.%s",
-                    saplingName, rubbersapling.getItemDamage(), resinName, resin.getItemDamage());
+                    saplingName,
+                    rubbersapling.getItemDamage(),
+                    resinName,
+                    resin.getItemDamage());
             Log.finest("Sending IMC '%s'.", imc);
             FMLInterModComms.sendMessage(Constants.MOD, "add-farmable-sapling", imc);
         }
@@ -308,25 +317,35 @@ public class PluginIC2 extends ForestryPlugin {
 
         // / Solder Manager
         ChipsetManager.solderManager.addRecipe(
-                layout, PluginCore.items.tubes.get(EnumElectronTube.COPPER, 1), Circuit.energyElectricChoke1);
+                layout,
+                PluginCore.items.tubes.get(EnumElectronTube.COPPER, 1),
+                Circuit.energyElectricChoke1);
+        ChipsetManager.solderManager
+                .addRecipe(layout, PluginCore.items.tubes.get(EnumElectronTube.TIN, 1), Circuit.energyElectricBoost1);
         ChipsetManager.solderManager.addRecipe(
-                layout, PluginCore.items.tubes.get(EnumElectronTube.TIN, 1), Circuit.energyElectricBoost1);
+                layout,
+                PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1),
+                Circuit.energyElectricBoost2);
         ChipsetManager.solderManager.addRecipe(
-                layout, PluginCore.items.tubes.get(EnumElectronTube.BRONZE, 1), Circuit.energyElectricBoost2);
-        ChipsetManager.solderManager.addRecipe(
-                layout, PluginCore.items.tubes.get(EnumElectronTube.IRON, 1), Circuit.energyElectricEfficiency1);
+                layout,
+                PluginCore.items.tubes.get(EnumElectronTube.IRON, 1),
+                Circuit.energyElectricEfficiency1);
 
         if (PluginManager.Module.FARMING.isEnabled() && resin != null && rubberwood != null) {
             ICircuitLayout layoutManual = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
             ChipsetManager.solderManager.addRecipe(
-                    layoutManual, PluginCore.items.tubes.get(EnumElectronTube.RUBBER, 1), Circuit.farmRubberManual);
+                    layoutManual,
+                    PluginCore.items.tubes.get(EnumElectronTube.RUBBER, 1),
+                    Circuit.farmRubberManual);
         }
 
         Block ic2Crop = GameRegistry.findBlock("IC2", "blockCrop");
         if (PluginManager.Module.FARMING.isEnabled() && ic2Crop != null) {
             ICircuitLayout layoutManaged = ChipsetManager.circuitRegistry.getLayout("forestry.farms.manual");
             ChipsetManager.solderManager.addRecipe(
-                    layoutManaged, PluginCore.items.tubes.get(EnumElectronTube.URANIUM, 1), Circuit.farmIC2CropsManual);
+                    layoutManaged,
+                    PluginCore.items.tubes.get(EnumElectronTube.URANIUM, 1),
+                    Circuit.farmIC2CropsManual);
             Farmables.farmables.put(FarmableReference.IC2Crops.get(), new ArrayList<>());
             Farmables.farmables.get(FarmableReference.IC2Crops.get()).add(new FarmableBasicIC2Crop());
         }
@@ -363,6 +382,7 @@ public class PluginIC2 extends ForestryPlugin {
 
     /**
      * Check if there is an instance of ICropTile.
+     * 
      * @param tileEntity tile entity to be checked.
      * @return true if there is an IC2 crop and false otherwise.
      */
@@ -373,6 +393,7 @@ public class PluginIC2 extends ForestryPlugin {
 
     /**
      * Check if an IC2 crop is ready to be harvested.
+     * 
      * @param tileEntity tile entity to be checked.
      * @return true if crop size is optimal for harvest and false otherwise.
      */
@@ -390,6 +411,7 @@ public class PluginIC2 extends ForestryPlugin {
 
     /**
      * Perform some of the actions of the crop-matron.
+     * 
      * @param tileEntity
      */
     @Optional.Method(modid = "IC2")
@@ -397,12 +419,9 @@ public class PluginIC2 extends ForestryPlugin {
         if (isIC2Crop(tileEntity)) {
             ICropTile crop = (ICropTile) tileEntity;
             /*
-            This part might be unbalanced until a custom farm logic is added and makes use of weed-ex.
-            if (crop.getCrop() != null) {
-            	if (crop.getCrop().isWeed(crop)) {
-            		crop.reset();
-            	}
-            }*/
+             * This part might be unbalanced until a custom farm logic is added and makes use of weed-ex. if
+             * (crop.getCrop() != null) { if (crop.getCrop().isWeed(crop)) { crop.reset(); } }
+             */
             if (crop.getHydrationStorage() <= 200) {
                 crop.setHydrationStorage(200);
             }
@@ -413,8 +432,9 @@ public class PluginIC2 extends ForestryPlugin {
     }
 
     /**
-     * This function takes care of everything related to the harvesting of the
-     * crop meaning it will calculate the drops and also do setSizeAfterHarvest().
+     * This function takes care of everything related to the harvesting of the crop meaning it will calculate the drops
+     * and also do setSizeAfterHarvest().
+     * 
      * @param tileEntity tile entity to be checked.
      * @return arraylist containing the drops.
      */

@@ -5,13 +5,14 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.genetics.IFruitFamily;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.genetics.IFruitFamily;
 
 public interface IFruitProvider {
 
@@ -43,8 +44,7 @@ public interface IFruitProvider {
      * @param x
      * @param y
      * @param z
-     * @param ripeningTime
-     *            Elapsed ripening time for the fruit.
+     * @param ripeningTime Elapsed ripening time for the fruit.
      * @param fancy
      * @return IIcon index of the texture to overlay on the leaf block.
      */

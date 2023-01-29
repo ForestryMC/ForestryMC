@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFermenterRecipe extends IForestryRecipe {
+
     /**
      * @return ItemStack representing the input resource.
      */
@@ -21,13 +22,13 @@ public interface IFermenterRecipe extends IForestryRecipe {
     FluidStack getFluidResource();
 
     /**
-     * @return Value of the given resource, i.e. how much needs to be fermented for the output to be deposited into the product tank.
+     * @return Value of the given resource, i.e. how much needs to be fermented for the output to be deposited into the
+     *         product tank.
      */
     int getFermentationValue();
 
     /**
-     * @return Modifies the amount of liquid output per work cycle.
-     * (water = 1.0f, honey = 1.5f)
+     * @return Modifies the amount of liquid output per work cycle. (water = 1.0f, honey = 1.5f)
      */
     float getModifier();
 

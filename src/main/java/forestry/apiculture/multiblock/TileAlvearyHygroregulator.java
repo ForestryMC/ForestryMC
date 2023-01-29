@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.multiblock;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
@@ -23,17 +30,10 @@ import forestry.core.fluids.TankManager;
 import forestry.core.fluids.tanks.FilteredTank;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.tiles.ILiquidTankTile;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileAlvearyHygroregulator extends TileAlveary
         implements IInventory, ILiquidTankTile, IFluidHandler, IAlvearyComponent.Climatiser {
+
     private final HygroregulatorRecipe[] recipes;
 
     private final TankManager tankManager;
@@ -56,10 +56,9 @@ public class TileAlvearyHygroregulator extends TileAlveary
         this.tankManager = new TankManager(this, liquidTank);
 
         this.recipes = new HygroregulatorRecipe[] {
-            new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),
-            new HygroregulatorRecipe(new FluidStack(lava, 1), 10, -0.01f, +0.005f),
-            new HygroregulatorRecipe(new FluidStack(liquidIce, 1), 10, 0.02f, -0.01f)
-        };
+                new HygroregulatorRecipe(new FluidStack(water, 1), 1, 0.01f, -0.005f),
+                new HygroregulatorRecipe(new FluidStack(lava, 1), 10, -0.01f, +0.005f),
+                new HygroregulatorRecipe(new FluidStack(liquidIce, 1), 10, 0.02f, -0.01f) };
     }
 
     @Override
@@ -192,6 +191,7 @@ public class TileAlvearyHygroregulator extends TileAlveary
     }
 
     private static class HygroregulatorRecipe {
+
         public final FluidStack liquid;
         public final int transferTime;
         public final float humidChange;

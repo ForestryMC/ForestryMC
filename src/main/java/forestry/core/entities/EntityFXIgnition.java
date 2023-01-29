@@ -1,23 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.entities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 @SideOnly(Side.CLIENT)
 public class EntityFXIgnition extends EntityFX {
+
     private final float ignitionParticleScale;
 
     public EntityFXIgnition(World world, double x, double y, double z) {
@@ -48,14 +48,8 @@ public class EntityFXIgnition extends EntityFX {
         return 1.0F;
     }
 
-    public void renderParticle(
-            Tessellator p_70539_1_,
-            float p_70539_2_,
-            float p_70539_3_,
-            float p_70539_4_,
-            float p_70539_5_,
-            float p_70539_6_,
-            float p_70539_7_) {
+    public void renderParticle(Tessellator p_70539_1_, float p_70539_2_, float p_70539_3_, float p_70539_4_,
+            float p_70539_5_, float p_70539_6_, float p_70539_7_) {
         float f6 = ((float) this.particleAge + p_70539_2_) / (float) this.particleMaxAge;
         this.particleScale = this.ignitionParticleScale * (1.0F - f6 * f6);
         super.renderParticle(p_70539_1_, p_70539_2_, p_70539_3_, p_70539_4_, p_70539_5_, p_70539_6_, p_70539_7_);
@@ -76,8 +70,8 @@ public class EntityFXIgnition extends EntityFX {
         float f = (float) this.particleAge / (float) this.particleMaxAge;
 
         if (this.rand.nextFloat() > (f * 2)) {
-            this.worldObj.spawnParticle(
-                    "smoke", this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
+            this.worldObj
+                    .spawnParticle("smoke", this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
         }
 
         this.motionY -= 0.03D;

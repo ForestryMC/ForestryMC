@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
+
+import java.util.ArrayList;
+
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
+
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
@@ -23,11 +29,6 @@ import forestry.core.utils.StringUtil;
 import forestry.mail.gui.widgets.AddresseeSlot;
 import forestry.mail.inventory.ItemInventoryLetter;
 import forestry.mail.network.packets.PacketLetterInfoRequest;
-import java.util.ArrayList;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.EntityPlayer;
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
 
 public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter> {
 
@@ -140,10 +141,14 @@ public class GuiLetter extends GuiForestry<ContainerLetter, ItemInventoryLetter>
         super.drawGuiContainerBackgroundLayer(var1, mouseX, mouseY);
 
         if (this.isProcessedLetter) {
-            fontRendererObj.drawString(
-                    address.getText(), guiLeft + 49, guiTop + 16, fontColor.get("gui.mail.lettertext"));
+            fontRendererObj
+                    .drawString(address.getText(), guiLeft + 49, guiTop + 16, fontColor.get("gui.mail.lettertext"));
             fontRendererObj.drawSplitString(
-                    text.getText(), guiLeft + 20, guiTop + 34, 119, fontColor.get("gui.mail.lettertext"));
+                    text.getText(),
+                    guiLeft + 20,
+                    guiTop + 34,
+                    119,
+                    fontColor.get("gui.mail.lettertext"));
         } else {
             clearTradeInfoWidgets();
             address.drawTextBox();

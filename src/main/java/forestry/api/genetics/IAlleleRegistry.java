@@ -5,14 +5,17 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IClassification.EnumClassLevel;
 import java.util.Collection;
 import java.util.Map;
+
 import net.minecraft.item.ItemStack;
 
+import com.mojang.authlib.GameProfile;
+import forestry.api.genetics.IClassification.EnumClassLevel;
+
 /**
- * Manages {@link ISpeciesRoot}, {@link IAllele}s, {@link IFruitFamily}s, {@link IClassification}, the blacklist and allows creation of research notes.
+ * Manages {@link ISpeciesRoot}, {@link IAllele}s, {@link IFruitFamily}s, {@link IClassification}, the blacklist and
+ * allows creation of research notes.
  *
  * @author SirSengir
  */
@@ -21,6 +24,7 @@ public interface IAlleleRegistry {
     /* SPECIES ROOT CLASSES */
     /**
      * Register a {@link ISpeciesRoot}.
+     * 
      * @param root {@link ISpeciesRoot} to register.
      */
     void registerSpeciesRoot(ISpeciesRoot root);
@@ -32,6 +36,7 @@ public interface IAlleleRegistry {
 
     /**
      * Retrieve the {@link ISpeciesRoot} with the given uid.
+     * 
      * @param uid Unique id for the species class, i.e. "rootBees", "rootTrees", "rootButterflies".
      * @return {@link ISpeciesRoot} if it exists, null otherwise.
      */
@@ -39,6 +44,7 @@ public interface IAlleleRegistry {
 
     /**
      * Retrieve a matching {@link ISpeciesRoot} for the given itemstack.
+     * 
      * @param stack An itemstack possibly containing NBT data which can be converted by a species root.
      * @return {@link ISpeciesRoot} if found, null otherwise.
      */
@@ -46,6 +52,7 @@ public interface IAlleleRegistry {
 
     /**
      * Retrieve a matching {@link ISpeciesRoot} for the given {@link IIndividual}-class.
+     * 
      * @param clz Class extending {@link IIndividual}.
      * @return {@link ISpeciesRoot} if found, null otherwise.
      */
@@ -63,8 +70,7 @@ public interface IAlleleRegistry {
     /**
      * Retrieve genetic information from an itemstack.
      *
-     * @param stack
-     *            Stack to retrieve genetic information for.
+     * @param stack Stack to retrieve genetic information for.
      * @return IIndividual containing genetic information, null if none could be extracted.
      */
     IIndividual getIndividual(ItemStack stack);
@@ -88,10 +94,10 @@ public interface IAlleleRegistry {
     /**
      * Registers an allele.
      *
-     * NOTE: Where possible, it is recommended to use IAlleleFactory instead
-     *   because it has built-in advanced localization support.
+     * NOTE: Where possible, it is recommended to use IAlleleFactory instead because it has built-in advanced
+     * localization support.
      *
-     * @param allele IAllele to register.
+     * @param allele          IAllele to register.
      * @param chromosomeTypes valid chromosomeTypes for this allele.
      * @since Forestry 4.2
      */
@@ -105,18 +111,15 @@ public interface IAlleleRegistry {
     /**
      * Registers an old allele UID and the new IAllele to replace instances of it with.
      *
-     * @param deprecatedAlleleUID
-     * 			the old allele's UID
-     * @param replacement
-     * 			the IAllele that the deprecated Allele will be replaced with.
+     * @param deprecatedAlleleUID the old allele's UID
+     * @param replacement         the IAllele that the deprecated Allele will be replaced with.
      */
     void registerDeprecatedAlleleReplacement(String deprecatedAlleleUID, IAllele replacement);
 
     /**
      * Gets an allele
      *
-     * @param uid
-     *            String based unique identifier of the allele to retrieve.
+     * @param uid String based unique identifier of the allele to retrieve.
      * @return IAllele if found or a replacement is found in the Deprecated Allele map, null otherwise.
      */
     IAllele getAllele(String uid);
@@ -136,32 +139,28 @@ public interface IAlleleRegistry {
     /**
      * Registers a classification.
      *
-     * @param classification
-     *            IClassification to register.
+     * @param classification IClassification to register.
      */
     void registerClassification(IClassification classification);
 
     /**
      * Creates and returns a classification.
      *
-     * @param level
-     *            EnumClassLevel of the classification to create.
-     * @param uid
-     *            String based unique identifier. Implementation will throw an exception if the key is already taken.
-     * @param scientific
-     *            Binomial for the given classification.
+     * @param level      EnumClassLevel of the classification to create.
+     * @param uid        String based unique identifier. Implementation will throw an exception if the key is already
+     *                   taken.
+     * @param scientific Binomial for the given classification.
      * @return Created {@link IClassification} for easier chaining.
      */
     IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific);
 
-    IClassification createAndRegisterClassification(
-            EnumClassLevel level, String uid, String scientific, IClassification... members);
+    IClassification createAndRegisterClassification(EnumClassLevel level, String uid, String scientific,
+            IClassification... members);
 
     /**
      * Gets a classification.
      *
-     * @param uid
-     *            String based unique identifier of the classification to retrieve.
+     * @param uid String based unique identifier of the classification to retrieve.
      * @return {@link IClassification} if found, null otherwise.
      */
     IClassification getClassification(String uid);
@@ -193,8 +192,7 @@ public interface IAlleleRegistry {
     /**
      * Registers a new IAlleleHandler
      *
-     * @param handler
-     *            IAlleleHandler to register.
+     * @param handler IAlleleHandler to register.
      */
     void registerAlleleHandler(IAlleleHandler handler);
 
@@ -202,8 +200,7 @@ public interface IAlleleRegistry {
     /**
      * Blacklist an allele identified by its UID from mutation.
      *
-     * @param uid
-     *            UID of the allele to blacklist.
+     * @param uid UID of the allele to blacklist.
      */
     void blacklistAllele(String uid);
 
@@ -213,8 +210,7 @@ public interface IAlleleRegistry {
     Collection<String> getAlleleBlacklist();
 
     /**
-     * @param uid
-     *            UID of the species to vet.
+     * @param uid UID of the species to vet.
      * @return true if the allele is blacklisted.
      */
     boolean isBlacklisted(String uid);
@@ -222,14 +218,14 @@ public interface IAlleleRegistry {
     /* RESEARCH */
     /**
      * @param researcher Username of the player who researched this note.
-     * @param species {@link IAlleleSpecies} to encode on the research note.
+     * @param species    {@link IAlleleSpecies} to encode on the research note.
      * @return An itemstack containing a research note with the given species encoded onto it.
      */
     ItemStack getSpeciesNoteStack(GameProfile researcher, IAlleleSpecies species);
 
     /**
      * @param researcher Username of the player who researched this note.
-     * @param mutation {@link IMutation} to encode on the research note.
+     * @param mutation   {@link IMutation} to encode on the research note.
      * @return An itemstack containing a research note with the given mutation encoded onto it.
      */
     ItemStack getMutationNoteStack(GameProfile researcher, IMutation mutation);

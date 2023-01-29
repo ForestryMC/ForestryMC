@@ -1,14 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
@@ -17,11 +21,6 @@ import forestry.api.genetics.IEffectData;
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.vect.Vect;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class AlleleEffectSnowing extends AlleleEffectThrottled {
 
@@ -65,7 +64,11 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
                 int meta = world.getBlockMetadata(posBlock.x, posBlock.y, posBlock.z);
                 if (meta < 7) {
                     world.setBlockMetadataWithNotify(
-                            posBlock.x, posBlock.y, posBlock.z, meta + 1, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+                            posBlock.x,
+                            posBlock.y,
+                            posBlock.z,
+                            meta + 1,
+                            Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
                 }
             } else if (block.isReplaceable(world, posBlock.x, posBlock.y, posBlock.z)) {
                 world.setBlock(
@@ -90,9 +93,7 @@ public class AlleleEffectSnowing extends AlleleEffectThrottled {
             ChunkCoordinates coordinates = housing.getCoordinates();
             World world = housing.getWorld();
 
-            Vect spawn = Vect.getRandomPositionInArea(world.rand, area)
-                    .add(coordinates)
-                    .add(offset);
+            Vect spawn = Vect.getRandomPositionInArea(world.rand, area).add(coordinates).add(offset);
             Proxies.render.addEntitySnowFX(world, spawn.x, spawn.y, spawn.z);
             return storedData;
         } else {

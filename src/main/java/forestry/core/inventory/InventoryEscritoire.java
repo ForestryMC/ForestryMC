@@ -1,23 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.inventory;
+
+import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.core.tiles.TileEscritoire;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
-import net.minecraft.item.ItemStack;
 
 public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
+
     public static final short SLOT_ANALYZE = 0;
     public static final short SLOT_RESULTS_1 = 1;
     public static final short SLOTS_RESULTS_COUNT = 6;
@@ -30,8 +30,7 @@ public class InventoryEscritoire extends InventoryAdapterTile<TileEscritoire> {
 
     @Override
     public boolean canSlotAccept(int slotIndex, ItemStack itemStack) {
-        if (slotIndex >= SLOT_INPUT_1
-                && slotIndex < SLOT_INPUT_1 + tile.getGame().getSampleSize(SLOTS_INPUT_COUNT)) {
+        if (slotIndex >= SLOT_INPUT_1 && slotIndex < SLOT_INPUT_1 + tile.getGame().getSampleSize(SLOTS_INPUT_COUNT)) {
             ItemStack specimen = getStackInSlot(SLOT_ANALYZE);
             if (specimen == null) {
                 return false;

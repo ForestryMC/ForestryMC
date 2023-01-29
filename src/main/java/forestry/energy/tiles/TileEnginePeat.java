@@ -1,14 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.energy.tiles;
+
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
@@ -27,20 +39,9 @@ import forestry.energy.gui.GuiEnginePeat;
 import forestry.energy.inventory.InventoryEnginePeat;
 import forestry.factory.triggers.FactoryTriggers;
 import forestry.plugins.PluginCore;
-import java.util.Collection;
-import java.util.LinkedList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEnginePeat extends TileEngine implements ISidedInventory {
+
     private Item fuelItem;
     private int fuelItemMeta;
     private int burnTime;
@@ -100,8 +101,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
         dumpStash();
 
         int fuelSlot = getFuelSlot();
-        boolean hasFuel =
-                fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0;
+        boolean hasFuel = fuelSlot >= 0 && determineBurnDuration(getInternalInventory().getStackInSlot(fuelSlot)) > 0;
         getErrorLogic().setCondition(!hasFuel, EnumErrorCode.NO_FUEL);
     }
 
@@ -260,8 +260,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
 
         IInventoryAdapter inventory = getInternalInventory();
         return ((float) inventory.getStackInSlot(fuelSlot).stackSize
-                        / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize())
-                > percentage;
+                / (float) inventory.getStackInSlot(fuelSlot).getMaxStackSize()) > percentage;
     }
 
     // / LOADING AND SAVING
@@ -288,8 +287,7 @@ public class TileEnginePeat extends TileEngine implements ISidedInventory {
         super.writeToNBT(nbttagcompound);
 
         if (fuelItem != null) {
-            nbttagcompound.setString(
-                    "EngineFuelItem", GameData.getItemRegistry().getNameForObject(fuelItem));
+            nbttagcompound.setString("EngineFuelItem", GameData.getItemRegistry().getNameForObject(fuelItem));
         }
 
         nbttagcompound.setInteger("EngineFuelMeta", fuelItemMeta);

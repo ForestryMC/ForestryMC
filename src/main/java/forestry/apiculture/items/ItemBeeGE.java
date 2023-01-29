@@ -1,14 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
+
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,14 +33,6 @@ import forestry.apiculture.genetics.BeeGenome;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
 import forestry.core.utils.StringUtil;
-import java.util.List;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 
 public class ItemBeeGE extends ItemGE {
 
@@ -74,7 +74,8 @@ public class ItemBeeGE extends ItemGE {
         }
 
         IBee individual = BeeManager.beeRoot.getMember(itemstack);
-        String customBeeKey = "bees.custom." + type.getName() + "."
+        String customBeeKey = "bees.custom." + type.getName()
+                + "."
                 + individual.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
         if (StringUtil.canTranslate(customBeeKey)) {
             return StringUtil.localize(customBeeKey);
@@ -85,7 +86,7 @@ public class ItemBeeGE extends ItemGE {
         return beeGrammar.replaceAll("%SPECIES", beeSpecies).replaceAll("%TYPE", beeType);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
         if (!itemstack.hasTagCompound()) {
@@ -95,9 +96,9 @@ public class ItemBeeGE extends ItemGE {
         if (type != EnumBeeType.DRONE) {
             IBee individual = BeeManager.beeRoot.getMember(itemstack);
             if (individual.isNatural()) {
-                list.add(EnumChatFormatting.YELLOW
-                        + EnumChatFormatting.ITALIC.toString()
-                        + StringUtil.localize("bees.stock.pristine"));
+                list.add(
+                        EnumChatFormatting.YELLOW + EnumChatFormatting.ITALIC.toString()
+                                + StringUtil.localize("bees.stock.pristine"));
             } else {
                 list.add(EnumChatFormatting.YELLOW + StringUtil.localize("bees.stock.ignoble"));
             }
@@ -112,7 +113,7 @@ public class ItemBeeGE extends ItemGE {
         addCreativeItems(itemList, true);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void addCreativeItems(List itemList, boolean hideSecrets) {
         for (IBee bee : BeeManager.beeRoot.getIndividualTemplates()) {
             // Don't show secret bees unless ordered to.
@@ -161,8 +162,7 @@ public class ItemBeeGE extends ItemGE {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister register) {
-        for (IAllele allele :
-                AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+        for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
             if (allele instanceof IAlleleBeeSpecies) {
                 ((IAlleleBeeSpecies) allele).getIconProvider().registerIcons(register);
             }

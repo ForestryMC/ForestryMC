@@ -1,16 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
@@ -28,16 +39,6 @@ import forestry.arboriculture.genetics.pollination.CheckPollinatableTree;
 import forestry.arboriculture.genetics.pollination.ICheckPollinatable;
 import forestry.core.config.Config;
 import forestry.core.genetics.ItemGE;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 public class GeneticsUtil {
 
@@ -91,8 +92,8 @@ public class GeneticsUtil {
     }
 
     /**
-     * Returns an ICheckPollinatable that can be checked but not mated.
-     * Used to check for pollination traits without altering the world by changing vanilla leaves to forestry ones.
+     * Returns an ICheckPollinatable that can be checked but not mated. Used to check for pollination traits without
+     * altering the world by changing vanilla leaves to forestry ones.
      */
     public static ICheckPollinatable getCheckPollinatable(World world, final int x, final int y, final int z) {
         TileEntity tile = world.getTileEntity(x, y, z);
@@ -109,8 +110,8 @@ public class GeneticsUtil {
         return null;
     }
 
-    public static IPollinatable getOrCreatePollinatable(
-            GameProfile owner, World world, final int x, final int y, final int z) {
+    public static IPollinatable getOrCreatePollinatable(GameProfile owner, World world, final int x, final int y,
+            final int z) {
         TileEntity tile = world.getTileEntity(x, y, z);
 
         if (tile instanceof IPollinatable) {
@@ -192,8 +193,8 @@ public class GeneticsUtil {
         return 1 + getGeneticAdvancement(species, new HashSet<IAlleleSpecies>(), speciesChromosome);
     }
 
-    private static int getGeneticAdvancement(
-            IAlleleSpecies species, Set<IAlleleSpecies> exclude, IChromosomeType speciesChromosome) {
+    private static int getGeneticAdvancement(IAlleleSpecies species, Set<IAlleleSpecies> exclude,
+            IChromosomeType speciesChromosome) {
         int highest = 0;
         exclude.add(species);
 
@@ -205,10 +206,7 @@ public class GeneticsUtil {
         return 1 + highest;
     }
 
-    private static int getHighestAdvancement(
-            IAlleleSpecies mutationSpecies,
-            int highest,
-            Set<IAlleleSpecies> exclude,
+    private static int getHighestAdvancement(IAlleleSpecies mutationSpecies, int highest, Set<IAlleleSpecies> exclude,
             IChromosomeType speciesChromosome) {
         if (exclude.contains(mutationSpecies) || AlleleManager.alleleRegistry.isBlacklisted(mutationSpecies.getUID())) {
             return highest;

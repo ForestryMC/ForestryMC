@@ -1,26 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.arboriculture.EnumWoodType;
-import forestry.api.arboriculture.TreeManager;
-import forestry.api.core.Tabs;
-import forestry.arboriculture.IWoodTyped;
-import forestry.arboriculture.render.IconProviderWood;
-import forestry.arboriculture.tiles.TileWood;
-import forestry.core.render.ParticleHelper;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
@@ -36,6 +26,16 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.api.arboriculture.TreeManager;
+import forestry.api.core.Tabs;
+import forestry.arboriculture.IWoodTyped;
+import forestry.arboriculture.render.IconProviderWood;
+import forestry.arboriculture.tiles.TileWood;
+import forestry.core.render.ParticleHelper;
 
 public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyped, ITileEntityProvider {
 
@@ -92,7 +92,7 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
         return "SomeSlab";
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List list) {
         if (!isDoubleSlab()) {
@@ -114,8 +114,8 @@ public class BlockSlab extends net.minecraft.block.BlockSlab implements IWoodTyp
     }
 
     /* DROP HANDLING */
-    // Hack: 	When harvesting we need to get the drops in onBlockHarvested,
-    // 			because Mojang destroys the block and tile before calling getDrops.
+    // Hack: When harvesting we need to get the drops in onBlockHarvested,
+    // because Mojang destroys the block and tile before calling getDrops.
     private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<>();
 
     @Override

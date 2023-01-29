@@ -1,16 +1,32 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map.Entry;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import forestry.api.arboriculture.EnumGermlingType;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -36,21 +52,6 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.BlockUtil;
 import forestry.plugins.PluginArboriculture;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map.Entry;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class TreeHelper extends SpeciesRoot implements ITreeRoot {
 
@@ -79,8 +80,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
     public int getSpeciesCount() {
         if (treeSpeciesCount < 0) {
             treeSpeciesCount = 0;
-            for (Entry<String, IAllele> entry :
-                    AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
+            for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
                 if (entry.getValue() instanceof IAlleleTreeSpecies) {
                     if (((IAlleleTreeSpecies) entry.getValue()).isCounted()) {
                         treeSpeciesCount++;
@@ -187,8 +187,8 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
     @Override
     public boolean plantSapling(World world, ITree tree, GameProfile owner, int x, int y, int z) {
 
-        boolean placed =
-                world.setBlock(x, y, z, PluginArboriculture.blocks.saplingGE, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+        boolean placed = world
+                .setBlock(x, y, z, PluginArboriculture.blocks.saplingGE, 0, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
         if (!placed) {
             return false;
         }
@@ -212,16 +212,16 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
     }
 
     @Override
-    public boolean setFruitBlock(
-            World world, IAlleleFruit allele, float sappiness, short[] indices, int x, int y, int z) {
+    public boolean setFruitBlock(World world, IAlleleFruit allele, float sappiness, short[] indices, int x, int y,
+            int z) {
 
         int direction = BlockUtil.getDirectionalMetadata(world, x, y, z);
         if (direction < 0) {
             return false;
         }
 
-        boolean placed = world.setBlock(
-                x, y, z, PluginArboriculture.blocks.pods, direction, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
+        boolean placed = world
+                .setBlock(x, y, z, PluginArboriculture.blocks.pods, direction, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
         if (!placed) {
             return false;
         }
@@ -325,8 +325,7 @@ public class TreeHelper extends SpeciesRoot implements ITreeRoot {
             }
         }
 
-        FMLCommonHandler.instance()
-                .getFMLLogger()
+        FMLCommonHandler.instance().getFMLLogger()
                 .debug("Failed to find a Treekeeping mode called '%s', reverting to fallback.");
         return treekeepingModes.get(0);
     }

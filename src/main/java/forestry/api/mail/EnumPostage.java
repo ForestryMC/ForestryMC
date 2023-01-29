@@ -6,6 +6,7 @@
 package forestry.api.mail;
 
 public enum EnumPostage {
+
     P_0(0),
     P_1(1),
     P_2(2),

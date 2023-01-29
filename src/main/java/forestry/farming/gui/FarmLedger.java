@@ -1,21 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.gui;
+
+import net.minecraft.init.Items;
 
 import forestry.core.gui.ledgers.Ledger;
 import forestry.core.gui.ledgers.LedgerManager;
 import forestry.core.utils.StringUtil;
-import net.minecraft.init.Items;
 
 public class FarmLedger extends Ledger {
+
     private final IFarmLedgerDelegate delegate;
 
     public FarmLedger(LedgerManager ledgerManager, IFarmLedgerDelegate delegate) {
@@ -61,7 +61,8 @@ public class FarmLedger extends Ledger {
         y += drawSubheader(StringUtil.localize("gui.hydr.rainfall") + ':', xBody, y);
         y += 3;
         y += drawText(
-                StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " (" + delegate.getDrought()
+                StringUtil.floatAsPercent(delegate.getHydrationRainfallModifier()) + " ("
+                        + delegate.getDrought()
                         + " d)",
                 xBody,
                 y);

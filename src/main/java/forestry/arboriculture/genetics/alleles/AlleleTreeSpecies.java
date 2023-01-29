@@ -1,14 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics.alleles;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.common.EnumPlantType;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,13 +29,9 @@ import forestry.api.genetics.IClassification;
 import forestry.api.genetics.IFruitFamily;
 import forestry.core.genetics.alleles.AlleleSpecies;
 import forestry.core.render.TextureManager;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.common.EnumPlantType;
 
 public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeciesCustom, IIconProvider {
+
     private final ITreeGenerator generator;
     private final IGermlingIconProvider germlingIconProvider;
     private final ILeafIconProvider leafIconProvider;
@@ -38,17 +39,9 @@ public class AlleleTreeSpecies extends AlleleSpecies implements IAlleleTreeSpeci
 
     private EnumPlantType nativeType = EnumPlantType.Plains;
 
-    public AlleleTreeSpecies(
-            String uid,
-            String unlocalizedName,
-            String authority,
-            String unlocalizedDescription,
-            boolean isDominant,
-            IClassification branch,
-            String binomial,
-            ILeafIconProvider leafIconProvider,
-            IGermlingIconProvider germlingIconProvider,
-            ITreeGenerator generator) {
+    public AlleleTreeSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription,
+            boolean isDominant, IClassification branch, String binomial, ILeafIconProvider leafIconProvider,
+            IGermlingIconProvider germlingIconProvider, ITreeGenerator generator) {
         super(uid, unlocalizedName, authority, unlocalizedDescription, isDominant, branch, binomial);
 
         this.generator = generator;

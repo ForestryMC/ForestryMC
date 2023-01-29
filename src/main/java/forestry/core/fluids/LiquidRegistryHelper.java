@@ -1,21 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.core.config.Constants;
-import forestry.core.items.EnumContainerType;
-import forestry.core.items.ItemLiquidContainer;
-import forestry.core.utils.Log;
-import forestry.plugins.PluginFluids;
 import java.util.EnumMap;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
@@ -24,10 +18,16 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 import net.minecraftforge.fluids.FluidStack;
 
+import forestry.core.config.Constants;
+import forestry.core.items.EnumContainerType;
+import forestry.core.items.ItemLiquidContainer;
+import forestry.core.utils.Log;
+import forestry.plugins.PluginFluids;
+
 public class LiquidRegistryHelper {
 
-    private static final EnumMap<EnumContainerType, ItemLiquidContainer> emptyContainers =
-            new EnumMap<>(EnumContainerType.class);
+    private static final EnumMap<EnumContainerType, ItemLiquidContainer> emptyContainers = new EnumMap<>(
+            EnumContainerType.class);
 
     static {
         emptyContainers.put(EnumContainerType.CAN, PluginFluids.items.canEmpty);

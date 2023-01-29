@@ -1,14 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.gui.widgets;
+
+import net.minecraft.util.IIcon;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmLogic;
@@ -17,18 +17,13 @@ import forestry.core.gui.widgets.Widget;
 import forestry.core.gui.widgets.WidgetManager;
 import forestry.core.proxy.Proxies;
 import forestry.farming.multiblock.IFarmControllerInternal;
-import net.minecraft.util.IIcon;
 
 public class FarmLogicSlot extends Widget {
 
     private final IFarmControllerInternal farmController;
     private final FarmDirection farmDirection;
 
-    public FarmLogicSlot(
-            IFarmControllerInternal farmController,
-            WidgetManager manager,
-            int xPos,
-            int yPos,
+    public FarmLogicSlot(IFarmControllerInternal farmController, WidgetManager manager, int xPos, int yPos,
             FarmDirection farmDirection) {
         super(manager, xPos, yPos);
         this.farmController = farmController;
@@ -64,6 +59,7 @@ public class FarmLogicSlot extends Widget {
     }
 
     protected final ToolTip toolTip = new ToolTip(250) {
+
         @Override
         public void refresh() {
             toolTip.clear();
@@ -72,10 +68,9 @@ public class FarmLogicSlot extends Widget {
             }
             toolTip.add(getLogic().getName());
             toolTip.add("Fertilizer: " + getLogic().getFertilizerConsumption());
-            toolTip.add("Water: "
-                    + getLogic()
-                            .getWaterConsumption(
-                                    farmController.getFarmLedgerDelegate().getHydrationModifier()));
+            toolTip.add(
+                    "Water: " + getLogic()
+                            .getWaterConsumption(farmController.getFarmLedgerDelegate().getHydrationModifier()));
         }
     };
 }

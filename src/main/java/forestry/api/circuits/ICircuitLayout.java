@@ -18,6 +18,7 @@ public interface ICircuitLayout {
 
     /**
      * Specifies where a circuit layout is used.
+     * 
      * @since Forestry 4.0
      */
     ICircuitSocketType getSocketType();

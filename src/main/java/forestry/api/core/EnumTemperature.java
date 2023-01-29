@@ -5,17 +5,20 @@
  ******************************************************************************/
 package forestry.api.core;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
- *  Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or spawn at a given location.
+ * Many things Forestry use temperature and humidity of a biome to determine whether they can or how they can work or
+ * spawn at a given location.
  *
- *  This enum concerns temperature.
+ * This enum concerns temperature.
  */
 public enum EnumTemperature {
+
     NONE("None", "habitats/ocean"),
     ICY("Icy", "habitats/snow"),
     COLD("Cold", "habitats/taiga"),
@@ -42,9 +45,9 @@ public enum EnumTemperature {
     }
 
     /**
-     * Determines the EnumTemperature given a floating point representation of
-     * Minecraft temperature. Hellish biomes are handled based on their biome
-     * type - check BiomeHelper.isBiomeHellish.
+     * Determines the EnumTemperature given a floating point representation of Minecraft temperature. Hellish biomes are
+     * handled based on their biome type - check BiomeHelper.isBiomeHellish.
+     * 
      * @param rawTemp raw temperature value
      * @return EnumTemperature corresponding to value of rawTemp
      */

@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.worldgen;
 
-import forestry.arboriculture.worldgen.ITreeBlockType;
 import java.util.Random;
+
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.arboriculture.worldgen.ITreeBlockType;
 
 public abstract class WorldGenBase extends WorldGenerator {
 
@@ -66,8 +66,8 @@ public abstract class WorldGenBase extends WorldGenerator {
 
     protected abstract boolean addBlock(World world, int x, int y, int z, ITreeBlockType type, EnumReplaceMode replace);
 
-    protected final void generateCuboid(
-            World world, Vector start, Vector area, ITreeBlockType block, EnumReplaceMode replace) {
+    protected final void generateCuboid(World world, Vector start, Vector area, ITreeBlockType block,
+            EnumReplaceMode replace) {
         for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
             for (int y = (int) start.y; y < (int) start.y + area.y; y++) {
                 for (int z = (int) start.z; z < (int) start.z + area.z; z++) {
@@ -80,8 +80,8 @@ public abstract class WorldGenBase extends WorldGenerator {
     /*
      * Center is the bottom middle of the cylinder
      */
-    protected final void generateCylinder(
-            World world, Vector center, float radius, int height, ITreeBlockType block, EnumReplaceMode replace) {
+    protected final void generateCylinder(World world, Vector center, float radius, int height, ITreeBlockType block,
+            EnumReplaceMode replace) {
         Vector start = new Vector(center.x - radius, center.y, center.z - radius);
         Vector area = new Vector(radius * 2 + 1, height, radius * 2 + 1);
         for (int x = (int) start.x; x < (int) start.x + area.x; x++) {
@@ -99,26 +99,13 @@ public abstract class WorldGenBase extends WorldGenerator {
         }
     }
 
-    protected final void generateCircle(
-            World world,
-            Vector center,
-            float radius,
-            int width,
-            int height,
-            ITreeBlockType block,
-            EnumReplaceMode replace) {
+    protected final void generateCircle(World world, Vector center, float radius, int width, int height,
+            ITreeBlockType block, EnumReplaceMode replace) {
         generateCircle(world, center, radius, width, height, block, 1.0f, replace);
     }
 
-    protected final void generateCircle(
-            World world,
-            Vector center,
-            float radius,
-            int width,
-            int height,
-            ITreeBlockType block,
-            float chance,
-            EnumReplaceMode replace) {
+    protected final void generateCircle(World world, Vector center, float radius, int width, int height,
+            ITreeBlockType block, float chance, EnumReplaceMode replace) {
         Vector start = new Vector(center.x - radius, center.y, center.z - radius);
         Vector area = new Vector(radius * 2 + 1, height, radius * 2 + 1);
 
@@ -139,8 +126,8 @@ public abstract class WorldGenBase extends WorldGenerator {
         }
     }
 
-    protected final void generateSphere(
-            World world, Vector center, int radius, ITreeBlockType block, EnumReplaceMode replace) {
+    protected final void generateSphere(World world, Vector center, int radius, ITreeBlockType block,
+            EnumReplaceMode replace) {
         Vector start = new Vector(center.x - radius, center.y - radius, center.z - radius);
         Vector area = new Vector(radius * 2 + 1, radius * 2 + 1, radius * 2 + 1);
         for (int x = (int) start.x; x < (int) start.x + area.x; x++) {

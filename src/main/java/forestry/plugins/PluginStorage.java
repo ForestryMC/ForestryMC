@@ -1,14 +1,48 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
+
+import java.awt.Color;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import net.minecraft.block.BlockBasePressurePlate;
+import net.minecraft.block.BlockButton;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockRedstoneDiode;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
+import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.BlockWall;
+import net.minecraft.block.BlockWorkbench;
+import net.minecraft.block.IGrowable;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemDoor;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInterModComms.IMCMessage;
@@ -39,40 +73,6 @@ import forestry.storage.PickupHandlerStorage;
 import forestry.storage.ResupplyHandler;
 import forestry.storage.items.ItemRegistryStorage;
 import forestry.storage.proxy.ProxyStorage;
-import java.awt.Color;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
-import net.minecraft.block.BlockBasePressurePlate;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFence;
-import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.BlockFurnace;
-import net.minecraft.block.BlockLadder;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockRedstoneDiode;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.BlockTrapDoor;
-import net.minecraft.block.BlockWall;
-import net.minecraft.block.BlockWorkbench;
-import net.minecraft.block.IGrowable;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemDoor;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.IShearable;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(
         pluginID = "Storage",
@@ -100,7 +100,7 @@ public class PluginStorage extends ForestryPlugin {
     public static ItemRegistryStorage items;
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void setupAPI() {
         super.setupAPI();
 
@@ -149,7 +149,7 @@ public class PluginStorage extends ForestryPlugin {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected void disabledSetupAPI() {
         BackpackManager.backpackItems = new ArrayList[6];
         BackpackManager.backpackItems[0] = minerItems;
@@ -190,23 +190,24 @@ public class PluginStorage extends ForestryPlugin {
         forester.addValidItemClasses(Arrays.<Class>asList(IPlantable.class, IGrowable.class));
 
         BackpackDefinition builder = (BackpackDefinition) BackpackManager.definitions.get("builder");
-        builder.addValidBlockClasses(Arrays.<Class>asList(
-                BlockStairs.class,
-                BlockFence.class,
-                BlockFenceGate.class,
-                BlockWall.class,
-                BlockBasePressurePlate.class,
-                BlockLever.class,
-                BlockButton.class,
-                BlockTorch.class,
-                BlockRedstoneDiode.class,
-                BlockChest.class,
-                BlockWorkbench.class,
-                BlockFurnace.class,
-                BlockLadder.class,
-                BlockTrapDoor.class,
-                BlockDoor.class,
-                BlockSlab.class));
+        builder.addValidBlockClasses(
+                Arrays.<Class>asList(
+                        BlockStairs.class,
+                        BlockFence.class,
+                        BlockFenceGate.class,
+                        BlockWall.class,
+                        BlockBasePressurePlate.class,
+                        BlockLever.class,
+                        BlockButton.class,
+                        BlockTorch.class,
+                        BlockRedstoneDiode.class,
+                        BlockChest.class,
+                        BlockWorkbench.class,
+                        BlockFurnace.class,
+                        BlockLadder.class,
+                        BlockTrapDoor.class,
+                        BlockDoor.class,
+                        BlockSlab.class));
         builder.addValidItemClass(ItemDoor.class);
     }
 
@@ -226,19 +227,27 @@ public class PluginStorage extends ForestryPlugin {
         adventurer.addValidItems(adventurerItems);
         builder.addValidItems(builderItems);
 
-        final Pattern minerOreDictPattern =
-                Pattern.compile("(ore|dust|gem|ingot|nugget|crushed|cluster|denseore)[A-Z].*");
+        final Pattern minerOreDictPattern = Pattern
+                .compile("(ore|dust|gem|ingot|nugget|crushed|cluster|denseore)[A-Z].*");
         final Pattern diggerOreDictPattern = Pattern.compile("(stone)[A-Z].*");
         final Pattern foresterOreDictPattern = Pattern.compile("(crop|seed|tree)[A-Z].*");
-        final Pattern builderOreDictPattern =
-                Pattern.compile("(block|paneGlass|slabWood|stainedClay|stainedGlass)[A-Z].*");
+        final Pattern builderOreDictPattern = Pattern
+                .compile("(block|paneGlass|slabWood|stainedClay|stainedGlass)[A-Z].*");
 
         final List<String> minerOreDictNames = new ArrayList<>();
         final List<String> diggerOreDictNames = new ArrayList<>(Arrays.asList("cobblestone", "stone", "sand"));
-        final List<String> foresterOreDictNames =
-                new ArrayList<>(Arrays.asList("logWood", "stickWood", "woodStick", "saplingTree"));
-        final List<String> builderOreDictNames = new ArrayList<>(Arrays.asList(
-                "stone", "plankWood", "stairWood", "slabWood", "fenceWood", "glass", "blockGlass", "paneGlass"));
+        final List<String> foresterOreDictNames = new ArrayList<>(
+                Arrays.asList("logWood", "stickWood", "woodStick", "saplingTree"));
+        final List<String> builderOreDictNames = new ArrayList<>(
+                Arrays.asList(
+                        "stone",
+                        "plankWood",
+                        "stairWood",
+                        "slabWood",
+                        "fenceWood",
+                        "glass",
+                        "blockGlass",
+                        "paneGlass"));
 
         for (String name : OreDictionary.getOreNames()) {
             if (minerOreDictPattern.matcher(name).matches()) {
@@ -259,106 +268,111 @@ public class PluginStorage extends ForestryPlugin {
         }
 
         miner.addValidOreDictNames(minerOreDictNames);
-        miner.addValidItems(Arrays.asList(
-                new ItemStack(Blocks.obsidian),
-                new ItemStack(Blocks.coal_ore),
-                new ItemStack(Items.coal),
-                PluginCore.items.bronzePickaxe.getItemStack(),
-                PluginCore.items.kitPickaxe.getItemStack(),
-                PluginCore.items.brokenBronzePickaxe.getItemStack()));
+        miner.addValidItems(
+                Arrays.asList(
+                        new ItemStack(Blocks.obsidian),
+                        new ItemStack(Blocks.coal_ore),
+                        new ItemStack(Items.coal),
+                        PluginCore.items.bronzePickaxe.getItemStack(),
+                        PluginCore.items.kitPickaxe.getItemStack(),
+                        PluginCore.items.brokenBronzePickaxe.getItemStack()));
 
         digger.addValidOreDictNames(diggerOreDictNames);
-        digger.addValidItems(Arrays.asList(
-                new ItemStack(Blocks.dirt, 1, OreDictionary.WILDCARD_VALUE),
-                new ItemStack(Blocks.gravel),
-                new ItemStack(Items.flint),
-                new ItemStack(Blocks.netherrack),
-                new ItemStack(Blocks.sandstone, 1, 0),
-                new ItemStack(Items.clay_ball),
-                new ItemStack(Blocks.soul_sand),
-                PluginCore.items.bronzeShovel.getItemStack(),
-                PluginCore.items.kitShovel.getItemStack(),
-                PluginCore.items.brokenBronzeShovel.getItemStack()));
+        digger.addValidItems(
+                Arrays.asList(
+                        new ItemStack(Blocks.dirt, 1, OreDictionary.WILDCARD_VALUE),
+                        new ItemStack(Blocks.gravel),
+                        new ItemStack(Items.flint),
+                        new ItemStack(Blocks.netherrack),
+                        new ItemStack(Blocks.sandstone, 1, 0),
+                        new ItemStack(Items.clay_ball),
+                        new ItemStack(Blocks.soul_sand),
+                        PluginCore.items.bronzeShovel.getItemStack(),
+                        PluginCore.items.kitShovel.getItemStack(),
+                        PluginCore.items.brokenBronzeShovel.getItemStack()));
 
         forester.addValidOreDictNames(foresterOreDictNames);
-        forester.addValidItems(Arrays.asList(
-                new ItemStack(Blocks.red_mushroom),
-                new ItemStack(Blocks.brown_mushroom),
-                new ItemStack(Blocks.red_flower),
-                new ItemStack(Blocks.yellow_flower),
-                new ItemStack(Blocks.cactus),
-                new ItemStack(Blocks.tallgrass, 1, OreDictionary.WILDCARD_VALUE),
-                new ItemStack(Blocks.vine),
-                new ItemStack(Blocks.pumpkin),
-                new ItemStack(Blocks.melon_block),
-                new ItemStack(Items.golden_apple),
-                new ItemStack(Items.nether_wart),
-                new ItemStack(Items.pumpkin_seeds),
-                new ItemStack(Items.melon_seeds)));
+        forester.addValidItems(
+                Arrays.asList(
+                        new ItemStack(Blocks.red_mushroom),
+                        new ItemStack(Blocks.brown_mushroom),
+                        new ItemStack(Blocks.red_flower),
+                        new ItemStack(Blocks.yellow_flower),
+                        new ItemStack(Blocks.cactus),
+                        new ItemStack(Blocks.tallgrass, 1, OreDictionary.WILDCARD_VALUE),
+                        new ItemStack(Blocks.vine),
+                        new ItemStack(Blocks.pumpkin),
+                        new ItemStack(Blocks.melon_block),
+                        new ItemStack(Items.golden_apple),
+                        new ItemStack(Items.nether_wart),
+                        new ItemStack(Items.pumpkin_seeds),
+                        new ItemStack(Items.melon_seeds)));
 
-        hunter.addValidItems(Arrays.asList(
-                new ItemStack(Items.feather),
-                new ItemStack(Items.gunpowder),
-                new ItemStack(Items.blaze_powder),
-                new ItemStack(Items.blaze_rod),
-                new ItemStack(Items.bone),
-                new ItemStack(Items.string),
-                new ItemStack(Items.rotten_flesh),
-                new ItemStack(Items.ghast_tear),
-                new ItemStack(Items.gold_nugget),
-                new ItemStack(Items.arrow),
-                new ItemStack(Items.porkchop),
-                new ItemStack(Items.cooked_porkchop),
-                new ItemStack(Items.beef),
-                new ItemStack(Items.cooked_beef),
-                new ItemStack(Items.chicken),
-                new ItemStack(Items.cooked_chicken),
-                new ItemStack(Items.leather),
-                new ItemStack(Items.egg),
-                new ItemStack(Items.ender_pearl),
-                new ItemStack(Items.spider_eye),
-                new ItemStack(Items.fermented_spider_eye),
-                new ItemStack(Items.slime_ball),
-                new ItemStack(Items.dye, 1, 0),
-                new ItemStack(Blocks.hay_block),
-                new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE),
-                new ItemStack(Items.ender_eye),
-                new ItemStack(Items.magma_cream),
-                new ItemStack(Items.speckled_melon),
-                new ItemStack(Items.fish),
-                new ItemStack(Items.cooked_fished),
-                new ItemStack(Items.lead),
-                new ItemStack(Items.fishing_rod),
-                new ItemStack(Items.name_tag),
-                new ItemStack(Items.saddle),
-                new ItemStack(Items.diamond_horse_armor),
-                new ItemStack(Items.golden_horse_armor),
-                new ItemStack(Items.iron_horse_armor)));
+        hunter.addValidItems(
+                Arrays.asList(
+                        new ItemStack(Items.feather),
+                        new ItemStack(Items.gunpowder),
+                        new ItemStack(Items.blaze_powder),
+                        new ItemStack(Items.blaze_rod),
+                        new ItemStack(Items.bone),
+                        new ItemStack(Items.string),
+                        new ItemStack(Items.rotten_flesh),
+                        new ItemStack(Items.ghast_tear),
+                        new ItemStack(Items.gold_nugget),
+                        new ItemStack(Items.arrow),
+                        new ItemStack(Items.porkchop),
+                        new ItemStack(Items.cooked_porkchop),
+                        new ItemStack(Items.beef),
+                        new ItemStack(Items.cooked_beef),
+                        new ItemStack(Items.chicken),
+                        new ItemStack(Items.cooked_chicken),
+                        new ItemStack(Items.leather),
+                        new ItemStack(Items.egg),
+                        new ItemStack(Items.ender_pearl),
+                        new ItemStack(Items.spider_eye),
+                        new ItemStack(Items.fermented_spider_eye),
+                        new ItemStack(Items.slime_ball),
+                        new ItemStack(Items.dye, 1, 0),
+                        new ItemStack(Blocks.hay_block),
+                        new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE),
+                        new ItemStack(Items.ender_eye),
+                        new ItemStack(Items.magma_cream),
+                        new ItemStack(Items.speckled_melon),
+                        new ItemStack(Items.fish),
+                        new ItemStack(Items.cooked_fished),
+                        new ItemStack(Items.lead),
+                        new ItemStack(Items.fishing_rod),
+                        new ItemStack(Items.name_tag),
+                        new ItemStack(Items.saddle),
+                        new ItemStack(Items.diamond_horse_armor),
+                        new ItemStack(Items.golden_horse_armor),
+                        new ItemStack(Items.iron_horse_armor)));
 
         builder.addValidOreDictNames(builderOreDictNames);
-        builder.addValidItems(Arrays.asList(
-                new ItemStack(Blocks.torch),
-                new ItemStack(Blocks.redstone_torch),
-                new ItemStack(Blocks.redstone_lamp),
-                new ItemStack(Blocks.stonebrick, 1, OreDictionary.WILDCARD_VALUE),
-                new ItemStack(Blocks.sandstone, 1, 1),
-                new ItemStack(Blocks.sandstone, 1, 2),
-                new ItemStack(Blocks.brick_block),
-                new ItemStack(Blocks.clay),
-                new ItemStack(Blocks.hardened_clay, 1, OreDictionary.WILDCARD_VALUE),
-                new ItemStack(Blocks.stained_hardened_clay, 1, OreDictionary.WILDCARD_VALUE),
-                new ItemStack(Blocks.packed_ice),
-                new ItemStack(Blocks.nether_brick),
-                new ItemStack(Blocks.crafting_table),
-                new ItemStack(Blocks.furnace),
-                new ItemStack(Blocks.lever),
-                new ItemStack(Blocks.dispenser),
-                new ItemStack(Blocks.dropper),
-                new ItemStack(Blocks.ladder),
-                new ItemStack(Blocks.iron_bars),
-                new ItemStack(Blocks.quartz_block, 1, OreDictionary.WILDCARD_VALUE),
-                new ItemStack(Items.sign),
-                new ItemStack(Items.item_frame)));
+        builder.addValidItems(
+                Arrays.asList(
+                        new ItemStack(Blocks.torch),
+                        new ItemStack(Blocks.redstone_torch),
+                        new ItemStack(Blocks.redstone_lamp),
+                        new ItemStack(Blocks.stonebrick, 1, OreDictionary.WILDCARD_VALUE),
+                        new ItemStack(Blocks.sandstone, 1, 1),
+                        new ItemStack(Blocks.sandstone, 1, 2),
+                        new ItemStack(Blocks.brick_block),
+                        new ItemStack(Blocks.clay),
+                        new ItemStack(Blocks.hardened_clay, 1, OreDictionary.WILDCARD_VALUE),
+                        new ItemStack(Blocks.stained_hardened_clay, 1, OreDictionary.WILDCARD_VALUE),
+                        new ItemStack(Blocks.packed_ice),
+                        new ItemStack(Blocks.nether_brick),
+                        new ItemStack(Blocks.crafting_table),
+                        new ItemStack(Blocks.furnace),
+                        new ItemStack(Blocks.lever),
+                        new ItemStack(Blocks.dispenser),
+                        new ItemStack(Blocks.dropper),
+                        new ItemStack(Blocks.ladder),
+                        new ItemStack(Blocks.iron_bars),
+                        new ItemStack(Blocks.quartz_block, 1, OreDictionary.WILDCARD_VALUE),
+                        new ItemStack(Items.sign),
+                        new ItemStack(Items.item_frame)));
 
         BlockRegistryApiculture beeBlocks = PluginApiculture.blocks;
         if (beeBlocks != null) {
@@ -437,13 +451,21 @@ public class PluginStorage extends ForestryPlugin {
         FluidStack water = Fluids.WATER.getFluid(Constants.CARPENTER_CRATING_LIQUID_QUANTITY);
         ItemStack box = items.crate.getItemStack();
         RecipeManagers.carpenterManager.addRecipe(
-                Constants.CARPENTER_CRATING_CYCLES, water, box, crateStack, "###", "###", "###", '#', uncrated);
+                Constants.CARPENTER_CRATING_CYCLES,
+                water,
+                box,
+                crateStack,
+                "###",
+                "###",
+                "###",
+                '#',
+                uncrated);
     }
 
     private static void addUncrating(ItemStack crateStack, ItemStack uncrated) {
         ItemStack product = new ItemStack(uncrated.getItem(), 9, uncrated.getItemDamage());
-        RecipeManagers.carpenterManager.addRecipe(
-                Constants.CARPENTER_UNCRATING_CYCLES, null, product, "#", '#', crateStack);
+        RecipeManagers.carpenterManager
+                .addRecipe(Constants.CARPENTER_UNCRATING_CYCLES, null, product, "#", '#', crateStack);
     }
 
     @Override
@@ -530,7 +552,18 @@ public class PluginStorage extends ForestryPlugin {
 
     private static void addBackpackRecipe(Item backpack, Object material, Object chest) {
         RecipeUtil.addRecipe(
-                backpack, "X#X", "VYV", "X#X", '#', Blocks.wool, 'X', Items.string, 'V', material, 'Y', chest);
+                backpack,
+                "X#X",
+                "VYV",
+                "X#X",
+                '#',
+                Blocks.wool,
+                'X',
+                Items.string,
+                'V',
+                material,
+                'Y',
+                chest);
     }
 
     private static void addT2BackpackRecipe(Item backpackT1, Item backpackT2) {

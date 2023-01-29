@@ -6,6 +6,7 @@
 package forestry.api.farming;
 
 import java.util.Collection;
+
 import net.minecraft.item.ItemStack;
 
 public interface ICrop {

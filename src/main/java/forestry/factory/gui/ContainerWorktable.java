@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.gui;
+
+import java.lang.reflect.Method;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import forestry.core.gui.ContainerTile;
@@ -27,14 +33,9 @@ import forestry.factory.network.packets.PacketWorktableMemoryUpdate;
 import forestry.factory.network.packets.PacketWorktableRecipeUpdate;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
-import java.lang.reflect.Method;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class ContainerWorktable extends ContainerTile<TileWorktable> implements IContainerCrafting, IGuiSelectable {
+
     private static final Method craftingEventHandler;
     private static final Object craftingEventHandlerInstance;
 
@@ -78,8 +79,12 @@ public class ContainerWorktable extends ContainerTile<TileWorktable> implements 
         // Internal inventory
         for (int i = 0; i < 2; i++) {
             for (int k = 0; k < 9; k++) {
-                addSlotToContainer(new Slot(
-                        internalInventory, InventoryWorktable.SLOT_INVENTORY_1 + k + i * 9, 8 + k * 18, 90 + i * 18));
+                addSlotToContainer(
+                        new Slot(
+                                internalInventory,
+                                InventoryWorktable.SLOT_INVENTORY_1 + k + i * 9,
+                                8 + k * 18,
+                                90 + i * 18));
             }
         }
 

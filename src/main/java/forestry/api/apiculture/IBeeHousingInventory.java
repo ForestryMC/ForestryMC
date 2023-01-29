@@ -21,7 +21,7 @@ public interface IBeeHousingInventory {
      * Adds products to the housing's inventory.
      *
      * @param product ItemStack with the product to add.
-     * @param all if true, success requires that all products are added
+     * @param all     if true, success requires that all products are added
      * @return boolean indicating success or failure.
      */
     boolean addProduct(ItemStack product, boolean all);

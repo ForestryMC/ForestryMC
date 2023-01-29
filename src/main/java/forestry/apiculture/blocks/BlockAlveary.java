@@ -1,14 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.blocks;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,20 +35,11 @@ import forestry.apiculture.multiblock.TileAlvearyStabiliser;
 import forestry.apiculture.multiblock.TileAlvearySwarmer;
 import forestry.core.blocks.BlockStructure;
 import forestry.core.render.TextureManager;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public class BlockAlveary extends BlockStructure {
+
     public enum Type {
+
         PLAIN,
         ENTRANCE,
         SWARMER,
@@ -57,7 +59,7 @@ public class BlockAlveary extends BlockStructure {
         setHarvestLevel("axe", 0);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
@@ -166,11 +168,9 @@ public class BlockAlveary extends BlockStructure {
     @SideOnly(Side.CLIENT)
     @Override
     public IIcon getIcon(int side, int metadata) {
-        if ((metadata <= 1
-                        || metadata == Type.SIEVE.ordinal()
-                        || metadata == Type.SWARMER.ordinal()
-                        || metadata == Type.STABILIZER.ordinal())
-                && (side == 1 || side == 0)) {
+        if ((metadata <= 1 || metadata == Type.SIEVE.ordinal()
+                || metadata == Type.SWARMER.ordinal()
+                || metadata == Type.STABILIZER.ordinal()) && (side == 1 || side == 0)) {
             return icons[BOTTOM];
         }
 

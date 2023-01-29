@@ -1,14 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
+
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,17 +31,9 @@ import forestry.apiculture.inventory.ItemInventoryHabitatLocator;
 import forestry.apiculture.render.TextureHabitatLocator;
 import forestry.core.items.ItemWithGui;
 import forestry.core.utils.StringUtil;
-import java.util.List;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class ItemHabitatLocator extends ItemWithGui {
+
     private static final String iconName = "forestry:biomefinder";
 
     private final HabitatLocatorLogic locatorLogic;
@@ -65,13 +66,13 @@ public class ItemHabitatLocator extends ItemWithGui {
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
         BiomeGenBase currentBiome = player.worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
 
-        float temperatureValue =
-                currentBiome.getFloatTemperature((int) player.posX, (int) player.posY, (int) player.posZ);
+        float temperatureValue = currentBiome
+                .getFloatTemperature((int) player.posX, (int) player.posY, (int) player.posZ);
         EnumTemperature temperature = EnumTemperature.getFromValue(temperatureValue);
         EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.rainfall);
 

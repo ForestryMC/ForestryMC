@@ -1,23 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileNaturalistChest;
 
 public class RenderNaturalistChest extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -39,13 +39,7 @@ public class RenderNaturalistChest extends TileEntitySpecialRenderer implements 
         render(chest.getOrientation(), chest.prevLidAngle, chest.lidAngle, x, y, z, partialTick);
     }
 
-    public void render(
-            ForgeDirection orientation,
-            float prevLidAngle,
-            float lidAngle,
-            double x,
-            double y,
-            double z,
+    public void render(ForgeDirection orientation, float prevLidAngle, float lidAngle, double x, double y, double z,
             float partialTick) {
         GL11.glPushMatrix();
         bindTexture(texture);

@@ -5,10 +5,11 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.core.EnumHumidity;
-import forestry.api.core.EnumTemperature;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.BiomeDictionary;
+
+import forestry.api.core.EnumHumidity;
+import forestry.api.core.EnumTemperature;
 
 /** Set custom mutation requirements */
 public interface IMutationCustom extends IMutation {
@@ -28,6 +29,7 @@ public interface IMutationCustom extends IMutation {
 
     /**
      * Restrict this mutation to certain types of biomes.
+     * 
      * @param types The types of biomes this mutation can occur.
      */
     IMutationCustom restrictBiomeType(BiomeDictionary.Type... types);

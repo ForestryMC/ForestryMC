@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.gui;
+
+import java.util.ArrayList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.*;
 import forestry.api.genetics.AlleleManager;
@@ -22,9 +25,6 @@ import forestry.core.gui.GuiAlyzer;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginApiculture;
-import java.util.ArrayList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiBeealyzer extends GuiAlyzer {
 
@@ -99,9 +99,11 @@ public class GuiBeealyzer extends GuiAlyzer {
         textLayout.newLine();
 
         {
-            String customPrimaryBeeKey = "bees.custom.beealyzer." + type.getName() + "."
+            String customPrimaryBeeKey = "bees.custom.beealyzer." + type.getName()
+                    + "."
                     + bee.getGenome().getPrimary().getUnlocalizedName().replace("bees.species.", "");
-            String customSecondaryBeeKey = "bees.custom.beealyzer." + type.getName() + "."
+            String customSecondaryBeeKey = "bees.custom.beealyzer." + type.getName()
+                    + "."
                     + bee.getGenome().getSecondary().getUnlocalizedName().replace("bees.species.", "");
 
             drawSpeciesRow(
@@ -124,8 +126,8 @@ public class GuiBeealyzer extends GuiAlyzer {
 
         textLayout.drawLine(StringUtil.localize("gui.fertility"), COLUMN_0);
         IAlleleInteger primaryFertility = (IAlleleInteger) bee.getGenome().getActiveAllele(EnumBeeChromosome.FERTILITY);
-        IAlleleInteger secondaryFertility =
-                (IAlleleInteger) bee.getGenome().getInactiveAllele(EnumBeeChromosome.FERTILITY);
+        IAlleleInteger secondaryFertility = (IAlleleInteger) bee.getGenome()
+                .getInactiveAllele(EnumBeeChromosome.FERTILITY);
         drawFertilityInfo(primaryFertility.getValue(), COLUMN_1, getColorCoding(primaryFertility.isDominant()), 0);
         drawFertilityInfo(secondaryFertility.getValue(), COLUMN_2, getColorCoding(secondaryFertility.isDominant()), 0);
         textLayout.newLine();
@@ -150,19 +152,17 @@ public class GuiBeealyzer extends GuiAlyzer {
 
         drawRow(
                 StringUtil.localize("gui.climate"),
-                AlleleManager.climateHelper.toDisplay(
-                        bee.getGenome().getPrimary().getTemperature()),
-                AlleleManager.climateHelper.toDisplay(
-                        bee.getGenome().getSecondary().getTemperature()),
+                AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getTemperature()),
+                AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getTemperature()),
                 bee,
                 EnumBeeChromosome.SPECIES);
 
         textLayout.newLine();
 
-        IAlleleTolerance tempToleranceActive =
-                (IAlleleTolerance) bee.getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
-        IAlleleTolerance tempToleranceInactive =
-                (IAlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
+        IAlleleTolerance tempToleranceActive = (IAlleleTolerance) bee.getGenome()
+                .getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
+        IAlleleTolerance tempToleranceInactive = (IAlleleTolerance) bee.getGenome()
+                .getInactiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
         textLayout.drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
         drawToleranceInfo(tempToleranceActive, COLUMN_1);
         drawToleranceInfo(tempToleranceInactive, COLUMN_2);
@@ -171,19 +171,17 @@ public class GuiBeealyzer extends GuiAlyzer {
 
         drawRow(
                 StringUtil.localize("gui.humidity"),
-                AlleleManager.climateHelper.toDisplay(
-                        bee.getGenome().getPrimary().getHumidity()),
-                AlleleManager.climateHelper.toDisplay(
-                        bee.getGenome().getSecondary().getHumidity()),
+                AlleleManager.climateHelper.toDisplay(bee.getGenome().getPrimary().getHumidity()),
+                AlleleManager.climateHelper.toDisplay(bee.getGenome().getSecondary().getHumidity()),
                 bee,
                 EnumBeeChromosome.SPECIES);
 
         textLayout.newLine();
 
-        IAlleleTolerance humidToleranceActive =
-                (IAlleleTolerance) bee.getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
-        IAlleleTolerance humidToleranceInactive =
-                (IAlleleTolerance) bee.getGenome().getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
+        IAlleleTolerance humidToleranceActive = (IAlleleTolerance) bee.getGenome()
+                .getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
+        IAlleleTolerance humidToleranceInactive = (IAlleleTolerance) bee.getGenome()
+                .getInactiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
         textLayout.drawLine("  " + StringUtil.localize("gui.tolerance"), COLUMN_0);
         drawToleranceInfo(humidToleranceActive, COLUMN_1);
         drawToleranceInfo(humidToleranceInactive, COLUMN_2);

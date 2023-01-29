@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import forestry.apiculture.entities.EntityMinecartApiary;
 import forestry.apiculture.entities.EntityMinecartBeehouse;
@@ -49,12 +52,9 @@ import forestry.mail.tiles.TileStampCollector;
 import forestry.mail.tiles.TileTrader;
 import forestry.storage.items.ItemBackpack;
 import forestry.storage.items.ItemBackpackNaturalist;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GuiIdRegistry {
+
     private static final Map<Class<? extends IGuiHandlerForestry>, GuiId> classMap = new HashMap<>();
     private static final Map<Integer, GuiId> idMap = new HashMap<>();
     private static int nextId = 0;
@@ -108,11 +108,12 @@ public class GuiIdRegistry {
         registerGuiHandlers(
                 GuiType.Entity,
                 Arrays.<Class<? extends IGuiHandlerForestry>>asList(
-                        EntityMinecartApiary.class, EntityMinecartBeehouse.class));
+                        EntityMinecartApiary.class,
+                        EntityMinecartBeehouse.class));
     }
 
-    private static void registerGuiHandlers(
-            GuiType guiType, List<Class<? extends IGuiHandlerForestry>> guiHandlerClasses) {
+    private static void registerGuiHandlers(GuiType guiType,
+            List<Class<? extends IGuiHandlerForestry>> guiHandlerClasses) {
         for (Class<? extends IGuiHandlerForestry> tileGuiHandlerClass : guiHandlerClasses) {
             GuiId guiId = new GuiId(nextId++, guiType, tileGuiHandlerClass);
             classMap.put(tileGuiHandlerClass, guiId);

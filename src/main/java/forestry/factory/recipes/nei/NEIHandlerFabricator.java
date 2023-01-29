@@ -1,14 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes.nei;
+
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -21,22 +33,11 @@ import forestry.core.recipes.nei.PositionedFluidTank;
 import forestry.core.recipes.nei.RecipeHandlerBase;
 import forestry.factory.gui.GuiFabricator;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 public class NEIHandlerFabricator extends RecipeHandlerBase {
 
     public class CachedFabricatorRecipe extends CachedBaseRecipe {
+
         public List<PositionedStack> smeltingInput = new ArrayList<>();
         public PositionedFluidTank tank;
         public List<PositionedStack> inputs = new ArrayList<>();
@@ -46,8 +47,7 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
             if (recipe.getLiquid() != null) {
                 this.tank = new PositionedFluidTank(recipe.getLiquid(), 2000, new Rectangle(21, 37, 16, 16));
                 List<ItemStack> smeltingInput = new ArrayList<>();
-                for (IFabricatorSmeltingRecipe s :
-                        getSmeltingInputs().get(recipe.getLiquid().getFluid())) {
+                for (IFabricatorSmeltingRecipe s : getSmeltingInputs().get(recipe.getLiquid().getFluid())) {
                     smeltingInput.add(s.getResource());
                 }
                 if (!smeltingInput.isEmpty()) {
@@ -199,20 +199,19 @@ public class NEIHandlerFabricator extends RecipeHandlerBase {
     }
 
     @Override
-    public List<String> provideItemTooltip(
-            GuiRecipe guiRecipe,
-            ItemStack itemStack,
-            List<String> currenttip,
-            CachedBaseRecipe crecipe,
-            Point relMouse) {
+    public List<String> provideItemTooltip(GuiRecipe guiRecipe, ItemStack itemStack, List<String> currenttip,
+            CachedBaseRecipe crecipe, Point relMouse) {
         super.provideItemTooltip(guiRecipe, itemStack, currenttip, crecipe, relMouse);
 
         if (new Rectangle(20, 9, 18, 18).contains(relMouse)) {
             for (IFabricatorSmeltingRecipe smelting : FabricatorSmeltingRecipeManager.recipes) {
                 if (NEIServerUtils.areStacksSameTypeCrafting(smelting.getResource(), itemStack)
                         && smelting.getProduct() != null) {
-                    currenttip.add(EnumChatFormatting.GRAY + NEIUtils.translate("handler.forestry.fabricator.worth")
-                            + " " + smelting.getProduct().amount + " mB");
+                    currenttip.add(
+                            EnumChatFormatting.GRAY + NEIUtils.translate("handler.forestry.fabricator.worth")
+                                    + " "
+                                    + smelting.getProduct().amount
+                                    + " mB");
                 }
             }
         }

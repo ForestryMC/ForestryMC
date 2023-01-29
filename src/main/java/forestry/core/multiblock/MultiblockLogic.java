@@ -1,23 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.multiblock;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.utils.Log;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.utils.Log;
+
 public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> implements IMultiblockLogic {
+
     private final Class<T> controllerClass;
     private boolean visited;
     private boolean saveMultiblockData;
@@ -50,13 +50,13 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
     public abstract T createNewController(World world);
 
     /**
-     * This is called when a block is being marked as valid by the chunk, but has not yet fully
-     * been placed into the world's TileEntity cache. this.worldObj, xCoord, yCoord and zCoord have
-     * been initialized, but any attempts to read data about the world can cause infinite loops -
-     * if you call getTileEntity on this TileEntity's coordinate from within validate(), you will
-     * blow your call stack.
+     * This is called when a block is being marked as valid by the chunk, but has not yet fully been placed into the
+     * world's TileEntity cache. this.worldObj, xCoord, yCoord and zCoord have been initialized, but any attempts to
+     * read data about the world can cause infinite loops - if you call getTileEntity on this TileEntity's coordinate
+     * from within validate(), you will blow your call stack.
      *
      * TL;DR: Here there be dragons.
+     * 
      * @see net.minecraft.tileentity.TileEntity#validate()
      */
     @Override
@@ -65,8 +65,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
     }
 
     /**
-     * Called when a block is removed by game actions, such as a player breaking the block
-     * or the block being changed into another block.
+     * Called when a block is removed by game actions, such as a player breaking the block or the block being changed
+     * into another block.
+     * 
      * @see net.minecraft.tileentity.TileEntity#invalidate()
      */
     @Override
@@ -75,9 +76,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
     }
 
     /**
-     * Called from Minecraft's tile entity loop, after all tile entities have been ticked,
-     * as the chunk in which this tile entity is contained is unloading.
-     * Happens before the Forge TickEnd event.
+     * Called from Minecraft's tile entity loop, after all tile entities have been ticked, as the chunk in which this
+     * tile entity is contained is unloading. Happens before the Forge TickEnd event.
+     * 
      * @see net.minecraft.tileentity.TileEntity#onChunkUnload()
      */
     @Override
@@ -124,7 +125,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
             ChunkCoordinates coords = part.getCoordinates();
             Log.info(
                     "[assert] Part @ (%d, %d, %d) should be detached already, but detected that it was not. This is not a fatal error, and will be repaired, but is unusual.",
-                    coords.posX, coords.posY, coords.posZ);
+                    coords.posX,
+                    coords.posY,
+                    coords.posZ);
             this.controller = null;
         }
     }
@@ -171,9 +174,9 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
     }
 
     /**
-     * Override this to easily modify the description packet's data without having
-     * to worry about sending the packet itself.
-     * Decode this data in decodeDescriptionPacket.
+     * Override this to easily modify the description packet's data without having to worry about sending the packet
+     * itself. Decode this data in decodeDescriptionPacket.
+     * 
      * @param packetData An NBT compound tag into which you should write your custom description data.
      */
     @Override
@@ -186,8 +189,8 @@ public abstract class MultiblockLogic<T extends IMultiblockControllerInternal> i
     }
 
     /**
-     * Override this to easily read in data from a TileEntity's description packet.
-     * Encoded in encodeDescriptionPacket.
+     * Override this to easily read in data from a TileEntity's description packet. Encoded in encodeDescriptionPacket.
+     * 
      * @param packetData The NBT data from the tile entity's description packet.
      */
     @Override

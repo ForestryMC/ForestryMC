@@ -8,6 +8,7 @@ package forestry.api.lepidopterology;
 import forestry.api.genetics.ISpeciesType;
 
 public enum EnumFlutterType implements ISpeciesType {
+
     BUTTERFLY,
     SERUM,
     CATERPILLAR,

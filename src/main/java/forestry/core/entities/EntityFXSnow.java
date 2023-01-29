@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.entities;
 
@@ -38,14 +36,8 @@ public class EntityFXSnow extends EntityFX {
     }
 
     @Override
-    public void renderParticle(
-            Tessellator tess,
-            float timeStep,
-            float rotationX,
-            float rotationXZ,
-            float rotationZ,
-            float rotationYZ,
-            float rotationXY) {
+    public void renderParticle(Tessellator tess, float timeStep, float rotationX, float rotationXZ, float rotationZ,
+            float rotationYZ, float rotationXY) {
         double x = (this.prevPosX + (this.posX - this.prevPosX) * timeStep - interpPosX);
         double y = (this.prevPosY + (this.posY - this.prevPosY) * timeStep - interpPosY);
         double z = (this.prevPosZ + (this.posZ - this.prevPosZ) * timeStep - interpPosZ);
@@ -84,21 +76,9 @@ public class EntityFXSnow extends EntityFX {
         }
     }
 
-    private static void renderParticle(
-            Tessellator tess,
-            double x,
-            double y,
-            double z,
-            float rotationX,
-            float rotationXZ,
-            float rotationZ,
-            float rotationYZ,
-            float rotationXY,
-            float minU,
-            float maxU,
-            float minV,
-            float maxV,
-            float scale) {
+    private static void renderParticle(Tessellator tess, double x, double y, double z, float rotationX,
+            float rotationXZ, float rotationZ, float rotationYZ, float rotationXY, float minU, float maxU, float minV,
+            float maxV, float scale) {
         tess.addVertexWithUV(
                 (x - rotationX * scale - rotationYZ * scale),
                 (y - rotationXZ * scale),

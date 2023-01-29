@@ -1,21 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.tiles;
+
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import forestry.core.utils.StringUtil;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
 
 public class EscritoireTextSource {
 
@@ -34,8 +33,8 @@ public class EscritoireTextSource {
 
     static {
         researchNotes = ArrayListMultimap.create();
-        EnumSet<Notes> multipleTranslationNoteLevels =
-                EnumSet.of(Notes.level1, Notes.level2, Notes.level3, Notes.level4, Notes.success, Notes.failure);
+        EnumSet<Notes> multipleTranslationNoteLevels = EnumSet
+                .of(Notes.level1, Notes.level2, Notes.level3, Notes.level4, Notes.success, Notes.failure);
         for (Notes notesLevel : multipleTranslationNoteLevels) {
             int levelCount = Integer.valueOf(StringUtil.localize("gui.escritoire.notes." + notesLevel + ".count"));
             for (int i = 1; i <= levelCount; i++) {

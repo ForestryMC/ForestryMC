@@ -6,6 +6,7 @@
 package forestry.api.apiculture;
 
 import java.util.ArrayList;
+
 import net.minecraft.world.World;
 
 public interface IBeekeepingMode {
@@ -49,7 +50,8 @@ public interface IBeekeepingMode {
      * @param queen
      * @param offspring
      * @param housing
-     * @return true if the genetic structure of the queen is breaking down during spawning of the offspring (with chance). will trigger a negative effect.
+     * @return true if the genetic structure of the queen is breaking down during spawning of the offspring (with
+     *         chance). will trigger a negative effect.
      */
     boolean isDegenerating(IBee queen, IBee offspring, IBeeHousing housing);
 

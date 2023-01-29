@@ -15,7 +15,8 @@ import net.minecraft.world.World;
 public interface IFarmable {
 
     /**
-     * @return true if the block at the given location is a "sapling" for this type, i.e. a non-harvestable immature version of the crop.
+     * @return true if the block at the given location is a "sapling" for this type, i.e. a non-harvestable immature
+     *         version of the crop.
      */
     boolean isSaplingAt(World world, int x, int y, int z);
 
@@ -30,13 +31,14 @@ public interface IFarmable {
     boolean isGermling(ItemStack itemstack);
 
     /**
-     * @return true if the item is something that can drop from this type without actually being harvested as a crop. (Apples or sapling from decaying leaves.)
+     * @return true if the item is something that can drop from this type without actually being harvested as a crop.
+     *         (Apples or sapling from decaying leaves.)
      */
     boolean isWindfall(ItemStack itemstack);
 
     /**
-     * Plants a sapling by manipulating the world. The {@link IFarmLogic} should have verified the given location as valid. Called by the {@link IFarmHousing}
-     * which handles resources.
+     * Plants a sapling by manipulating the world. The {@link IFarmLogic} should have verified the given location as
+     * valid. Called by the {@link IFarmHousing} which handles resources.
      *
      * @return true on success, false otherwise.
      */

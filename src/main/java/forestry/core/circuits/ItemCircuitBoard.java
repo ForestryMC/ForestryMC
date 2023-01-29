@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.circuits;
+
+import java.util.List;
+import java.util.Locale;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.ICircuit;
@@ -16,13 +23,6 @@ import forestry.api.circuits.ICircuitBoard;
 import forestry.api.circuits.ICircuitLayout;
 import forestry.core.items.ItemForestryMultiPass;
 import forestry.plugins.PluginCore;
-import java.util.List;
-import java.util.Locale;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemCircuitBoard extends ItemForestryMultiPass {
 
@@ -31,7 +31,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
         setHasSubtypes(true);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
         itemList.add(createCircuitboard(EnumCircuitBoardType.BASIC, null, new ICircuit[] {}));
@@ -64,7 +64,7 @@ public class ItemCircuitBoard extends ItemForestryMultiPass {
         return "item.for.circuitboard." + type.toString().toLowerCase(Locale.ENGLISH);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
         ICircuitBoard circuitboard = ChipsetManager.circuitRegistry.getCircuitboard(itemstack);

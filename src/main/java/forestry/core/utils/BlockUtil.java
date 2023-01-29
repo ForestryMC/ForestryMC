@@ -1,23 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyReceiver;
-import cpw.mods.fml.common.Loader;
-import forestry.core.config.Constants;
-import forestry.core.tiles.TileEngine;
-import forestry.core.utils.vect.Vect;
 import java.util.ArrayList;
 import java.util.function.Predicate;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.BlockLog;
@@ -30,6 +23,13 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+
+import cofh.api.energy.IEnergyConnection;
+import cofh.api.energy.IEnergyReceiver;
+import cpw.mods.fml.common.Loader;
+import forestry.core.config.Constants;
+import forestry.core.tiles.TileEngine;
+import forestry.core.utils.vect.Vect;
 
 public abstract class BlockUtil {
 
@@ -105,8 +105,7 @@ public abstract class BlockUtil {
     }
 
     public static boolean isReplaceableBlock(Block block) {
-        return block == Blocks.vine
-                || block == Blocks.tallgrass
+        return block == Blocks.vine || block == Blocks.tallgrass
                 || block == Blocks.deadbush
                 || block == Blocks.snow_layer
                 || block.getMaterial().isReplaceable();
@@ -115,19 +114,8 @@ public abstract class BlockUtil {
     /**
      * Ray traces through the blocks collision from start vector to end vector returning a ray trace hit.
      */
-    public static MovingObjectPosition collisionRayTrace(
-            World world,
-            int x,
-            int y,
-            int z,
-            Vec3 startVec,
-            Vec3 endVec,
-            float minX,
-            float minY,
-            float minZ,
-            float maxX,
-            float maxY,
-            float maxZ) {
+    public static MovingObjectPosition collisionRayTrace(World world, int x, int y, int z, Vec3 startVec, Vec3 endVec,
+            float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
         startVec = startVec.addVector((double) (-x), (double) (-y), (double) (-z));
         endVec = endVec.addVector((double) (-x), (double) (-y), (double) (-z));
         Vec3 vec32 = startVec.getIntermediateWithXValue(endVec, minX);
@@ -246,20 +234,18 @@ public abstract class BlockUtil {
     private static boolean bw = Loader.isModLoaded("bartworks");
 
     static {
-        if (bw)
-            try {
-                BW_MetaGenerated_WerkstoffBlocksClass = (Class<? extends Block>) Class.forName(
-                        "com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_WerkstoffBlocks");
-                BWBlocks = (Block) Class.forName("com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader")
-                        .getField("BWBlocks")
-                        .get(null);
-            } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
+        if (bw) try {
+            BW_MetaGenerated_WerkstoffBlocksClass = (Class<? extends Block>) Class
+                    .forName("com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_WerkstoffBlocks");
+            BWBlocks = (Block) Class.forName("com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader")
+                    .getField("BWBlocks").get(null);
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static ItemStack getItemStackFromBlockBelow(
-            World world, int x, int y, int z, Predicate<TileEntity> stillInside) {
+    public static ItemStack getItemStackFromBlockBelow(World world, int x, int y, int z,
+            Predicate<TileEntity> stillInside) {
         TileEntity tile;
         Block block;
         int depth = 0;

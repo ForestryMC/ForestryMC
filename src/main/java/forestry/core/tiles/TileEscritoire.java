@@ -1,16 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.tiles;
 
+import java.io.IOException;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
 import forestry.api.genetics.IIndividual;
@@ -22,11 +28,6 @@ import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamableGui;
 import forestry.core.utils.InventoryUtil;
-import java.io.IOException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPickupWatcher, IStreamableGui {
 
@@ -65,15 +66,15 @@ public class TileEscritoire extends TileBase implements ISidedInventory, ISlotPi
             return;
         }
 
-        IIndividual individual =
-                AlleleManager.alleleRegistry.getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
+        IIndividual individual = AlleleManager.alleleRegistry
+                .getIndividual(getStackInSlot(InventoryEscritoire.SLOT_ANALYZE));
         if (individual == null) {
             return;
         }
 
         IAlleleSpecies species = individual.getGenome().getPrimary();
-        for (ItemStack itemstack :
-                species.getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
+        for (ItemStack itemstack : species
+                .getResearchBounty(worldObj, gameProfile, individual, game.getBountyLevel())) {
             InventoryUtil.addStack(
                     getInternalInventory(),
                     itemstack,

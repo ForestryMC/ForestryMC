@@ -5,11 +5,13 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IFruitFamily;
 import net.minecraft.util.StatCollector;
 
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IFruitFamily;
+
 public enum EnumFruitFamily implements IFruitFamily {
+
     PRUNES("prunes", "Prunus domestica"),
     POMES("pomes", "Pomum"),
     JUNGLE("jungle", "Tropicus"),

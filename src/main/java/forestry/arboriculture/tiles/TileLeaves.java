@@ -1,16 +1,31 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.tiles;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.EnumPlantType;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -48,20 +63,6 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.EnumPlantType;
 
 public class TileLeaves extends TileTreeContainer
         implements IPollinatable, IFruitBearer, IButterflyNursery, IRipeningPacketReceiver {
@@ -231,8 +232,8 @@ public class TileLeaves extends TileTreeContainer
                         && (fruitProvider == AlleleFruit.fruitApple.getProvider())) {
                     textureIndexFruits = -1;
                 } else {
-                    textureIndexFruits = fruitProvider.getIconIndex(
-                            genome, worldObj, xCoord, yCoord, zCoord, getRipeningTime(), true);
+                    textureIndexFruits = fruitProvider
+                            .getIconIndex(genome, worldObj, xCoord, yCoord, zCoord, getRipeningTime(), true);
                 }
 
                 ripeningPeriod = (short) tree.getGenome().getFruitProvider().getRipeningPeriod();
@@ -405,10 +406,7 @@ public class TileLeaves extends TileTreeContainer
         data.writeByte(leafState);
 
         if (hasFruit) {
-            String fruitAlleleUID = getTree()
-                    .getGenome()
-                    .getActiveAllele(EnumTreeChromosome.FRUITS)
-                    .getUID();
+            String fruitAlleleUID = getTree().getGenome().getActiveAllele(EnumTreeChromosome.FRUITS).getUID();
             int colourFruits = getFruitColour();
 
             data.writeUTF(fruitAlleleUID);
@@ -527,8 +525,8 @@ public class TileLeaves extends TileTreeContainer
         damage += caterpillar.getGenome().getMetabolism();
 
         IButterflyGenome caterpillarGenome = caterpillar.getGenome();
-        int caterpillarMatureTime =
-                Math.round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
+        int caterpillarMatureTime = Math
+                .round((float) caterpillarGenome.getLifespan() / (caterpillarGenome.getFertility() * 2));
 
         if (maturationTime >= caterpillarMatureTime && caterpillar.canTakeFlight(worldObj, xCoord, yCoord, zCoord)) {
             if (worldObj.isAirBlock(xCoord - 1, yCoord, zCoord)) {

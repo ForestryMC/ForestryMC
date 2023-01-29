@@ -34,7 +34,8 @@ public interface IMutation {
     /**
      * @return Array of {@link IAllele} representing the full default genome of the mutated side.
      *
-     *         Make sure to return a proper array for the species class. Returning an allele of the wrong type will cause cast errors on runtime.
+     *         Make sure to return a proper array for the species class. Returning an allele of the wrong type will
+     *         cause cast errors on runtime.
      */
     IAllele[] getTemplate();
 

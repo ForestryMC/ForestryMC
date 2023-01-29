@@ -1,23 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.items;
+
+import java.awt.Color;
+
+import net.minecraft.item.ItemStack;
 
 import forestry.api.recipes.RecipeManagers;
 import forestry.core.fluids.Fluids;
 import forestry.core.recipes.RecipeUtil;
 import forestry.plugins.PluginCore;
-import java.awt.Color;
-import net.minecraft.item.ItemStack;
 
 public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
+
     COPPER(new Color(0xe3b78e)),
     TIN(new Color(0xE6F8FF)),
     BRONZE(new Color(0xddc276)),
@@ -73,17 +74,19 @@ public enum EnumElectronTube implements ItemOverlay.IOverlayInfo {
         if (stack != null) {
             for (Object stackOreDict : RecipeUtil.getOreDictRecipeEquivalents(stack)) {
                 RecipeManagers.fabricatorManager.addRecipe(
-                        null, Fluids.GLASS.getFluid(500), PluginCore.items.tubes.get(this, 4), new Object[] {
-                            " X ", "#X#", "XXX", '#', "dustRedstone", 'X', stackOreDict
-                        });
+                        null,
+                        Fluids.GLASS.getFluid(500),
+                        PluginCore.items.tubes.get(this, 4),
+                        new Object[] { " X ", "#X#", "XXX", '#', "dustRedstone", 'X', stackOreDict });
             }
         }
     }
 
     public void registerTubeRecipe(String stack) {
         RecipeManagers.fabricatorManager.addRecipe(
-                null, Fluids.GLASS.getFluid(500), PluginCore.items.tubes.get(this, 4), new Object[] {
-                    " X ", "#X#", "XXX", '#', "dustRedstone", 'X', stack
-                });
+                null,
+                Fluids.GLASS.getFluid(500),
+                PluginCore.items.tubes.get(this, 4),
+                new Object[] { " X ", "#X#", "XXX", '#', "dustRedstone", 'X', stack });
     }
 }

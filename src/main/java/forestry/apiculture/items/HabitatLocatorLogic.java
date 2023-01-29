@@ -1,23 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.apiculture.IBee;
-import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.vect.Vect;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,7 +21,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 
+import forestry.api.apiculture.IBee;
+import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.vect.Vect;
+
 public class HabitatLocatorLogic {
+
     private static final int maxChecksPerTick = 100;
     private static final int maxSearchRadiusIterations = 500;
     private static final int spacing = 20;
@@ -148,8 +149,8 @@ public class HabitatLocatorLogic {
         return null;
     }
 
-    private static ChunkCoordinates getChunkCoordinates(
-            Vect pos, World world, Collection<BiomeGenBase> biomesToSearch) {
+    private static ChunkCoordinates getChunkCoordinates(Vect pos, World world,
+            Collection<BiomeGenBase> biomesToSearch) {
         BiomeGenBase biome;
 
         biome = world.getBiomeGenForCoords(pos.x, pos.z);

@@ -1,16 +1,41 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.blocks;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -31,29 +56,6 @@ import forestry.arboriculture.tiles.TileLeaves;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginArboriculture;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import javax.annotation.Nullable;
-import net.minecraft.block.BlockNewLeaf;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProvider, IGrowable {
 
@@ -77,7 +79,7 @@ public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProv
 
     @SideOnly(Side.CLIENT)
     @Override
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
 
         for (ITree tree : TreeManager.treeRoot.getIndividualTemplates()) {
@@ -96,8 +98,8 @@ public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProv
     }
 
     /* DROP HANDLING */
-    // Hack: 	When harvesting leaves we need to get the drops in onBlockHarvested,
-    // 			because Mojang destroys the block and tile before calling getDrops.
+    // Hack: When harvesting leaves we need to get the drops in onBlockHarvested,
+    // because Mojang destroys the block and tile before calling getDrops.
     private final ThreadLocal<ArrayList<ItemStack>> drops = new ThreadLocal<>();
 
     @Override
@@ -138,8 +140,8 @@ public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProv
         return ret;
     }
 
-    private static ArrayList<ItemStack> getLeafDrop(
-            World world, @Nullable GameProfile playerProfile, int x, int y, int z, float saplingModifier, int fortune) {
+    private static ArrayList<ItemStack> getLeafDrop(World world, @Nullable GameProfile playerProfile, int x, int y,
+            int z, float saplingModifier, int fortune) {
         ArrayList<ItemStack> prod = new ArrayList<>();
 
         TileLeaves tile = getLeafTile(world, x, y, z);
@@ -330,15 +332,15 @@ public class BlockForestryLeaves extends BlockNewLeaf implements ITileEntityProv
     }
 
     @Override
-    public boolean onBlockActivated(
-            World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
+            float par8, float par9) {
 
         ItemStack heldItem = player.getHeldItem();
         TileEntity tile = world.getTileEntity(x, y, z);
         IButterfly caterpillar = tile instanceof TileLeaves ? ((TileLeaves) tile).getCaterpillar() : null;
         if (heldItem != null && (heldItem.getItem() instanceof IToolScoop) && caterpillar != null) {
-            ItemStack butterfly =
-                    ButterflyManager.butterflyRoot.getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR.ordinal());
+            ItemStack butterfly = ButterflyManager.butterflyRoot
+                    .getMemberStack(caterpillar, EnumFlutterType.CATERPILLAR.ordinal());
             ItemStackUtil.dropItemStackAsEntity(butterfly, world, x, y, z);
             ((TileLeaves) tile).setCaterpillar(null);
             return true;

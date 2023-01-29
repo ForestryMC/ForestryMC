@@ -1,14 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.tiles;
+
+import java.io.IOException;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.IFabricatorRecipe;
@@ -36,23 +50,10 @@ import forestry.factory.inventory.InventoryFabricator;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.FabricatorRecipeManager;
 import forestry.factory.recipes.FabricatorSmeltingRecipeManager;
-import java.io.IOException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileFabricator extends TilePowered
         implements ISlotPickupWatcher, ILiquidTankTile, IFluidHandler, ISidedInventory {
+
     private static final int MAX_HEAT = 5000;
 
     private final InventoryAdapterTile craftingInventory;
@@ -92,9 +93,8 @@ public class TileFabricator extends TilePowered
         // FIXME 1.8: wont need this
         // move items from legacy crafting area to the new one
         IInventory inventory = getInternalInventory();
-        for (int slot = InventoryFabricator.SLOT_CRAFTING_LEGACY_1;
-                slot < InventoryFabricator.SLOT_CRAFTING_LEGACY_1 + InventoryFabricator.SLOT_CRAFTING_LEGACY_COUNT;
-                slot++) {
+        for (int slot = InventoryFabricator.SLOT_CRAFTING_LEGACY_1; slot
+                < InventoryFabricator.SLOT_CRAFTING_LEGACY_1 + InventoryFabricator.SLOT_CRAFTING_LEGACY_COUNT; slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
             if (stack != null) {
                 inventory.setInventorySlotContents(slot, null);
@@ -221,7 +221,9 @@ public class TileFabricator extends TilePowered
 
         // Remove resources
         ItemStack[] crafting = InventoryUtil.getStacks(
-                craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+                craftingInventory,
+                InventoryGhostCrafting.SLOT_CRAFTING_1,
+                InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
         if (!removeFromInventory(crafting, null, false)) {
             return;
         }
@@ -248,7 +250,9 @@ public class TileFabricator extends TilePowered
 
     private boolean removeFromInventory(ItemStack[] set, EntityPlayer player, boolean doRemove) {
         IInventory inventory = new InventoryMapper(
-                this, InventoryFabricator.SLOT_INVENTORY_1, InventoryFabricator.SLOT_INVENTORY_COUNT);
+                this,
+                InventoryFabricator.SLOT_INVENTORY_1,
+                InventoryFabricator.SLOT_INVENTORY_COUNT);
         return InventoryUtil.removeSets(inventory, 1, set, player, true, true, false, doRemove);
     }
 
@@ -285,8 +289,8 @@ public class TileFabricator extends TilePowered
 
     private int getMeltingPoint() {
         if (this.getStackInSlot(InventoryFabricator.SLOT_METAL) != null) {
-            IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager.findMatchingSmelting(
-                    this.getStackInSlot(InventoryFabricator.SLOT_METAL));
+            IFabricatorSmeltingRecipe smelt = FabricatorSmeltingRecipeManager
+                    .findMatchingSmelting(this.getStackInSlot(InventoryFabricator.SLOT_METAL));
             if (smelt != null) {
                 return smelt.getMeltingPoint();
             }

@@ -18,8 +18,8 @@ public interface IWorldGenInterface {
      *
      * Returned generator classes take an {@link ITreeGenData} in the constructor.
      *
-     * @param ident
-     *            Unique identifier for tree type. Forestry's convention is 'treeSpecies', i.e. 'treeBaobab', 'treeSequoia'.
+     * @param ident Unique identifier for tree type. Forestry's convention is 'treeSpecies', i.e. 'treeBaobab',
+     *              'treeSequoia'.
      * @return All generators matching the given ident.
      */
     Class<? extends WorldGenerator>[] getTreeGenerators(String ident);

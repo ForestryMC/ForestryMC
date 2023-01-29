@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins.compat;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
@@ -29,13 +36,6 @@ import forestry.farming.logic.FarmableReference;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginCore;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(
         pluginID = "Natura",
@@ -97,11 +97,15 @@ public class PluginNatura extends ForestryPlugin {
 
             ItemStack saplingWild = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
             RecipeUtil.addFermenterRecipes(
-                    saplingWild, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+                    saplingWild,
+                    ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"),
+                    Fluids.BIOMASS);
 
             String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
             FMLInterModComms.sendMessage(
-                    Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+                    Constants.MOD,
+                    "add-farmable-sapling",
+                    String.format("farmArboreal@%s.-1", saplingName));
         }
 
         berryBlight = GameRegistry.findItemStack(NATURA, "berryBlight", 1);
@@ -218,7 +222,8 @@ public class PluginNatura extends ForestryPlugin {
 
         int amount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
         for (ItemStack aSeedList : seedList) {
-            RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] {aSeedList}, Fluids.SEEDOIL.getFluid(amount));
+            RecipeManagers.squeezerManager
+                    .addRecipe(10, new ItemStack[] { aSeedList }, Fluids.SEEDOIL.getFluid(amount));
         }
 
         Block cropBlock = GameRegistry.findBlock(NATURA, "N Crops");
@@ -257,7 +262,7 @@ public class PluginNatura extends ForestryPlugin {
         ItemStack mulch = PluginCore.items.mulch.getItemStack();
         RecipeManagers.squeezerManager.addRecipe(
                 10,
-                new ItemStack[] {netherFood},
+                new ItemStack[] { netherFood },
                 Fluids.JUICE.getFluid(amount),
                 mulch,
                 ForestryAPI.activeMode.getIntegerSetting("squeezer.mulch.apple"));
@@ -266,18 +271,21 @@ public class PluginNatura extends ForestryPlugin {
         amount = Math.max(amount, 1); // Produce at least 1 mb of juice.
 
         for (ItemStack berry : berries) {
-            RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[] {berry}, Fluids.JUICE.getFluid(amount));
+            RecipeManagers.squeezerManager.addRecipe(3, new ItemStack[] { berry }, Fluids.JUICE.getFluid(amount));
         }
 
         if (itemBarley != null) {
             RecipeUtil.addFermenterRecipes(
-                    itemBarley, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
+                    itemBarley,
+                    ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"),
+                    Fluids.BIOMASS);
             if (ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat").stackSize > 0) {
                 ItemStack compostWheat = ForestryAPI.activeMode.getStackSetting("recipe.output.compost.wheat");
                 RecipeUtil.addRecipe(compostWheat, " X ", "X#X", " X ", '#', Blocks.dirt, 'X', itemBarley);
             }
             FuelManager.moistenerResource.put(
-                    itemBarley, new MoistenerFuel(itemBarley, PluginCore.items.mouldyWheat.getItemStack(), 0, 300));
+                    itemBarley,
+                    new MoistenerFuel(itemBarley, PluginCore.items.mouldyWheat.getItemStack(), 0, 300));
         }
     }
 }

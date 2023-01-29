@@ -1,16 +1,32 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
+import java.lang.ref.WeakReference;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayer;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.core.ForestryEvent;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAlleleSpecies;
@@ -20,20 +36,6 @@ import forestry.api.genetics.IMutation;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.core.network.packets.PacketGenomeTrackerSync;
 import forestry.core.proxy.Proxies;
-import java.lang.ref.WeakReference;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import javax.annotation.Nullable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
 
 public abstract class BreedingTracker extends WorldSavedData implements IBreedingTracker {
 
@@ -110,9 +112,7 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         }
     }
 
-    private void syncToPlayer(
-            Collection<String> discoveredSpecies,
-            Collection<String> discoveredMutations,
+    private void syncToPlayer(Collection<String> discoveredSpecies, Collection<String> discoveredMutations,
             Collection<String> researchedMutations) {
         World world = this.world != null ? this.world.get() : null;
         if (world != null && username != null && username.getName() != null) {
@@ -158,11 +158,8 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         writeToNBT(nbttagcompound, discoveredSpecies, discoveredMutations, researchedMutations);
     }
 
-    private void writeToNBT(
-            NBTTagCompound nbtTagCompound,
-            Collection<String> discoveredSpecies,
-            Collection<String> discoveredMutations,
-            Collection<String> researchedMutations) {
+    private void writeToNBT(NBTTagCompound nbtTagCompound, Collection<String> discoveredSpecies,
+            Collection<String> discoveredMutations, Collection<String> researchedMutations) {
         if (modeName != null && !modeName.isEmpty()) {
             nbtTagCompound.setString(MODE_NAME_KEY, modeName);
         }
@@ -174,8 +171,8 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         writeValuesToNBT(nbtTagCompound, researchedMutations, RESEARCHED_COUNT_KEY, RESEARCHED_KEY);
     }
 
-    private static void readValuesFromNBT(
-            NBTTagCompound nbttagcompound, Set<String> values, String countKey, String key) {
+    private static void readValuesFromNBT(NBTTagCompound nbttagcompound, Set<String> values, String countKey,
+            String key) {
         if (nbttagcompound.hasKey(countKey)) {
             final int count = nbttagcompound.getInteger(countKey);
             for (int i = 0; i < count; i++) {
@@ -187,8 +184,8 @@ public abstract class BreedingTracker extends WorldSavedData implements IBreedin
         }
     }
 
-    private static void writeValuesToNBT(
-            NBTTagCompound nbttagcompound, Collection<String> values, String countKey, String key) {
+    private static void writeValuesToNBT(NBTTagCompound nbttagcompound, Collection<String> values, String countKey,
+            String key) {
         final int count = values.size();
         nbttagcompound.setInteger(countKey, count);
         Iterator<String> iterator = values.iterator();

@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.energy.render;
+
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
 import forestry.core.proxy.Proxies;
@@ -17,13 +24,6 @@ import forestry.core.render.IBlockRenderer;
 import forestry.core.tiles.TemperatureState;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.Log;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.opengl.GL11;
 
 public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -85,16 +85,13 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
     public RenderEngine(String baseTexture) {
         this();
 
-        textures = new ResourceLocation[] {
-            new ForestryResource(baseTexture + "base.png"),
-            new ForestryResource(baseTexture + "piston.png"),
-            new ForestryResource(baseTexture + "extension.png"),
-            new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_highest.png"),
-            new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_higher.png"),
-            new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_high.png"),
-            new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
-            new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"),
-        };
+        textures = new ResourceLocation[] { new ForestryResource(baseTexture + "base.png"),
+                new ForestryResource(baseTexture + "piston.png"), new ForestryResource(baseTexture + "extension.png"),
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_highest.png"),
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_higher.png"),
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_high.png"),
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_medium.png"),
+                new ForestryResource(Constants.TEXTURE_PATH_BLOCKS + "/engine_trunk_low.png"), };
     }
 
     @Override
@@ -112,8 +109,8 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
         }
     }
 
-    private void render(
-            TemperatureState state, float progress, ForgeDirection orientation, double x, double y, double z) {
+    private void render(TemperatureState state, float progress, ForgeDirection orientation, double x, double y,
+            double z) {
 
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -134,8 +131,8 @@ public class RenderEngine extends TileEntitySpecialRenderer implements IBlockRen
 
         float tfactor = step / 16;
 
-        float[] angle = {0, 0, 0};
-        float[] translate = {orientation.offsetX, orientation.offsetY, orientation.offsetZ};
+        float[] angle = { 0, 0, 0 };
+        float[] translate = { orientation.offsetX, orientation.offsetY, orientation.offsetZ };
 
         switch (orientation) {
             case EAST:

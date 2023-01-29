@@ -1,16 +1,31 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.apiculture.*;
 import forestry.api.core.BiomeHelper;
 import forestry.api.core.EnumHumidity;
@@ -38,20 +53,6 @@ import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.Log;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.vect.Vect;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class Bee extends IndividualLiving implements IBee {
 
@@ -280,8 +281,8 @@ public class Bee extends IndividualLiving implements IBee {
             EnumTemperature beeBaseTemperature = species.getTemperature();
             EnumTolerance beeToleranceTemperature = genome.getToleranceTemp();
 
-            if (!AlleleManager.climateHelper.isWithinLimits(
-                    actualTemperature, beeBaseTemperature, beeToleranceTemperature)) {
+            if (!AlleleManager.climateHelper
+                    .isWithinLimits(actualTemperature, beeBaseTemperature, beeToleranceTemperature)) {
                 if (beeBaseTemperature.ordinal() > actualTemperature.ordinal()) {
                     errorStates.add(EnumErrorCode.TOO_COLD);
                 } else {
@@ -368,10 +369,9 @@ public class Bee extends IndividualLiving implements IBee {
         IAlleleBeeSpecies primary = genome.getPrimary();
         IAlleleBeeSpecies secondary = genome.getSecondary();
         if (!isPureBred(EnumBeeChromosome.SPECIES)) {
-            list.add(EnumChatFormatting.BLUE
-                    + StringUtil.localize("bees.hybrid")
-                            .replaceAll("%PRIMARY", primary.getName())
-                            .replaceAll("%SECONDARY", secondary.getName()));
+            list.add(
+                    EnumChatFormatting.BLUE + StringUtil.localize("bees.hybrid")
+                            .replaceAll("%PRIMARY", primary.getName()).replaceAll("%SECONDARY", secondary.getName()));
         }
 
         if (generation > 0) {
@@ -386,19 +386,18 @@ public class Bee extends IndividualLiving implements IBee {
                 rarity = EnumRarity.common;
             }
 
-            String generationString =
-                    rarity.rarityColor + StringUtil.localizeAndFormat("gui.beealyzer.generations", generation);
+            String generationString = rarity.rarityColor
+                    + StringUtil.localizeAndFormat("gui.beealyzer.generations", generation);
             list.add(generationString);
         }
 
         IAllele speedAllele = genome.getActiveAllele(EnumBeeChromosome.SPEED);
-        IAlleleTolerance tempToleranceAllele =
-                (IAlleleTolerance) getGenome().getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
-        IAlleleTolerance humidToleranceAllele =
-                (IAlleleTolerance) getGenome().getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
+        IAlleleTolerance tempToleranceAllele = (IAlleleTolerance) getGenome()
+                .getActiveAllele(EnumBeeChromosome.TEMPERATURE_TOLERANCE);
+        IAlleleTolerance humidToleranceAllele = (IAlleleTolerance) getGenome()
+                .getActiveAllele(EnumBeeChromosome.HUMIDITY_TOLERANCE);
 
-        String unlocalizedCustomSpeed =
-                "tooltip.worker." + speedAllele.getUnlocalizedName().replaceAll("(.*)\\.", "");
+        String unlocalizedCustomSpeed = "tooltip.worker." + speedAllele.getUnlocalizedName().replaceAll("(.*)\\.", "");
         String speed;
         if (StringUtil.canTranslate(unlocalizedCustomSpeed)) {
             speed = StringUtil.localize(unlocalizedCustomSpeed);
@@ -406,13 +405,15 @@ public class Bee extends IndividualLiving implements IBee {
             speed = speedAllele.getName() + ' ' + StringUtil.localize("gui.worker");
         }
 
-        String lifespan =
-                genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + ' ' + StringUtil.localize("gui.life");
+        String lifespan = genome.getActiveAllele(EnumBeeChromosome.LIFESPAN).getName() + ' '
+                + StringUtil.localize("gui.life");
         String tempTolerance = EnumChatFormatting.GREEN + "T: "
-                + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature()) + " / "
+                + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getTemperature())
+                + " / "
                 + tempToleranceAllele.getName();
         String humidTolerance = EnumChatFormatting.GREEN + "H: "
-                + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity()) + " / "
+                + AlleleManager.climateHelper.toDisplay(genome.getPrimary().getHumidity())
+                + " / "
                 + humidToleranceAllele.getName();
         String flowers = genome.getFlowerProvider().getDescription();
         String jubilance = null;
@@ -441,8 +442,8 @@ public class Bee extends IndividualLiving implements IBee {
     public void age(World world, float housingLifespanModifier) {
         IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
         IBeeModifier beeModifier = mode.getBeeModifier();
-        float finalModifier =
-                housingLifespanModifier * beeModifier.getLifespanModifier(genome, mate, housingLifespanModifier);
+        float finalModifier = housingLifespanModifier
+                * beeModifier.getLifespanModifier(genome, mate, housingLifespanModifier);
 
         super.age(world, finalModifier);
     }
@@ -530,8 +531,7 @@ public class Bee extends IndividualLiving implements IBee {
 
         // / Specialty products
         if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
-            for (Map.Entry<ItemStack, Float> entry :
-                    primary.getSpecialtyChances().entrySet()) {
+            for (Map.Entry<ItemStack, Float> entry : primary.getSpecialtyChances().entrySet()) {
                 if (housing.getWorld().rand.nextFloat() < getFinalChance(entry.getValue(), speed, prodModifier, 1f)) {
                     products.add(entry.getKey().copy());
                 }
@@ -540,22 +540,20 @@ public class Bee extends IndividualLiving implements IBee {
 
         ItemStack[] productsArray = products.toArray(new ItemStack[products.size()]);
         ChunkCoordinates housingCoordinates = housing.getCoordinates();
-        return genome.getFlowerProvider()
-                .affectProducts(
-                        housing.getWorld(),
-                        this,
-                        housingCoordinates.posX,
-                        housingCoordinates.posY,
-                        housingCoordinates.posZ,
-                        productsArray);
+        return genome.getFlowerProvider().affectProducts(
+                housing.getWorld(),
+                this,
+                housingCoordinates.posX,
+                housingCoordinates.posY,
+                housingCoordinates.posZ,
+                productsArray);
     }
 
     public static float getFinalChance(float chance, float beeSpeed, float productionModifier, float t) {
         chance *= 100f;
         return (float) (((1f + t / 6f) * Math.sqrt(chance) * 2f * (1f + beeSpeed)
-                        + Math.pow(productionModifier, Math.cbrt(chance))
-                        - 3f)
-                / 100f);
+                + Math.pow(productionModifier, Math.cbrt(chance))
+                - 3f) / 100f);
     }
 
     /* REPRODUCTION */
@@ -588,10 +586,12 @@ public class Bee extends IndividualLiving implements IBee {
         List<IBee> bees = new ArrayList<>();
 
         ChunkCoordinates housingCoordinates = housing.getCoordinates();
-        int toCreate = BeeManager.beeRoot
-                .getBeekeepingMode(world)
-                .getFinalFertility(
-                        this, world, housingCoordinates.posX, housingCoordinates.posY, housingCoordinates.posZ);
+        int toCreate = BeeManager.beeRoot.getBeekeepingMode(world).getFinalFertility(
+                this,
+                world,
+                housingCoordinates.posX,
+                housingCoordinates.posY,
+                housingCoordinates.posZ);
 
         if (toCreate <= 0) {
             toCreate = 1;
@@ -764,8 +764,8 @@ public class Bee extends IndividualLiving implements IBee {
             Vect randomPos = Vect.getRandomPositionInArea(random, area);
             Vect posBlock = Vect.add(housingPos, randomPos, offset);
 
-            ICheckPollinatable checkPollinatable =
-                    GeneticsUtil.getCheckPollinatable(world, posBlock.x, posBlock.y, posBlock.z);
+            ICheckPollinatable checkPollinatable = GeneticsUtil
+                    .getCheckPollinatable(world, posBlock.x, posBlock.y, posBlock.z);
             if (checkPollinatable == null) {
                 continue;
             }
@@ -777,8 +777,8 @@ public class Bee extends IndividualLiving implements IBee {
                 continue;
             }
 
-            IPollinatable realPollinatable =
-                    GeneticsUtil.getOrCreatePollinatable(housing.getOwner(), world, posBlock.x, posBlock.y, posBlock.z);
+            IPollinatable realPollinatable = GeneticsUtil
+                    .getOrCreatePollinatable(housing.getOwner(), world, posBlock.x, posBlock.y, posBlock.z);
 
             if (realPollinatable != null) {
                 realPollinatable.mateWith(pollen);
@@ -814,8 +814,8 @@ public class Bee extends IndividualLiving implements IBee {
             Vect randomPos = Vect.getRandomPositionInArea(random, area);
             Vect posBlock = Vect.add(housingPos, randomPos, offset);
 
-            if (FlowerManager.flowerRegistry.growFlower(
-                    provider.getFlowerType(), world, this, posBlock.x, posBlock.y, posBlock.z)) {
+            if (FlowerManager.flowerRegistry
+                    .growFlower(provider.getFlowerType(), world, this, posBlock.x, posBlock.y, posBlock.z)) {
                 break;
             }
         }

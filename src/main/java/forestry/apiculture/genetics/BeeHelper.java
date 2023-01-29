@@ -1,16 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.Map.Entry;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -37,15 +47,6 @@ import forestry.apiculture.BeeHousingModifier;
 import forestry.apiculture.BeekeepingLogic;
 import forestry.core.genetics.SpeciesRoot;
 import forestry.plugins.PluginApiculture;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.Map.Entry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class BeeHelper extends SpeciesRoot implements IBeeRoot {
 
@@ -66,8 +67,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
     public int getSpeciesCount() {
         if (beeSpeciesCount < 0) {
             beeSpeciesCount = 0;
-            for (Entry<String, IAllele> entry :
-                    AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
+            for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
                 if (entry.getValue() instanceof IAlleleBeeSpecies) {
                     if (((IAlleleBeeSpecies) entry.getValue()).isCounted()) {
                         beeSpeciesCount++;
@@ -314,8 +314,7 @@ public class BeeHelper extends SpeciesRoot implements IBeeRoot {
             }
         }
 
-        FMLCommonHandler.instance()
-                .getFMLLogger()
+        FMLCommonHandler.instance().getFMLLogger()
                 .debug("Failed to find a beekeeping mode called '%s', reverting to fallback.");
         return beekeepingModes.get(0);
     }

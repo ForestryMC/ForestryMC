@@ -1,14 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.tiles;
+
+import java.io.IOException;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
@@ -32,20 +43,10 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.plugins.PluginManager;
-import java.io.IOException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileAnalyzer extends TilePowered
         implements ISidedInventory, ILiquidTankTile, IFluidHandler, IItemStackDisplay {
+
     private static final int TIME_TO_ANALYZE = 125;
     private static final int HONEY_REQUIRED = 100;
     private static final int ENERGY_PER_WORK_CYCLE = 20320;
@@ -65,9 +66,13 @@ public class TileAnalyzer extends TilePowered
         resourceTank = new FilteredTank(Constants.PROCESSOR_TANK_CAPACITY, Fluids.HONEY.getFluid());
         tankManager = new TankManager(this, resourceTank);
         invInput = new InventoryMapper(
-                getInternalInventory(), InventoryAnalyzer.SLOT_INPUT_1, InventoryAnalyzer.SLOT_INPUT_COUNT);
+                getInternalInventory(),
+                InventoryAnalyzer.SLOT_INPUT_1,
+                InventoryAnalyzer.SLOT_INPUT_COUNT);
         invOutput = new InventoryMapper(
-                getInternalInventory(), InventoryAnalyzer.SLOT_OUTPUT_1, InventoryAnalyzer.SLOT_OUTPUT_COUNT);
+                getInternalInventory(),
+                InventoryAnalyzer.SLOT_OUTPUT_1,
+                InventoryAnalyzer.SLOT_OUTPUT_COUNT);
     }
 
     /* SAVING & LOADING */

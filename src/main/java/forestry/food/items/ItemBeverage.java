@@ -1,23 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.food.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.food.IBeverageEffect;
-import forestry.core.config.Config;
-import forestry.core.items.ItemForestryFood;
-import forestry.core.items.ItemOverlay;
-import forestry.food.BeverageEffect;
 import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,8 +20,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.food.IBeverageEffect;
+import forestry.core.config.Config;
+import forestry.core.items.ItemForestryFood;
+import forestry.core.items.ItemOverlay;
+import forestry.food.BeverageEffect;
+
 public class ItemBeverage extends ItemForestryFood {
+
     public interface IBeverageInfo extends ItemOverlay.IOverlayInfo {
+
         int getHeal();
 
         float getSaturation();
@@ -121,7 +123,7 @@ public class ItemBeverage extends ItemForestryFood {
         return itemstack;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
         for (int i = 0; i < beverages.length; i++) {
@@ -131,7 +133,7 @@ public class ItemBeverage extends ItemForestryFood {
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
         List<IBeverageEffect> effects = BeverageEffect.loadEffects(itemstack);

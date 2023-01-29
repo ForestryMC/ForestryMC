@@ -1,14 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology;
+
+import net.minecraft.world.World;
 
 import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
@@ -17,22 +17,18 @@ import forestry.api.lepidopterology.IButterfly;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
-import net.minecraft.world.World;
 
 public class ButterflySpawner implements ILeafTickHandler {
 
     @Override
     public boolean onRandomLeafTick(ITree tree, World world, int x, int y, int z, boolean isDestroyed) {
 
-        if (world.rand.nextFloat()
-                >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
+        if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
             return false;
         }
 
-        IButterfly spawn = ButterflyManager.butterflyRoot
-                .getIndividualTemplates()
-                .get(world.rand.nextInt(
-                        ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
+        IButterfly spawn = ButterflyManager.butterflyRoot.getIndividualTemplates()
+                .get(world.rand.nextInt(ButterflyManager.butterflyRoot.getIndividualTemplates().size()));
         if (world.rand.nextFloat() >= spawn.getGenome().getPrimary().getRarity() * 0.5f) {
             return false;
         }

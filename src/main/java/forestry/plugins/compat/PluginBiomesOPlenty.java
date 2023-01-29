@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins.compat;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
@@ -31,12 +37,6 @@ import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginCore;
 import forestry.plugins.PluginManager;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(
         pluginID = "BiomesOPlenty",
@@ -109,12 +109,13 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
             Item saplingItem = GameRegistry.findItem(BoP, key);
             String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
             FMLInterModComms.sendMessage(
-                    Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+                    Constants.MOD,
+                    "add-farmable-sapling",
+                    String.format("farmArboreal@%s.-1", saplingName));
         }
 
         if (saplings != null && persimmon != null) {
-            Farmables.farmables
-                    .get(FarmableReference.Arboreal.get())
+            Farmables.farmables.get(FarmableReference.Arboreal.get())
                     .add(new FarmableGenericSapling(saplings, 15, persimmon));
         }
 
@@ -123,8 +124,7 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
             Item boPTurnipSeeds = GameRegistry.findItem(BoP, "turnipSeeds");
             ItemStack boPTurnipSeedStack = new ItemStack(boPTurnipSeeds, 1, 0);
             if (boPTurnipSeeds != null) {
-                Farmables.farmables
-                        .get(FarmableReference.Vegetables.get())
+                Farmables.farmables.get(FarmableReference.Vegetables.get())
                         .add(new FarmableGenericCrop(boPTurnipSeedStack, boPTurnip, 7));
             }
 
@@ -137,12 +137,16 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
 
         if (saplings != null) {
             RecipeUtil.addFermenterRecipes(
-                    new ItemStack(saplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);
+                    new ItemStack(saplings, 1, OreDictionary.WILDCARD_VALUE),
+                    saplingYield,
+                    Fluids.BIOMASS);
         }
 
         if (colorizedSaplings != null) {
             RecipeUtil.addFermenterRecipes(
-                    new ItemStack(colorizedSaplings, 1, OreDictionary.WILDCARD_VALUE), saplingYield, Fluids.BIOMASS);
+                    new ItemStack(colorizedSaplings, 1, OreDictionary.WILDCARD_VALUE),
+                    saplingYield,
+                    Fluids.BIOMASS);
         }
     }
 
@@ -153,26 +157,26 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
         if (misc != null) {
             ItemStack pinecone = new ItemStack(misc, 1, 13);
             if (pinecone != null) {
-                RecipeManagers.squeezerManager.addRecipe(
-                        10, new ItemStack[] {pinecone}, Fluids.SEEDOIL.getFluid(3 * amount));
+                RecipeManagers.squeezerManager
+                        .addRecipe(10, new ItemStack[] { pinecone }, Fluids.SEEDOIL.getFluid(3 * amount));
             }
         }
 
         if (food != null) {
-            RecipeManagers.squeezerManager.addRecipe(
-                    10, new ItemStack[] {new ItemStack(food)}, Fluids.JUICE.getFluid(50), mulch, 5);
+            RecipeManagers.squeezerManager
+                    .addRecipe(10, new ItemStack[] { new ItemStack(food) }, Fluids.JUICE.getFluid(50), mulch, 5);
         }
 
         if (persimmon != null) {
-            RecipeManagers.squeezerManager.addRecipe(
-                    10, new ItemStack[] {persimmon}, Fluids.JUICE.getFluid(200), mulch, 20);
+            RecipeManagers.squeezerManager
+                    .addRecipe(10, new ItemStack[] { persimmon }, Fluids.JUICE.getFluid(200), mulch, 20);
         }
 
         ItemStack boPTurnipSeedStack = GameRegistry.findItemStack(BoP, "turnipSeeds", 1);
         if (boPTurnipSeedStack != null) {
             if (PluginManager.Module.FACTORY.isEnabled()) {
-                RecipeManagers.squeezerManager.addRecipe(
-                        10, new ItemStack[] {boPTurnipSeedStack}, Fluids.SEEDOIL.getFluid(amount));
+                RecipeManagers.squeezerManager
+                        .addRecipe(10, new ItemStack[] { boPTurnipSeedStack }, Fluids.SEEDOIL.getFluid(amount));
             }
         }
     }
@@ -181,7 +185,11 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
         Block flowers = GameRegistry.findBlock(BoP, "flowers");
         if (flowers != null) {
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // Clover
+                    flowers,
+                    0,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // Clover
             FlowerManager.flowerRegistry.registerPlantableFlower(
                     flowers,
                     1,
@@ -189,12 +197,20 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
                     FlowerManager.FlowerTypeVanilla,
                     FlowerManager.FlowerTypeSnow,
                     FlowerManager.FlowerTypeMushrooms); // Swampflower
-            //			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 2, 1.0, FlowerManager.FlowerTypeNether);
-            //		//Deathbloom
+            // FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 2, 1.0, FlowerManager.FlowerTypeNether);
+            // //Deathbloom
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 3, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // GlowFlower
+                    flowers,
+                    3,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // GlowFlower
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 4, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // Blue Hydrangea
+                    flowers,
+                    4,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // Blue Hydrangea
             FlowerManager.flowerRegistry.registerPlantableFlower(
                     flowers,
                     5,
@@ -203,58 +219,89 @@ public class PluginBiomesOPlenty extends ForestryPlugin {
                     FlowerManager.FlowerTypeSnow,
                     FlowerManager.FlowerTypeJungle); // Orange Cosmos
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 6, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // Pink Daffodil
+                    flowers,
+                    6,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // Pink Daffodil
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 7, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // WildFlower
+                    flowers,
+                    7,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // WildFlower
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 8, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // Violet
+                    flowers,
+                    8,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // Violet
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 9, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // White Anemone
+                    flowers,
+                    9,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // White Anemone
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 10, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // Waterlily
+                    flowers,
+                    10,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // Waterlily
             FlowerManager.flowerRegistry.registerPlantableFlower(
                     flowers,
                     11,
                     1.0,
                     FlowerManager.FlowerTypeVanilla,
                     FlowerManager.FlowerTypeSnow); // EnderLotus (does not actually spawn in the end)
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 12, 1.0, FlowerManager.FlowerTypeCacti); // Bromeliad
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 13, 1.0, FlowerManager.FlowerTypeNether); // EyeBulb
+            // FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 14, 1.0, FlowerManager.FlowerTypeNether);
+            // // Unlisted top of the eyebulb
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 12, 1.0, FlowerManager.FlowerTypeCacti); // Bromeliad
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 13, 1.0, FlowerManager.FlowerTypeNether); // EyeBulb
-            //			FlowerManager.flowerRegistry.registerPlantableFlower(flowers, 14, 1.0, FlowerManager.FlowerTypeNether);
-            //		// Unlisted top of the eyebulb
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers, 15, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // Dandelion Puff
+                    flowers,
+                    15,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // Dandelion Puff
         }
 
         Block flowers2 = GameRegistry.findBlock(BoP, "flowers2");
         if (flowers2 != null) {
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 0, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeJungle); // Pink Hibiscus
+                    flowers2,
+                    0,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeJungle); // Pink Hibiscus
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 1, 1.0, FlowerManager.FlowerTypeVanilla); // Lily
+                                                                                                                     // of
+                                                                                                                     // the
+                                                                                                                     // Valley
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 2, 1.0, FlowerManager.FlowerTypeNether); // Burning
+                                                                                                                    // Blososm
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 3, 1.0, FlowerManager.FlowerTypeVanilla); // Lavender
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 4, 1.0, FlowerManager.FlowerTypeVanilla); // Goldenrod
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 5, 1.0, FlowerManager.FlowerTypeVanilla); // Bluebells
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 6, 1.0, FlowerManager.FlowerTypeVanilla); // Miner's
+                                                                                                                     // delight
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 1, 1.0, FlowerManager.FlowerTypeVanilla); // Lily of the Valley
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 2, 1.0, FlowerManager.FlowerTypeNether); // Burning Blososm
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 3, 1.0, FlowerManager.FlowerTypeVanilla); // Lavender
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 4, 1.0, FlowerManager.FlowerTypeVanilla); // Goldenrod
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 5, 1.0, FlowerManager.FlowerTypeVanilla); // Bluebells
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 6, 1.0, FlowerManager.FlowerTypeVanilla); // Miner's delight
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 7, 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow); // Icy Iris
-            FlowerManager.flowerRegistry.registerPlantableFlower(
-                    flowers2, 8, 1.0, FlowerManager.FlowerTypeVanilla); // Rose
+                    flowers2,
+                    7,
+                    1.0,
+                    FlowerManager.FlowerTypeVanilla,
+                    FlowerManager.FlowerTypeSnow); // Icy Iris
+            FlowerManager.flowerRegistry.registerPlantableFlower(flowers2, 8, 1.0, FlowerManager.FlowerTypeVanilla); // Rose
         }
-        // Toadstool 0 Portobello 1 Blue Milk cap 2 Glowshroom 3 flat mushroom 4 shadow shroom 5       'plants:12' tiny
+        // Toadstool 0 Portobello 1 Blue Milk cap 2 Glowshroom 3 flat mushroom 4 shadow shroom 5 'plants:12' tiny
         // cactus
         Block mushrooms = GameRegistry.findBlock(BoP, "mushrooms");
         if (mushrooms != null) {
             FlowerManager.flowerRegistry.registerPlantableFlower(
-                    mushrooms, OreDictionary.WILDCARD_VALUE, 1.0, FlowerManager.FlowerTypeMushrooms);
+                    mushrooms,
+                    OreDictionary.WILDCARD_VALUE,
+                    1.0,
+                    FlowerManager.FlowerTypeMushrooms);
             FlowerManager.flowerRegistry.registerPlantableFlower(mushrooms, 3, 1.0, FlowerManager.FlowerTypeNether);
         }
         Block plants = GameRegistry.findBlock(BoP, "plants");

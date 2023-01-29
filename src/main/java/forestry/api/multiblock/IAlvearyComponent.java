@@ -10,11 +10,12 @@ import forestry.api.apiculture.IBeeModifier;
 import forestry.api.core.IClimateControlled;
 
 /**
- * Needs to be implemented by TileEntities that want to be part of an alveary.
- * The sub-interfaces can be implemented to alter the operation of the alveary.
- * They are automatically detected and handled by the alveary when they join its structure.
+ * Needs to be implemented by TileEntities that want to be part of an alveary. The sub-interfaces can be implemented to
+ * alter the operation of the alveary. They are automatically detected and handled by the alveary when they join its
+ * structure.
  */
 public interface IAlvearyComponent<T extends IMultiblockLogicAlveary> extends IMultiblockComponent {
+
     /**
      * @return the multiblock logic for this component
      */
@@ -24,6 +25,7 @@ public interface IAlvearyComponent<T extends IMultiblockLogicAlveary> extends IM
      * Implemented by alveary parts to apply a beeListener to the completed structure.
      */
     interface BeeListener extends IAlvearyComponent {
+
         IBeeListener getBeeListener();
     }
 
@@ -31,6 +33,7 @@ public interface IAlvearyComponent<T extends IMultiblockLogicAlveary> extends IM
      * Implemented by alveary parts to apply a beeModifier to the completed structure.
      */
     interface BeeModifier extends IAlvearyComponent {
+
         IBeeModifier getBeeModifier();
     }
 
@@ -38,10 +41,12 @@ public interface IAlvearyComponent<T extends IMultiblockLogicAlveary> extends IM
      * Implemented by alveary parts to apply a climate change to the completed structure.
      */
     interface Climatiser extends IAlvearyComponent {
+
         /**
          * Called every tick by the alveary.
+         * 
          * @param tickCount the number of ticks in the world
-         * @param alveary the climate controlled alveary
+         * @param alveary   the climate controlled alveary
          */
         void changeClimate(int tickCount, IClimateControlled alveary);
     }
@@ -50,6 +55,7 @@ public interface IAlvearyComponent<T extends IMultiblockLogicAlveary> extends IM
      * Implemented by alveary parts to receive ticks from the completed structure.
      */
     interface Active extends IAlvearyComponent {
+
         void updateServer(int tickCount);
 
         void updateClient(int tickCount);

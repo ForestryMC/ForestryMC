@@ -1,17 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory;
 
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.recipes.ICarpenterManager;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.ICentrifugeManager;
@@ -30,15 +37,11 @@ import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.IStillManager;
 import forestry.api.recipes.IStillRecipe;
-import java.util.Map;
-import java.util.Set;
-import javax.annotation.Nullable;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class DummyManagers {
 
     public abstract static class DummyCraftingProvider<T extends IForestryRecipe> implements ICraftingProvider<T> {
+
         @Override
         public boolean addRecipe(T recipe) {
             return false;
@@ -70,8 +73,8 @@ public class DummyManagers {
         public void addRecipe(int packagingTime, ItemStack box, ItemStack product, Object... materials) {}
 
         @Override
-        public void addRecipe(
-                int packagingTime, FluidStack liquid, ItemStack box, ItemStack product, Object... materials) {}
+        public void addRecipe(int packagingTime, FluidStack liquid, ItemStack box, ItemStack product,
+                Object... materials) {}
     }
 
     public static class DummyCentrifugeManager extends DummyCraftingProvider<ICentrifugeRecipe>
@@ -102,8 +105,8 @@ public class DummyManagers {
             implements IFermenterManager {
 
         @Override
-        public void addRecipe(
-                ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {}
+        public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output,
+                FluidStack liquid) {}
 
         @Override
         public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {}
@@ -120,15 +123,15 @@ public class DummyManagers {
             implements ISqueezerManager {
 
         @Override
-        public void addRecipe(
-                int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants, int chance) {}
+        public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, ItemStack remnants,
+                int chance) {}
 
         @Override
         public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid) {}
 
         @Override
-        public void addContainerRecipe(
-                int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {}
+        public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants,
+                float chance) {}
     }
 
     public static class DummyStillManager extends DummyCraftingProvider<IStillRecipe> implements IStillManager {

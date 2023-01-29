@@ -13,6 +13,7 @@ import forestry.api.core.INBTTagable;
  * @author SirSengir
  */
 public interface IEffectData extends INBTTagable {
+
     void setInteger(int index, int val);
 
     void setFloat(int index, float val);

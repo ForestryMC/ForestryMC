@@ -1,16 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map.Entry;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IChromosomeType;
@@ -29,14 +38,6 @@ import forestry.core.genetics.SpeciesRoot;
 import forestry.core.utils.EntityUtil;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map.Entry;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
 
@@ -57,8 +58,7 @@ public class ButterflyHelper extends SpeciesRoot implements IButterflyRoot {
     public int getSpeciesCount() {
         if (butterflySpeciesCount < 0) {
             butterflySpeciesCount = 0;
-            for (Entry<String, IAllele> entry :
-                    AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
+            for (Entry<String, IAllele> entry : AlleleManager.alleleRegistry.getRegisteredAlleles().entrySet()) {
                 if (entry.getValue() instanceof IAlleleButterflySpecies) {
                     if (((IAlleleButterflySpecies) entry.getValue()).isCounted()) {
                         butterflySpeciesCount++;

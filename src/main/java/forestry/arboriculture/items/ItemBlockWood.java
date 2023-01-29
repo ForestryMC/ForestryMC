@@ -1,14 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.items;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,41 +29,25 @@ import forestry.arboriculture.tiles.TileWood;
 import forestry.core.config.Constants;
 import forestry.core.items.ItemBlockForestry;
 import forestry.core.utils.StringUtil;
-import javax.annotation.Nullable;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 
 public class ItemBlockWood extends ItemBlockForestry {
+
     private static final String LEGACY_WOOD_TYPE_KEY = "WoodType";
 
     public ItemBlockWood(Block block) {
         super(block);
     }
 
-    public static boolean placeWood(
-            ItemStack stack, @Nullable EntityPlayer player, World world, int x, int y, int z, int metadata) {
+    public static boolean placeWood(ItemStack stack, @Nullable EntityPlayer player, World world, int x, int y, int z,
+            int metadata) {
         EnumWoodType woodType = getWoodType(stack);
         Block block = Block.getBlockFromItem(stack.getItem());
 
         return placeWood(stack, woodType, block, player, world, x, y, z, metadata);
     }
 
-    public static boolean placeWood(
-            ItemStack stack,
-            EnumWoodType woodType,
-            Block block,
-            @Nullable EntityPlayer player,
-            World world,
-            int x,
-            int y,
-            int z,
-            int metadata) {
+    public static boolean placeWood(ItemStack stack, EnumWoodType woodType, Block block, @Nullable EntityPlayer player,
+            World world, int x, int y, int z, int metadata) {
         boolean placed = world.setBlock(x, y, z, block, metadata, Constants.FLAG_BLOCK_SYNCH_AND_UPDATE);
         if (!placed) {
             return false;
@@ -137,18 +130,8 @@ public class ItemBlockWood extends ItemBlockForestry {
     }
 
     @Override
-    public boolean placeBlockAt(
-            ItemStack stack,
-            EntityPlayer player,
-            World world,
-            int x,
-            int y,
-            int z,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ,
-            int metadata) {
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+            float hitX, float hitY, float hitZ, int metadata) {
         return placeWood(stack, player, world, x, y, z, metadata);
     }
 

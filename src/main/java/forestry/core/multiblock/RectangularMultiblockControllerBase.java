@@ -1,10 +1,11 @@
 package forestry.core.multiblock;
 
-import forestry.api.multiblock.IMultiblockComponent;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import forestry.api.multiblock.IMultiblockComponent;
 
 public abstract class RectangularMultiblockControllerBase extends MultiblockControllerForestry {
 
@@ -79,10 +80,14 @@ public abstract class RectangularMultiblockControllerBase extends MultiblockCont
                         part = (IMultiblockComponent) te;
 
                         // Ensure this part should actually be allowed within a cube of this controller's type
-                        if (!myClass.equals(
-                                part.getMultiblockLogic().getController().getClass())) {
-                            throw new MultiblockValidationException(StatCollector.translateToLocalFormatted(
-                                    "for.multiblock.error.invalid.part", x, y, z, myClass.getSimpleName()));
+                        if (!myClass.equals(part.getMultiblockLogic().getController().getClass())) {
+                            throw new MultiblockValidationException(
+                                    StatCollector.translateToLocalFormatted(
+                                            "for.multiblock.error.invalid.part",
+                                            x,
+                                            y,
+                                            z,
+                                            myClass.getSimpleName()));
                         }
                     } else {
                         // This is permitted so that we can incorporate certain non-multiblock parts inside interiors

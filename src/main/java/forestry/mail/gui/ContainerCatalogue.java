@@ -1,14 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.IMailAddress;
@@ -22,16 +32,6 @@ import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.mail.EnumStationState;
 import forestry.mail.network.packets.PacketLetterInfoResponse;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 
 public class ContainerCatalogue extends Container implements IGuiSelectable, ILetterInfoReceiver {
 
@@ -48,7 +48,7 @@ public class ContainerCatalogue extends Container implements IGuiSelectable, ILe
     private boolean needsSynch = true;
     private int currentFilter = 1;
 
-    private static final String[] FILTER_NAMES = new String[] {"all", "online", "offline"};
+    private static final String[] FILTER_NAMES = new String[] { "all", "online", "offline" };
     private static final List<Set<IPostalState>> FILTERS = new ArrayList<>();
 
     static {

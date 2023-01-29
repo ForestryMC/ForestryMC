@@ -1,15 +1,17 @@
 package forestry.farming.logic;
 
-import forestry.api.farming.ICrop;
-import forestry.api.farming.IFarmable;
-import forestry.core.utils.vect.Vect;
-import forestry.plugins.compat.PluginIC2;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import forestry.api.farming.ICrop;
+import forestry.api.farming.IFarmable;
+import forestry.core.utils.vect.Vect;
+import forestry.plugins.compat.PluginIC2;
+
 public class FarmableBasicIC2Crop implements IFarmable {
+
     @Override
     public boolean isSaplingAt(World world, int x, int y, int z) {
         TileEntity crop = world.getTileEntity(x, y, z);

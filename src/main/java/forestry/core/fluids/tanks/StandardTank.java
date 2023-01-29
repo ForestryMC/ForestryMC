@@ -1,14 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.fluids.tanks;
+
+import java.io.IOException;
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.item.EnumRarity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 
 import forestry.core.fluids.FakeTankUpdateHandler;
 import forestry.core.fluids.FluidHelper;
@@ -19,19 +28,12 @@ import forestry.core.gui.tooltips.ToolTipLine;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import java.io.IOException;
-import java.util.Locale;
-import javax.annotation.Nonnull;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class StandardTank extends FluidTank implements IStreamable {
+
     // defines how the tank responds to IFluidHandler requests
     public enum TankMode {
         DEFAULT,
@@ -213,6 +215,7 @@ public class StandardTank extends FluidTank implements IStreamable {
     }
 
     protected final ToolTip toolTip = new ToolTip() {
+
         @Override
         public void refresh() {
             refreshTooltip();

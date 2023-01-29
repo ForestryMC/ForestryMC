@@ -1,22 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.commands;
 
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.core.config.Constants;
-import forestry.core.config.Version;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,10 +19,19 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.core.config.Constants;
+import forestry.core.config.Version;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
 
 public final class CommandSaveStats extends SubCommand {
 
@@ -41,8 +41,8 @@ public final class CommandSaveStats extends SubCommand {
 
     static {
         discoveredSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.discovered.symbol");
-        blacklistedSymbol =
-                StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted.symbol");
+        blacklistedSymbol = StatCollector
+                .translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted.symbol");
         notCountedSymbol = StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted.symbol");
     }
 
@@ -80,11 +80,16 @@ public final class CommandSaveStats extends SubCommand {
         Collection<String> statistics = new ArrayList<>();
 
         String date = DateFormat.getInstance().format(new Date());
-        statistics.add(StatCollector.translateToLocalFormatted(
-                saveHelper.getUnlocalizedSaveStatsString(), player.getDisplayName(), date));
+        statistics.add(
+                StatCollector.translateToLocalFormatted(
+                        saveHelper.getUnlocalizedSaveStatsString(),
+                        player.getDisplayName(),
+                        date));
         statistics.add("");
-        statistics.add(StatCollector.translateToLocalFormatted(
-                "for.chat.command.forestry.stats.save.mode", modeHelper.getModeName(world)));
+        statistics.add(
+                StatCollector.translateToLocalFormatted(
+                        "for.chat.command.forestry.stats.save.mode",
+                        modeHelper.getModeName(world)));
         statistics.add("");
 
         IBreedingTracker tracker = saveHelper.getBreedingTracker(world, player.getGameProfile());
@@ -100,12 +105,15 @@ public final class CommandSaveStats extends SubCommand {
             statistics.add(speciesCountLine);
             statistics.add(StringUtil.line(speciesCountLine.length()));
 
-            statistics.add(discoveredSymbol + ": "
-                    + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.discovered"));
-            statistics.add(blacklistedSymbol + ": "
-                    + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted"));
-            statistics.add(notCountedSymbol + ": "
-                    + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted"));
+            statistics.add(
+                    discoveredSymbol + ": "
+                            + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.discovered"));
+            statistics.add(
+                    blacklistedSymbol + ": "
+                            + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.blacklisted"));
+            statistics.add(
+                    notCountedSymbol + ": "
+                            + StatCollector.translateToLocal("for.chat.command.forestry.stats.save.key.notCounted"));
             statistics.add("");
 
             String header = generateSpeciesListHeader();
@@ -121,8 +129,12 @@ public final class CommandSaveStats extends SubCommand {
 
         File file = new File(
                 Proxies.common.getForestryRoot(),
-                "config/" + Constants.MOD.toLowerCase(Locale.ENGLISH) + "/stats/" + player.getDisplayName() + '-'
-                        + saveHelper.getFileSuffix() + ".log");
+                "config/" + Constants.MOD.toLowerCase(Locale.ENGLISH)
+                        + "/stats/"
+                        + player.getDisplayName()
+                        + '-'
+                        + saveHelper.getFileSuffix()
+                        + ".log");
         try {
             File folder = file.getParentFile();
             if (folder != null && !folder.exists()) {
@@ -161,7 +173,9 @@ public final class CommandSaveStats extends SubCommand {
         }
 
         CommandHelpers.sendLocalizedChatMessage(
-                sender, "for.chat.command.forestry.stats.save.saved", player.getDisplayName());
+                sender,
+                "for.chat.command.forestry.stats.save.saved",
+                player.getDisplayName());
     }
 
     private static String generateSpeciesListHeader() {
@@ -187,18 +201,23 @@ public final class CommandSaveStats extends SubCommand {
         }
 
         return speciesListEntry(
-                discovered, blacklisted, notCounted, species.getUID(), species.getName(), species.getAuthority());
+                discovered,
+                blacklisted,
+                notCounted,
+                species.getUID(),
+                species.getName(),
+                species.getAuthority());
     }
 
-    private static String speciesListEntry(
-            String discovered,
-            String blacklisted,
-            String notCounted,
-            String UID,
-            String speciesName,
-            String authority) {
+    private static String speciesListEntry(String discovered, String blacklisted, String notCounted, String UID,
+            String speciesName, String authority) {
         return String.format(
                 "[ %-2s ] [ %-2s ] [ %-2s ]\t%-40s %-20s %-20s",
-                discovered, blacklisted, notCounted, UID, speciesName, authority);
+                discovered,
+                blacklisted,
+                notCounted,
+                UID,
+                speciesName,
+                authority);
     }
 }

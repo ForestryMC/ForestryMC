@@ -1,14 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.tiles;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.fuels.FuelManager;
@@ -32,23 +46,10 @@ import forestry.factory.gui.ContainerMoistener;
 import forestry.factory.gui.GuiMoistener;
 import forestry.factory.inventory.InventoryMoistener;
 import forestry.factory.recipes.MoistenerRecipeManager;
-import java.io.IOException;
-import java.util.ArrayList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileMoistener extends TileBase
         implements ISidedInventory, ILiquidTankTile, IFluidHandler, IRenderableTile {
+
     private final FilteredTank resourceTank;
     private final TankManager tankManager;
     private IMoistenerRecipe currentRecipe;
@@ -196,8 +197,8 @@ public class TileMoistener extends TileBase
                 }
 
                 if (FuelManager.moistenerResource.containsKey(getStackInSlot(InventoryMoistener.SLOT_WORKING))) {
-                    MoistenerFuel res =
-                            FuelManager.moistenerResource.get(getStackInSlot(InventoryMoistener.SLOT_WORKING));
+                    MoistenerFuel res = FuelManager.moistenerResource
+                            .get(getStackInSlot(InventoryMoistener.SLOT_WORKING));
                     burnTime = totalTime = res.moistenerValue;
                 }
             } else {
@@ -224,8 +225,8 @@ public class TileMoistener extends TileBase
     }
 
     public void checkRecipe() {
-        IMoistenerRecipe sameRec = MoistenerRecipeManager.findMatchingRecipe(
-                getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE));
+        IMoistenerRecipe sameRec = MoistenerRecipeManager
+                .findMatchingRecipe(getInternalInventory().getStackInSlot(InventoryMoistener.SLOT_RESOURCE));
         if (currentRecipe != sameRec) {
             currentRecipe = sameRec;
             resetRecipe();
@@ -361,9 +362,8 @@ public class TileMoistener extends TileBase
     private void rotateReservoir() {
         ArrayList<Integer> slotsToShift = new ArrayList<>();
 
-        for (int i = InventoryMoistener.SLOT_RESERVOIR_1;
-                i < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT;
-                i++) {
+        for (int i = InventoryMoistener.SLOT_RESERVOIR_1; i
+                < InventoryMoistener.SLOT_RESERVOIR_1 + InventoryMoistener.SLOT_RESERVOIR_COUNT; i++) {
             if (getStackInSlot(i) == null) {
                 continue;
             }
@@ -445,10 +445,7 @@ public class TileMoistener extends TileBase
         }
 
         return ((float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).stackSize
-                        / (float) inventory
-                                .getStackInSlot(InventoryMoistener.SLOT_RESOURCE)
-                                .getMaxStackSize())
-                > percentage;
+                / (float) inventory.getStackInSlot(InventoryMoistener.SLOT_RESOURCE).getMaxStackSize()) > percentage;
     }
 
     public boolean isProducing() {

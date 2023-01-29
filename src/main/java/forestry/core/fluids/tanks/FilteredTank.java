@@ -1,28 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.fluids.tanks;
 
-import forestry.core.gui.tooltips.ToolTipLine;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
 import net.minecraft.item.EnumRarity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.core.gui.tooltips.ToolTipLine;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -87,8 +87,10 @@ public class FilteredTank extends StandardTank {
                     rarity = EnumRarity.common;
                 }
                 FluidStack filterFluidStack = FluidRegistry.getFluidStack(fluidFilter.getName(), 0);
-                ToolTipLine name =
-                        new ToolTipLine(fluidFilter.getLocalizedName(filterFluidStack), rarity.rarityColor, 2);
+                ToolTipLine name = new ToolTipLine(
+                        fluidFilter.getLocalizedName(filterFluidStack),
+                        rarity.rarityColor,
+                        2);
                 toolTip.add(name);
             }
         } else {

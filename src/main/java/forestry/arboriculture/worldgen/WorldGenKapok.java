@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import forestry.api.world.ITreeGenData;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+
+import forestry.api.world.ITreeGenData;
 
 public class WorldGenKapok extends WorldGenTree {
 
@@ -44,7 +44,14 @@ public class WorldGenKapok extends WorldGenTree {
 
         for (ChunkCoordinates branchEnd : branchCoords) {
             generateAdjustedCylinder(
-                    world, branchEnd.posY + 1, branchEnd.posX, branchEnd.posZ, 2.0f, 2, leaf, EnumReplaceMode.NONE);
+                    world,
+                    branchEnd.posY + 1,
+                    branchEnd.posX,
+                    branchEnd.posZ,
+                    2.0f,
+                    2,
+                    leaf,
+                    EnumReplaceMode.NONE);
         }
 
         // Add some smaller twigs below for flavour

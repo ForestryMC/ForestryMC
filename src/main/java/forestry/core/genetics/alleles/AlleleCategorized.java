@@ -1,18 +1,18 @@
 package forestry.core.genetics.alleles;
 
 import net.minecraft.util.StatCollector;
+
 import org.apache.commons.lang3.text.WordUtils;
 
 /**
- * Alleles that have a category with several values inherit from this class.
- * For example, temperature tolerances or speeds are categories with several values.
+ * Alleles that have a category with several values inherit from this class. For example, temperature tolerances or
+ * speeds are categories with several values.
  *
- * This class helps localization by allowing specific names like
- * forestry.allele.speed.fast
- * and can fall back on generic names like
- * forestry.allele.fast
+ * This class helps localization by allowing specific names like forestry.allele.speed.fast and can fall back on generic
+ * names like forestry.allele.fast
  */
 public abstract class AlleleCategorized extends Allele {
+
     protected AlleleCategorized(String modId, String category, String valueName, boolean isDominant) {
         super(getUid(modId, category, valueName), getUnlocalizedName(modId, category, valueName), isDominant);
     }

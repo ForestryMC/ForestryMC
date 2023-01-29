@@ -1,23 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.ledgers;
+
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 import forestry.core.gui.IHintSource;
 import forestry.core.proxy.Proxies;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-import java.util.List;
-import java.util.Random;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 
 public class HintLedger extends Ledger {
 
@@ -35,9 +35,7 @@ public class HintLedger extends Ledger {
 
         Minecraft minecraft = Proxies.common.getClientInstance();
         FontRenderer fontRenderer = minecraft.fontRenderer;
-        int lineCount = fontRenderer
-                .listFormattedStringToWidth(hintString, maxTextWidth)
-                .size();
+        int lineCount = fontRenderer.listFormattedStringToWidth(hintString, maxTextWidth).size();
         maxHeight = (lineCount + 1) * fontRenderer.FONT_HEIGHT + 20;
     }
 

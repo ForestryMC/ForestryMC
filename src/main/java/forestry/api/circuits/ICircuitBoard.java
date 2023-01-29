@@ -5,8 +5,9 @@
  ******************************************************************************/
 package forestry.api.circuits;
 
-import forestry.api.core.INBTTagable;
 import java.util.List;
+
+import forestry.api.core.INBTTagable;
 
 public interface ICircuitBoard extends INBTTagable {
 
@@ -28,6 +29,7 @@ public interface ICircuitBoard extends INBTTagable {
 
     /**
      * Specifies where a circuit can be used.
+     * 
      * @since Forestry 4.0
      */
     ICircuitSocketType getSocketType();

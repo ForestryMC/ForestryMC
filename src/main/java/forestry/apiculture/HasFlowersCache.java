@@ -1,14 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture;
+
+import java.util.Random;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.FlowerManager;
@@ -19,12 +23,9 @@ import forestry.api.core.INBTTagable;
 import forestry.api.genetics.IFlowerProvider;
 import forestry.core.utils.vect.Vect;
 import forestry.plugins.PluginApiculture;
-import java.util.Random;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.World;
 
 public class HasFlowersCache implements INBTTagable {
+
     private static final String nbtKey = "hasFlowerCache";
     private static final Random random = new Random();
     private static final int flowerCheckInterval = 128;
@@ -74,13 +75,12 @@ public class HasFlowersCache implements INBTTagable {
         if (!isFlowerCoordInRange(flowerCoords, min, max)) {
             return false;
         }
-        return FlowerManager.flowerRegistry.isAcceptedFlower(
-                flowerType, world, flowerCoords.posX, flowerCoords.posY, flowerCoords.posZ);
+        return FlowerManager.flowerRegistry
+                .isAcceptedFlower(flowerType, world, flowerCoords.posX, flowerCoords.posY, flowerCoords.posZ);
     }
 
     private static boolean isFlowerCoordInRange(ChunkCoordinates flowerCoords, Vect min, Vect max) {
-        return flowerCoords.posX >= min.x
-                && flowerCoords.posX <= max.x
+        return flowerCoords.posX >= min.x && flowerCoords.posX <= max.x
                 && flowerCoords.posY >= min.y
                 && flowerCoords.posY <= max.y
                 && flowerCoords.posZ >= min.z

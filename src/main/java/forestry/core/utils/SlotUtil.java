@@ -1,22 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
-import forestry.core.gui.slots.SlotForestry;
 import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
+
+import forestry.core.gui.slots.SlotForestry;
 
 public abstract class SlotUtil {
 
@@ -93,8 +93,8 @@ public abstract class SlotUtil {
         return originalStack;
     }
 
-    private static boolean shiftItemStack(
-            List inventorySlots, ItemStack stackInSlot, int slotIndex, int numSlots, boolean fromCraftingSlot) {
+    private static boolean shiftItemStack(List inventorySlots, ItemStack stackInSlot, int slotIndex, int numSlots,
+            boolean fromCraftingSlot) {
         if (isInPlayerInventory(slotIndex)) {
             if (shiftToMachineInventory(inventorySlots, stackInSlot, numSlots)) {
                 return true;
@@ -166,8 +166,8 @@ public abstract class SlotUtil {
         return changed;
     }
 
-    private static boolean shiftItemStackToRangeMerge(
-            List inventorySlots, ItemStack stackToShift, int start, int count) {
+    private static boolean shiftItemStackToRangeMerge(List inventorySlots, ItemStack stackToShift, int start,
+            int count) {
         if (stackToShift == null || !stackToShift.isStackable() || stackToShift.stackSize <= 0) {
             return false;
         }
@@ -195,8 +195,8 @@ public abstract class SlotUtil {
         return changed;
     }
 
-    private static boolean shiftItemStackToRangeOpenSlots(
-            List inventorySlots, ItemStack stackToShift, int start, int count) {
+    private static boolean shiftItemStackToRangeOpenSlots(List inventorySlots, ItemStack stackToShift, int start,
+            int count) {
         if (stackToShift == null || stackToShift.stackSize <= 0) {
             return false;
         }
@@ -264,10 +264,10 @@ public abstract class SlotUtil {
     }
 
     // if mergeOnly = true, don't shift into empty slots.
-    private static boolean shiftToMachineInventory(
-            List inventorySlots, ItemStack stackToShift, int numSlots, boolean mergeOnly) {
+    private static boolean shiftToMachineInventory(List inventorySlots, ItemStack stackToShift, int numSlots,
+            boolean mergeOnly) {
         for (int machineIndex = playerInventorySize; machineIndex < numSlots; machineIndex++) {
-            //            System.out.println("SlotUtil::shiftToMachineinventory");
+            // System.out.println("SlotUtil::shiftToMachineinventory");
             Slot slot = (Slot) inventorySlots.get(machineIndex);
             if (mergeOnly && slot.getStack() == null) {
                 continue;

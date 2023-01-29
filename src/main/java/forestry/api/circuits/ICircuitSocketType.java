@@ -6,10 +6,11 @@
 package forestry.api.circuits;
 
 /**
- * Specifies where a circuit layout can be used. (i.e. farm, machine, engine, etc)
- * See CircuitSocketType for Forestry's uses.
+ * Specifies where a circuit layout can be used. (i.e. farm, machine, engine, etc) See CircuitSocketType for Forestry's
+ * uses.
  */
 public interface ICircuitSocketType {
+
     /** unique identifier for this socket type */
     String getUid();
 

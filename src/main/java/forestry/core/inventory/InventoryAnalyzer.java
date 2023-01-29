@@ -1,14 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.inventory;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 
 import forestry.api.arboriculture.TreeManager;
 import forestry.api.genetics.AlleleManager;
@@ -17,10 +18,9 @@ import forestry.core.tiles.TileAnalyzer;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.plugins.PluginManager;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 
 public class InventoryAnalyzer extends InventoryAdapterTile<TileAnalyzer> {
+
     public static final short SLOT_ANALYZE = 0;
     public static final short SLOT_CAN = 1;
     public static final short SLOT_INPUT_1 = 2;

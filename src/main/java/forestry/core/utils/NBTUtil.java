@@ -1,19 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
-import com.google.common.collect.ForwardingList;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagByteArray;
@@ -28,12 +25,16 @@ import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
 
+import com.google.common.collect.ForwardingList;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public abstract class NBTUtil {
 
     public enum EnumNBTType {
+
         END(NBTTagEnd.class),
         BYTE(NBTTagByte.class),
         SHORT(NBTTagShort.class),
@@ -46,6 +47,7 @@ public abstract class NBTUtil {
         LIST(NBTTagList.class),
         COMPOUND(NBTTagCompound.class),
         INT_ARRAY(NBTTagIntArray.class);
+
         public static final EnumNBTType[] VALUES = values();
         public final Class<? extends NBTBase> classObject;
 

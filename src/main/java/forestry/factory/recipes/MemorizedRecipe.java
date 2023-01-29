@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 import forestry.api.core.INBTTagable;
 import forestry.core.network.DataInputStreamForestry;
@@ -18,14 +24,9 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.factory.inventory.InventoryCraftingForestry;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public final class MemorizedRecipe implements INBTTagable, IStreamable {
+
     private final InventoryCraftingForestry craftMatrix = new InventoryCraftingForestry();
     private final List<ItemStack> recipeOutputs = new ArrayList<>();
     private int selectedRecipe;

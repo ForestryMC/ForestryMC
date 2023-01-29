@@ -1,10 +1,7 @@
 package forestry.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.CreativeTabForestry;
-import forestry.core.render.TextureManager;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -13,8 +10,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.CreativeTabForestry;
+import forestry.core.render.TextureManager;
+
 public class BlockResourceStorage extends Block {
+
     public enum ResourceType {
+
         APATITE,
         COPPER,
         TIN,
@@ -33,7 +37,7 @@ public class BlockResourceStorage extends Block {
         setCreativeTab(CreativeTabForestry.tabForestry);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubBlocks(Item item, CreativeTabs creativeTabs, List itemList) {
         for (ResourceType resourceType : ResourceType.values()) {

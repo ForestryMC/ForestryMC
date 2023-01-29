@@ -1,9 +1,11 @@
 package forestry.arboriculture.genetics.pollination;
 
+import java.util.EnumSet;
+
+import net.minecraftforge.common.EnumPlantType;
+
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.IPollinatable;
-import java.util.EnumSet;
-import net.minecraftforge.common.EnumPlantType;
 
 public class FakePollinatable implements IPollinatable {
 

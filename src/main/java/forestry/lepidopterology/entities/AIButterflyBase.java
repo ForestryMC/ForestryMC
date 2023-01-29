@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.entities;
 
@@ -29,7 +27,10 @@ public abstract class AIButterflyBase extends EntityAIBase {
         }
 
         Vec3 randomTarget = RandomPositionGenerator.findRandomTargetBlockAwayFrom(
-                entity, 16, 7, Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ));
+                entity,
+                16,
+                7,
+                Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ));
 
         if (randomTarget == null) {
             return null;
@@ -43,8 +44,8 @@ public abstract class AIButterflyBase extends EntityAIBase {
     }
 
     protected Vec3 getRandomDestinationUpwards() {
-        Vec3 destination = Vec3.createVectorHelper(
-                entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
+        Vec3 destination = Vec3
+                .createVectorHelper(entity.posX, entity.posY + entity.getRNG().nextInt(10) + 2, entity.posZ);
         if (validateDestination(destination, true)) {
             return destination;
         } else {

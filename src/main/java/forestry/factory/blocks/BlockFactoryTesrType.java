@@ -1,14 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.blocks;
+
+import java.util.Locale;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import forestry.core.blocks.IMachinePropertiesTESR;
 import forestry.core.config.Constants;
@@ -23,10 +25,9 @@ import forestry.factory.tiles.TileMillRainmaker;
 import forestry.factory.tiles.TileMoistener;
 import forestry.factory.tiles.TileSqueezer;
 import forestry.factory.tiles.TileStill;
-import java.util.Locale;
-import org.apache.commons.lang3.text.WordUtils;
 
 public enum BlockFactoryTesrType implements IMachinePropertiesTESR {
+
     BOTTLER(TileBottler.class),
     CARPENTER(TileCarpenter.class),
     CENTRIFUGE(TileCentrifuge.class),
@@ -35,6 +36,7 @@ public enum BlockFactoryTesrType implements IMachinePropertiesTESR {
     SQUEEZER(TileSqueezer.class),
     STILL(TileStill.class),
     RAINMAKER(TileMillRainmaker.class) {
+
         @Override
         public IBlockRenderer getRenderer() {
             return Proxies.render.getRenderMill(Constants.TEXTURE_PATH_BLOCKS + "/rainmaker_");

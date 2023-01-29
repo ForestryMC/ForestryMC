@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.ledgers;
 
@@ -47,16 +45,14 @@ public class ClimateLedger extends Ledger {
 
         drawSubheader(StringUtil.localize("gui.temperature") + ':', x + 22, y + 20);
         drawText(
-                AlleleManager.climateHelper.toDisplay(temperature)
-                        + ' '
+                AlleleManager.climateHelper.toDisplay(temperature) + ' '
                         + StringUtil.floatAsPercent(tile.getExactTemperature()),
                 x + 22,
                 y + 32);
 
         drawSubheader(StringUtil.localize("gui.humidity") + ':', x + 22, y + 44);
         drawText(
-                AlleleManager.climateHelper.toDisplay(tile.getHumidity())
-                        + ' '
+                AlleleManager.climateHelper.toDisplay(tile.getHumidity()) + ' '
                         + StringUtil.floatAsPercent(tile.getExactHumidity()),
                 x + 22,
                 y + 56);
@@ -64,7 +60,8 @@ public class ClimateLedger extends Ledger {
 
     @Override
     public String getTooltip() {
-        return "T: " + AlleleManager.climateHelper.toDisplay(tile.getTemperature()) + " / H: "
+        return "T: " + AlleleManager.climateHelper.toDisplay(tile.getTemperature())
+                + " / H: "
                 + AlleleManager.climateHelper.toDisplay(tile.getHumidity());
     }
 }

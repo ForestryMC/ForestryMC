@@ -1,14 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.blocks;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -23,20 +37,6 @@ import forestry.core.render.TextureManager;
 import forestry.core.tiles.TileUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginArboriculture;
-import java.util.ArrayList;
-import java.util.Random;
-import net.minecraft.block.Block;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
@@ -88,8 +88,7 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
     public void registerBlockIcons(IIconRegister register) {
         defaultIcon = TextureManager.registerTex(register, "germlings/sapling.treeBalsa");
 
-        for (IAllele allele :
-                AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
+        for (IAllele allele : AlleleManager.alleleRegistry.getRegisteredAlleles().values()) {
             if (allele instanceof IAlleleTreeSpecies) {
                 ((IAlleleTreeSpecies) allele).getIconProvider().registerIcons(register);
             }
@@ -176,8 +175,8 @@ public class BlockSapling extends BlockTreeContainer implements IGrowable {
 
         TileSapling sapling = getSaplingTile(world, x, y, z);
         if (sapling != null && sapling.getTree() != null) {
-            ItemStack saplingStack =
-                    TreeManager.treeRoot.getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
+            ItemStack saplingStack = TreeManager.treeRoot
+                    .getMemberStack(sapling.getTree(), EnumGermlingType.SAPLING.ordinal());
             ItemStackUtil.dropItemStackAsEntity(saplingStack, world, x, y, z);
         }
     }

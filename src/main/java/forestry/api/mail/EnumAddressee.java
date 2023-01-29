@@ -8,6 +8,7 @@ package forestry.api.mail;
 import java.util.Locale;
 
 public enum EnumAddressee {
+
     PLAYER,
     TRADER;
 

@@ -1,19 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import forestry.apiculture.blocks.BlockCandle;
-import forestry.apiculture.tiles.TileCandle;
-import forestry.core.proxy.Proxies;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -21,14 +15,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import forestry.apiculture.blocks.BlockCandle;
+import forestry.apiculture.tiles.TileCandle;
+import forestry.core.proxy.Proxies;
+
 public class RenderCandleBlock implements ISimpleBlockRenderingHandler {
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {}
 
     @Override
-    public boolean renderWorldBlock(
-            IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
+            RenderBlocks renderer) {
         if (block.getRenderType() == Proxies.render.getCandleRenderId()) {
             renderBlockCandle(world, x, y, z, (BlockCandle) block);
         }
@@ -86,8 +85,8 @@ public class RenderCandleBlock implements ISimpleBlockRenderingHandler {
         return true;
     }
 
-    private static void renderCandleAtAngle(
-            IIcon icon, double x, double y, double z, double par8, double par10, int colour) {
+    private static void renderCandleAtAngle(IIcon icon, double x, double y, double z, double par8, double par10,
+            int colour) {
         Tessellator tessellator = Tessellator.instance;
         double minU = icon.getMinU();
         double minV = icon.getMinV();
@@ -112,13 +111,29 @@ public class RenderCandleBlock implements ISimpleBlockRenderingHandler {
         tessellator.setColorOpaque_I(colour);
         // top quad
         tessellator.addVertexWithUV(
-                x + par8 * (1.0D - d22) - d21, y + d22, z + par10 * (1.0D - d22) - d21, textureLightTopU, d10);
+                x + par8 * (1.0D - d22) - d21,
+                y + d22,
+                z + par10 * (1.0D - d22) - d21,
+                textureLightTopU,
+                d10);
         tessellator.addVertexWithUV(
-                x + par8 * (1.0D - d22) - d21, y + d22, z + par10 * (1.0D - d22) + d21, textureLightTopU, d12);
+                x + par8 * (1.0D - d22) - d21,
+                y + d22,
+                z + par10 * (1.0D - d22) + d21,
+                textureLightTopU,
+                d12);
         tessellator.addVertexWithUV(
-                x + par8 * (1.0D - d22) + d21, y + d22, z + par10 * (1.0D - d22) + d21, textureLightBottomU, d12);
+                x + par8 * (1.0D - d22) + d21,
+                y + d22,
+                z + par10 * (1.0D - d22) + d21,
+                textureLightBottomU,
+                d12);
         tessellator.addVertexWithUV(
-                x + par8 * (1.0D - d22) + d21, y + d22, z + par10 * (1.0D - d22) - d21, textureLightBottomU, d10);
+                x + par8 * (1.0D - d22) + d21,
+                y + d22,
+                z + par10 * (1.0D - d22) - d21,
+                textureLightBottomU,
+                d10);
         // -x quad
         tessellator.addVertexWithUV(x - d21, y + 1d, d19, minU, minV);
         tessellator.addVertexWithUV(x - d21 + par8, y, d19 + par10, minU, maxV);

@@ -1,26 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import forestry.api.core.Tabs;
-import forestry.core.config.Config;
-import forestry.core.items.ItemForestryMultiPass;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import forestry.api.core.Tabs;
+import forestry.core.config.Config;
+import forestry.core.items.ItemForestryMultiPass;
+
 public class ItemHoneycomb extends ItemForestryMultiPass {
+
     public ItemHoneycomb() {
         super();
         setMaxDamage(0);
@@ -54,7 +55,7 @@ public class ItemHoneycomb extends ItemForestryMultiPass {
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
         for (int i = 0; i < EnumHoneyComb.VALUES.length; i++) {

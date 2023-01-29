@@ -1,6 +1,5 @@
 package forestry.core.network;
 
-import cpw.mods.fml.common.registry.GameData;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -8,6 +7,7 @@ import java.io.InputStream;
 import java.io.InvalidObjectException;
 import java.util.Collection;
 import java.util.List;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import cpw.mods.fml.common.registry.GameData;
 
 public class DataInputStreamForestry extends DataInputStream {
 

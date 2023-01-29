@@ -1,27 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.errors;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.core.IErrorLogic;
 import forestry.api.core.IErrorState;
 import forestry.api.core.IErrorStateRegistry;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import net.minecraft.client.renderer.texture.IIconRegister;
 
 /**
  *
@@ -31,8 +32,7 @@ public class ErrorStateRegistry implements IErrorStateRegistry {
 
     private static final BiMap<Short, IErrorState> states = HashBiMap.create();
     private static final Map<String, IErrorState> stateNames = new HashMap<>();
-    private static final Set<IErrorState> stateView =
-            Collections.unmodifiableSet(states.inverse().keySet());
+    private static final Set<IErrorState> stateView = Collections.unmodifiableSet(states.inverse().keySet());
 
     @Override
     public void registerErrorState(IErrorState state) {

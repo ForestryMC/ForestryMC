@@ -1,14 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.storage.items;
+
+import java.util.List;
+import java.util.Locale;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.relauncher.Side;
@@ -32,19 +43,9 @@ import forestry.storage.gui.ContainerBackpack;
 import forestry.storage.gui.GuiBackpack;
 import forestry.storage.gui.GuiBackpackT2;
 import forestry.storage.inventory.ItemInventoryBackpack;
-import java.util.List;
-import java.util.Locale;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class ItemBackpack extends ItemWithGui {
+
     private final IBackpackDefinition definition;
     private final EnumBackpackType type;
 
@@ -81,32 +82,14 @@ public class ItemBackpack extends ItemWithGui {
     }
 
     @Override
-    public boolean onItemUse(
-            ItemStack itemstack,
-            EntityPlayer player,
-            World world,
-            int x,
-            int y,
-            int z,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side,
+            float hitX, float hitY, float hitZ) {
         return getInventoryHit(world, x, y, z, side) != null;
     }
 
     @Override
-    public boolean onItemUseFirst(
-            ItemStack itemstack,
-            EntityPlayer player,
-            World world,
-            int x,
-            int y,
-            int z,
-            int side,
-            float hitX,
-            float hitY,
-            float hitZ) {
+    public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side,
+            float hitX, float hitY, float hitZ) {
 
         if (world.isRemote) {
             return false;
@@ -221,7 +204,7 @@ public class ItemBackpack extends ItemWithGui {
         return getSlotsForType(type);
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
         int occupied = ItemInventory.getOccupiedSlotCount(itemstack);
@@ -234,9 +217,9 @@ public class ItemBackpack extends ItemWithGui {
         } else if (mode == BackpackMode.RESUPPLY) {
             list.add(StringUtil.localize("storage.backpack.mode.resupply"));
         }
-        list.add(StringUtil.localize("gui.slots")
-                .replaceAll("%USED", String.valueOf(occupied))
-                .replaceAll("%SIZE", String.valueOf(getBackpackSize())));
+        list.add(
+                StringUtil.localize("gui.slots").replaceAll("%USED", String.valueOf(occupied))
+                        .replaceAll("%SIZE", String.valueOf(getBackpackSize())));
     }
 
     @Override

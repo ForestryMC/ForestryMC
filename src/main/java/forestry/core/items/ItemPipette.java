@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.items;
+
+import java.util.List;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidStack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,13 +24,6 @@ import forestry.core.config.Constants;
 import forestry.core.fluids.PipetteContents;
 import forestry.core.render.TextureManager;
 import forestry.core.utils.StringUtil;
-import java.util.List;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
-import net.minecraftforge.fluids.FluidStack;
 
 public class ItemPipette extends ItemForestry implements IToolPipette {
 
@@ -92,7 +92,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
         return filled;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
         PipetteContents contained = new PipetteContents(itemstack.getTagCompound());
@@ -126,8 +126,7 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
     @Override
     public FluidStack drain(ItemStack pipette, int maxDrain, boolean doDrain) {
         PipetteContents contained = new PipetteContents(pipette.getTagCompound());
-        if (contained.getContents() == null
-                || contained.getContents().getFluid().getID() <= 0) {
+        if (contained.getContents() == null || contained.getContents().getFluid().getID() <= 0) {
             return null;
         }
 

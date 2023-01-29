@@ -1,8 +1,9 @@
 package forestry.core.gui;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import forestry.core.gui.slots.SlotFiltered;
 import forestry.core.inventory.ItemInventoryAlyzer;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerAlyzer extends ContainerItemInventory<ItemInventoryAlyzer> {
 

@@ -1,14 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.genetics.EnumTolerance;
 import forestry.api.genetics.IAlleleFloat;
@@ -26,8 +27,6 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.genetics.Genome;
 import forestry.core.genetics.alleles.AlleleBoolean;
 import forestry.core.genetics.alleles.AlleleTolerance;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ButterflyGenome extends Genome implements IButterflyGenome {
 
@@ -51,8 +50,10 @@ public class ButterflyGenome extends Genome implements IButterflyGenome {
             return (IAlleleButterflySpecies) species;
         }
 
-        return (IAlleleButterflySpecies)
-                getActiveAllele(itemStack, EnumButterflyChromosome.SPECIES, ButterflyManager.butterflyRoot);
+        return (IAlleleButterflySpecies) getActiveAllele(
+                itemStack,
+                EnumButterflyChromosome.SPECIES,
+                ButterflyManager.butterflyRoot);
     }
 
     /* SPECIES */

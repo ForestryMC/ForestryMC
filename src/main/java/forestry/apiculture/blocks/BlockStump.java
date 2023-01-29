@@ -1,14 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.blocks;
+
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.BlockTorch;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,17 +30,6 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.StringUtil;
 import forestry.plugins.PluginApiculture;
-import java.util.List;
-import java.util.Random;
-import net.minecraft.block.BlockTorch;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class BlockStump extends BlockTorch {
 
@@ -46,29 +46,19 @@ public class BlockStump extends BlockTorch {
         this.blockIcon = TextureManager.registerTex(register, StringUtil.cleanBlockName(this));
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
         itemList.add(new ItemStack(this, 1, 0));
     }
 
     @Override
-    public boolean onBlockActivated(
-            World world,
-            int x,
-            int y,
-            int z,
-            EntityPlayer player,
-            int facing,
-            float facingX,
-            float facingY,
-            float facingZ) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float facingX,
+            float facingY, float facingZ) {
 
         ItemStack held = player.getCurrentEquippedItem();
-        if (held != null
-                && (held.getItem() == Items.flint_and_steel
-                        || held.getItem() == Items.flint
-                        || ItemStackUtil.equals(Blocks.torch, held))) {
+        if (held != null && (held.getItem() == Items.flint_and_steel || held.getItem() == Items.flint
+                || ItemStackUtil.equals(Blocks.torch, held))) {
             world.setBlock(
                     x,
                     y,

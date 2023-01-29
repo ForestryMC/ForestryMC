@@ -1,24 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.inventory;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 
 import forestry.api.fuels.FuelManager;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.inventory.InventoryAdapterTile;
 import forestry.factory.recipes.FermenterRecipeManager;
 import forestry.factory.tiles.TileFermenter;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 
 public class InventoryFermenter extends InventoryAdapterTile<TileFermenter> {
+
     public static final short SLOT_RESOURCE = 0;
     public static final short SLOT_FUEL = 1;
     public static final short SLOT_CAN_OUTPUT = 2;

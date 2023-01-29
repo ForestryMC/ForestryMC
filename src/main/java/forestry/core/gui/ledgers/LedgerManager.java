@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui.ledgers;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
@@ -17,11 +20,9 @@ import forestry.core.errors.FakeErrorSource;
 import forestry.core.gui.GuiForestry;
 import forestry.core.gui.GuiUtil;
 import forestry.core.gui.tooltips.ToolTip;
-import java.util.ArrayList;
-import java.util.List;
-import org.lwjgl.opengl.GL11;
 
 public class LedgerManager {
+
     private final List<Ledger> ledgers = new ArrayList<>();
     private final List<ErrorLedger> errorLedgers = new ArrayList<>();
 
@@ -182,8 +183,7 @@ public class LedgerManager {
     }
 
     public boolean ledgerOverlaps(int x, int y, int width, int height) {
-        return getAtPosition(x + width, y + height) != null
-                || getAtPosition(x + width, y) != null
+        return getAtPosition(x + width, y + height) != null || getAtPosition(x + width, y) != null
                 || getAtPosition(x, y + height) != null
                 || getAtPosition(x, y) != null;
     }

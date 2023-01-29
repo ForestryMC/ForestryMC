@@ -1,14 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.tiles;
+
+import java.io.IOException;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
 import forestry.api.recipes.ICarpenterRecipe;
@@ -32,22 +46,10 @@ import forestry.factory.gui.GuiCarpenter;
 import forestry.factory.inventory.InventoryCarpenter;
 import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.CarpenterRecipeManager;
-import java.io.IOException;
-import javax.annotation.Nullable;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileCarpenter extends TilePowered
         implements ISidedInventory, ILiquidTankTile, IFluidHandler, IItemStackDisplay {
+
     private static final int TICKS_PER_RECIPE_TIME = 1;
     private static final int ENERGY_PER_WORK_CYCLE = 2040;
     private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 10;
@@ -110,8 +112,8 @@ public class TileCarpenter extends TilePowered
         }
 
         if (!CarpenterRecipeManager.matches(currentRecipe, resourceTank.getFluid(), getBoxStack(), craftingInventory)) {
-            currentRecipe = CarpenterRecipeManager.findMatchingRecipe(
-                    resourceTank.getFluid(), getBoxStack(), craftingInventory);
+            currentRecipe = CarpenterRecipeManager
+                    .findMatchingRecipe(resourceTank.getFluid(), getBoxStack(), craftingInventory);
 
             if (currentRecipe != null) {
                 int recipeTime = currentRecipe.getPackagingTime();
@@ -146,7 +148,11 @@ public class TileCarpenter extends TilePowered
 
         ItemStack pendingProduct = currentRecipe.getCraftingGridRecipe().getRecipeOutput();
         InventoryUtil.tryAddStack(
-                this, pendingProduct, InventoryCarpenter.SLOT_PRODUCT, InventoryCarpenter.SLOT_PRODUCT_COUNT, true);
+                this,
+                pendingProduct,
+                InventoryCarpenter.SLOT_PRODUCT,
+                InventoryCarpenter.SLOT_PRODUCT_COUNT,
+                true);
 
         return true;
     }
@@ -186,9 +192,13 @@ public class TileCarpenter extends TilePowered
 
         EntityPlayer player = PlayerUtil.getPlayer(worldObj, getAccessHandler().getOwner());
         ItemStack[] craftingSets = InventoryUtil.getStacks(
-                craftingInventory, InventoryGhostCrafting.SLOT_CRAFTING_1, InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
+                craftingInventory,
+                InventoryGhostCrafting.SLOT_CRAFTING_1,
+                InventoryGhostCrafting.SLOT_CRAFTING_COUNT);
         IInventory inventory = new InventoryMapper(
-                getInternalInventory(), InventoryCarpenter.SLOT_INVENTORY_1, InventoryCarpenter.SLOT_INVENTORY_COUNT);
+                getInternalInventory(),
+                InventoryCarpenter.SLOT_INVENTORY_1,
+                InventoryCarpenter.SLOT_INVENTORY_COUNT);
         return InventoryUtil.removeSets(inventory, 1, craftingSets, player, true, true, false, doRemove);
     }
 

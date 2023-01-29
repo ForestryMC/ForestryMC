@@ -1,23 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
-import forestry.api.arboriculture.EnumTreeChromosome;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllelePlantType;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+
 import net.minecraftforge.common.EnumPlantType;
+
+import forestry.api.arboriculture.EnumTreeChromosome;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllelePlantType;
 
 public class AllelePlantType extends AlleleCategorized implements IAllelePlantType {
 

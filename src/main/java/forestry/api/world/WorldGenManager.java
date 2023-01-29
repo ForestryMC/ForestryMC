@@ -10,5 +10,6 @@ package forestry.api.world;
  */
 @Deprecated
 public class WorldGenManager {
+
     public static IWorldGenInterface worldgenInterface;
 }

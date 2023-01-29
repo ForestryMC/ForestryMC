@@ -1,14 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import forestry.api.mail.EnumAddressee;
@@ -35,8 +36,6 @@ import forestry.mail.items.EnumStampDefinition;
 import forestry.mail.items.ItemRegistryMail;
 import forestry.mail.network.PacketRegistryMail;
 import forestry.mail.triggers.MailTriggers;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 
 @Plugin(
         pluginID = "Mail",
@@ -45,6 +44,7 @@ import net.minecraft.item.ItemStack;
         url = Constants.URL,
         unlocalizedDescription = "for.plugin.mail.description")
 public class PluginMail extends ForestryPlugin {
+
     public static ItemRegistryMail items;
     public static BlockRegistryMail blocks;
 
@@ -160,7 +160,9 @@ public class PluginMail extends ForestryPlugin {
                 PluginCore.items.woodPulp);
 
         RecipeUtil.addShapelessRecipe(
-                items.catalogue.getItemStack(), items.stamps.getWildcard(), new ItemStack(Items.book));
+                items.catalogue.getItemStack(),
+                items.stamps.getWildcard(),
+                new ItemStack(Items.book));
 
         RecipeUtil.addRecipe(
                 blocks.mail.get(BlockMailType.MAILBOX),

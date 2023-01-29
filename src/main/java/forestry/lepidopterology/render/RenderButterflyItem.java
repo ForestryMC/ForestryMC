@@ -1,27 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.render;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.IButterfly;
-import forestry.core.proxy.Proxies;
-import forestry.lepidopterology.entities.EntityButterfly;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.IButterfly;
+import forestry.core.proxy.Proxies;
+import forestry.lepidopterology.entities.EntityButterfly;
 
 public class RenderButterflyItem implements IItemRenderer {
 
@@ -73,8 +73,8 @@ public class RenderButterflyItem implements IItemRenderer {
     private IButterfly initButterfly(ItemStack item) {
         IButterfly butterfly = ButterflyManager.butterflyRoot.getMember(item);
         if (butterfly == null) {
-            butterfly = ButterflyManager.butterflyRoot.templateAsIndividual(
-                    ButterflyManager.butterflyRoot.getDefaultTemplate());
+            butterfly = ButterflyManager.butterflyRoot
+                    .templateAsIndividual(ButterflyManager.butterflyRoot.getDefaultTemplate());
         }
 
         if (entity == null) {

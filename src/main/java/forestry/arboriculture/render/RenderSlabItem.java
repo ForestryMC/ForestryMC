@@ -1,17 +1,20 @@
 package forestry.arboriculture.render;
 
-import forestry.api.arboriculture.EnumWoodType;
-import forestry.arboriculture.items.ItemBlockWood;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 
+import forestry.api.arboriculture.EnumWoodType;
+import forestry.arboriculture.items.ItemBlockWood;
+import forestry.core.utils.ItemStackUtil;
+
 public class RenderSlabItem implements IItemRenderer {
+
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         switch (type) {
@@ -47,8 +50,8 @@ public class RenderSlabItem implements IItemRenderer {
         }
     }
 
-    private static void renderItem(
-            RenderBlocks renderer, ItemStack itemStack, float x, float y, float z, boolean fullBlock) {
+    private static void renderItem(RenderBlocks renderer, ItemStack itemStack, float x, float y, float z,
+            boolean fullBlock) {
         Tessellator tessellator = Tessellator.instance;
         Block block = ItemStackUtil.getBlock(itemStack);
 

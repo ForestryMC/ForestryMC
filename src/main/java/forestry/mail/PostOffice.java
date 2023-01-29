@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail;
+
+import java.io.File;
+import java.util.LinkedHashMap;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldSavedData;
 
 import forestry.api.mail.EnumPostage;
 import forestry.api.mail.ILetter;
@@ -21,12 +27,6 @@ import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
 import forestry.mail.items.EnumStampDefinition;
 import forestry.plugins.PluginMail;
-import java.io.File;
-import java.util.LinkedHashMap;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 
 public class PostOffice extends WorldSavedData implements IPostOffice {
 
@@ -93,8 +93,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
                 continue;
             }
 
-            MailAddress address =
-                    new MailAddress(str.replace(TradeStation.SAVE_NAME, "").replace(".dat", ""));
+            MailAddress address = new MailAddress(str.replace(TradeStation.SAVE_NAME, "").replace(".dat", ""));
             ITradeStation trade = PostManager.postRegistry.getTradeStation(world, address);
             if (trade == null) {
                 continue;
@@ -124,7 +123,7 @@ public class PostOffice extends WorldSavedData implements IPostOffice {
 
     @Override
     public ItemStack getAnyStamp(EnumPostage postage, int max) {
-        return getAnyStamp(new EnumPostage[] {postage}, max);
+        return getAnyStamp(new EnumPostage[] { postage }, max);
     }
 
     @Override

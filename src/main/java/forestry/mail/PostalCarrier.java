@@ -1,14 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,11 +28,6 @@ import forestry.core.render.TextureManager;
 import forestry.core.utils.PlayerUtil;
 import forestry.core.utils.StringUtil;
 import forestry.mail.network.packets.PacketPOBoxInfoUpdate;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 
 public class PostalCarrier implements IPostalCarrier {
 
@@ -57,8 +56,8 @@ public class PostalCarrier implements IPostalCarrier {
     }
 
     @Override
-    public IPostalState deliverLetter(
-            World world, IPostOffice office, IMailAddress recipient, ItemStack letterStack, boolean doDeliver) {
+    public IPostalState deliverLetter(World world, IPostOffice office, IMailAddress recipient, ItemStack letterStack,
+            boolean doDeliver) {
         if (type == EnumAddressee.TRADER) {
             return handleTradeLetter(world, recipient, letterStack, doDeliver);
         } else {
@@ -66,8 +65,8 @@ public class PostalCarrier implements IPostalCarrier {
         }
     }
 
-    private static IPostalState handleTradeLetter(
-            World world, IMailAddress recipient, ItemStack letterStack, boolean doLodge) {
+    private static IPostalState handleTradeLetter(World world, IMailAddress recipient, ItemStack letterStack,
+            boolean doLodge) {
         ITradeStation trade = PostManager.postRegistry.getTradeStation(world, recipient);
         if (trade == null) {
             return EnumDeliveryState.NO_MAILBOX;

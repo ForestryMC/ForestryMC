@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins;
+
+import java.util.ArrayList;
+
+import net.minecraft.command.ICommand;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import cpw.mods.fml.common.IFuelHandler;
 import forestry.api.circuits.ChipsetManager;
@@ -47,12 +53,6 @@ import forestry.core.recipes.RecipeUtil;
 import forestry.core.tiles.MachineDefinition;
 import forestry.core.utils.ClimateUtil;
 import forestry.core.utils.ForestryModEnvWarningCallable;
-import java.util.ArrayList;
-import net.minecraft.command.ICommand;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(
         pluginID = "Core",
@@ -61,6 +61,7 @@ import net.minecraftforge.oredict.OreDictionary;
         url = Constants.URL,
         unlocalizedDescription = "for.plugin.core.description")
 public class PluginCore extends ForestryPlugin {
+
     public static final RootCommand rootCommand = new RootCommand();
     public static ItemRegistryCore items;
     public static BlockRegistryCore blocks;
@@ -98,7 +99,8 @@ public class PluginCore extends ForestryPlugin {
         rootCommand.addChildCommand(new CommandPlugins());
 
         blocks.core.addDefinitions(
-                new MachineDefinition(BlockCoreType.ESCRITOIRE), new MachineDefinition(BlockCoreType.ANALYZER));
+                new MachineDefinition(BlockCoreType.ESCRITOIRE),
+                new MachineDefinition(BlockCoreType.ANALYZER));
     }
 
     @Override
@@ -201,15 +203,19 @@ public class PluginCore extends ForestryPlugin {
         /* BRONZE INGOTS */
         if (Config.isCraftingBronzeEnabled()) {
             RecipeUtil.addShapelessRecipe(
-                    new ItemStack(items.ingotBronze, 4), "ingotTin", "ingotCopper", "ingotCopper", "ingotCopper");
+                    new ItemStack(items.ingotBronze, 4),
+                    "ingotTin",
+                    "ingotCopper",
+                    "ingotCopper",
+                    "ingotCopper");
         }
 
         /* STURDY MACHINE */
         RecipeUtil.addRecipe(items.sturdyCasing, "###", "# #", "###", '#', "ingotBronze");
 
         // / EMPTY CANS
-        RecipeUtil.addRecipe(
-                ForestryAPI.activeMode.getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
+        RecipeUtil
+                .addRecipe(ForestryAPI.activeMode.getStackSetting("recipe.output.can"), " # ", "# #", '#', "ingotTin");
 
         // / GEARS
         ArrayList<ItemStack> stoneGear = OreDictionary.getOres("gearStone");
@@ -321,14 +327,10 @@ public class PluginCore extends ForestryPlugin {
         }
 
         if (ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can").stackSize > 0) {
-            ItemStack canWater = PluginFluids.items
-                    .getContainer(EnumContainerType.CAN, Fluids.WATER)
+            ItemStack canWater = PluginFluids.items.getContainer(EnumContainerType.CAN, Fluids.WATER).getItemStack();
+            ItemStack waxCapsuleWater = PluginFluids.items.getContainer(EnumContainerType.CAPSULE, Fluids.WATER)
                     .getItemStack();
-            ItemStack waxCapsuleWater = PluginFluids.items
-                    .getContainer(EnumContainerType.CAPSULE, Fluids.WATER)
-                    .getItemStack();
-            ItemStack refractoryWater = PluginFluids.items
-                    .getContainer(EnumContainerType.REFRACTORY, Fluids.WATER)
+            ItemStack refractoryWater = PluginFluids.items.getContainer(EnumContainerType.REFRACTORY, Fluids.WATER)
                     .getItemStack();
             RecipeUtil.addRecipe(
                     ForestryAPI.activeMode.getStackSetting("recipe.output.bogearth.can"),
@@ -429,7 +431,7 @@ public class PluginCore extends ForestryPlugin {
 
     @Override
     public ICommand[] getConsoleCommands() {
-        return new ICommand[] {rootCommand};
+        return new ICommand[] { rootCommand };
     }
 
     @Override

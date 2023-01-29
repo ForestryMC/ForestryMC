@@ -1,14 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Keyboard;
 
 import forestry.api.mail.EnumAddressee;
 import forestry.api.mail.TradeStationInfo;
@@ -17,15 +27,6 @@ import forestry.core.gui.GuiForestry;
 import forestry.core.gui.widgets.ItemStackWidget;
 import forestry.core.gui.widgets.Widget;
 import forestry.core.utils.StringUtil;
-import java.util.ArrayList;
-import java.util.List;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
 
 public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
 
@@ -53,8 +54,13 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
         buttonList.add(new GuiButton(2, width / 2 + 44, guiTop + 150, 12, 20, ">"));
         buttonList.add(new GuiButton(3, width / 2 - 58, guiTop + 150, 12, 20, "<"));
 
-        buttonFilter =
-                new GuiButton(4, (width / 2) - 44, guiTop + 150, 42, 20, StringUtil.localize("gui.mail.filter.all"));
+        buttonFilter = new GuiButton(
+                4,
+                (width / 2) - 44,
+                guiTop + 150,
+                42,
+                20,
+                StringUtil.localize("gui.mail.filter.all"));
         buttonList.add(buttonFilter);
 
         buttonUse = new GuiButton(5, width / 2, guiTop + 150, 42, 20, StringUtil.localize("gui.mail.address.copy"));
@@ -93,8 +99,8 @@ public class GuiCatalogue extends GuiForestry<ContainerCatalogue, IInventory> {
     }
 
     private void drawNoTrade(int x, int y) {
-        fontRendererObj.drawSplitString(
-                StringUtil.localize("gui.mail.notrades"), x, y + 18, 119, fontColor.get("gui.book"));
+        fontRendererObj
+                .drawSplitString(StringUtil.localize("gui.mail.notrades"), x, y + 18, 119, fontColor.get("gui.book"));
     }
 
     private void drawTradePreview(TradeStationInfo tradeInfo, int x, int y) {

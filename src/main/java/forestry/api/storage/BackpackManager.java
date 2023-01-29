@@ -7,11 +7,14 @@ package forestry.api.storage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import net.minecraft.item.ItemStack;
 
 public class BackpackManager {
+
     /**
-     * 0 - Miner's Backpack 1 - Digger's Backpack 2 - Forester's Backpack 3 - Hunter's Backpack 4 - Adventurer's Backpack
+     * 0 - Miner's Backpack 1 - Digger's Backpack 2 - Forester's Backpack 3 - Hunter's Backpack 4 - Adventurer's
+     * Backpack
      *
      * Use IMC messages to achieve the same effect!
      */

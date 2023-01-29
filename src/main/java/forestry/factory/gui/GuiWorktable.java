@@ -1,14 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.gui;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
+import org.lwjgl.opengl.GL11;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestryTitled;
@@ -24,13 +29,9 @@ import forestry.factory.inventory.InventoryGhostCrafting;
 import forestry.factory.recipes.MemorizedRecipe;
 import forestry.factory.recipes.RecipeMemory;
 import forestry.factory.tiles.TileWorktable;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
 
 public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWorktable> {
+
     private static final int SPACING = 18;
     private boolean hasRecipeConflict = false;
 
@@ -46,8 +47,12 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
             int yPos = 20 + (y * SPACING);
             for (int x = 0; x < 3; x++) {
                 int xPos = 110 + (x * SPACING);
-                MemorizedRecipeSlot memorizedRecipeSlot =
-                        new MemorizedRecipeSlot(widgetManager, xPos, yPos, recipeMemory, slot++);
+                MemorizedRecipeSlot memorizedRecipeSlot = new MemorizedRecipeSlot(
+                        widgetManager,
+                        xPos,
+                        yPos,
+                        recipeMemory,
+                        slot++);
                 widgetManager.add(memorizedRecipeSlot);
             }
         }
@@ -73,8 +78,8 @@ public class GuiWorktable extends GuiForestryTitled<ContainerWorktable, TileWork
     public void drawScreen(int mouseX, int mouseY, float parTicks) {
         super.drawScreen(mouseX, mouseY, parTicks);
 
-        final Slot itemSlot =
-                (Slot) inventorySlots.inventorySlots.get(54 + InventoryGhostCrafting.SLOT_CRAFTING_RESULT);
+        final Slot itemSlot = (Slot) inventorySlots.inventorySlots
+                .get(54 + InventoryGhostCrafting.SLOT_CRAFTING_RESULT);
 
         if (func_146978_c(itemSlot.xDisplayPosition, itemSlot.yDisplayPosition, 16, 16, mouseX, mouseY)
                 && !inventory.canTakeStack(InventoryGhostCrafting.SLOT_CRAFTING_RESULT)) {

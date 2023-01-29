@@ -8,7 +8,8 @@ package forestry.api.multiblock;
 import forestry.api.apiculture.IBeeHousing;
 
 /**
- * The IAlvearyController provides access to all the IMultiblockController and IBeeHousing methods
- * necessary for an IAlvearyComponent to function.
+ * The IAlvearyController provides access to all the IMultiblockController and IBeeHousing methods necessary for an
+ * IAlvearyComponent to function.
  */
-public interface IAlvearyController extends IMultiblockController, IBeeHousing {}
+public interface IAlvearyController extends IMultiblockController, IBeeHousing {
+}

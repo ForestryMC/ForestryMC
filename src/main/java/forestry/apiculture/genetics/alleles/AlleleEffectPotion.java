@@ -1,14 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionHelper;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import forestry.api.apiculture.BeeManager;
@@ -17,16 +27,6 @@ import forestry.api.apiculture.IBeeHousing;
 import forestry.api.genetics.IEffectData;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.Log;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionHelper;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 
 public class AlleleEffectPotion extends AlleleEffectThrottled {
 
@@ -36,8 +36,8 @@ public class AlleleEffectPotion extends AlleleEffectThrottled {
     private final int duration;
     private final float chance;
 
-    public AlleleEffectPotion(
-            String name, boolean isDominant, Potion potion, int duration, int throttle, float chance) {
+    public AlleleEffectPotion(String name, boolean isDominant, Potion potion, int duration, int throttle,
+            float chance) {
         super(name, isDominant, throttle, true, false);
         this.potion = potion;
         this.isBadEffect = isBadEffect(potion);

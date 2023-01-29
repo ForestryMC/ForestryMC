@@ -1,26 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.food.items;
+
+import java.awt.Color;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.core.render.TextureManager;
-import java.awt.Color;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
 
 public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
+
     MEAD_SHORT("meadShort", "glass", new Color(0xec9a19), new Color(0xffffff), 1, 0.2f, true),
     MEAD_CURATIVE("meadCurative", "glass", new Color(0xc5feff), new Color(0xffffff), 1, 0.2f, true),
     MEAD("mead", "glass", new Color(0xcc6600), new Color(0xffffff), 10, 0.1f, true);
+
     public static final EnumBeverage[] VALUES = values();
 
     private final String name;
@@ -38,13 +40,7 @@ public enum EnumBeverage implements ItemBeverage.IBeverageInfo {
     private final float saturation;
     private final boolean isAlwaysEdible;
 
-    EnumBeverage(
-            String name,
-            String iconType,
-            Color primaryColor,
-            Color secondaryColor,
-            int heal,
-            float saturation,
+    EnumBeverage(String name, String iconType, Color primaryColor, Color secondaryColor, int heal, float saturation,
             boolean isAlwaysEdible) {
         this.name = name;
         this.iconType = iconType;

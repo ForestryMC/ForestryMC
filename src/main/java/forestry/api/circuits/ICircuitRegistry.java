@@ -6,6 +6,7 @@
 package forestry.api.circuits;
 
 import java.util.Map;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 

@@ -1,28 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.food;
 
-import forestry.api.food.IBeverageEffect;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.food.IBeverageEffect;
 
 /**
  * describes the itemstacks required to achieve a certain effect.
  */
 public class InfuserMixture {
+
     private final int meta;
     private final ItemStack[] ingredients;
     private final IBeverageEffect effect;
 
     public InfuserMixture(int meta, ItemStack ingredient, IBeverageEffect effect) {
-        this(meta, new ItemStack[] {ingredient}, effect);
+        this(meta, new ItemStack[] { ingredient }, effect);
     }
 
     public InfuserMixture(int meta, ItemStack ingredients[], IBeverageEffect effect) {

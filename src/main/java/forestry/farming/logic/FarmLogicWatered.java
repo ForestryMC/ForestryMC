@@ -1,14 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.farming.FarmDirection;
 import forestry.api.farming.IFarmHousing;
@@ -18,14 +26,6 @@ import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
 import forestry.farming.FarmHelper;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 
 public abstract class FarmLogicWatered extends FarmLogic {
 
@@ -89,7 +89,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
     private boolean maintainSoil(int x, int y, int z, FarmDirection direction, int extent) {
 
         World world = getWorld();
-        ItemStack[] resources = new ItemStack[] {resource};
+        ItemStack[] resources = new ItemStack[] { resource };
 
         for (int i = 0; i < extent; i++) {
             Vect position = translateWithOffset(x, y, z, direction, i);
@@ -151,7 +151,7 @@ public abstract class FarmLogicWatered extends FarmLogic {
     }
 
     private boolean trySetSoil(Vect position) {
-        ItemStack[] resources = new ItemStack[] {resource};
+        ItemStack[] resources = new ItemStack[] { resource };
         if (!housing.getFarmInventory().hasResources(resources)) {
             return false;
         }

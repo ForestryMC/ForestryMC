@@ -8,6 +8,7 @@ package forestry.api.recipes;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IStillRecipe extends IForestryRecipe {
+
     /**
      * @return Amount of work cycles required to run through the conversion once.
      */

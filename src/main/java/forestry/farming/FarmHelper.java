@@ -1,30 +1,30 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming;
 
-import com.google.common.collect.ImmutableSet;
-import forestry.api.farming.FarmDirection;
-import forestry.api.multiblock.IFarmComponent;
-import forestry.core.utils.vect.MutableVect;
-import forestry.core.utils.vect.Vect;
-import forestry.core.utils.vect.VectUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.google.common.collect.ImmutableSet;
+
+import forestry.api.farming.FarmDirection;
+import forestry.api.multiblock.IFarmComponent;
+import forestry.core.utils.vect.MutableVect;
+import forestry.core.utils.vect.Vect;
+import forestry.core.utils.vect.VectUtil;
+
 public class FarmHelper {
 
-    public static final ImmutableSet<Block> bricks = ImmutableSet.of(
-            Blocks.brick_block, Blocks.stonebrick, Blocks.sandstone, Blocks.nether_brick, Blocks.quartz_block);
+    public static final ImmutableSet<Block> bricks = ImmutableSet
+            .of(Blocks.brick_block, Blocks.stonebrick, Blocks.sandstone, Blocks.nether_brick, Blocks.quartz_block);
 
     private static FarmDirection getOpposite(FarmDirection farmDirection) {
         ForgeDirection forgeDirection = farmDirection.getForgeDirection();
@@ -32,8 +32,8 @@ public class FarmHelper {
         return FarmDirection.getFarmDirection(forgeDirectionOpposite);
     }
 
-    public static Vect getFarmMultiblockCorner(
-            World world, Vect start, FarmDirection farmSide, FarmDirection layoutDirection) {
+    public static Vect getFarmMultiblockCorner(World world, Vect start, FarmDirection farmSide,
+            FarmDirection layoutDirection) {
         Vect edge = getFarmMultiblockEdge(world, start, farmSide);
         return getFarmMultiblockEdge(world, edge, getOpposite(layoutDirection));
     }

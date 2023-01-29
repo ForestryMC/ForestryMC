@@ -5,8 +5,9 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.core.INBTTagable;
 import java.util.List;
+
+import forestry.api.core.INBTTagable;
 
 /**
  * An actual individual with genetic information.
@@ -23,6 +24,7 @@ public interface IIndividual extends INBTTagable {
 
     /**
      * Call to mark the IIndividual as analyzed.
+     * 
      * @return true if the IIndividual has not been analyzed previously.
      */
     boolean analyze();
@@ -36,7 +38,9 @@ public interface IIndividual extends INBTTagable {
     IGenome getGenome();
 
     /**
-     * Check whether the genetic makeup of two IIndividuals is identical. Ignores additional data like generations, irregular mating, etc..
+     * Check whether the genetic makeup of two IIndividuals is identical. Ignores additional data like generations,
+     * irregular mating, etc..
+     * 
      * @param other
      * @return true if the given other IIndividual has the amount of chromosomes and their alleles are identical.
      */

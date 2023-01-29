@@ -13,12 +13,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 
 /**
- * Base logic class for Multiblock-connected tile entities.
- * Most multiblock components should derive from this.
- * Supply it an IMultiblockLogic from MultiblockManager.logicFactory
+ * Base logic class for Multiblock-connected tile entities. Most multiblock components should derive from this. Supply
+ * it an IMultiblockLogic from MultiblockManager.logicFactory
  */
 public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> extends TileEntity
         implements IMultiblockComponent {
+
     private final T multiblockLogic;
 
     public MultiblockTileEntityBase(T multiblockLogic) {
@@ -36,8 +36,8 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
     }
 
     @Override
-    public abstract void onMachineAssembled(
-            IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord);
+    public abstract void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord,
+            ChunkCoordinates maxCoord);
 
     @Override
     public abstract void onMachineBroken();
@@ -55,9 +55,10 @@ public abstract class MultiblockTileEntityBase<T extends IMultiblockLogic> exten
     }
 
     /**
-     * Generally, TileEntities that are part of a multiblock should not subscribe to updates
-     * from the main game loop. Instead, you should have lists of TileEntities which need to
-     * be notified during an update() in your Controller and perform callbacks from there.
+     * Generally, TileEntities that are part of a multiblock should not subscribe to updates from the main game loop.
+     * Instead, you should have lists of TileEntities which need to be notified during an update() in your Controller
+     * and perform callbacks from there.
+     * 
      * @see net.minecraft.tileentity.TileEntity#canUpdate()
      */
     @Override

@@ -1,14 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.tiles;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Stack;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
@@ -32,19 +43,9 @@ import forestry.factory.gui.GuiCentrifuge;
 import forestry.factory.inventory.InventoryCentrifuge;
 import forestry.factory.recipes.CentrifugeRecipeManager;
 import forestry.factory.triggers.FactoryTriggers;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Stack;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileCentrifuge extends TilePowered implements ISocketable, ISidedInventory {
+
     private static final int TICKS_PER_RECIPE_TIME = 1;
     private static final int ENERGY_PER_WORK_CYCLE = 3200;
     private static final int ENERGY_PER_RECIPE_TIME = ENERGY_PER_WORK_CYCLE / 20;
@@ -160,7 +161,11 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
         ItemStack next = pendingProducts.peek();
 
         boolean added = InventoryUtil.tryAddStack(
-                this, next, InventoryCentrifuge.SLOT_PRODUCT_1, InventoryCentrifuge.SLOT_PRODUCT_COUNT, true);
+                this,
+                next,
+                InventoryCentrifuge.SLOT_PRODUCT_1,
+                InventoryCentrifuge.SLOT_PRODUCT_COUNT,
+                true);
 
         if (added) {
             pendingProducts.pop();
@@ -178,10 +183,7 @@ public class TileCentrifuge extends TilePowered implements ISocketable, ISidedIn
         }
 
         return ((float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).stackSize
-                        / (float) inventory
-                                .getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE)
-                                .getMaxStackSize())
-                > percentage;
+                / (float) inventory.getStackInSlot(InventoryCentrifuge.SLOT_RESOURCE).getMaxStackSize()) > percentage;
     }
 
     @Override

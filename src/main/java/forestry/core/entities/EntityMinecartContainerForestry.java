@@ -1,18 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.entities;
 
-import forestry.core.inventory.IInventoryAdapter;
-import forestry.core.tiles.IFilterSlotDelegate;
-import forestry.core.utils.InventoryUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
@@ -20,8 +15,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import forestry.core.inventory.IInventoryAdapter;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.utils.InventoryUtil;
+
 public abstract class EntityMinecartContainerForestry extends EntityMinecartForestry
         implements ISidedInventory, IFilterSlotDelegate {
+
     /**
      * When set to true, the minecart will drop all items when setDead() is called. When false (such as when travelling
      * dimensions) it preserves its contents.

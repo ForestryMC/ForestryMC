@@ -1,23 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.commands;
+
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 import forestry.core.utils.StringUtil;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
 import forestry.plugins.PluginManager;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -115,8 +114,8 @@ public class CommandPlugins extends SubCommand {
                     CommandHelpers.sendChatMessage(sender, EnumChatFormatting.BLUE + "URL: " + info.url());
                 }
                 if (!info.unlocalizedDescription().isEmpty()) {
-                    CommandHelpers.sendChatMessage(
-                            sender, StatCollector.translateToLocal(info.unlocalizedDescription()));
+                    CommandHelpers
+                            .sendChatMessage(sender, StatCollector.translateToLocal(info.unlocalizedDescription()));
                 }
             }
         }

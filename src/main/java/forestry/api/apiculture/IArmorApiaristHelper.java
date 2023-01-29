@@ -18,9 +18,10 @@ public interface IArmorApiaristHelper {
 
     /**
      * Called when the apiarist's armor acts as protection against an attack.
-     * @param stack ItemStack to check
-     * @param entity Entity being attacked
-     * @param cause Optional cause of attack, such as a bee effect identifier
+     * 
+     * @param stack     ItemStack to check
+     * @param entity    Entity being attacked
+     * @param cause     Optional cause of attack, such as a bee effect identifier
      * @param doProtect Whether or not to actually do the side effects of protection
      * @return Whether or not the item is valid Apiarist Armor and should protect the player from that attack
      * @since Forestry 4.2
@@ -29,8 +30,9 @@ public interface IArmorApiaristHelper {
 
     /**
      * Called when the apiarist's armor acts as protection against an attack.
-     * @param entity Entity being attacked
-     * @param cause Optional cause of attack, such as a bee effect identifier
+     * 
+     * @param entity    Entity being attacked
+     * @param cause     Optional cause of attack, such as a bee effect identifier
      * @param doProtect Whether or not to actually do the side effects of protection
      * @return The number of valid Apiarist Armor pieces the player is wearing that are actually protecting
      * @since Forestry 4.2
@@ -39,9 +41,10 @@ public interface IArmorApiaristHelper {
 
     /**
      * Called when the apiarist's armor acts as protection against an attack.
-     * @param stack ItemStack to check
-     * @param player Player being attacked
-     * @param cause Optional cause of attack, such as a bee effect identifier
+     * 
+     * @param stack     ItemStack to check
+     * @param player    Player being attacked
+     * @param cause     Optional cause of attack, such as a bee effect identifier
      * @param doProtect Whether or not to actually do the side effects of protection
      * @return Whether or not the item is valid Apiarist Armor and should protect the player from that attack
      * @deprecated since Forestry 4.2. use the EntityLivingBase version
@@ -51,8 +54,9 @@ public interface IArmorApiaristHelper {
 
     /**
      * Called when the apiarist's armor acts as protection against an attack.
-     * @param player Player being attacked
-     * @param cause Optional cause of attack, such as a bee effect identifier
+     * 
+     * @param player    Player being attacked
+     * @param cause     Optional cause of attack, such as a bee effect identifier
      * @param doProtect Whether or not to actually do the side effects of protection
      * @return The number of valid Apiarist Armor pieces the player is wearing that are actually protecting
      * @deprecated since Forestry 4.2. use the EntityLivingBase version

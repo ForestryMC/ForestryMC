@@ -1,17 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.config;
 
 import java.io.File;
 import java.util.Arrays;
+
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -64,8 +63,11 @@ public class LocalizedConfiguration extends Configuration {
         Property prop = this.get(category, name, defaultValue);
         prop.setValidValues(validValues);
         prop.setLanguageKey(langKey);
-        prop.comment =
-                comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]";
+        prop.comment = comment + " [default: "
+                + defaultValue
+                + "] [valid: "
+                + Arrays.toString(prop.getValidValues())
+                + "]";
         return prop.getString();
     }
 
@@ -87,8 +89,11 @@ public class LocalizedConfiguration extends Configuration {
 
         prop.setValidValues(validValues);
         prop.setLanguageKey(langKey);
-        prop.comment =
-                comment + " [default: " + defaultValue + "] [valid: " + Arrays.toString(prop.getValidValues()) + "]";
+        prop.comment = comment + " [default: "
+                + defaultValue
+                + "] [valid: "
+                + Arrays.toString(prop.getValidValues())
+                + "]";
         String stringValue = prop.getString();
 
         T enumValue = defaultValue;
@@ -122,8 +127,11 @@ public class LocalizedConfiguration extends Configuration {
         Property prop = this.get(category, name, defaultValue);
         prop.setLanguageKey(langKey);
         prop.setValidValues(validValues);
-        prop.comment = comment + " [default: " + Arrays.toString(defaultValue) + "] [valid: "
-                + Arrays.toString(prop.getValidValues()) + "]";
+        prop.comment = comment + " [default: "
+                + Arrays.toString(defaultValue)
+                + "] [valid: "
+                + Arrays.toString(prop.getValidValues())
+                + "]";
         return prop.getStringList();
     }
 

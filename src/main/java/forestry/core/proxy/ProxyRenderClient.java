@@ -1,14 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.proxy;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityExplodeFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntitySpellParticleFX;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -33,16 +42,6 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.render.TextureManager;
 import forestry.core.render.TileRendererIndex;
 import forestry.core.tiles.MachineDefinition;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityExplodeFX;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.EntitySpellParticleFX;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 
 public class ProxyRenderClient extends ProxyRender {
 
@@ -81,10 +80,10 @@ public class ProxyRenderClient extends ProxyRender {
 
     @Override
     public void registerTESR(MachineDefinition definition) {
-        RenderBlock.byBlockRenderer.put(
-                new TileRendererIndex(definition.getBlock(), definition.getMeta()), definition.renderer);
-        ClientRegistry.bindTileEntitySpecialRenderer(
-                definition.teClass, (TileEntitySpecialRenderer) definition.renderer);
+        RenderBlock.byBlockRenderer
+                .put(new TileRendererIndex(definition.getBlock(), definition.getMeta()), definition.renderer);
+        ClientRegistry
+                .bindTileEntitySpecialRenderer(definition.teClass, (TileEntitySpecialRenderer) definition.renderer);
     }
 
     @Override
@@ -197,9 +196,7 @@ public class ProxyRenderClient extends ProxyRender {
             return;
         }
 
-        Proxies.common
-                .getClientInstance()
-                .effectRenderer
+        Proxies.common.getClientInstance().effectRenderer
                 .addEffect(new EntityFXSnow(world, d1 + world.rand.nextGaussian(), d2, d3 + world.rand.nextGaussian()));
     }
 

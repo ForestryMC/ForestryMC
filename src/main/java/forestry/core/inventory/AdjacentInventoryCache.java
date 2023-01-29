@@ -1,26 +1,26 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.inventory;
 
-import forestry.core.tiles.AdjacentTileCache;
-import forestry.core.tiles.TileUtil;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.core.tiles.AdjacentTileCache;
+import forestry.core.tiles.TileUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -28,6 +28,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheListener {
 
     public interface ITileFilter {
+
         boolean matches(TileEntity tile);
     }
 
@@ -46,8 +47,8 @@ public final class AdjacentInventoryCache implements AdjacentTileCache.ICacheLis
         this(tile, cache, filter, null);
     }
 
-    public AdjacentInventoryCache(
-            TileEntity tile, AdjacentTileCache cache, ITileFilter filter, Comparator<IInventory> sorter) {
+    public AdjacentInventoryCache(TileEntity tile, AdjacentTileCache cache, ITileFilter filter,
+            Comparator<IInventory> sorter) {
         this.cache = cache;
         this.filter = filter;
         this.sorter = sorter;

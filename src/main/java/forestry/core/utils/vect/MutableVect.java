@@ -1,23 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils.vect;
 
-import forestry.api.farming.FarmDirection;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.api.farming.FarmDirection;
 
 /**
  * Represents changeable positions or dimensions.
  */
 public class MutableVect implements IVect {
+
     public int x;
     public int y;
     public int z;
@@ -93,7 +93,7 @@ public class MutableVect implements IVect {
 
     @Override
     public int[] toArray() {
-        return new int[] {x, y, z};
+        return new int[] { x, y, z };
     }
 
     public MutableVect multiply(float factor) {

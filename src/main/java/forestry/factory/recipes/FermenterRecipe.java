@@ -1,20 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.recipes.IFermenterRecipe;
-import forestry.core.fluids.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.core.fluids.Fluids;
 
 public class FermenterRecipe implements IFermenterRecipe {
 
@@ -24,8 +23,8 @@ public class FermenterRecipe implements IFermenterRecipe {
     private final Fluid output;
     private final FluidStack fluidResource;
 
-    public FermenterRecipe(
-            ItemStack resource, int fermentationValue, float modifier, Fluid output, FluidStack fluidResource) {
+    public FermenterRecipe(ItemStack resource, int fermentationValue, float modifier, Fluid output,
+            FluidStack fluidResource) {
         // assume that fermenter recipes want to use Forestry's honey and not the legacy "fluid.honey"
         if (Fluids.LEGACY_HONEY.is(fluidResource)) {
             fluidResource = Fluids.HONEY.getFluid(fluidResource.amount);

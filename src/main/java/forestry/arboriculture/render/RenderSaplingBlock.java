@@ -1,14 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.render;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import forestry.api.arboriculture.EnumGermlingType;
@@ -16,12 +21,6 @@ import forestry.api.arboriculture.IAlleleTreeSpecies;
 import forestry.arboriculture.blocks.BlockSapling;
 import forestry.arboriculture.tiles.TileSapling;
 import forestry.plugins.PluginArboriculture;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 
 public class RenderSaplingBlock implements ISimpleBlockRenderingHandler {
 
@@ -31,8 +30,8 @@ public class RenderSaplingBlock implements ISimpleBlockRenderingHandler {
     public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {}
 
     @Override
-    public boolean renderWorldBlock(
-            IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
+            RenderBlocks renderer) {
 
         if (modelId != this.getRenderId()) {
             return false;
@@ -63,8 +62,8 @@ public class RenderSaplingBlock implements ISimpleBlockRenderingHandler {
         return PluginArboriculture.modelIdSaplings;
     }
 
-    private static boolean renderCrossedSquares(
-            IAlleleTreeSpecies species, IBlockAccess world, Block block, int x, int y, int z) {
+    private static boolean renderCrossedSquares(IAlleleTreeSpecies species, IBlockAccess world, Block block, int x,
+            int y, int z) {
 
         Tessellator tess = Tessellator.instance;
 
@@ -86,8 +85,8 @@ public class RenderSaplingBlock implements ISimpleBlockRenderingHandler {
         return true;
     }
 
-    private static void drawCrossedSquares(
-            IAlleleTreeSpecies species, double par3, double par5, double par7, float mod) {
+    private static void drawCrossedSquares(IAlleleTreeSpecies species, double par3, double par5, double par7,
+            float mod) {
 
         Tessellator tess = Tessellator.instance;
         IIcon icon = species.getGermlingIcon(EnumGermlingType.SAPLING, renderLayer);

@@ -1,28 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.storage;
 
-import cpw.mods.fml.common.registry.GameData;
-import forestry.api.apiculture.BeeManager;
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.storage.IBackpackDefinition;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.OreDictionary;
+
+import cpw.mods.fml.common.registry.GameData;
+import forestry.api.apiculture.BeeManager;
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.storage.IBackpackDefinition;
 
 public class BackpackDefinition implements IBackpackDefinition {
 
@@ -54,8 +54,8 @@ public class BackpackDefinition implements IBackpackDefinition {
     @Override
     public String getName(ItemStack backpack) {
         Item item = backpack.getItem();
-        String display =
-                ("" + StatCollector.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name")).trim();
+        String display = ("" + StatCollector.translateToLocal(item.getUnlocalizedNameInefficiently(backpack) + ".name"))
+                .trim();
 
         if (backpack.stackTagCompound != null && backpack.stackTagCompound.hasKey("display", 10)) {
             NBTTagCompound nbt = backpack.stackTagCompound.getCompoundTag("display");
@@ -112,11 +112,11 @@ public class BackpackDefinition implements IBackpackDefinition {
     }
 
     public void addValidOreDictName(String oreDictName) {
-        //		if (OreDictionary.doesOreNameExist(oreDictName)) { //TODO: add this back when using a forge version that
+        // if (OreDictionary.doesOreNameExist(oreDictName)) { //TODO: add this back when using a forge version that
         // supports it
         int oreId = OreDictionary.getOreID(oreDictName);
         validOreIds.add(oreId);
-        //		}
+        // }
     }
 
     public void addValidOreDictNames(List<String> oreDictNames) {

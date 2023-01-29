@@ -1,14 +1,31 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
 import buildcraft.api.transport.IPipeTile;
 import cpw.mods.fml.common.Optional;
@@ -23,23 +40,6 @@ import forestry.core.inventory.wrappers.InventoryIterator;
 import forestry.core.inventory.wrappers.SidedInventoryMapper;
 import forestry.core.tiles.AdjacentTileCache;
 import forestry.plugins.PluginManager;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class InventoryUtil {
 
@@ -77,8 +77,7 @@ public abstract class InventoryUtil {
      *
      * Two null stacks will return true, unlike the other functions.
      *
-     * This function is primarily intended to be used to track changes to an
-     * ItemStack.
+     * This function is primarily intended to be used to track changes to an ItemStack.
      *
      * @param a An ItemStack
      * @param b An ItemStack
@@ -104,8 +103,7 @@ public abstract class InventoryUtil {
     }
 
     /**
-     * A more robust item comparison function. Supports items with damage = -1
-     * matching any sub-type.
+     * A more robust item comparison function. Supports items with damage = -1 matching any sub-type.
      *
      * @param a An ItemStack
      * @param b An ItemStack
@@ -115,8 +113,8 @@ public abstract class InventoryUtil {
         return isItemEqual(a, b, true, true);
     }
 
-    public static boolean isItemEqual(
-            final ItemStack a, final ItemStack b, final boolean matchDamage, final boolean matchNBT) {
+    public static boolean isItemEqual(final ItemStack a, final ItemStack b, final boolean matchDamage,
+            final boolean matchNBT) {
         if (a == null || b == null) {
             return false;
         }
@@ -148,13 +146,13 @@ public abstract class InventoryUtil {
     }
 
     /**
-     * Places an ItemStack in a destination IInventory. Will attempt to move as
-     * much of the stack as possible, returning any remainder.
+     * Places an ItemStack in a destination IInventory. Will attempt to move as much of the stack as possible, returning
+     * any remainder.
      *
      * @param stack The ItemStack to put in the inventory.
      * @param dest  The destination IInventory.
-     * @return Null if itemStack was completely moved, a new itemStack with
-     * remaining stackSize if part or none of the stack was moved.
+     * @return Null if itemStack was completely moved, a new itemStack with remaining stackSize if part or none of the
+     *         stack was moved.
      */
     public static ItemStack moveItemStack(ItemStack stack, IInventory dest) {
         InventoryManipulator im = InventoryManipulator.get(dest);
@@ -208,8 +206,7 @@ public abstract class InventoryUtil {
     }
 
     /**
-     * Removes and returns a single item from the inventory that matches the
-     * filter.
+     * Removes and returns a single item from the inventory that matches the filter.
      *
      * @param inv    The inventory
      * @param filter ItemStack to match against
@@ -220,8 +217,7 @@ public abstract class InventoryUtil {
     }
 
     /**
-     * Removes and returns a single item from the inventory that matches the
-     * filter.
+     * Removes and returns a single item from the inventory that matches the filter.
      *
      * @param inv    The inventory
      * @param filter EnumItemType to match against
@@ -233,8 +229,8 @@ public abstract class InventoryUtil {
     }
 
     /**
-     * Attempts to move a single item from the source inventory into a adjacent Buildcraft pipe.
-     * If the attempt fails, the source Inventory will not be modified.
+     * Attempts to move a single item from the source inventory into a adjacent Buildcraft pipe. If the attempt fails,
+     * the source Inventory will not be modified.
      *
      * @param source    The source inventory
      * @param tileCache The tile cache of the source block.
@@ -244,8 +240,8 @@ public abstract class InventoryUtil {
         return moveOneItemToPipe(source, tileCache, ForgeDirection.VALID_DIRECTIONS);
     }
 
-    public static boolean moveOneItemToPipe(
-            IInventory source, AdjacentTileCache tileCache, ForgeDirection[] directions) {
+    public static boolean moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache,
+            ForgeDirection[] directions) {
         if (PluginManager.Module.BUILDCRAFT_TRANSPORT.isEnabled()) {
             return internal_moveOneItemToPipe(source, tileCache, directions);
         }
@@ -254,8 +250,8 @@ public abstract class InventoryUtil {
     }
 
     @Optional.Method(modid = "BuildCraftAPI|transport")
-    private static boolean internal_moveOneItemToPipe(
-            IInventory source, AdjacentTileCache tileCache, ForgeDirection[] directions) {
+    private static boolean internal_moveOneItemToPipe(IInventory source, AdjacentTileCache tileCache,
+            ForgeDirection[] directions) {
         IInventory invClone = new InventoryCopy(source);
         ItemStack stackToMove = removeOneItem(invClone);
         if (stackToMove == null) {
@@ -296,39 +292,31 @@ public abstract class InventoryUtil {
     /* REMOVAL */
 
     /**
-     * Removes a set of items from an inventory.
-     * Removes the exact items first if they exist, and then removes crafting equivalents.
-     * If the inventory doesn't have all the required items, returns false without removing anything.
-     * If stowContainer is true, items with containers will have their container stowed.
+     * Removes a set of items from an inventory. Removes the exact items first if they exist, and then removes crafting
+     * equivalents. If the inventory doesn't have all the required items, returns false without removing anything. If
+     * stowContainer is true, items with containers will have their container stowed.
      */
-    public static boolean removeSets(
-            IInventory inventory,
-            int count,
-            ItemStack[] set,
-            EntityPlayer player,
-            boolean stowContainer,
-            boolean oreDictionary,
-            boolean craftingTools,
-            boolean doRemove) {
+    public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, EntityPlayer player,
+            boolean stowContainer, boolean oreDictionary, boolean craftingTools, boolean doRemove) {
         ItemStack[] stock = getStacks(inventory);
 
         if (doRemove) {
-            ItemStack[] removed =
-                    removeSets(inventory, count, set, player, stowContainer, oreDictionary, craftingTools);
+            ItemStack[] removed = removeSets(
+                    inventory,
+                    count,
+                    set,
+                    player,
+                    stowContainer,
+                    oreDictionary,
+                    craftingTools);
             return removed != null && removed.length >= count;
         } else {
             return ItemStackUtil.containsSets(set, stock, oreDictionary, craftingTools) >= count;
         }
     }
 
-    public static ItemStack[] removeSets(
-            IInventory inventory,
-            int count,
-            ItemStack[] set,
-            EntityPlayer player,
-            boolean stowContainer,
-            boolean oreDictionary,
-            boolean craftingTools) {
+    public static ItemStack[] removeSets(IInventory inventory, int count, ItemStack[] set, EntityPlayer player,
+            boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
         ItemStack[] removed = new ItemStack[set.length];
         ItemStack[] stock = getStacks(inventory);
 
@@ -347,8 +335,13 @@ public abstract class InventoryUtil {
             ItemStack removedStack = removeStack(inventory, stackToRemove, player, stowContainer, false, false);
             if (removedStack == null) {
                 // remove crafting equivalents next
-                removedStack =
-                        removeStack(inventory, stackToRemove, player, stowContainer, oreDictionary, craftingTools);
+                removedStack = removeStack(
+                        inventory,
+                        stackToRemove,
+                        player,
+                        stowContainer,
+                        oreDictionary,
+                        craftingTools);
             }
 
             removed[i] = removedStack;
@@ -359,13 +352,8 @@ public abstract class InventoryUtil {
     /**
      * Private Helper for removeSetsFromInventory. Assumes removal is possible.
      */
-    private static ItemStack removeStack(
-            IInventory inventory,
-            ItemStack stackToRemove,
-            EntityPlayer player,
-            boolean stowContainer,
-            boolean oreDictionary,
-            boolean craftingTools) {
+    private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, EntityPlayer player,
+            boolean stowContainer, boolean oreDictionary, boolean craftingTools) {
         for (int j = 0; j < inventory.getSizeInventory(); j++) {
             ItemStack stackInSlot = inventory.getStackInSlot(j);
             if (stackInSlot == null) {
@@ -464,8 +452,8 @@ public abstract class InventoryUtil {
         return result;
     }
 
-    public static boolean tryAddStacksCopy(
-            IInventory inventory, ItemStack[] stacks, int startSlot, int slots, boolean all) {
+    public static boolean tryAddStacksCopy(IInventory inventory, ItemStack[] stacks, int startSlot, int slots,
+            boolean all) {
 
         for (ItemStack stack : stacks) {
             if (stack == null) {
@@ -495,8 +483,8 @@ public abstract class InventoryUtil {
         return tryAddStack(inventory, stack, startSlot, slots, all, true);
     }
 
-    public static boolean tryAddStack(
-            IInventory inventory, ItemStack stack, int startSlot, int slots, boolean all, boolean doAdd) {
+    public static boolean tryAddStack(IInventory inventory, ItemStack stack, int startSlot, int slots, boolean all,
+            boolean doAdd) {
         int added = addStack(inventory, stack, startSlot, slots, false);
         boolean success = all ? (added == stack.stackSize) : (added > 0);
 
@@ -579,8 +567,8 @@ public abstract class InventoryUtil {
         return stowInInventory(itemstack, inventory, doAdd, 0, inventory.getSizeInventory());
     }
 
-    public static boolean stowInInventory(
-            ItemStack itemstack, IInventory inventory, boolean doAdd, int slot1, int count) {
+    public static boolean stowInInventory(ItemStack itemstack, IInventory inventory, boolean doAdd, int slot1,
+            int count) {
 
         boolean added = false;
 

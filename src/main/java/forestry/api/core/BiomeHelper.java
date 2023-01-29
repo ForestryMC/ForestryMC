@@ -2,6 +2,7 @@ package forestry.api.core;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -17,8 +18,9 @@ public class BiomeHelper {
     }
 
     /**
-     * Determines if a given BiomeGenBase is of HELLISH temperature, since it is treated separately from actual temperature values.
-     * Uses the BiomeDictionary.
+     * Determines if a given BiomeGenBase is of HELLISH temperature, since it is treated separately from actual
+     * temperature values. Uses the BiomeDictionary.
+     * 
      * @param biomeGen BiomeGenBase of the biome in question
      * @return true, if the BiomeGenBase is a Nether-type biome; false otherwise.
      */

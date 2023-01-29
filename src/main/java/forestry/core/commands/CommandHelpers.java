@@ -1,19 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.commands;
 
-import forestry.core.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -24,6 +22,8 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+
+import forestry.core.utils.StringUtil;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -62,19 +62,19 @@ public class CommandHelpers {
         sender.addChatMessage(new ChatComponentTranslation(locTag, args));
     }
 
-    public static void sendLocalizedChatMessage(
-            ICommandSender sender, ChatStyle chatStyle, String locTag, Object... args) {
+    public static void sendLocalizedChatMessage(ICommandSender sender, ChatStyle chatStyle, String locTag,
+            Object... args) {
         ChatComponentTranslation chat = new ChatComponentTranslation(locTag, args);
         chat.setChatStyle(chatStyle);
         sender.addChatMessage(chat);
     }
 
     /**
-     * Avoid using this function if at all possible. Commands are processed on the server,
-     * which has no localization information.
+     * Avoid using this function if at all possible. Commands are processed on the server, which has no localization
+     * information.
      *
-     * StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage().
-     * Messages will not be localized properly if you use StringUtil.localize().
+     * StringUtil.localize() is NOT a valid alternative for sendLocalizedChatMessage(). Messages will not be localized
+     * properly if you use StringUtil.localize().
      */
     public static void sendChatMessage(ICommandSender sender, String message) {
         sender.addChatMessage(new ChatComponentText(message));
@@ -100,7 +100,10 @@ public class CommandHelpers {
         ChatStyle header = new ChatStyle();
         header.setColor(EnumChatFormatting.BLUE);
         sendLocalizedChatMessage(
-                sender, header, "for.chat.command." + commandString + ".format", command.getFullCommandString());
+                sender,
+                header,
+                "for.chat.command." + commandString + ".format",
+                command.getFullCommandString());
 
         ChatStyle body = new ChatStyle();
         body.setColor(EnumChatFormatting.GRAY);
@@ -166,8 +169,8 @@ public class CommandHelpers {
         return CommandBase.getListOfStringsMatchingLastWord(strings, lastWords);
     }
 
-    public static List<String> addStandardTabCompletionOptions(
-            IForestryCommand command, ICommandSender sender, String[] incomplete) {
+    public static List<String> addStandardTabCompletionOptions(IForestryCommand command, ICommandSender sender,
+            String[] incomplete) {
         if (incomplete.length > 1) {
             String commandName = incomplete[0];
             for (SubCommand child : command.getChildren()) {

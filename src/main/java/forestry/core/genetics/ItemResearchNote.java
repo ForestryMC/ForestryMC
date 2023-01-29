@@ -1,31 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics;
 
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleSpecies;
-import forestry.api.genetics.IBreedingTracker;
-import forestry.api.genetics.IMutation;
-import forestry.api.genetics.ISpeciesRoot;
-import forestry.core.genetics.mutations.EnumMutateChance;
-import forestry.core.items.ItemForestry;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -38,9 +24,25 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleSpecies;
+import forestry.api.genetics.IBreedingTracker;
+import forestry.api.genetics.IMutation;
+import forestry.api.genetics.ISpeciesRoot;
+import forestry.core.genetics.mutations.EnumMutateChance;
+import forestry.core.items.ItemForestry;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.StringUtil;
+
 public class ItemResearchNote extends ItemForestry {
 
     public enum EnumNoteType {
+
         NONE,
         MUTATION,
         SPECIES;
@@ -92,29 +94,26 @@ public class ItemResearchNote extends ItemForestry {
 
                 String species1 = encoded.getAllele0().getName();
                 String species2 = encoded.getAllele1().getName();
-                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance())
-                        .toString()
+                String mutationChanceKey = EnumMutateChance.rateChance(encoded.getBaseChance()).toString()
                         .toLowerCase(Locale.ENGLISH);
                 String mutationChance = StringUtil.localize("researchNote.chance." + mutationChanceKey);
-                String speciesResult =
-                        encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName();
+                String speciesResult = encoded.getTemplate()[root.getKaryotypeKey().ordinal()].getName();
 
                 tooltips.add(StringUtil.localize("researchNote.discovery.0"));
-                tooltips.add(StringUtil.localize("researchNote.discovery.1")
-                        .replace("%SPEC1", species1)
-                        .replace("%SPEC2", species2));
+                tooltips.add(
+                        StringUtil.localize("researchNote.discovery.1").replace("%SPEC1", species1)
+                                .replace("%SPEC2", species2));
                 tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.2", mutationChance));
                 tooltips.add(StringUtil.localizeAndFormat("researchNote.discovery.3", speciesResult));
 
-                if (encoded.getSpecialConditions() != null
-                        && encoded.getSpecialConditions().size() > 0) {
+                if (encoded.getSpecialConditions() != null && encoded.getSpecialConditions().size() > 0) {
                     for (String line : encoded.getSpecialConditions()) {
                         tooltips.add(EnumChatFormatting.GOLD + line);
                     }
                 }
             } else if (this == SPECIES) {
-                IAlleleSpecies allele0 =
-                        (IAlleleSpecies) AlleleManager.alleleRegistry.getAllele(compound.getString("AL0"));
+                IAlleleSpecies allele0 = (IAlleleSpecies) AlleleManager.alleleRegistry
+                        .getAllele(compound.getString("AL0"));
                 if (allele0 == null) {
                     return tooltips;
                 }
@@ -124,8 +123,11 @@ public class ItemResearchNote extends ItemForestry {
                 }
 
                 tooltips.add("researchNote.discovered.0");
-                tooltips.add(StringUtil.localizeAndFormat(
-                        "researchNote.discovered.1", allele0.getName(), allele0.getBinomial()));
+                tooltips.add(
+                        StringUtil.localizeAndFormat(
+                                "researchNote.discovered.1",
+                                allele0.getName(),
+                                allele0.getBinomial()));
             }
 
             return tooltips;
@@ -155,8 +157,7 @@ public class ItemResearchNote extends ItemForestry {
 
                 IAlleleSpecies species0 = encoded.getAllele0();
                 IAlleleSpecies species1 = encoded.getAllele1();
-                IAlleleSpecies speciesResult = (IAlleleSpecies)
-                        encoded.getTemplate()[root.getKaryotypeKey().ordinal()];
+                IAlleleSpecies speciesResult = (IAlleleSpecies) encoded.getTemplate()[root.getKaryotypeKey().ordinal()];
 
                 tracker.registerSpecies(species0);
                 tracker.registerSpecies(species1);
@@ -165,11 +166,12 @@ public class ItemResearchNote extends ItemForestry {
                 tracker.researchMutation(encoded);
                 player.addChatMessage(new ChatComponentTranslation("for.chat.memorizednote"));
 
-                player.addChatMessage(new ChatComponentTranslation(
-                        "for.chat.memorizednote2",
-                        EnumChatFormatting.GRAY + species0.getName(),
-                        EnumChatFormatting.GRAY + species1.getName(),
-                        EnumChatFormatting.GREEN + speciesResult.getName()));
+                player.addChatMessage(
+                        new ChatComponentTranslation(
+                                "for.chat.memorizednote2",
+                                EnumChatFormatting.GRAY + species0.getName(),
+                                EnumChatFormatting.GRAY + species1.getName(),
+                                EnumChatFormatting.GREEN + speciesResult.getName()));
 
                 return true;
             }
@@ -253,9 +255,9 @@ public class ItemResearchNote extends ItemForestry {
         public void addTooltip(List<String> list) {
             ArrayList<String> tooltips = type.getTooltip(inner);
             if (tooltips.size() <= 0) {
-                list.add(EnumChatFormatting.ITALIC
-                        + EnumChatFormatting.RED.toString()
-                        + StringUtil.localize("researchNote.error.0"));
+                list.add(
+                        EnumChatFormatting.ITALIC + EnumChatFormatting.RED.toString()
+                                + StringUtil.localize("researchNote.error.0"));
                 list.add(StringUtil.localize("researchNote.error.1"));
                 return;
             }
@@ -285,7 +287,7 @@ public class ItemResearchNote extends ItemForestry {
         return StringUtil.localizeAndFormatRaw(getUnlocalizedName(itemstack) + ".name", researcherName);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
         ResearchNote note = new ResearchNote(itemstack.getTagCompound());

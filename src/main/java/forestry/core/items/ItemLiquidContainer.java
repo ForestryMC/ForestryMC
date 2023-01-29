@@ -1,27 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.CreativeTabForestry;
-import forestry.core.fluids.BlockForestryFluid;
-import forestry.core.fluids.FluidHelper;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.TextureManager;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -39,7 +31,16 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.CreativeTabForestry;
+import forestry.core.fluids.BlockForestryFluid;
+import forestry.core.fluids.FluidHelper;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.TextureManager;
+
 public class ItemLiquidContainer extends ItemForestry {
+
     private static final Map<Block, ItemLiquidContainer> buckets = new HashMap<>();
 
     private boolean isDrink = false;
@@ -100,8 +101,8 @@ public class ItemLiquidContainer extends ItemForestry {
         entityplayer.getFoodStats().addStats(healAmount, saturationModifier);
         world.playSoundAtEntity(entityplayer, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
         /*
-         * if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) entityplayer.addPotionEffect(new PotionEffect(potionId,
-         * potionDuration * 20, potionAmplifier));
+         * if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability)
+         * entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
          */
 
         return itemstack;
@@ -202,8 +203,8 @@ public class ItemLiquidContainer extends ItemForestry {
         return itemstack;
     }
 
-    private ItemStack tryPlaceLiquid(
-            ItemStack itemstack, World world, EntityPlayer player, MovingObjectPosition movingobjectposition) {
+    private ItemStack tryPlaceLiquid(ItemStack itemstack, World world, EntityPlayer player,
+            MovingObjectPosition movingobjectposition) {
 
         if (this.type != EnumContainerType.BUCKET) {
             return itemstack;
@@ -310,8 +311,8 @@ public class ItemLiquidContainer extends ItemForestry {
     }
 
     /*
-     * public ItemLiquidContainer setPotionEffect(int i, int j, int k, float f) { potionId = i; potionDuration = j; potionAmplifier = k; potionEffectProbability
-     * = f; return this; }
+     * public ItemLiquidContainer setPotionEffect(int i, int j, int k, float f) { potionId = i; potionDuration = j;
+     * potionAmplifier = k; potionEffectProbability = f; return this; }
      */
     public ItemLiquidContainer setAlwaysEdible() {
         isAlwaysEdible = true;
@@ -326,10 +327,10 @@ public class ItemLiquidContainer extends ItemForestry {
     @Override
     public void registerIcons(IIconRegister register) {
         icons = new IIcon[2];
-        icons[0] = TextureManager.registerTex(
-                register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".bottle");
-        icons[1] = TextureManager.registerTex(
-                register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".contents");
+        icons[0] = TextureManager
+                .registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".bottle");
+        icons[1] = TextureManager
+                .registerTex(register, "liquids/" + type.toString().toLowerCase(Locale.ENGLISH) + ".contents");
     }
 
     @SideOnly(Side.CLIENT)

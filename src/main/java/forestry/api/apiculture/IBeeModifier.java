@@ -6,30 +6,31 @@
 package forestry.api.apiculture;
 
 public interface IBeeModifier {
+
     /**
-     * @param genome Genome of the bee this modifier is called for.
+     * @param genome          Genome of the bee this modifier is called for.
      * @param currentModifier Current modifier.
      * @return Float used to modify the base territory.
      */
     float getTerritoryModifier(IBeeGenome genome, float currentModifier);
 
     /**
-     * @param genome Genome of the bee this modifier is called for.
-     * @param mate Genome of the bee mate this modifier is called for.
+     * @param genome          Genome of the bee this modifier is called for.
+     * @param mate            Genome of the bee mate this modifier is called for.
      * @param currentModifier Current modifier.
      * @return Float used to modify the base mutation chance.
      */
     float getMutationModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier);
 
     /**
-     * @param genome Genome of the bee this modifier is called for.
+     * @param genome          Genome of the bee this modifier is called for.
      * @param currentModifier Current modifier.
      * @return Float used to modify the life span of queens.
      */
     float getLifespanModifier(IBeeGenome genome, IBeeGenome mate, float currentModifier);
 
     /**
-     * @param genome Genome of the bee this modifier is called for.
+     * @param genome          Genome of the bee this modifier is called for.
      * @param currentModifier Current modifier.
      * @return Float modifying the production speed of queens.
      */

@@ -1,14 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.genetics;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 import forestry.api.arboriculture.EnumGrowthConditions;
 import forestry.api.arboriculture.IGrowthProvider;
@@ -18,15 +20,12 @@ import forestry.arboriculture.tiles.TileSapling;
 import forestry.core.utils.BlockUtil;
 import forestry.core.utils.StringUtil;
 import forestry.core.utils.vect.Vect;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 
 public class GrowthProvider implements IGrowthProvider {
 
     @Override
-    public boolean canGrow(
-            ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth, int expectedHeight) {
+    public boolean canGrow(ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth,
+            int expectedHeight) {
         if (!hasRoom(world, xPos, yPos, zPos, expectedGirth, expectedHeight)) {
             return false;
         }
@@ -53,8 +52,8 @@ public class GrowthProvider implements IGrowthProvider {
         return new String[0];
     }
 
-    protected static EnumGrowthConditions getConditionsFromRainfall(
-            World world, int xPos, int yPos, int zPos, float min, float max) {
+    protected static EnumGrowthConditions getConditionsFromRainfall(World world, int xPos, int yPos, int zPos,
+            float min, float max) {
 
         BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
         if (biome.rainfall < min || biome.rainfall > max) {
@@ -64,8 +63,8 @@ public class GrowthProvider implements IGrowthProvider {
         return EnumGrowthConditions.EXCELLENT;
     }
 
-    protected static EnumGrowthConditions getConditionsFromTemperature(
-            World world, int xPos, int yPos, int zPos, float min, float max) {
+    protected static EnumGrowthConditions getConditionsFromTemperature(World world, int xPos, int yPos, int zPos,
+            float min, float max) {
 
         BiomeGenBase biome = world.getWorldChunkManager().getBiomeGenAt(xPos, zPos);
         float biomeTemperature = biome.getFloatTemperature(xPos, yPos, zPos);
@@ -116,8 +115,8 @@ public class GrowthProvider implements IGrowthProvider {
         return true;
     }
 
-    private static boolean hasSufficientSaplings(
-            ITreeGenome genome, World world, int xPos, int yPos, int zPos, int expectedGirth) {
+    private static boolean hasSufficientSaplings(ITreeGenome genome, World world, int xPos, int yPos, int zPos,
+            int expectedGirth) {
 
         if (expectedGirth == 1) {
             return true;
@@ -138,11 +137,7 @@ public class GrowthProvider implements IGrowthProvider {
                 }
 
                 ITree tree = ((TileSapling) tile).getTree();
-                if (tree == null
-                        || !tree.getGenome()
-                                .getPrimary()
-                                .getUID()
-                                .equals(genome.getPrimary().getUID())) {
+                if (tree == null || !tree.getGenome().getPrimary().getUID().equals(genome.getPrimary().getUID())) {
                     return false;
                 }
             }

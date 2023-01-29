@@ -1,22 +1,15 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.apiculture.entities.EntityMinecartApiary;
-import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
-import forestry.apiculture.entities.EntityMinecartBeehouse;
-import forestry.core.render.TextureManager;
 import java.util.List;
+
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -28,8 +21,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.apiculture.entities.EntityMinecartApiary;
+import forestry.apiculture.entities.EntityMinecartBeeHousingBase;
+import forestry.apiculture.entities.EntityMinecartBeehouse;
+import forestry.core.render.TextureManager;
+
 public class ItemMinecartBeehouse extends ItemMinecart {
-    private final String[] definition = new String[] {"cart.beehouse", "cart.apiary"};
+
+    private final String[] definition = new String[] { "cart.beehouse", "cart.apiary" };
 
     public ItemMinecartBeehouse() {
         super(0);
@@ -39,17 +40,8 @@ public class ItemMinecartBeehouse extends ItemMinecart {
     }
 
     @Override
-    public boolean onItemUse(
-            ItemStack itemStack,
-            EntityPlayer player,
-            World world,
-            int x,
-            int y,
-            int z,
-            int side,
-            float facingX,
-            float facingY,
-            float facingZ) {
+    public boolean onItemUse(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int side,
+            float facingX, float facingY, float facingZ) {
         if (!BlockRailBase.func_150051_a(world.getBlock(x, y, z))) {
             return false;
         }
@@ -58,10 +50,16 @@ public class ItemMinecartBeehouse extends ItemMinecart {
             EntityMinecartBeeHousingBase entityMinecart;
             if (itemStack.getItemDamage() == 0) {
                 entityMinecart = new EntityMinecartBeehouse(
-                        world, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F));
+                        world,
+                        (double) ((float) x + 0.5F),
+                        (double) ((float) y + 0.5F),
+                        (double) ((float) z + 0.5F));
             } else {
                 entityMinecart = new EntityMinecartApiary(
-                        world, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F));
+                        world,
+                        (double) ((float) x + 0.5F),
+                        (double) ((float) y + 0.5F),
+                        (double) ((float) z + 0.5F));
             }
             entityMinecart.setOwner(player.getGameProfile());
 
@@ -107,7 +105,7 @@ public class ItemMinecartBeehouse extends ItemMinecart {
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
         for (int i = 0; i < definition.length; i++) {

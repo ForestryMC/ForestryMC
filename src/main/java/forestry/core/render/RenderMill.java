@@ -1,24 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.render;
 
-import forestry.core.proxy.Proxies;
-import forestry.core.tiles.TileMill;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import forestry.core.proxy.Proxies;
+import forestry.core.tiles.TileMill;
 
 public class RenderMill extends TileEntitySpecialRenderer implements IBlockRenderer {
 
@@ -117,8 +117,8 @@ public class RenderMill extends TileEntitySpecialRenderer implements IBlockRende
             step = progress * 2F * 3.99F;
         }
 
-        float[] angle = {0, 0, 0};
-        float[] translate = {0, 0, 0};
+        float[] angle = { 0, 0, 0 };
+        float[] translate = { 0, 0, 0 };
         float tfactor = step / 16;
 
         if (orientation == null) {

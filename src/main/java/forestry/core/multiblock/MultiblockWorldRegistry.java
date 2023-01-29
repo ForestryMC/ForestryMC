@@ -1,8 +1,5 @@
 package forestry.core.multiblock;
 
-import forestry.api.multiblock.IMultiblockComponent;
-import forestry.api.multiblock.IMultiblockLogic;
-import forestry.core.utils.Log;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,16 +7,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import forestry.api.multiblock.IMultiblockComponent;
+import forestry.api.multiblock.IMultiblockLogic;
+import forestry.core.utils.Log;
+
 /**
- * This class manages all the multiblock controllers that exist in a given world,
- * either client- or server-side.
- * You must create different registries for server and client worlds.
+ * This class manages all the multiblock controllers that exist in a given world, either client- or server-side. You
+ * must create different registries for server and client worlds.
  *
  * @author Erogenous Beef
  */
@@ -307,9 +308,10 @@ public class MultiblockWorldRegistry {
     }
 
     /**
-     * Called when a multiblock part is added to the world, either via chunk-load or user action.
-     * If its chunk is loaded, it will be processed during the next tick.
-     * If the chunk is not loaded, it will be added to a list of objects waiting for a chunkload.
+     * Called when a multiblock part is added to the world, either via chunk-load or user action. If its chunk is
+     * loaded, it will be processed during the next tick. If the chunk is not loaded, it will be added to a list of
+     * objects waiting for a chunkload.
+     * 
      * @param part The part which is being added to this world.
      */
     public void onPartAdded(IMultiblockComponent part) {
@@ -336,8 +338,9 @@ public class MultiblockWorldRegistry {
     }
 
     /**
-     * Called when a part is removed from the world, via user action or via chunk unloads.
-     * This part is removed from any lists in which it may be, and its machine is marked for recalculation.
+     * Called when a part is removed from the world, via user action or via chunk unloads. This part is removed from any
+     * lists in which it may be, and its machine is marked for recalculation.
+     * 
      * @param part The part which is being removed.
      */
     public void onPartRemovedFromWorld(IMultiblockComponent part) {
@@ -369,8 +372,8 @@ public class MultiblockWorldRegistry {
     }
 
     /**
-     * Called when the world which this World Registry represents is fully unloaded from the system.
-     * Does some housekeeping just to be nice.
+     * Called when the world which this World Registry represents is fully unloaded from the system. Does some
+     * housekeeping just to be nice.
      */
     public void onWorldUnloaded() {
         controllers.clear();
@@ -391,9 +394,8 @@ public class MultiblockWorldRegistry {
     }
 
     /**
-     * Called when a chunk has finished loading. Adds all of the parts which are awaiting
-     * load to the list of parts which are orphans and therefore will be added to machines
-     * after the next world tick.
+     * Called when a chunk has finished loading. Adds all of the parts which are awaiting load to the list of parts
+     * which are orphans and therefore will be added to machines after the next world tick.
      *
      * @param chunkX Chunk X coordinate (world coordate >> 4) of the chunk that was loaded
      * @param chunkZ Chunk Z coordinate (world coordate >> 4) of the chunk that was loaded
@@ -411,9 +413,8 @@ public class MultiblockWorldRegistry {
     }
 
     /**
-     * Registers a controller as dead. It will be cleaned up at the end of the next world tick.
-     * Note that a controller must shed all of its blocks before being marked as dead, or the system
-     * will complain at you.
+     * Registers a controller as dead. It will be cleaned up at the end of the next world tick. Note that a controller
+     * must shed all of its blocks before being marked as dead, or the system will complain at you.
      *
      * @param deadController The controller which is dead.
      */
@@ -422,8 +423,8 @@ public class MultiblockWorldRegistry {
     }
 
     /**
-     * Registers a controller as dirty - its list of attached blocks has changed, and it
-     * must be re-checked for assembly and, possibly, for orphans.
+     * Registers a controller as dirty - its list of attached blocks has changed, and it must be re-checked for assembly
+     * and, possibly, for orphans.
      *
      * @param dirtyController The dirty controller.
      */
@@ -432,8 +433,7 @@ public class MultiblockWorldRegistry {
     }
 
     /**
-     * Use this only if you know what you're doing. You should rarely need to iterate
-     * over all controllers in a world!
+     * Use this only if you know what you're doing. You should rarely need to iterate over all controllers in a world!
      *
      * @return An (unmodifiable) set of controllers which are active in this world.
      */

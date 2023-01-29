@@ -1,22 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.render;
 
-import forestry.core.proxy.Proxies;
-import forestry.core.render.ForestryResource;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import org.lwjgl.opengl.GL11;
+
+import forestry.core.proxy.Proxies;
+import forestry.core.render.ForestryResource;
 
 public class ModelAnalyzer extends ModelBase {
 
@@ -29,11 +29,8 @@ public class ModelAnalyzer extends ModelBase {
 
     public ModelAnalyzer(String gfxBase) {
 
-        textures = new ResourceLocation[] {
-            new ForestryResource(gfxBase + "pedestal.png"),
-            new ForestryResource(gfxBase + "tower1.png"),
-            new ForestryResource(gfxBase + "tower2.png"),
-        };
+        textures = new ResourceLocation[] { new ForestryResource(gfxBase + "pedestal.png"),
+                new ForestryResource(gfxBase + "tower1.png"), new ForestryResource(gfxBase + "tower2.png"), };
 
         pedestal = new ModelRenderer(this, 0, 0);
         pedestal.addBox(-8F, -8F, -8F, 16, 1, 16);
@@ -57,7 +54,7 @@ public class ModelAnalyzer extends ModelBase {
         GL11.glPushMatrix();
 
         GL11.glTranslatef(posX, posY, posZ);
-        float[] angle = {0, 0, 0};
+        float[] angle = { 0, 0, 0 };
 
         if (orientation == null) {
             orientation = ForgeDirection.WEST;

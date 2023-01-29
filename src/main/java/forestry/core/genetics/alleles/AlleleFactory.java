@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
@@ -24,12 +22,7 @@ import forestry.apiculture.genetics.alleles.AlleleFlowers;
 public class AlleleFactory implements IAlleleFactory {
 
     @Override
-    public IAlleleFloat createFloat(
-            String modId,
-            String category,
-            String valueName,
-            float value,
-            boolean isDominant,
+    public IAlleleFloat createFloat(String modId, String category, String valueName, float value, boolean isDominant,
             IChromosomeType... types) {
         IAlleleFloat alleleFloat = new AlleleFloat(modId, category, valueName, value, isDominant);
         AlleleManager.alleleRegistry.registerAllele(alleleFloat, types);
@@ -37,45 +30,37 @@ public class AlleleFactory implements IAlleleFactory {
     }
 
     @Override
-    public IAlleleArea createArea(
-            String modId,
-            String category,
-            String valueName,
-            int xDimValue,
-            int yDimValue,
-            int zDimValue,
-            boolean isDominant,
-            IChromosomeType... types) {
-        IAlleleArea alleleArea =
-                new AlleleArea(modId, category, valueName, new int[] {xDimValue, yDimValue, zDimValue}, isDominant);
+    public IAlleleArea createArea(String modId, String category, String valueName, int xDimValue, int yDimValue,
+            int zDimValue, boolean isDominant, IChromosomeType... types) {
+        IAlleleArea alleleArea = new AlleleArea(
+                modId,
+                category,
+                valueName,
+                new int[] { xDimValue, yDimValue, zDimValue },
+                isDominant);
         AlleleManager.alleleRegistry.registerAllele(alleleArea, types);
         return alleleArea;
     }
 
     @Override
-    public IAlleleInteger createInteger(
-            String modId, String category, String valueName, int value, boolean isDominant, IChromosomeType... types) {
+    public IAlleleInteger createInteger(String modId, String category, String valueName, int value, boolean isDominant,
+            IChromosomeType... types) {
         IAlleleInteger alleleInteger = new AlleleInteger(modId, category, valueName, value, isDominant);
         AlleleManager.alleleRegistry.registerAllele(alleleInteger, types);
         return alleleInteger;
     }
 
     @Override
-    public IAlleleBoolean createBoolean(
-            String modId, String category, boolean value, boolean isDominant, IChromosomeType... types) {
+    public IAlleleBoolean createBoolean(String modId, String category, boolean value, boolean isDominant,
+            IChromosomeType... types) {
         IAlleleBoolean alleleBoolean = new AlleleBoolean(modId, category, value, isDominant);
         AlleleManager.alleleRegistry.registerAllele(alleleBoolean, types);
         return alleleBoolean;
     }
 
     @Override
-    public IAlleleFlowers createFlowers(
-            String modId,
-            String category,
-            String valueName,
-            IFlowerProvider value,
-            boolean isDominant,
-            IChromosomeType... types) {
+    public IAlleleFlowers createFlowers(String modId, String category, String valueName, IFlowerProvider value,
+            boolean isDominant, IChromosomeType... types) {
         IAlleleFlowers alleleFlowers = new AlleleFlowers(modId, category, valueName, value, isDominant);
         AlleleManager.alleleRegistry.registerAllele(alleleFlowers, types);
         return alleleFlowers;
@@ -89,16 +74,16 @@ public class AlleleFactory implements IAlleleFactory {
     }
 
     @Override
-    public IAlleleArea createArea(
-            String modId, String category, String name, int xDim, int yDim, int zDim, boolean isDominant) {
-        IAlleleArea alleleArea = new AlleleArea(modId, category, name, new int[] {xDim, yDim, zDim}, isDominant);
+    public IAlleleArea createArea(String modId, String category, String name, int xDim, int yDim, int zDim,
+            boolean isDominant) {
+        IAlleleArea alleleArea = new AlleleArea(modId, category, name, new int[] { xDim, yDim, zDim }, isDominant);
         AlleleManager.alleleRegistry.registerAllele(alleleArea);
         return alleleArea;
     }
 
     @Override
-    public IAlleleInteger createInteger(
-            String modId, String category, String valueName, int value, boolean isDominant) {
+    public IAlleleInteger createInteger(String modId, String category, String valueName, int value,
+            boolean isDominant) {
         IAlleleInteger alleleInteger = new AlleleInteger(modId, category, valueName, value, isDominant);
         AlleleManager.alleleRegistry.registerAllele(alleleInteger);
         return alleleInteger;
@@ -112,8 +97,8 @@ public class AlleleFactory implements IAlleleFactory {
     }
 
     @Override
-    public IAlleleFlowers createFlowers(
-            String modId, String category, String name, IFlowerProvider flowerProvider, boolean isDominant) {
+    public IAlleleFlowers createFlowers(String modId, String category, String name, IFlowerProvider flowerProvider,
+            boolean isDominant) {
         IAlleleFlowers alleleFlowers = new AlleleFlowers(modId, category, name, flowerProvider, isDominant);
         AlleleManager.alleleRegistry.registerAllele(alleleFlowers);
         return alleleFlowers;

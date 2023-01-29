@@ -8,6 +8,7 @@ package forestry.api.farming;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public enum FarmDirection {
+
     NORTH(ForgeDirection.NORTH),
     EAST(ForgeDirection.EAST),
     SOUTH(ForgeDirection.SOUTH),

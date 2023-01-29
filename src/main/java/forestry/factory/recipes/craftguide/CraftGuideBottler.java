@@ -1,20 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes.craftguide;
 
-import forestry.factory.blocks.BlockFactoryTesrType;
-import forestry.factory.recipes.BottlerRecipe;
-import forestry.plugins.PluginFactory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+
 import uristqwerty.CraftGuide.api.ItemSlot;
 import uristqwerty.CraftGuide.api.LiquidSlot;
 import uristqwerty.CraftGuide.api.RecipeGenerator;
@@ -22,6 +18,9 @@ import uristqwerty.CraftGuide.api.RecipeProvider;
 import uristqwerty.CraftGuide.api.RecipeTemplate;
 import uristqwerty.CraftGuide.api.Slot;
 import uristqwerty.CraftGuide.api.SlotType;
+import forestry.factory.blocks.BlockFactoryTesrType;
+import forestry.factory.recipes.BottlerRecipe;
+import forestry.plugins.PluginFactory;
 
 public class CraftGuideBottler implements RecipeProvider {
 
@@ -30,8 +29,7 @@ public class CraftGuideBottler implements RecipeProvider {
     public CraftGuideBottler() {
         slots[0] = new ItemSlot(12, 12, 16, 16).drawOwnBackground();
         slots[1] = new LiquidSlot(12, 30);
-        slots[2] =
-                new ItemSlot(50, 21, 16, 16).setSlotType(SlotType.OUTPUT_SLOT).drawOwnBackground();
+        slots[2] = new ItemSlot(50, 21, 16, 16).setSlotType(SlotType.OUTPUT_SLOT).drawOwnBackground();
         slots[3] = new ItemSlot(31, 21, 16, 16).setSlotType(SlotType.MACHINE_SLOT);
     }
 
@@ -44,8 +42,8 @@ public class CraftGuideBottler implements RecipeProvider {
         ItemStack machine = PluginFactory.blocks.factoryTESR.get(BlockFactoryTesrType.BOTTLER);
         RecipeTemplate template = generator.createRecipeTemplate(slots, machine);
 
-        for (FluidContainerRegistry.FluidContainerData container :
-                FluidContainerRegistry.getRegisteredFluidContainerData()) {
+        for (FluidContainerRegistry.FluidContainerData container : FluidContainerRegistry
+                .getRegisteredFluidContainerData()) {
             BottlerRecipe recipe = BottlerRecipe.getRecipe(container.fluid, container.emptyContainer);
             if (recipe != null) {
                 Object[] array = new Object[4];

@@ -8,6 +8,7 @@ package forestry.api.fuels;
 import net.minecraft.item.ItemStack;
 
 public class MoistenerFuel {
+
     /**
      * The item to use
      */

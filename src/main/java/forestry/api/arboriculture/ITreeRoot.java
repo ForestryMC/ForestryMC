@@ -5,15 +5,18 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import com.mojang.authlib.GameProfile;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IChromosome;
-import forestry.api.genetics.ISpeciesRoot;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
+
+import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IChromosome;
+import forestry.api.genetics.ISpeciesRoot;
 
 public interface ITreeRoot extends ISpeciesRoot {
 
@@ -48,6 +51,7 @@ public interface ITreeRoot extends ISpeciesRoot {
     /* TREE SPECIFIC */
     /**
      * Register a leaf tick handler.
+     * 
      * @param handler the {@link ILeafTickHandler} to register.
      */
     void registerLeafTickHandler(ILeafTickHandler handler);

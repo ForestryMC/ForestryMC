@@ -1,14 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics.mutations;
+
+import java.util.Calendar;
+
+import net.minecraft.world.World;
 
 import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.IAllele;
@@ -16,8 +18,6 @@ import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
 import forestry.core.utils.DayMonth;
 import forestry.core.utils.StringUtil;
-import java.util.Calendar;
-import net.minecraft.world.World;
 
 public class MutationConditionTimeLimited implements IMutationCondition {
 
@@ -30,16 +30,8 @@ public class MutationConditionTimeLimited implements IMutationCondition {
     }
 
     @Override
-    public float getChance(
-            World world,
-            int x,
-            int y,
-            int z,
-            IAllele allele0,
-            IAllele allele1,
-            IGenome genome0,
-            IGenome genome1,
-            IClimateProvider climate) {
+    public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0,
+            IGenome genome1, IClimateProvider climate) {
         DayMonth now = new DayMonth();
 
         // If we are equal to start day, return 1.
@@ -65,8 +57,7 @@ public class MutationConditionTimeLimited implements IMutationCondition {
 
     @Override
     public String getDescription() {
-        return StringUtil.localize("mutation.condition.date")
-                .replace("%START", start.toString())
+        return StringUtil.localize("mutation.condition.date").replace("%START", start.toString())
                 .replace("%END", end.toString());
     }
 }

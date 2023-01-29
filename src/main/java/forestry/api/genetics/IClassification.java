@@ -13,6 +13,7 @@ package forestry.api.genetics;
 public interface IClassification {
 
     public enum EnumClassLevel {
+
         DOMAIN(0x777fff, true),
         KINGDOM(0x77c3ff),
         PHYLUM(0x77ffb6, true),

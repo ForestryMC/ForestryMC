@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.network.packets;
+
+import java.io.IOException;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 
 import cpw.mods.fml.common.registry.GameData;
 import forestry.core.network.DataInputStreamForestry;
@@ -16,9 +19,6 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.PacketIdClient;
 import forestry.core.proxy.Proxies;
-import java.io.IOException;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class PacketFXSignal extends PacketCoordinates implements IForestryPacketClient {
 
@@ -29,6 +29,7 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
     }
 
     public enum SoundFXType {
+
         NONE(""),
         BLOCK_DESTROY(""),
         BLOCK_PLACE(""),
@@ -63,8 +64,8 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
         this(VisualFXType.NONE, type, xCoord, yCoord, zCoord, block, meta);
     }
 
-    public PacketFXSignal(
-            VisualFXType visualFX, SoundFXType soundFX, int xCoord, int yCoord, int zCoord, Block block, int meta) {
+    public PacketFXSignal(VisualFXType visualFX, SoundFXType soundFX, int xCoord, int yCoord, int zCoord, Block block,
+            int meta) {
         super(xCoord, yCoord, zCoord);
         this.visualFX = visualFX;
         this.soundFX = soundFX;
@@ -94,15 +95,20 @@ public class PacketFXSignal extends PacketCoordinates implements IForestryPacket
     public void onPacketData(DataInputStreamForestry data, EntityPlayer player) throws IOException {
         if (visualFX != VisualFXType.NONE) {
             Proxies.common.addBlockDestroyEffects(
-                    Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block, meta);
+                    Proxies.common.getRenderWorld(),
+                    getPosX(),
+                    getPosY(),
+                    getPosZ(),
+                    block,
+                    meta);
         }
         if (soundFX != SoundFXType.NONE) {
             if (soundFX == SoundFXType.BLOCK_DESTROY) {
-                Proxies.common.playBlockBreakSoundFX(
-                        Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block);
+                Proxies.common
+                        .playBlockBreakSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block);
             } else if (soundFX == SoundFXType.BLOCK_PLACE) {
-                Proxies.common.playBlockPlaceSoundFX(
-                        Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block);
+                Proxies.common
+                        .playBlockPlaceSoundFX(Proxies.common.getRenderWorld(), getPosX(), getPosY(), getPosZ(), block);
             } else {
                 Proxies.common.playSoundFX(
                         Proxies.common.getRenderWorld(),

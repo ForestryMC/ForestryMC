@@ -1,28 +1,29 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.recipes.ISqueezerManager;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.core.fluids.FluidHelper;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.datastructures.ItemStackMap;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import javax.annotation.Nullable;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class SqueezerRecipeManager implements ISqueezerManager {
 
@@ -30,8 +31,8 @@ public class SqueezerRecipeManager implements ISqueezerManager {
     public static final ItemStackMap<ISqueezerContainerRecipe> containerRecipes = new ItemStackMap<>();
 
     @Override
-    public void addRecipe(
-            int timePerItem, ItemStack[] resources, FluidStack liquid, @Nullable ItemStack remnants, int chance) {
+    public void addRecipe(int timePerItem, ItemStack[] resources, FluidStack liquid, @Nullable ItemStack remnants,
+            int chance) {
         ISqueezerRecipe recipe = new SqueezerRecipe(timePerItem, resources, liquid, remnants, chance / 100.0f);
         addRecipe(recipe);
     }
@@ -42,10 +43,10 @@ public class SqueezerRecipeManager implements ISqueezerManager {
     }
 
     @Override
-    public void addContainerRecipe(
-            int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants, float chance) {
-        containerRecipes.put(
-                emptyContainer, new SqueezerContainerRecipe(emptyContainer, timePerItem, remnants, chance));
+    public void addContainerRecipe(int timePerItem, ItemStack emptyContainer, @Nullable ItemStack remnants,
+            float chance) {
+        containerRecipes
+                .put(emptyContainer, new SqueezerContainerRecipe(emptyContainer, timePerItem, remnants, chance));
     }
 
     @Nullable
@@ -123,7 +124,7 @@ public class SqueezerRecipeManager implements ISqueezerManager {
         HashMap<Object[], Object[]> recipeList = new HashMap<>();
 
         for (ISqueezerRecipe recipe : recipes) {
-            recipeList.put(recipe.getResources(), new Object[] {recipe.getRemnants(), recipe.getFluidOutput()});
+            recipeList.put(recipe.getResources(), new Object[] { recipe.getRemnants(), recipe.getFluidOutput() });
         }
 
         return recipeList;

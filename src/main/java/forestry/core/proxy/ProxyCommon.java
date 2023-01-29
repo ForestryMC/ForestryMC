@@ -1,14 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.proxy;
+
+import java.io.File;
+
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -17,14 +25,6 @@ import forestry.core.TickHandlerCoreServer;
 import forestry.core.multiblock.MultiblockServerTickHandler;
 import forestry.core.network.packets.PacketFXSignal;
 import forestry.core.worldgen.WorldGenerator;
-import java.io.File;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ProxyCommon {
 
@@ -95,18 +95,11 @@ public class ProxyCommon {
 
     public void playBlockPlaceSoundFX(World world, int x, int y, int z, Block block) {}
 
-    public void sendFXSignal(
-            PacketFXSignal.VisualFXType visualFX,
-            PacketFXSignal.SoundFXType soundFX,
-            World world,
-            int xCoord,
-            int yCoord,
-            int zCoord,
-            Block block,
-            int i) {
+    public void sendFXSignal(PacketFXSignal.VisualFXType visualFX, PacketFXSignal.SoundFXType soundFX, World world,
+            int xCoord, int yCoord, int zCoord, Block block, int i) {
         if (!world.isRemote) {
-            Proxies.net.sendNetworkPacket(
-                    new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i), world);
+            Proxies.net
+                    .sendNetworkPacket(new PacketFXSignal(visualFX, soundFX, xCoord, yCoord, zCoord, block, i), world);
         }
     }
 

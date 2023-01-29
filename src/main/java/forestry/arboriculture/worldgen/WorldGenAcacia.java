@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import forestry.api.world.ITreeGenData;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
+
+import forestry.api.world.ITreeGenData;
 
 public class WorldGenAcacia extends WorldGenTree {
 
@@ -27,12 +27,22 @@ public class WorldGenAcacia extends WorldGenTree {
         Direction leanDirection = Direction.getRandom(world.rand);
         float leanAmount = height / 4.0f;
 
-        List<ChunkCoordinates> treeTops =
-                generateTreeTrunk(world, height, girth, 0, leanDirection.forgeDirection, leanAmount);
+        List<ChunkCoordinates> treeTops = generateTreeTrunk(
+                world,
+                height,
+                girth,
+                0,
+                leanDirection.forgeDirection,
+                leanAmount);
         if (height > 5 && world.rand.nextBoolean()) {
             Direction branchDirection = Direction.getRandomOther(world.rand, leanDirection);
             List<ChunkCoordinates> treeTops2 = generateTreeTrunk(
-                    world, Math.round(height * 0.66f), girth, 0, branchDirection.forgeDirection, leanAmount);
+                    world,
+                    Math.round(height * 0.66f),
+                    girth,
+                    0,
+                    branchDirection.forgeDirection,
+                    leanAmount);
             treeTops.addAll(treeTops2);
         }
 
@@ -46,7 +56,14 @@ public class WorldGenAcacia extends WorldGenTree {
             int canopyThickness = Math.max(1, Math.round(yOffset / 10.0f));
 
             generateAdjustedCylinder(
-                    world, yOffset--, xOffset, zOffset, canopyMultiplier, 1, leaf, EnumReplaceMode.NONE);
+                    world,
+                    yOffset--,
+                    xOffset,
+                    zOffset,
+                    canopyMultiplier,
+                    1,
+                    leaf,
+                    EnumReplaceMode.NONE);
 
             float canopyWidth = world.rand.nextBoolean() ? 3.0f : 2.5f;
             List<ChunkCoordinates> branches = generateBranches(

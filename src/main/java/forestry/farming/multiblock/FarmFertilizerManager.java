@@ -1,24 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.multiblock;
+
+import java.io.IOException;
+
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.ForestryAPI;
 import forestry.api.core.INBTTagable;
 import forestry.core.network.DataInputStreamForestry;
 import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
-import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class FarmFertilizerManager implements INBTTagable, IStreamable {
+
     private static final int BUFFER_FERTILIZER = 200;
 
     private final int fertilizerValue;

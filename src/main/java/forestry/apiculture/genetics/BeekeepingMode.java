@@ -1,14 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics;
+
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
+
+import net.minecraft.world.World;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.DefaultBeeModifier;
@@ -17,10 +21,6 @@ import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
 import forestry.api.apiculture.IBeekeepingMode;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
-import net.minecraft.world.World;
 
 public class BeekeepingMode implements IBeekeepingMode {
 
@@ -36,13 +36,8 @@ public class BeekeepingMode implements IBeekeepingMode {
     private final boolean canFatigue;
     private final IBeeModifier beeModifier;
 
-    public BeekeepingMode(
-            String name,
-            float mutationModifier,
-            float lifespanModifier,
-            float speedModifier,
-            boolean reducesFertility,
-            boolean canFatigue) {
+    public BeekeepingMode(String name, float mutationModifier, float lifespanModifier, float speedModifier,
+            boolean reducesFertility, boolean canFatigue) {
         this.rand = new Random();
         this.name = name;
         this.reducesFertility = reducesFertility;
@@ -138,6 +133,7 @@ public class BeekeepingMode implements IBeekeepingMode {
     }
 
     private static class BeekeepingModeBeeModifier extends DefaultBeeModifier {
+
         private final float mutationModifier;
         private final float lifespanModifier;
         private final float speedModifier;

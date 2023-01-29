@@ -1,27 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.recipes.IFermenterManager;
-import forestry.api.recipes.IFermenterRecipe;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ItemStackUtil;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+
+import forestry.api.recipes.IFermenterManager;
+import forestry.api.recipes.IFermenterRecipe;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.ItemStackUtil;
 
 public class FermenterRecipeManager implements IFermenterManager {
 
@@ -30,8 +30,8 @@ public class FermenterRecipeManager implements IFermenterManager {
     public static final Set<Fluid> recipeFluidOutputs = new HashSet<>();
 
     @Override
-    public void addRecipe(
-            ItemStack resource, int fermentationValue, float modifier, FluidStack output, FluidStack liquid) {
+    public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output,
+            FluidStack liquid) {
         IFermenterRecipe recipe = new FermenterRecipe(resource, fermentationValue, modifier, output.getFluid(), liquid);
         addRecipe(recipe);
     }
@@ -106,7 +106,8 @@ public class FermenterRecipeManager implements IFermenterManager {
 
         for (IFermenterRecipe recipe : recipes) {
             recipeList.put(
-                    new Object[] {recipe.getResource(), recipe.getFluidResource()}, new Object[] {recipe.getOutput()});
+                    new Object[] { recipe.getResource(), recipe.getFluidResource() },
+                    new Object[] { recipe.getOutput() });
         }
 
         return recipeList;

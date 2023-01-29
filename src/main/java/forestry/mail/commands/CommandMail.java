@@ -1,16 +1,17 @@
 /*
- *******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
- *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
- *******************************************************************************
+ ******************************************************************************* Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt Various Contributors including, but not limited to: SirSengir (original
+ * work), CovertJaguar, Player, Binnie, MysteriousAges
  */
 package forestry.mail.commands;
+
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 
 import forestry.api.mail.ITradeStation;
 import forestry.api.mail.PostManager;
@@ -19,12 +20,6 @@ import forestry.core.commands.CommandHelpers;
 import forestry.core.commands.SubCommand;
 import forestry.core.utils.StringUtil;
 import forestry.mail.MailAddress;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -50,10 +45,8 @@ public class CommandMail extends SubCommand {
             if (!(sender instanceof EntityPlayer)) {
                 return;
             }
-            for (ITradeStation trade : PostManager.postRegistry
-                    .getPostOffice(((EntityPlayer) sender).worldObj)
-                    .getActiveTradeStations(((EntityPlayer) sender).worldObj)
-                    .values()) {
+            for (ITradeStation trade : PostManager.postRegistry.getPostOffice(((EntityPlayer) sender).worldObj)
+                    .getActiveTradeStations(((EntityPlayer) sender).worldObj).values()) {
                 CommandHelpers.sendChatMessage(sender, makeTradeListEntry(trade.getTradeInfo()));
             }
         }
@@ -98,7 +91,10 @@ public class CommandMail extends SubCommand {
                 ChatStyle red = new ChatStyle();
                 red.setColor(EnumChatFormatting.RED);
                 CommandHelpers.sendLocalizedChatMessage(
-                        sender, red, "for.chat.command.forestry.mail.virtualize.no_tradestation", args[0]);
+                        sender,
+                        red,
+                        "for.chat.command.forestry.mail.virtualize.no_tradestation",
+                        args[0]);
                 return;
             }
 

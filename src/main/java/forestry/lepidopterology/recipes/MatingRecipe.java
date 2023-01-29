@@ -1,22 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.recipes;
 
-import forestry.api.lepidopterology.ButterflyManager;
-import forestry.api.lepidopterology.EnumFlutterType;
-import forestry.api.lepidopterology.IButterfly;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+
+import forestry.api.lepidopterology.ButterflyManager;
+import forestry.api.lepidopterology.EnumFlutterType;
+import forestry.api.lepidopterology.IButterfly;
 
 public class MatingRecipe implements IRecipe {
 
@@ -25,7 +24,8 @@ public class MatingRecipe implements IRecipe {
 
     public MatingRecipe() {
         unknown = ButterflyManager.butterflyRoot.getMemberStack(
-                ButterflyManager.butterflyRoot.getIndividualTemplates().get(0), EnumFlutterType.BUTTERFLY.ordinal());
+                ButterflyManager.butterflyRoot.getIndividualTemplates().get(0),
+                EnumFlutterType.BUTTERFLY.ordinal());
     }
 
     @Override
@@ -36,15 +36,15 @@ public class MatingRecipe implements IRecipe {
         int sera = 0;
 
         for (int i = 0; i < crafting.getSizeInventory(); i++) {
-            if (ButterflyManager.butterflyRoot.isMember(
-                    crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
+            if (ButterflyManager.butterflyRoot
+                    .isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
                 butterflies++;
                 mated = ButterflyManager.butterflyRoot.isMated(crafting.getStackInSlot(i));
                 cached = crafting.getStackInSlot(i);
-            } else if (ButterflyManager.butterflyRoot.isMember(
-                    crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
-                sera++;
-            }
+            } else if (ButterflyManager.butterflyRoot
+                    .isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
+                        sera++;
+                    }
         }
 
         return !mated && butterflies == 1 && sera == 1;
@@ -64,13 +64,13 @@ public class MatingRecipe implements IRecipe {
         IButterfly butterfly = null;
         IButterfly serum = null;
         for (int i = 0; i < crafting.getSizeInventory(); i++) {
-            if (ButterflyManager.butterflyRoot.isMember(
-                    crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
+            if (ButterflyManager.butterflyRoot
+                    .isMember(crafting.getStackInSlot(i), EnumFlutterType.BUTTERFLY.ordinal())) {
                 butterfly = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
-            } else if (ButterflyManager.butterflyRoot.isMember(
-                    crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
-                serum = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
-            }
+            } else if (ButterflyManager.butterflyRoot
+                    .isMember(crafting.getStackInSlot(i), EnumFlutterType.SERUM.ordinal())) {
+                        serum = ButterflyManager.butterflyRoot.getMember(crafting.getStackInSlot(i));
+                    }
         }
         if (butterfly == null || serum == null) {
             return null;

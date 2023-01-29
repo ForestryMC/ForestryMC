@@ -1,16 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins.compat;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import com.google.common.collect.ImmutableList;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.core.ForestryAPI;
 import forestry.api.farming.Farmables;
@@ -24,10 +28,6 @@ import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableReference;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(
         pluginID = "MagicalCrops",
@@ -102,8 +102,8 @@ public class PluginMagicalCrops extends ForestryPlugin {
                 "Sulfur",
                 "Darkiron");
 
-        ImmutableList<String> soulSeeds =
-                ImmutableList.of("Cow", "Creeper", "Magma", "Skeleton", "Slime", "Spider", "Ghast", "Wither");
+        ImmutableList<String> soulSeeds = ImmutableList
+                .of("Cow", "Creeper", "Magma", "Skeleton", "Slime", "Spider", "Ghast", "Wither");
 
         ImmutableList<String> potionSeeds = ImmutableList.of("Fire", "Water", "Strength", "Regen", "Night", "Speed");
 
@@ -234,10 +234,15 @@ public class PluginMagicalCrops extends ForestryPlugin {
         if (cropProduce != null) {
             int juiceAmount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.apple");
             ItemStack produce = new ItemStack(
-                    GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce"), 1, OreDictionary.WILDCARD_VALUE);
+                    GameRegistry.findItem(MagCrop, MagCrop + "_CropProduce"),
+                    1,
+                    OreDictionary.WILDCARD_VALUE);
             RecipeUtil.addFermenterRecipes(
-                    produce, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"), Fluids.BIOMASS);
-            RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] {produce}, Fluids.JUICE.getFluid(juiceAmount));
+                    produce,
+                    ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.wheat"),
+                    Fluids.BIOMASS);
+            RecipeManagers.squeezerManager
+                    .addRecipe(10, new ItemStack[] { produce }, Fluids.JUICE.getFluid(juiceAmount));
         }
     }
 
@@ -245,7 +250,8 @@ public class PluginMagicalCrops extends ForestryPlugin {
         ItemStack seed = GameRegistry.findItemStack(MagCrop, MagCrop + seedPrefix + name, 1);
         Block crop = GameRegistry.findBlock(MagCrop, MagCrop + cropPrefix + name);
         if (seed != null) {
-            RecipeManagers.squeezerManager.addRecipe(10, new ItemStack[] {seed}, Fluids.SEEDOIL.getFluid(fluidAmount));
+            RecipeManagers.squeezerManager
+                    .addRecipe(10, new ItemStack[] { seed }, Fluids.SEEDOIL.getFluid(fluidAmount));
         }
         if (seed != null && crop != null && Config.isMagicalCropsSupportEnabled()) {
             Farmables.farmables.get(FarmableReference.Wheat.get()).add(new FarmableGenericCrop(seed, crop, 7));

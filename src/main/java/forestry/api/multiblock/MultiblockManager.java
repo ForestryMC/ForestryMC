@@ -6,5 +6,6 @@
 package forestry.api.multiblock;
 
 public class MultiblockManager {
+
     public static IMultiblockLogicFactory logicFactory;
 }

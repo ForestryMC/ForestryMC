@@ -5,12 +5,14 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.genetics.IAlleleSpecies;
-import java.util.Map;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 public interface IAlleleBeeSpecies extends IAlleleSpecies {
 
@@ -36,6 +38,7 @@ public interface IAlleleBeeSpecies extends IAlleleSpecies {
 
     /**
      * Only jubilant bees produce specialities.
+     * 
      * @return true if the bee is jubilant, false otherwise.
      */
     boolean isJubilant(IBeeGenome genome, IBeeHousing housing);

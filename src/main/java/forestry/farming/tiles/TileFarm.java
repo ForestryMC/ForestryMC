@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.tiles;
+
+import java.io.IOException;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChunkCoordinates;
 
 import forestry.api.circuits.ICircuitSocketType;
 import forestry.api.core.IErrorLogic;
@@ -31,21 +37,9 @@ import forestry.farming.gui.ContainerFarm;
 import forestry.farming.gui.GuiFarm;
 import forestry.farming.multiblock.MultiblockLogicFarm;
 import forestry.farming.render.EnumFarmBlockTexture;
-import java.io.IOException;
-import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChunkCoordinates;
 
-public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm>
-        implements IFarmComponent,
-                IHintSource,
-                ISocketable,
-                IStreamableGui,
-                IErrorLogicSource,
-                IRestrictedAccess,
-                ITitled {
+public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLogicFarm> implements IFarmComponent,
+        IHintSource, ISocketable, IStreamableGui, IErrorLogicSource, IRestrictedAccess, ITitled {
 
     private EnumFarmBlockTexture farmBlockTexture = EnumFarmBlockTexture.BRICK_STONE;
 
@@ -54,8 +48,8 @@ public abstract class TileFarm extends MultiblockTileEntityForestry<MultiblockLo
     }
 
     @Override
-    public void onMachineAssembled(
-            IMultiblockController multiblockController, ChunkCoordinates minCoord, ChunkCoordinates maxCoord) {
+    public void onMachineAssembled(IMultiblockController multiblockController, ChunkCoordinates minCoord,
+            ChunkCoordinates maxCoord) {
         worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
         markDirty();
     }

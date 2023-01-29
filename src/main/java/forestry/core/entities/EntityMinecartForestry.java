@@ -1,24 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.entities;
 
-import com.mojang.authlib.GameProfile;
-import forestry.core.access.AccessHandler;
-import forestry.core.access.EnumAccess;
-import forestry.core.access.IAccessHandler;
-import forestry.core.access.IRestrictedAccess;
-import forestry.core.gui.GuiHandler;
-import forestry.core.gui.IGuiHandlerEntity;
-import forestry.core.gui.IHintSource;
-import forestry.core.tiles.ITitled;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,8 +19,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 
+import com.mojang.authlib.GameProfile;
+
+import forestry.core.access.AccessHandler;
+import forestry.core.access.EnumAccess;
+import forestry.core.access.IAccessHandler;
+import forestry.core.access.IRestrictedAccess;
+import forestry.core.gui.GuiHandler;
+import forestry.core.gui.IGuiHandlerEntity;
+import forestry.core.gui.IHintSource;
+import forestry.core.tiles.ITitled;
+
 public abstract class EntityMinecartForestry extends EntityMinecart
         implements ITitled, IRestrictedAccess, IHintSource, IGuiHandlerEntity {
+
     private final AccessHandler accessHandler = new AccessHandler(this);
 
     @SuppressWarnings("unused")

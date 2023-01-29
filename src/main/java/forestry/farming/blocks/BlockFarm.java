@@ -1,30 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.blocks.BlockStructure;
-import forestry.core.render.ParticleHelper;
-import forestry.core.utils.ItemStackUtil;
-import forestry.farming.render.EnumFarmBlockTexture;
-import forestry.farming.tiles.TileFarm;
-import forestry.farming.tiles.TileFarmControl;
-import forestry.farming.tiles.TileFarmGearbox;
-import forestry.farming.tiles.TileFarmHatch;
-import forestry.farming.tiles.TileFarmPlain;
-import forestry.farming.tiles.TileFarmValve;
-import forestry.plugins.PluginFarming;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EffectRenderer;
@@ -41,6 +27,20 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.blocks.BlockStructure;
+import forestry.core.render.ParticleHelper;
+import forestry.core.utils.ItemStackUtil;
+import forestry.farming.render.EnumFarmBlockTexture;
+import forestry.farming.tiles.TileFarm;
+import forestry.farming.tiles.TileFarmControl;
+import forestry.farming.tiles.TileFarmGearbox;
+import forestry.farming.tiles.TileFarmHatch;
+import forestry.farming.tiles.TileFarmPlain;
+import forestry.farming.tiles.TileFarmValve;
+import forestry.plugins.PluginFarming;
+
 public class BlockFarm extends BlockStructure {
 
     private final ParticleHelper.Callback particleCallback;
@@ -53,7 +53,7 @@ public class BlockFarm extends BlockStructure {
     }
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
         for (int i = 0; i < 6; i++) {

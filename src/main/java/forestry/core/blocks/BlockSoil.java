@@ -1,24 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.CreativeTabForestry;
-import forestry.core.config.Constants;
-import forestry.core.render.TextureManager;
-import forestry.plugins.PluginCore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
@@ -33,6 +26,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.CreativeTabForestry;
+import forestry.core.config.Constants;
+import forestry.core.render.TextureManager;
+import forestry.plugins.PluginCore;
 
 /**
  * Humus, bog earth, peat
@@ -195,8 +195,8 @@ public class BlockSoil extends Block implements IItemTyped {
     }
 
     @Override
-    public boolean canSustainPlant(
-            IBlockAccess world, int x, int y, int z, ForgeDirection direction, IPlantable plant) {
+    public boolean canSustainPlant(IBlockAccess world, int x, int y, int z, ForgeDirection direction,
+            IPlantable plant) {
         EnumPlantType plantType = plant.getPlantType(world, x, y, z);
         if (plantType != EnumPlantType.Crop && plantType != EnumPlantType.Plains) {
             return false;
@@ -229,7 +229,7 @@ public class BlockSoil extends Block implements IItemTyped {
     }
 
     // / CREATIVE INVENTORY
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubBlocks(Item item, CreativeTabs par2CreativeTabs, List itemList) {
         itemList.add(new ItemStack(this, 1, 0));

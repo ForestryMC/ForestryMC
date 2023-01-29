@@ -1,24 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.inventory;
+
+import java.util.ArrayList;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.ItemStackUtil;
 import forestry.core.utils.SlotUtil;
 import forestry.mail.TradeStation;
-import java.util.ArrayList;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public class InventoryTradeStation extends InventoryAdapter {
 
@@ -31,22 +31,19 @@ public class InventoryTradeStation extends InventoryAdapter {
 
         ArrayList<Integer> slots = new ArrayList<>();
 
-        for (int i = TradeStation.SLOT_LETTERS_1;
-                i < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT;
-                i++) {
+        for (int i = TradeStation.SLOT_LETTERS_1; i
+                < TradeStation.SLOT_LETTERS_1 + TradeStation.SLOT_LETTERS_COUNT; i++) {
             slots.add(i);
         }
         for (int i = TradeStation.SLOT_STAMPS_1; i < TradeStation.SLOT_STAMPS_1 + TradeStation.SLOT_STAMPS_COUNT; i++) {
             slots.add(i);
         }
-        for (int i = TradeStation.SLOT_RECEIVE_BUFFER;
-                i < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT;
-                i++) {
+        for (int i = TradeStation.SLOT_RECEIVE_BUFFER; i
+                < TradeStation.SLOT_RECEIVE_BUFFER + TradeStation.SLOT_RECEIVE_BUFFER_COUNT; i++) {
             slots.add(i);
         }
-        for (int i = TradeStation.SLOT_SEND_BUFFER;
-                i < TradeStation.SLOT_SEND_BUFFER + TradeStation.SLOT_SEND_BUFFER_COUNT;
-                i++) {
+        for (int i = TradeStation.SLOT_SEND_BUFFER; i
+                < TradeStation.SLOT_SEND_BUFFER + TradeStation.SLOT_SEND_BUFFER_COUNT; i++) {
             slots.add(i);
         }
 

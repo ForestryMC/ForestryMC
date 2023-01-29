@@ -1,16 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.inventory;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.core.IErrorSource;
 import forestry.api.core.IErrorState;
 import forestry.api.genetics.IBreedingTracker;
@@ -20,12 +24,9 @@ import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.errors.EnumErrorCode;
 import forestry.plugins.PluginApiculture;
 import forestry.plugins.PluginManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class ItemInventoryAlyzer extends ItemInventory implements IErrorSource {
+
     public static final int SLOT_SPECIMEN = 0;
     public static final int SLOT_ANALYZE_1 = 1;
     public static final int SLOT_ANALYZE_2 = 2;
@@ -90,8 +91,8 @@ public abstract class ItemInventoryAlyzer extends ItemInventory implements IErro
 
             individual.analyze();
             if (player != null) {
-                IBreedingTracker breedingTracker =
-                        speciesRoot.getBreedingTracker(player.worldObj, player.getGameProfile());
+                IBreedingTracker breedingTracker = speciesRoot
+                        .getBreedingTracker(player.worldObj, player.getGameProfile());
                 breedingTracker.registerSpecies(individual.getGenome().getPrimary());
                 breedingTracker.registerSpecies(individual.getGenome().getSecondary());
             }

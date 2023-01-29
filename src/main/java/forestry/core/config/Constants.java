@@ -1,18 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.config;
 
 import forestry.api.core.IForestryConstants;
 
 public class Constants implements IForestryConstants {
+
     // System
     public static final String MOD = "Forestry";
     public static final String ID = "forestry";
@@ -26,7 +25,7 @@ public class Constants implements IForestryConstants {
     public static final int BUCKET_VOLUME = 1000;
     public static final int FLUID_PER_HONEY_DROP = 100;
 
-    public static final int[] FACINGS = {0, 1, 2, 3, 4, 5};
+    public static final int[] FACINGS = { 0, 1, 2, 3, 4, 5 };
     public static final int[] SLOTS_NONE = new int[0];
     public static final String[] EMPTY_STRINGS = new String[0];
 

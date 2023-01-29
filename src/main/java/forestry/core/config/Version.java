@@ -1,28 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.config;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-import forestry.Forestry;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.Log;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import forestry.Forestry;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.Log;
 
 /**
  * With permission from pahimar.
@@ -39,8 +39,8 @@ public class Version {
 
     public static final String VERSION = "@VERSION@";
     public static final String BUILD_NUMBER = "@BUILD_NUMBER@";
-    public static final String[] FAILED_CHANGELOG =
-            new String[] {String.format("Unable to retrieve changelog for %s", Constants.MOD)};
+    public static final String[] FAILED_CHANGELOG = new String[] {
+            String.format("Unable to retrieve changelog for %s", Constants.MOD) };
     private static final String REMOTE_VERSION_FILE = "http://bit.ly/forestryver";
     private static final String REMOTE_CHANGELOG_ROOT = "https://dl.dropbox.com/u/44760587/forestry/changelog/";
     public static EnumUpdateState currentVersion = EnumUpdateState.CURRENT;
@@ -63,8 +63,7 @@ public class Version {
         File versionFile = new File(Forestry.instance.getConfigFolder(), Config.CATEGORY_COMMON + ".cfg");
         Configuration config = new Configuration(versionFile);
         Property property = config.get("version", "seen", VERSION);
-        property.comment =
-                "indicates the last version the user has been informed about and will suppress further notices on it.";
+        property.comment = "indicates the last version the user has been informed about and will suppress further notices on it.";
         String seenVersion = property.getString();
 
         if (recommendedVersion == null || recommendedVersion.equals(seenVersion)) {
@@ -112,25 +111,32 @@ public class Version {
                     return;
                 }
 
-                int result = FMLCommonHandler.instance()
-                        .findContainerFor(Forestry.instance)
-                        .getProcessedVersion()
+                int result = FMLCommonHandler.instance().findContainerFor(Forestry.instance).getProcessedVersion()
                         .compareTo(new DefaultArtifactVersion(recommendedVersion));
                 if (result >= 0) {
-                    Log.finer("Using the latest version [" + VERSION + " (build:" + BUILD_NUMBER + ")] for Minecraft "
-                            + mcVersion);
+                    Log.finer(
+                            "Using the latest version [" + VERSION
+                                    + " (build:"
+                                    + BUILD_NUMBER
+                                    + ")] for Minecraft "
+                                    + mcVersion);
                     currentVersion = EnumUpdateState.CURRENT;
                     return;
                 }
 
                 cachedChangelog = grabChangelog(recommendedVersion);
 
-                Log.warning("Using outdated version [" + VERSION + " (build:" + BUILD_NUMBER + ")] for Minecraft "
-                        + mcVersion + ". Consider updating.");
+                Log.warning(
+                        "Using outdated version [" + VERSION
+                                + " (build:"
+                                + BUILD_NUMBER
+                                + ")] for Minecraft "
+                                + mcVersion
+                                + ". Consider updating.");
                 currentVersion = EnumUpdateState.OUTDATED;
 
             } catch (Exception e) {
-                //				e.printStackTrace();
+                // e.printStackTrace();
                 Log.warning("Unable to read from remote version authority.");
                 currentVersion = EnumUpdateState.CONNECTION_ERROR;
             }
@@ -178,10 +184,10 @@ public class Version {
             return changelog.toArray(new String[changelog.size()]);
 
         } catch (Exception ex) {
-            //			ex.printStackTrace();
+            // ex.printStackTrace();
             Log.warning("Unable to read changelog from remote site.");
         }
 
-        return new String[] {String.format("Unable to retrieve changelog for %s %s", Constants.MOD, version)};
+        return new String[] { String.format("Unable to retrieve changelog for %s %s", Constants.MOD, version) };
     }
 }

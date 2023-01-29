@@ -1,19 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.worldgen;
 
-import forestry.api.world.ITreeGenData;
 import java.util.Random;
+
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import forestry.api.world.ITreeGenData;
 
 public class WorldGenPadauk extends WorldGenTree {
 
@@ -43,18 +43,17 @@ public class WorldGenPadauk extends WorldGenTree {
             for (int i = 0; i < girth * 4; i++) {
                 if (world.rand.nextBoolean()) {
 
-                    int[] offset = {-1, 1};
+                    int[] offset = { -1, 1 };
                     int offsetValue = (offset[new Random().nextInt(offset.length)]);
                     int maxBranchLength = 3;
                     int branchLength = new Random().nextInt(maxBranchLength + 1);
-                    ForgeDirection[] direction = {ForgeDirection.NORTH, ForgeDirection.EAST};
+                    ForgeDirection[] direction = { ForgeDirection.NORTH, ForgeDirection.EAST };
                     ForgeDirection directionValue = (direction[new Random().nextInt(direction.length)]);
                     int branchSpawn = leafSpawn;
 
                     for (int j = 1; j < branchLength + 1; j++) {
-                        if (j == branchLength
-                                && world.rand
-                                        .nextBoolean()) { // Just adding a bit of variation to the ends for character
+                        if (j == branchLength && world.rand.nextBoolean()) { // Just adding a bit of variation to the
+                                                                             // ends for character
                             branchSpawn += 1;
                         }
 

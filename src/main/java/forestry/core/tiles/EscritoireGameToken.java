@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.tiles;
+
+import java.io.IOException;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import forestry.api.core.INBTTagable;
 import forestry.api.genetics.AlleleManager;
@@ -18,24 +21,23 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.utils.ColourUtil;
 import forestry.core.utils.StringUtil;
-import java.io.IOException;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class EscritoireGameToken implements INBTTagable, IStreamable {
 
     private enum State {
+
         UNREVEALED, // face down
         PROBED, // shown by escritoire probe action
         SELECTED, // selected by the user as the first half of a match
         MATCHED, // successfully matched
         FAILED; // failed to match
+
         public static final State[] VALUES = values();
     }
 
     private static final String[] OVERLAY_NONE = new String[0];
-    private static final String[] OVERLAY_FAILED = new String[] {"errors/errored"};
-    private static final String[] OVERLAY_SELECTED = new String[] {"errors/unknown"};
+    private static final String[] OVERLAY_FAILED = new String[] { "errors/errored" };
+    private static final String[] OVERLAY_SELECTED = new String[] { "errors/unknown" };
 
     private ItemStack tokenStack;
     private State state = State.UNREVEALED;

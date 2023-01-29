@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics.alleles;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import forestry.api.apiculture.EnumBeeChromosome;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -24,10 +27,6 @@ import forestry.apiculture.flowers.FlowerProvider;
 import forestry.core.config.Constants;
 import forestry.core.utils.vect.IVect;
 import forestry.plugins.PluginManager;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 public class AlleleHelper implements IAlleleHelper {
 
@@ -46,7 +45,8 @@ public class AlleleHelper implements IAlleleHelper {
             createAlleles(EnumAllele.Territory.class, EnumBeeChromosome.TERRITORY, EnumTreeChromosome.TERRITORY);
 
             AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.territoryDefault", get(EnumAllele.Territory.AVERAGE));
+                    "forestry.territoryDefault",
+                    get(EnumAllele.Territory.AVERAGE));
         }
 
         if (PluginManager.Module.APICULTURE.isEnabled() || PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
@@ -63,8 +63,8 @@ public class AlleleHelper implements IAlleleHelper {
                     EnumBeeChromosome.FLOWER_PROVIDER,
                     EnumButterflyChromosome.FLOWER_PROVIDER);
 
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.speedNorm", get(EnumAllele.Speed.NORMAL));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.speedNorm", get(EnumAllele.Speed.NORMAL));
         }
 
         if (PluginManager.Module.ARBORICULTURE.isEnabled()) {
@@ -75,30 +75,33 @@ public class AlleleHelper implements IAlleleHelper {
             createAlleles(EnumAllele.Maturation.class, EnumTreeChromosome.MATURATION);
             createAlleles(EnumAllele.Sappiness.class, EnumTreeChromosome.SAPPINESS);
 
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.heightMax10", get(EnumAllele.Height.AVERAGE));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.saplingsDefault", get(EnumAllele.Saplings.AVERAGE));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.saplingsDouble", get(EnumAllele.Saplings.HIGH));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.saplingsTriple", get(EnumAllele.Saplings.HIGHER));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.yieldDefault", get(EnumAllele.Yield.AVERAGE));
             AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.heightMax10", get(EnumAllele.Height.AVERAGE));
+                    "forestry.maturitySlowest",
+                    get(EnumAllele.Maturation.SLOWEST));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.maturitySlower", get(EnumAllele.Maturation.SLOWER));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.maturitySlow", get(EnumAllele.Maturation.SLOW));
             AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.saplingsDefault", get(EnumAllele.Saplings.AVERAGE));
+                    "forestry.maturityAverage",
+                    get(EnumAllele.Maturation.AVERAGE));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.maturityFast", get(EnumAllele.Maturation.FAST));
+            AlleleManager.alleleRegistry
+                    .registerDeprecatedAlleleReplacement("forestry.maturityFaster", get(EnumAllele.Maturation.FASTER));
             AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.saplingsDouble", get(EnumAllele.Saplings.HIGH));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.saplingsTriple", get(EnumAllele.Saplings.HIGHER));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.yieldDefault", get(EnumAllele.Yield.AVERAGE));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.maturitySlowest", get(EnumAllele.Maturation.SLOWEST));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.maturitySlower", get(EnumAllele.Maturation.SLOWER));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.maturitySlow", get(EnumAllele.Maturation.SLOW));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.maturityAverage", get(EnumAllele.Maturation.AVERAGE));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.maturityFast", get(EnumAllele.Maturation.FAST));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.maturityFaster", get(EnumAllele.Maturation.FASTER));
-            AlleleManager.alleleRegistry.registerDeprecatedAlleleReplacement(
-                    "forestry.maturityFastest", get(EnumAllele.Maturation.FASTEST));
+                    "forestry.maturityFastest",
+                    get(EnumAllele.Maturation.FASTEST));
         }
 
         if (PluginManager.Module.LEPIDOPTEROLOGY.isEnabled()) {
@@ -158,11 +161,11 @@ public class AlleleHelper implements IAlleleHelper {
         }
 
         // uncomment this once all addon mods are using the allele registration with IChromosomeType
-        //		Collection<IChromosomeType> validTypes = AlleleManager.alleleRegistry.getChromosomeTypes(allele);
-        //		if (validTypes.size() > 0 && !validTypes.contains(chromosomeType)) {
-        //			throw new IllegalArgumentException("Allele can't applied to this Chromosome type. Expected: " + validTypes
+        // Collection<IChromosomeType> validTypes = AlleleManager.alleleRegistry.getChromosomeTypes(allele);
+        // if (validTypes.size() > 0 && !validTypes.contains(chromosomeType)) {
+        // throw new IllegalArgumentException("Allele can't applied to this Chromosome type. Expected: " + validTypes
         // + " Got: " + chromosomeType);
-        //		}
+        // }
 
         alleles[chromosomeType.ordinal()] = allele;
     }
@@ -192,8 +195,8 @@ public class AlleleHelper implements IAlleleHelper {
         alleleMaps.put(enumClass, map);
     }
 
-    private static <K extends IAlleleValue<V>, V> IAllele createAllele(
-            String category, K enumValue, IChromosomeType... types) {
+    private static <K extends IAlleleValue<V>, V> IAllele createAllele(String category, K enumValue,
+            IChromosomeType... types) {
         V value = enumValue.getValue();
         boolean isDominant = enumValue.isDominant();
         String name = enumValue.toString().toLowerCase(Locale.ENGLISH);
@@ -205,18 +208,22 @@ public class AlleleHelper implements IAlleleHelper {
             return AlleleManager.alleleFactory.createInteger(modId, category, name, (Integer) value, isDominant, types);
         } else if (IVect.class.isAssignableFrom(valueClass)) {
             IVect area = (IVect) value;
-            return AlleleManager.alleleFactory.createArea(
-                    modId, category, name, area.getX(), area.getY(), area.getZ(), isDominant, types);
+            return AlleleManager.alleleFactory
+                    .createArea(modId, category, name, area.getX(), area.getY(), area.getZ(), isDominant, types);
         } else if (Boolean.class.isAssignableFrom(valueClass)) {
             return AlleleManager.alleleFactory.createBoolean(modId, category, (Boolean) value, isDominant, types);
         } else if (EnumTolerance.class.isAssignableFrom(valueClass)) {
-            IAlleleTolerance alleleTolerance =
-                    new AlleleTolerance(modId, category, name, (EnumTolerance) value, isDominant);
+            IAlleleTolerance alleleTolerance = new AlleleTolerance(
+                    modId,
+                    category,
+                    name,
+                    (EnumTolerance) value,
+                    isDominant);
             AlleleManager.alleleRegistry.registerAllele(alleleTolerance, types);
             return alleleTolerance;
         } else if (FlowerProvider.class.isAssignableFrom(valueClass)) {
-            return AlleleManager.alleleFactory.createFlowers(
-                    modId, category, name, (FlowerProvider) value, isDominant, types);
+            return AlleleManager.alleleFactory
+                    .createFlowers(modId, category, name, (FlowerProvider) value, isDominant, types);
         }
         throw new RuntimeException("could not create allele for category: " + category + " and value " + valueClass);
     }

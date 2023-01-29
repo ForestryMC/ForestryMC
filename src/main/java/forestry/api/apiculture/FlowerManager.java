@@ -5,13 +5,26 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
-import forestry.api.genetics.IFlowerRegistry;
 import java.util.ArrayList;
+
 import net.minecraft.item.ItemStack;
 
+import forestry.api.genetics.IFlowerRegistry;
+
 public class FlowerManager {
+
     /**
-     * <blockquote><pre>e.g. FlowerManager.flowerRegister.registerPlantableFlower(new ItemStack(Blocks.red_flower), 1.0, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);</pre></blockquote>
+     * <blockquote>
+     * 
+     * <pre>
+     * e.g.FlowerManager.flowerRegister.registerPlantableFlower(
+     *         new ItemStack(Blocks.red_flower),
+     *         1.0,
+     *         FlowerManager.FlowerTypeVanilla,
+     *         FlowerManager.FlowerTypeSnow);
+     * </pre>
+     * 
+     * </blockquote>
      */
     public static IFlowerRegistry flowerRegistry;
 
@@ -26,8 +39,8 @@ public class FlowerManager {
     public static final String FlowerTypeGourd = "flowersGourd";
 
     /**
-     * @deprecated since Forestry 3.4. Use IFlowerRegistry.registerPlantableFlower instead.
-     * Completely unused since Forestry 4.0, kept for backward compatibility with older mods.
+     * @deprecated since Forestry 3.4. Use IFlowerRegistry.registerPlantableFlower instead. Completely unused since
+     *             Forestry 4.0, kept for backward compatibility with older mods.
      */
     @Deprecated
     public static ArrayList<ItemStack> plainFlowers = new ArrayList<ItemStack>();

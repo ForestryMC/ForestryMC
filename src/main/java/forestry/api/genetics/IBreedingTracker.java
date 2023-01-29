@@ -5,9 +5,10 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import forestry.api.apiculture.IBeekeepingMode;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+
+import forestry.api.apiculture.IBeekeepingMode;
 
 /**
  * Keeps track of who bred, discovered, and researched which species in a world.
@@ -62,8 +63,7 @@ public interface IBreedingTracker {
     /**
      * Queries the tracker for discovered species.
      *
-     * @param mutation
-     *            Mutation to query for.
+     * @param mutation Mutation to query for.
      * @return true if the mutation has been discovered.
      */
     boolean isDiscovered(IMutation mutation);
@@ -71,17 +71,14 @@ public interface IBreedingTracker {
     /**
      * Queries the tracker for discovered species.
      *
-     * @param species
-     *            Species to check.
+     * @param species Species to check.
      * @return true if the species has been bred.
      */
     boolean isDiscovered(IAlleleSpecies species);
 
     /**
-     * Register a successfully researched mutation.
-     * Mutations are normally researched in the Escritoire.
-     * Researched mutations may have bonuses such as occurring at a higher rate.
-     * Researched mutations count as discovered.
+     * Register a successfully researched mutation. Mutations are normally researched in the Escritoire. Researched
+     * mutations may have bonuses such as occurring at a higher rate. Researched mutations count as discovered.
      */
     void researchMutation(IMutation mutation);
 
@@ -91,9 +88,9 @@ public interface IBreedingTracker {
     boolean isResearched(IMutation mutation);
 
     /**
-     * Synchronizes the tracker to the client side.
-     * Before Forestry 4.2.1: Should be called before opening any gui needing that information.
-     * Since Forestry 4.2.1: Breeding tracker should be automatically synced, only Forestry should need to call this.
+     * Synchronizes the tracker to the client side. Before Forestry 4.2.1: Should be called before opening any gui
+     * needing that information. Since Forestry 4.2.1: Breeding tracker should be automatically synced, only Forestry
+     * should need to call this.
      */
     void synchToPlayer(EntityPlayer player);
 

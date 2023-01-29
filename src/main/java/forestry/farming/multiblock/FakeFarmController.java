@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.multiblock;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitSocketType;
@@ -23,12 +26,9 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.multiblock.FakeMultiblockController;
 import forestry.farming.gui.IFarmLedgerDelegate;
 import io.netty.util.internal.EmptyArrays;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
 
 public class FakeFarmController extends FakeMultiblockController implements IFarmControllerInternal {
+
     public static final FakeFarmController instance = new FakeFarmController();
 
     private FakeFarmController() {}
@@ -121,6 +121,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
     }
 
     private static class FakeFarmInventory implements IFarmInventory {
+
         public static final FakeFarmInventory instance = new FakeFarmInventory();
 
         private FakeFarmInventory() {}
@@ -170,6 +171,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
     }
 
     private static class FakeFarmLedgerDelegate implements IFarmLedgerDelegate {
+
         public static final FakeFarmLedgerDelegate instance = new FakeFarmLedgerDelegate();
 
         private FakeFarmLedgerDelegate() {}

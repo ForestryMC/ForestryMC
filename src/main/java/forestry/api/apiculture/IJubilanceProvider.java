@@ -8,8 +8,8 @@ package forestry.api.apiculture;
 public interface IJubilanceProvider {
 
     /**
-     * Returns true when conditions are right to make this species Jubilant.
-     * Jubilant bees can produce their Specialty products.
+     * Returns true when conditions are right to make this species Jubilant. Jubilant bees can produce their Specialty
+     * products.
      */
     boolean isJubilant(IAlleleBeeSpecies species, IBeeGenome genome, IBeeHousing housing);
 

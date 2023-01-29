@@ -1,14 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,25 +35,13 @@ import forestry.core.render.SpriteSheet;
 import forestry.core.utils.vect.Vect;
 import forestry.core.utils.vect.VectUtil;
 import forestry.plugins.PluginCore;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 
 public class FarmLogicArboreal extends FarmLogicHomogeneous {
+
     private static final int BRANCH_RANGE = 20;
 
-    public FarmLogicArboreal(
-            IFarmHousing housing, ItemStack resource, ItemStack ground, Iterable<IFarmable> germlings) {
+    public FarmLogicArboreal(IFarmHousing housing, ItemStack resource, ItemStack ground,
+            Iterable<IFarmable> germlings) {
         super(housing, resource, ground, germlings);
     }
 
@@ -161,8 +162,8 @@ public class FarmLogicArboreal extends FarmLogicHomogeneous {
         return crops;
     }
 
-    private ArrayList<Vect> processHarvestBlock(
-            IFarmable germling, Stack<ICrop> crops, Set<Vect> seen, Vect start, Vect position) {
+    private ArrayList<Vect> processHarvestBlock(IFarmable germling, Stack<ICrop> crops, Set<Vect> seen, Vect start,
+            Vect position) {
 
         World world = getWorld();
 

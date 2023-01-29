@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.apiculture.genetics.alleles;
+
+import java.util.Arrays;
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.Vec3;
 
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeChromosome;
@@ -23,13 +30,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.EntityUtil;
 import forestry.core.utils.vect.MutableVect;
 import forestry.core.utils.vect.Vect;
-import java.util.Arrays;
-import java.util.List;
-import net.minecraft.entity.Entity;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.Vec3;
 
 public abstract class AlleleEffect extends AlleleCategorized implements IAlleleBeeEffect {
 
@@ -69,10 +69,12 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
                 effectFestiveEaster = new AlleleEffectNone("festiveEaster", true),
                 effectSnowing = new AlleleEffectSnowing(),
                 effectDrunkard = new AlleleEffectPotion("drunkard", false, Potion.confusion, 100),
-                effectReanimation =
-                        new AlleleEffectResurrection("reanimation", AlleleEffectResurrection.getReanimationList()),
-                effectResurrection =
-                        new AlleleEffectResurrection("resurrection", AlleleEffectResurrection.getResurrectionList()),
+                effectReanimation = new AlleleEffectResurrection(
+                        "reanimation",
+                        AlleleEffectResurrection.getReanimationList()),
+                effectResurrection = new AlleleEffectResurrection(
+                        "resurrection",
+                        AlleleEffectResurrection.getResurrectionList()),
                 effectRepulsion = new AlleleEffectRepulsion(),
                 effectFertile = new AlleleEffectFertile(),
                 effectMycophilic = new AlleleEffectFungification());
@@ -158,8 +160,8 @@ public abstract class AlleleEffect extends AlleleCategorized implements IAlleleB
         return AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z);
     }
 
-    public static <T extends Entity> List<T> getEntitiesInRange(
-            IBeeGenome genome, IBeeHousing housing, Class<T> entityClass) {
+    public static <T extends Entity> List<T> getEntitiesInRange(IBeeGenome genome, IBeeHousing housing,
+            Class<T> entityClass) {
         AxisAlignedBB boundingBox = getBounding(genome, housing);
         return EntityUtil.getEntitiesWithinAABB(housing.getWorld(), entityClass, boundingBox);
     }

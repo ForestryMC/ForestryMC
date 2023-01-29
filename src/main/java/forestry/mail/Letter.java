@@ -1,14 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail;
+
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import org.apache.commons.lang3.StringUtils;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -16,13 +22,9 @@ import forestry.api.mail.IStamps;
 import forestry.core.inventory.InventoryAdapter;
 import forestry.core.utils.InventoryUtil;
 import forestry.core.utils.StringUtil;
-import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import org.apache.commons.lang3.StringUtils;
 
 public class Letter implements ILetter {
+
     public static final short SLOT_ATTACHMENT_1 = 0;
     public static final short SLOT_ATTACHMENT_COUNT = 18;
     public static final short SLOT_POSTAGE_1 = 18;
@@ -38,7 +40,7 @@ public class Letter implements ILetter {
 
     public Letter(IMailAddress sender, IMailAddress recipient) {
         this.sender = sender;
-        this.recipient = new IMailAddress[] {recipient};
+        this.recipient = new IMailAddress[] { recipient };
     }
 
     public Letter(NBTTagCompound nbttagcompound) {
@@ -209,7 +211,7 @@ public class Letter implements ILetter {
         if (address == null) {
             this.recipient = new IMailAddress[] {};
         } else {
-            this.recipient = new IMailAddress[] {address};
+            this.recipient = new IMailAddress[] { address };
         }
     }
 

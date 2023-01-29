@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.tiles;
+
+import java.io.IOException;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import cofh.api.energy.IEnergyConnection;
 import forestry.api.core.IErrorLogic;
@@ -21,22 +28,15 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.BlockUtil;
 import forestry.energy.EnergyManager;
-import java.io.IOException;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEngine extends TileBase implements IEnergyConnection, IActivatable {
+
     private static final int CANT_SEND_ENERGY_TIME = 20;
 
     private boolean active = false; // Used for smp.
     private int cantSendEnergyCountdown = CANT_SEND_ENERGY_TIME;
     /**
-     * Indicates whether the piston is receding from or approaching the
-     * combustion chamber
+     * Indicates whether the piston is receding from or approaching the combustion chamber
      */
     private int stagePiston = 0;
     /**
@@ -144,8 +144,7 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
                 progress = 0;
                 stagePiston = 0;
             }
-        } else if (enabledRedstone
-                && BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile)) {
+        } else if (enabledRedstone && BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile)) {
             if (energyManager.canSendEnergy(getOrientation(), tile)) {
                 stagePiston = 1; // If we can transfer energy, start running
                 setActive(true);
@@ -210,7 +209,9 @@ public abstract class TileEngine extends TileBase implements IEnergyConnection, 
 
     private boolean isOrientedAtEnergyReciever(ForgeDirection orientation) {
         TileEntity tile = worldObj.getTileEntity(
-                xCoord + orientation.offsetX, yCoord + orientation.offsetY, zCoord + orientation.offsetZ);
+                xCoord + orientation.offsetX,
+                yCoord + orientation.offsetY,
+                zCoord + orientation.offsetZ);
         return BlockUtil.isEnergyReceiverOrEngine(getOrientation().getOpposite(), tile);
     }
 

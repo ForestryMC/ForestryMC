@@ -1,16 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.genetics.alleles;
 
+import java.util.Collection;
+import java.util.Map;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.core.EnumHumidity;
@@ -25,14 +32,9 @@ import forestry.apiculture.items.ItemRegistryApiculture;
 import forestry.core.utils.GeneticsUtil;
 import forestry.core.utils.ItemStackUtil;
 import forestry.plugins.PluginApiculture;
-import java.util.Collection;
-import java.util.Map;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
 
 public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCustom {
+
     private final String binomial;
     private final String authority;
     private final String description;
@@ -44,14 +46,8 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
     private EnumTemperature climate = EnumTemperature.NORMAL;
     private EnumHumidity humidity = EnumHumidity.NORMAL;
 
-    protected AlleleSpecies(
-            String uid,
-            String unlocalizedName,
-            String authority,
-            String unlocalizedDescription,
-            boolean isDominant,
-            IClassification branch,
-            String binomial) {
+    protected AlleleSpecies(String uid, String unlocalizedName, String authority, String unlocalizedDescription,
+            boolean isDominant, IClassification branch, String binomial) {
         super(uid, unlocalizedName, isDominant);
 
         this.branch = branch;
@@ -87,8 +83,7 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
             return 1.0f;
         }
 
-        for (Map.Entry<ItemStack, Float> entry :
-                getRoot().getResearchCatalysts().entrySet()) {
+        for (Map.Entry<ItemStack, Float> entry : getRoot().getResearchCatalysts().entrySet()) {
             if (ItemStackUtil.isIdenticalItem(entry.getKey(), itemstack)) {
                 return entry.getValue();
             }
@@ -109,13 +104,13 @@ public abstract class AlleleSpecies extends Allele implements IAlleleSpeciesCust
             Collection<? extends IMutation> combinations = getRoot().getCombinations(this);
             if (combinations.size() > 0) {
                 IMutation[] candidates = combinations.toArray(new IMutation[combinations.size()]);
-                research = AlleleManager.alleleRegistry.getMutationNoteStack(
-                        researcher, candidates[world.rand.nextInt(candidates.length)]);
+                research = AlleleManager.alleleRegistry
+                        .getMutationNoteStack(researcher, candidates[world.rand.nextInt(candidates.length)]);
             }
         }
 
         if (research != null) {
-            return new ItemStack[] {research};
+            return new ItemStack[] { research };
         } else {
             return ItemStackUtil.EMPTY_STACK_ARRAY;
         }

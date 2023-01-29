@@ -1,24 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.gui.slots.SlotFilteredInventory;
-import forestry.core.network.packets.PacketGuiSelectRequest;
-import forestry.core.tiles.IFilterSlotDelegate;
-import forestry.core.tiles.TileNaturalistChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
+
+import forestry.core.gui.slots.SlotFilteredInventory;
+import forestry.core.network.packets.PacketGuiSelectRequest;
+import forestry.core.tiles.IFilterSlotDelegate;
+import forestry.core.tiles.TileNaturalistChest;
 
 public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistChest> implements IGuiSelectable {
 
@@ -28,8 +27,8 @@ public class ContainerNaturalistInventory extends ContainerTile<TileNaturalistCh
         addInventory(this, tile, page);
     }
 
-    public static <T extends IInventory & IFilterSlotDelegate> void addInventory(
-            ContainerForestry container, T inventory, int selectedPage) {
+    public static <T extends IInventory & IFilterSlotDelegate> void addInventory(ContainerForestry container,
+            T inventory, int selectedPage) {
         for (int page = 0; page < 5; page++) {
             for (int x = 0; x < 5; x++) {
                 for (int y = 0; y < 5; y++) {

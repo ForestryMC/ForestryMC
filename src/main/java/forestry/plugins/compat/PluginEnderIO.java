@@ -1,5 +1,8 @@
 package forestry.plugins.compat;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.Fluid;
+
 import cpw.mods.fml.common.event.FMLInterModComms;
 import forestry.api.core.ForestryAPI;
 import forestry.core.config.Constants;
@@ -7,8 +10,6 @@ import forestry.core.fluids.Fluids;
 import forestry.core.utils.ModUtil;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.Fluid;
 
 @Plugin(
         pluginID = "EnderIO",
@@ -44,8 +45,9 @@ public class PluginEnderIO extends ForestryPlugin {
     public void doInit() {
         Fluid ethanol = Fluids.ETHANOL.getFluid();
         if (ethanol != null) {
-            int ethanolBurnTime = Math.round(Constants.ENGINE_CYCLE_DURATION_ETHANOL
-                    * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
+            int ethanolBurnTime = Math.round(
+                    Constants.ENGINE_CYCLE_DURATION_ETHANOL
+                            * ForestryAPI.activeMode.getFloatSetting("fuel.ethanol.combustion"));
             addFuel(ethanol, 40, ethanolBurnTime);
         }
 

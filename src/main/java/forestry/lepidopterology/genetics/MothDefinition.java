@@ -1,14 +1,18 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.lepidopterology.genetics;
+
+import java.awt.Color;
+import java.util.Arrays;
+import java.util.Locale;
+
+import net.minecraft.item.ItemStack;
 
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IClassification;
@@ -21,20 +25,19 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.Locale;
-import net.minecraft.item.ItemStack;
 
 public enum MothDefinition implements IButterflyDefinition {
+
     Brimstone(ButterflyBranchDefinition.Opisthograptis, "brimstone", "luteolata", new Color(0xffea40), true, 1.0f),
     LatticedHeath(ButterflyBranchDefinition.Chiasmia, "latticeHeath", "clathrata", new Color(0xf2f0be), true, 0.5f) {
+
         @Override
         protected void setAlleles(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.SMALLEST);
         }
     },
     Atlas(ButterflyBranchDefinition.Attacus, "atlas", "atlas", new Color(0xd96e3d), false, 0.1f) {
+
         @Override
         protected void setAlleles(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumButterflyChromosome.SIZE, EnumAllele.Size.LARGEST);
@@ -46,19 +49,15 @@ public enum MothDefinition implements IButterflyDefinition {
     private IAllele[] template;
     private IButterflyGenome genome;
 
-    MothDefinition(
-            ButterflyBranchDefinition branchDefinition,
-            String speciesName,
-            String binomial,
-            Color serumColor,
-            boolean dominant,
-            float rarity) {
+    MothDefinition(ButterflyBranchDefinition branchDefinition, String speciesName, String binomial, Color serumColor,
+            boolean dominant, float rarity) {
         branch = branchDefinition;
 
         String uid = "moth" + name();
         IClassification parent = branch.getBranch().getParent();
         String unlocalizedName = "for.butterflies.species."
-                + parent.getUID().substring((parent.getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1) + '.'
+                + parent.getUID().substring((parent.getLevel().name().toLowerCase(Locale.ENGLISH)).length() + 1)
+                + '.'
                 + speciesName;
         String unlocalizedDescription = "for.description." + uid;
 

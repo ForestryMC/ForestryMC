@@ -1,21 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.core.config.Constants;
-import forestry.core.utils.InventoryUtil;
-import forestry.core.utils.ItemStackUtil;
-import forestry.plugins.PluginFluids;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -28,6 +23,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import forestry.core.config.Constants;
+import forestry.core.utils.InventoryUtil;
+import forestry.core.utils.ItemStackUtil;
+import forestry.plugins.PluginFluids;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -35,8 +35,8 @@ public final class FluidHelper {
 
     private FluidHelper() {}
 
-    public static boolean handleRightClick(
-            IFluidHandler tank, ForgeDirection side, EntityPlayer player, boolean fill, boolean drain) {
+    public static boolean handleRightClick(IFluidHandler tank, ForgeDirection side, EntityPlayer player, boolean fill,
+            boolean drain) {
         if (player == null) {
             return false;
         }
@@ -87,11 +87,13 @@ public final class FluidHelper {
                                 return false;
                             }
                             player.inventory.setInventorySlotContents(
-                                    player.inventory.currentItem, InventoryUtil.depleteItem(current));
+                                    player.inventory.currentItem,
+                                    InventoryUtil.depleteItem(current));
                             player.inventory.markDirty();
                         } else {
                             player.inventory.setInventorySlotContents(
-                                    player.inventory.currentItem, InventoryUtil.depleteItem(current));
+                                    player.inventory.currentItem,
+                                    InventoryUtil.depleteItem(current));
                             player.inventory.setInventorySlotContents(player.inventory.currentItem, filled);
                             player.inventory.markDirty();
                         }
@@ -120,18 +122,13 @@ public final class FluidHelper {
         NO_SPACE
     }
 
-    public static FillStatus fillContainers(
-            IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, Fluid fluidToFill) {
+    public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot,
+            Fluid fluidToFill) {
         return fillContainers(fluidHandler, inv, inputSlot, outputSlot, fluidToFill, true);
     }
 
-    public static FillStatus fillContainers(
-            IFluidHandler fluidHandler,
-            IInventory inv,
-            int inputSlot,
-            int outputSlot,
-            Fluid fluidToFill,
-            boolean doFill) {
+    public static FillStatus fillContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot,
+            Fluid fluidToFill, boolean doFill) {
         if (fluidToFill == null) {
             return FillStatus.INVALID_INPUT;
         }
@@ -152,8 +149,8 @@ public final class FluidHelper {
             fillAmount = Math.min(Constants.BUCKET_VOLUME, containerCapacity);
         }
 
-        FluidStack canDrain =
-                fluidHandler.drain(ForgeDirection.UNKNOWN, new FluidStack(fluidToFill, fillAmount), false);
+        FluidStack canDrain = fluidHandler
+                .drain(ForgeDirection.UNKNOWN, new FluidStack(fluidToFill, fillAmount), false);
         if (canDrain == null || canDrain.amount == 0) {
             return FillStatus.NO_FLUID;
         }
@@ -229,8 +226,7 @@ public final class FluidHelper {
         // consume forestry containers if there is only one slot
         if (outputSlot == inputSlot && drainedItem != null) {
             Item item = drainedItem.getItem();
-            if (PluginFluids.items.canEmpty == item
-                    || PluginFluids.items.waxCapsuleEmpty == item
+            if (PluginFluids.items.canEmpty == item || PluginFluids.items.waxCapsuleEmpty == item
                     || PluginFluids.items.refractoryEmpty == item) {
                 drainedItem = null;
             }
@@ -258,8 +254,8 @@ public final class FluidHelper {
         return true;
     }
 
-    private static boolean hasRoomForDrainedContainer(
-            ItemStack input, ItemStack output, ItemStack drainedItem, int inputSlot, int outputSlot) {
+    private static boolean hasRoomForDrainedContainer(ItemStack input, ItemStack output, ItemStack drainedItem,
+            int inputSlot, int outputSlot) {
         if (output == null || drainedItem == null) {
             return true;
         }
@@ -424,8 +420,8 @@ public final class FluidHelper {
         if (fluid == null) {
             return FluidContainerRegistry.getContainerCapacity(container);
         } else {
-            return FluidContainerRegistry.getContainerCapacity(
-                    new FluidStack(fluid, Constants.BUCKET_VOLUME), container);
+            return FluidContainerRegistry
+                    .getContainerCapacity(new FluidStack(fluid, Constants.BUCKET_VOLUME), container);
         }
     }
 }

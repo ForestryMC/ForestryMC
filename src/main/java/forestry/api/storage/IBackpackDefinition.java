@@ -6,6 +6,7 @@
 package forestry.api.storage;
 
 import java.util.List;
+
 import net.minecraft.item.ItemStack;
 
 public interface IBackpackDefinition {

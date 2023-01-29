@@ -1,24 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import forestry.arboriculture.blocks.BlockForestryLeaves;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.render.RenderOverlayBlock;
-import forestry.plugins.PluginArboriculture;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
+import forestry.arboriculture.blocks.BlockForestryLeaves;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.render.RenderOverlayBlock;
+import forestry.plugins.PluginArboriculture;
 
 /**
  * Ugly but serviceable renderer for leaves, taking fruits into account.
@@ -31,8 +30,8 @@ public class RenderLeavesBlock extends RenderOverlayBlock {
     }
 
     @Override
-    public boolean renderWorldBlock(
-            IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
+            RenderBlocks renderer) {
 
         TileLeaves tile = BlockForestryLeaves.getLeafTile(world, x, y, z);
         if (tile == null) {
@@ -63,15 +62,8 @@ public class RenderLeavesBlock extends RenderOverlayBlock {
         return PluginArboriculture.modelIdLeaves;
     }
 
-    private static boolean renderFruitOverlay(
-            IBlockAccess world,
-            Block block,
-            int x,
-            int y,
-            int z,
-            RenderBlocks renderer,
-            IIcon texture,
-            int multiplier) {
+    private static boolean renderFruitOverlay(IBlockAccess world, Block block, int x, int y, int z,
+            RenderBlocks renderer, IIcon texture, int multiplier) {
 
         float mR = (multiplier >> 16 & 255) / 255.0F;
         float mG = (multiplier >> 8 & 255) / 255.0F;
@@ -86,17 +78,8 @@ public class RenderLeavesBlock extends RenderOverlayBlock {
         return renderFruitOverlayWithColorMultiplier(world, block, x, y, z, mR, mG, mB, renderer, texture);
     }
 
-    private static boolean renderFruitOverlayWithColorMultiplier(
-            IBlockAccess world,
-            Block block,
-            int x,
-            int y,
-            int z,
-            float r,
-            float g,
-            float b,
-            RenderBlocks renderer,
-            IIcon texture) {
+    private static boolean renderFruitOverlayWithColorMultiplier(IBlockAccess world, Block block, int x, int y, int z,
+            float r, float g, float b, RenderBlocks renderer, IIcon texture) {
 
         int mixedBrightness = block.getMixedBrightnessForBlock(world, x, y, z);
 

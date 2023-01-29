@@ -1,12 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.utils;
 
@@ -14,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -76,14 +75,12 @@ public abstract class ItemStackUtil {
     }
 
     /**
-     * Creates a split stack of the specified amount, preserving NBT data,
-     * without decreasing the source stack.
+     * Creates a split stack of the specified amount, preserving NBT data, without decreasing the source stack.
      */
     public static ItemStack createSplitStack(ItemStack stack, int amount) {
         ItemStack split = new ItemStack(stack.getItem(), amount, stack.getItemDamage());
         if (stack.getTagCompound() != null) {
-            NBTTagCompound nbttagcompound =
-                    (NBTTagCompound) stack.getTagCompound().copy();
+            NBTTagCompound nbttagcompound = (NBTTagCompound) stack.getTagCompound().copy();
             split.setTagCompound(nbttagcompound);
         }
         return split;
@@ -145,8 +142,8 @@ public abstract class ItemStackUtil {
     /**
      * Counts how many full sets are contained in the passed stock
      */
-    public static int containsSets(
-            ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools, boolean matchTags) {
+    public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary, boolean craftingTools,
+            boolean matchTags) {
         int totalSets = 0;
 
         ItemStack[] condensedRequired = ItemStackUtil.condenseStacks(set);
@@ -226,8 +223,8 @@ public abstract class ItemStackUtil {
     /**
      * Compare two item stacks for crafting equivalency.
      */
-    public static boolean isCraftingEquivalent(
-            ItemStack base, ItemStack comparison, boolean oreDictionary, boolean craftingTools) {
+    public static boolean isCraftingEquivalent(ItemStack base, ItemStack comparison, boolean oreDictionary,
+            boolean craftingTools) {
         if (isCraftingEquivalent(base, comparison)) {
             return true;
         }
@@ -299,8 +296,8 @@ public abstract class ItemStackUtil {
         dropItemStackAsEntity(items, world, x, y, z, 10);
     }
 
-    public static void dropItemStackAsEntity(
-            ItemStack items, World world, double x, double y, double z, int delayForPickup) {
+    public static void dropItemStackAsEntity(ItemStack items, World world, double x, double y, double z,
+            int delayForPickup) {
         if (items.stackSize <= 0 || world.isRemote) {
             return;
         }

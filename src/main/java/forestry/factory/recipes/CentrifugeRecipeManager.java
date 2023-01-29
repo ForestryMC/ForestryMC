@@ -1,24 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.recipes;
 
-import forestry.api.recipes.ICentrifugeManager;
-import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.core.utils.ItemStackUtil;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import net.minecraft.item.ItemStack;
+
+import forestry.api.recipes.ICentrifugeManager;
+import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.core.utils.ItemStackUtil;
 
 public class CentrifugeRecipeManager implements ICentrifugeManager {
 
@@ -66,7 +66,8 @@ public class CentrifugeRecipeManager implements ICentrifugeManager {
 
         for (ICentrifugeRecipe recipe : recipes) {
             Set<ItemStack> productsKeys = recipe.getAllProducts().keySet();
-            recipeList.put(new Object[] {recipe.getInput()}, productsKeys.toArray(new ItemStack[productsKeys.size()]));
+            recipeList
+                    .put(new Object[] { recipe.getInput() }, productsKeys.toArray(new ItemStack[productsKeys.size()]));
         }
 
         return recipeList;

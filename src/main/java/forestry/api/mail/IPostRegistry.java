@@ -5,10 +5,12 @@
  ******************************************************************************/
 package forestry.api.mail;
 
-import com.mojang.authlib.GameProfile;
 import java.util.Map;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import com.mojang.authlib.GameProfile;
 
 public interface IPostRegistry {
 
@@ -32,6 +34,7 @@ public interface IPostRegistry {
     /* CARRIERS */
     /**
      * Registers a new {@link IPostalCarrier}. See {@link IPostalCarrier} for details.
+     * 
      * @param carrier {@link IPostalCarrier} to register.
      */
     void registerCarrier(IPostalCarrier carrier);

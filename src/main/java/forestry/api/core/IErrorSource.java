@@ -8,6 +8,7 @@ package forestry.api.core;
 import com.google.common.collect.ImmutableSet;
 
 public interface IErrorSource {
+
     /**
      * @return the active error states. An empty Set indicates no errors.
      */

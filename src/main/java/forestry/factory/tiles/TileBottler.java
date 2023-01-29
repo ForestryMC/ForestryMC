@@ -1,14 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.factory.tiles;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import buildcraft.api.statements.ITriggerExternal;
 import cpw.mods.fml.common.Optional;
@@ -29,21 +42,9 @@ import forestry.factory.gui.GuiBottler;
 import forestry.factory.inventory.InventoryBottler;
 import forestry.factory.recipes.BottlerRecipe;
 import forestry.factory.triggers.FactoryTriggers;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 
 public class TileBottler extends TilePowered implements ISidedInventory, ILiquidTankTile, IFluidHandler {
+
     private static final int TICKS_PER_RECIPE_TIME = 5;
     private static final int ENERGY_PER_RECIPE_TIME = 1000;
 
@@ -135,9 +136,7 @@ public class TileBottler extends TilePowered implements ISidedInventory, ILiquid
         }
 
         return ((float) inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN).stackSize
-                        / (float) inventory
-                                .getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN)
-                                .getMaxStackSize())
+                / (float) inventory.getStackInSlot(InventoryBottler.SLOT_INPUT_EMPTY_CAN).getMaxStackSize())
                 > percentage;
     }
 

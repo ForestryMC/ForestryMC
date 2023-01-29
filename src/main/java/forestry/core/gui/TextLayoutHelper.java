@@ -1,20 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
 
-import forestry.core.render.FontColour;
 import net.minecraft.client.gui.FontRenderer;
+
 import org.lwjgl.opengl.GL11;
 
+import forestry.core.render.FontColour;
+
 public class TextLayoutHelper {
+
     private static final int LINE_HEIGHT = 12;
 
     private final GuiForestry guiForestry;
@@ -100,8 +101,8 @@ public class TextLayoutHelper {
     }
 
     public void drawSplitLine(String text, int x, int maxWidth, int color) {
-        fontRendererObj.drawSplitString(
-                text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
+        fontRendererObj
+                .drawSplitString(text, guiForestry.getGuiLeft() + x, guiForestry.getGuiTop() + line, maxWidth, color);
     }
 
     public int getCenteredOffset(String string) {

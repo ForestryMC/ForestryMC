@@ -5,6 +5,8 @@
  ******************************************************************************/
 package forestry.api.apiculture;
 
+import java.util.Locale;
+
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleBoolean;
@@ -14,7 +16,6 @@ import forestry.api.genetics.IAlleleInteger;
 import forestry.api.genetics.IAlleleTolerance;
 import forestry.api.genetics.IChromosomeType;
 import forestry.api.genetics.ISpeciesRoot;
-import java.util.Locale;
 
 /**
  * Enum representing the order of chromosomes in a bee's genome and what they control.
@@ -22,6 +23,7 @@ import java.util.Locale;
  * @author SirSengir
  */
 public enum EnumBeeChromosome implements IChromosomeType {
+
     /**
      * Species of the bee. Alleles here must implement {@link IAlleleBeeSpecies}.
      */
@@ -43,11 +45,13 @@ public enum EnumBeeChromosome implements IChromosomeType {
      */
     TEMPERATURE_TOLERANCE(IAlleleTolerance.class),
     /**
-     * Slightly incorrectly named. If true, a naturally dirunal bee can work during the night. If true, a naturally nocturnal bee can work during the day.
+     * Slightly incorrectly named. If true, a naturally dirunal bee can work during the night. If true, a naturally
+     * nocturnal bee can work during the day.
      */
     NOCTURNAL(IAlleleBoolean.class),
     /**
-     * Not used / superseded by fixed values for the species. Probably going to be replaced with a boolean for FIRE_RESIST.
+     * Not used / superseded by fixed values for the species. Probably going to be replaced with a boolean for
+     * FIRE_RESIST.
      */
     @Deprecated
     HUMIDITY(IAllele.class),

@@ -1,14 +1,21 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
+
+import java.util.HashMap;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.apiculture.IApiaristTracker;
 import forestry.api.arboriculture.EnumTreeChromosome;
@@ -24,27 +31,16 @@ import forestry.core.gui.buttons.StandardButtonTextureSets;
 import forestry.core.network.packets.PacketGuiSelectRequest;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
-import java.util.HashMap;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
 public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInventory> {
+
     private final ISpeciesRoot speciesRoot;
     private final IBreedingTracker breedingTracker;
     private final HashMap<String, ItemStack> iconStacks = new HashMap<>();
     private final int pageCurrent, pageMax;
 
-    public GuiNaturalistInventory(
-            ISpeciesRoot speciesRoot,
-            EntityPlayer player,
-            Container container,
-            IPagedInventory inventory,
-            int page,
-            int maxPages) {
+    public GuiNaturalistInventory(ISpeciesRoot speciesRoot, EntityPlayer player, Container container,
+            IPagedInventory inventory, int page, int maxPages) {
         super(Constants.TEXTURE_PATH_GUI + "/apiaristinventory.png", container, inventory);
 
         this.speciesRoot = speciesRoot;
@@ -82,7 +78,10 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
             textLayout.startPage();
 
             displaySpeciesInformation(
-                    true, individual.getGenome().getPrimary(), iconStacks.get(individual.getIdent()), 10);
+                    true,
+                    individual.getGenome().getPrimary(),
+                    iconStacks.get(individual.getIdent()),
+                    10);
             if (!individual.isPureBred(EnumTreeChromosome.SPECIES)) {
                 displaySpeciesInformation(
                         individual.isAnalyzed(),
@@ -145,7 +144,9 @@ public class GuiNaturalistInventory extends GuiForestry<Container, IPagedInvento
         textLayout.startPage();
 
         textLayout.drawLine(
-                StringUtil.localize("gui.speciescount") + ": " + breedingTracker.getSpeciesBred() + "/"
+                StringUtil.localize("gui.speciescount") + ": "
+                        + breedingTracker.getSpeciesBred()
+                        + "/"
                         + speciesRoot.getSpeciesCount(),
                 x);
         textLayout.newLine();

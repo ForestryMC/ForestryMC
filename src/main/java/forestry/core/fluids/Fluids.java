@@ -1,18 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.fluids;
 
-import forestry.core.config.Constants;
-import forestry.core.items.EnumContainerType;
-import forestry.core.items.ItemLiquidContainer;
 import java.awt.Color;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -20,17 +15,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
 import org.apache.commons.lang3.text.WordUtils;
 
+import forestry.core.config.Constants;
+import forestry.core.items.EnumContainerType;
+import forestry.core.items.ItemLiquidContainer;
+
 public enum Fluids {
+
     ETHANOL(new Color(255, 111, 0), 790, 1000) {
+
         @Override
         public String getTag() {
             return "bioethanol";
@@ -51,6 +55,7 @@ public enum Fluids {
         }
     },
     BIOMASS(new Color(100, 132, 41), 400, 6560) {
+
         @Override
         public Block makeBlock() {
             return new BlockForestryFluid(this, 100, true);
@@ -66,6 +71,7 @@ public enum Fluids {
         }
     },
     GLASS(new Color(164, 164, 164), 2400, 10000) {
+
         @Override
         public int getTemperature() {
             return 1200;
@@ -82,6 +88,7 @@ public enum Fluids {
         }
     },
     HONEY(new Color(255, 196, 35), 1420, 73600) {
+
         @Override
         public String getTag() {
             return "for.honey";
@@ -109,12 +116,14 @@ public enum Fluids {
         }
     },
     LEGACY_HONEY(new Color(255, 196, 35)) {
+
         @Override
         public String getTag() {
             return "honey";
         }
     },
     ICE(new Color(175, 242, 255), 920, 1000) {
+
         @Override
         public int getTemperature() {
             return 265;
@@ -135,6 +144,7 @@ public enum Fluids {
         }
     },
     JUICE(new Color(168, 201, 114)) {
+
         @Override
         public Block makeBlock() {
             return new BlockForestryFluid(this);
@@ -157,6 +167,7 @@ public enum Fluids {
         }
     },
     MILK(new Color(255, 255, 255), 1030, 3000) {
+
         @Override
         public Block makeBlock() {
             return new BlockForestryFluid(this);
@@ -168,6 +179,7 @@ public enum Fluids {
         }
     },
     SEEDOIL("SeedOil", new Color(255, 255, 168), 885, 5000) {
+
         @Override
         public Block makeBlock() {
             return new BlockForestryFluid(this, 2, true);
@@ -183,6 +195,7 @@ public enum Fluids {
         }
     },
     SHORT_MEAD("ShortMead", new Color(239, 154, 56), 1000, 1200) {
+
         @Override
         public String getTag() {
             return "short.mead";
@@ -203,6 +216,7 @@ public enum Fluids {
         }
     },
     MEAD("Mead", new Color(202, 102, 0), 1000, 1200) {
+
         @Override
         public String getTag() {
             return "mead";
@@ -224,12 +238,14 @@ public enum Fluids {
     },
     // Vanilla
     WATER(new Color(0x2432ec)) {
+
         @Override
         public EnumSet<EnumContainerType> getContainerTypes() {
             return EnumSet.of(EnumContainerType.CAN, EnumContainerType.CAPSULE, EnumContainerType.REFRACTORY);
         }
     },
     LAVA(new Color(0xfd461f)) {
+
         @Override
         public EnumSet<EnumContainerType> getContainerTypes() {
             return EnumSet.of(EnumContainerType.CAN, EnumContainerType.REFRACTORY);
@@ -237,12 +253,14 @@ public enum Fluids {
     },
     // BuildCraft
     FUEL(new Color(0xffff00)) {
+
         @Override
         public EnumSet<EnumContainerType> getContainerTypes() {
             return EnumSet.of(EnumContainerType.CAN, EnumContainerType.CAPSULE, EnumContainerType.REFRACTORY);
         }
     },
     OIL(new Color(0x404040)) {
+
         @Override
         public EnumSet<EnumContainerType> getContainerTypes() {
             return EnumSet.of(EnumContainerType.CAN, EnumContainerType.CAPSULE, EnumContainerType.REFRACTORY);
@@ -252,9 +270,8 @@ public enum Fluids {
     CREOSOTE(new Color(0x635c03)),
     STEAM(new Color(0x91938F));
 
-    public static final Fluids[] forestryFluids = {
-        ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK, SEEDOIL, SHORT_MEAD, MEAD
-    };
+    public static final Fluids[] forestryFluids = { ETHANOL, BIOMASS, GLASS, HONEY, LEGACY_HONEY, ICE, JUICE, MILK,
+            SEEDOIL, SHORT_MEAD, MEAD };
 
     private static final Map<String, Fluids> tagToFluid = new HashMap<>();
 

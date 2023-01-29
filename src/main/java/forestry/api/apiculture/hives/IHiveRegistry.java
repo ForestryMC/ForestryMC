@@ -5,8 +5,9 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
-import forestry.api.apiculture.IHiveDrop;
 import java.util.List;
+
+import forestry.api.apiculture.IHiveDrop;
 
 public interface IHiveRegistry {
 

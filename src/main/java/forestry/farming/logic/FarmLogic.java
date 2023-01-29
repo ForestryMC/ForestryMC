@@ -1,25 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.logic;
 
-import forestry.api.farming.FarmDirection;
-import forestry.api.farming.IFarmHousing;
-import forestry.api.farming.IFarmLogic;
-import forestry.core.config.Constants;
-import forestry.core.entities.EntitySelector;
-import forestry.core.render.SpriteSheet;
-import forestry.core.utils.EntityUtil;
-import forestry.core.utils.vect.Vect;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
@@ -29,7 +20,17 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
+import forestry.api.farming.FarmDirection;
+import forestry.api.farming.IFarmHousing;
+import forestry.api.farming.IFarmLogic;
+import forestry.core.config.Constants;
+import forestry.core.entities.EntitySelector;
+import forestry.core.render.SpriteSheet;
+import forestry.core.utils.EntityUtil;
+import forestry.core.utils.vect.Vect;
+
 public abstract class FarmLogic implements IFarmLogic {
+
     private final EntitySelectorFarm entitySelectorFarm = new EntitySelectorFarm(this);
     protected final IFarmHousing housing;
     protected boolean isManual;
@@ -90,8 +91,8 @@ public abstract class FarmLogic implements IFarmLogic {
     protected List<ItemStack> collectEntityItems(boolean toWorldHeight) {
         AxisAlignedBB harvestBox = getHarvestBox(housing, toWorldHeight);
 
-        List<EntityItem> entityItems =
-                EntityUtil.selectEntitiesWithinAABB(housing.getWorld(), entitySelectorFarm, harvestBox);
+        List<EntityItem> entityItems = EntityUtil
+                .selectEntitiesWithinAABB(housing.getWorld(), entitySelectorFarm, harvestBox);
         List<ItemStack> stacks = new ArrayList<>();
         for (EntityItem entity : entityItems) {
             ItemStack contained = entity.getEntityItem();
@@ -102,6 +103,7 @@ public abstract class FarmLogic implements IFarmLogic {
     }
 
     private static class EntitySelectorFarm extends EntitySelector<EntityItem> {
+
         private final FarmLogic farmLogic;
 
         public EntitySelectorFarm(FarmLogic farmLogic) {

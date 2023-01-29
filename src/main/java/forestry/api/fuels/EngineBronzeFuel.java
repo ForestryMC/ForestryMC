@@ -8,6 +8,7 @@ package forestry.api.fuels;
 import net.minecraftforge.fluids.Fluid;
 
 public class EngineBronzeFuel {
+
     /**
      * Item that is valid fuel for a biogas engine.
      */

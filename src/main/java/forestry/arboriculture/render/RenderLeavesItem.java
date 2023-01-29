@@ -1,29 +1,30 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.arboriculture.render;
 
-import forestry.arboriculture.genetics.TreeHelper;
-import forestry.arboriculture.items.ItemBlockLeaves;
-import forestry.arboriculture.tiles.TileLeaves;
-import forestry.core.proxy.Proxies;
-import forestry.core.utils.ItemStackUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
+
 import org.lwjgl.opengl.GL11;
 
+import forestry.arboriculture.genetics.TreeHelper;
+import forestry.arboriculture.items.ItemBlockLeaves;
+import forestry.arboriculture.tiles.TileLeaves;
+import forestry.core.proxy.Proxies;
+import forestry.core.utils.ItemStackUtil;
+
 public class RenderLeavesItem implements IItemRenderer {
+
     protected static final double OVERLAY_SHIFT = 0.001;
 
     @Override
@@ -40,8 +41,8 @@ public class RenderLeavesItem implements IItemRenderer {
     }
 
     @Override
-    public boolean shouldUseRenderHelper(
-            IItemRenderer.ItemRenderType type, ItemStack item, IItemRenderer.ItemRendererHelper helper) {
+    public boolean shouldUseRenderHelper(IItemRenderer.ItemRenderType type, ItemStack item,
+            IItemRenderer.ItemRendererHelper helper) {
         return true;
     }
 

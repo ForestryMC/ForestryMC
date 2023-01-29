@@ -1,26 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.tiles;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import forestry.core.blocks.IMachineProperties;
-import forestry.core.blocks.IMachinePropertiesTESR;
-import forestry.core.proxy.Proxies;
-import forestry.core.render.IBlockRenderer;
-import forestry.core.render.TextureManager;
-import forestry.core.utils.BlockUtil;
 import java.util.List;
 import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,6 +24,16 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import forestry.core.blocks.IMachineProperties;
+import forestry.core.blocks.IMachinePropertiesTESR;
+import forestry.core.proxy.Proxies;
+import forestry.core.render.IBlockRenderer;
+import forestry.core.render.TextureManager;
+import forestry.core.utils.BlockUtil;
 
 public class MachineDefinition {
 
@@ -132,7 +132,7 @@ public class MachineDefinition {
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
         if (legacy) {
             return;
@@ -183,7 +183,8 @@ public class MachineDefinition {
 
         for (int i = 0; i < 8; i++) {
             icons[i] = TextureManager.registerTex(
-                    register, teIdent.replace("forestry.", "").toLowerCase(Locale.ENGLISH) + "." + faceMap[i]);
+                    register,
+                    teIdent.replace("forestry.", "").toLowerCase(Locale.ENGLISH) + "." + faceMap[i]);
         }
     }
 

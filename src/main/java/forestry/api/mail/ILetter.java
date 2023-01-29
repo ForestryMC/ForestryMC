@@ -5,10 +5,12 @@
  ******************************************************************************/
 package forestry.api.mail;
 
-import forestry.api.core.INBTTagable;
 import java.util.List;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
+import forestry.api.core.INBTTagable;
 
 public interface ILetter extends IInventory, INBTTagable {
 

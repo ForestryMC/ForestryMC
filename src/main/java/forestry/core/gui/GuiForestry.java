@@ -1,14 +1,31 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
+
+import java.util.Collections;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import codechicken.nei.VisiblityData;
 import codechicken.nei.api.INEIGuiHandler;
@@ -28,26 +45,11 @@ import forestry.core.proxy.Proxies;
 import forestry.core.render.FontColour;
 import forestry.core.tiles.IClimatised;
 import forestry.core.tiles.IPowerHandler;
-import java.util.Collections;
-import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 @Optional.Interface(iface = "codechicken.nei.api.INEIGuiHandler", modid = "NotEnoughItems")
 public abstract class GuiForestry<C extends Container, I extends IInventory> extends GuiContainer
         implements INEIGuiHandler {
+
     protected final I inventory;
     protected final C container;
 
@@ -106,8 +108,7 @@ public abstract class GuiForestry<C extends Container, I extends IInventory> ext
             ledgerManager.add(new ClimateLedger(ledgerManager, (IClimatised) inventory));
         }
 
-        if (Config.enableEnergyStat
-                && inventory instanceof IPowerHandler
+        if (Config.enableEnergyStat && inventory instanceof IPowerHandler
                 && ((IPowerHandler) inventory).getEnergyManager().getMaxEnergyStored() > 0) {
             ledgerManager.add(new PowerLedger(ledgerManager, (IPowerHandler) inventory));
         }

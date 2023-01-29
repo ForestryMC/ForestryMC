@@ -1,14 +1,36 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.farming.multiblock;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
@@ -52,33 +74,12 @@ import forestry.farming.gui.IFarmLedgerDelegate;
 import forestry.farming.logic.FarmLogicArboreal;
 import forestry.farming.tiles.TileFarmGearbox;
 import forestry.farming.tiles.TileFarmPlain;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 public class FarmController extends RectangularMultiblockControllerBase
         implements IFarmControllerInternal, ILiquidTankTile {
 
     private enum Stage {
+
         CULTIVATE,
         HARVEST;
 
@@ -414,7 +415,7 @@ public class FarmController extends RectangularMultiblockControllerBase
     public int[] getCoords() {
         if (coords == null) {
             ChunkCoordinates centerCoord = getCenterCoord();
-            coords = new int[] {centerCoord.posX, centerCoord.posY, centerCoord.posZ};
+            coords = new int[] { centerCoord.posX, centerCoord.posY, centerCoord.posZ };
         }
         return coords;
     }
@@ -422,7 +423,7 @@ public class FarmController extends RectangularMultiblockControllerBase
     @Override
     public int[] getOffset() {
         if (offset == null) {
-            offset = new int[] {-getArea()[0] / 2, -2, -getArea()[2] / 2};
+            offset = new int[] { -getArea()[0] / 2, -2, -getArea()[2] / 2 };
         }
         return offset;
     }
@@ -430,7 +431,7 @@ public class FarmController extends RectangularMultiblockControllerBase
     @Override
     public int[] getArea() {
         if (area == null) {
-            area = new int[] {7 + (allowedExtent * 2), 13, 7 + (allowedExtent * 2)};
+            area = new int[] { 7 + (allowedExtent * 2), 13, 7 + (allowedExtent * 2) };
         }
         return area;
     }
@@ -536,13 +537,8 @@ public class FarmController extends RectangularMultiblockControllerBase
         setExtents(worldObj, targets);
     }
 
-    private static void createTargets(
-            World world,
-            Map<FarmDirection, List<FarmTarget>> targets,
-            Vect targetStart,
-            final int allowedExtent,
-            final int farmSizeNorthSouth,
-            final int farmSizeEastWest) {
+    private static void createTargets(World world, Map<FarmDirection, List<FarmTarget>> targets, Vect targetStart,
+            final int allowedExtent, final int farmSizeNorthSouth, final int farmSizeEastWest) {
 
         for (FarmDirection farmSide : FarmDirection.values()) {
 
@@ -600,8 +596,8 @@ public class FarmController extends RectangularMultiblockControllerBase
         return null;
     }
 
-    private static boolean isCycleCanceledByListeners(
-            IFarmLogic logic, FarmDirection direction, Iterable<IFarmListener> farmListeners) {
+    private static boolean isCycleCanceledByListeners(IFarmLogic logic, FarmDirection direction,
+            Iterable<IFarmListener> farmListeners) {
         for (IFarmListener listener : farmListeners) {
             if (listener.cancelTask(logic, direction)) {
                 return true;
@@ -613,8 +609,7 @@ public class FarmController extends RectangularMultiblockControllerBase
     private static void setExtents(World worldObj, Map<FarmDirection, List<FarmTarget>> targets) {
         for (List<FarmTarget> targetsList : targets.values()) {
             if (!targetsList.isEmpty()) {
-                Vect groundPosition =
-                        getGroundPosition(worldObj, targetsList.get(0).getStart());
+                Vect groundPosition = getGroundPosition(worldObj, targetsList.get(0).getStart());
 
                 for (FarmTarget target : targetsList) {
                     target.setExtentAndYOffset(worldObj, groundPosition);
@@ -624,14 +619,15 @@ public class FarmController extends RectangularMultiblockControllerBase
     }
 
     private static class FarmWorkStatus {
+
         public boolean didWork = false;
         public boolean hasFarmland = false;
         public boolean hasFertilizer = false;
         public boolean hasLiquid = false;
     }
 
-    private FarmWorkStatus cultivateTargets(
-            FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets, IFarmLogic logic) {
+    private FarmWorkStatus cultivateTargets(FarmWorkStatus farmWorkStatus, List<FarmTarget> farmTargets,
+            IFarmLogic logic) {
         float hydrationModifier = hydrationManager.getHydrationModifier();
 
         final int fertilizerConsumption = logic.getFertilizerConsumption();
@@ -674,7 +670,11 @@ public class FarmController extends RectangularMultiblockControllerBase
     private static boolean cultivateTarget(FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
         Vect targetPosition = target.getStart().add(0, target.getYOffset(), 0);
         if (logic.cultivate(
-                targetPosition.x, targetPosition.y, targetPosition.z, target.getDirection(), target.getExtent())) {
+                targetPosition.x,
+                targetPosition.y,
+                targetPosition.z,
+                target.getDirection(),
+                target.getExtent())) {
             for (IFarmListener listener : farmListeners) {
                 listener.hasCultivated(
                         logic,
@@ -690,8 +690,8 @@ public class FarmController extends RectangularMultiblockControllerBase
         return false;
     }
 
-    private static Collection<ICrop> harvestTargets(
-            List<FarmTarget> farmTargets, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+    private static Collection<ICrop> harvestTargets(List<FarmTarget> farmTargets, IFarmLogic logic,
+            Iterable<IFarmListener> farmListeners) {
         if (farmTargets != null) {
             for (FarmTarget target : farmTargets) {
                 Collection<ICrop> harvested = harvestTarget(target, logic, farmListeners);
@@ -704,8 +704,8 @@ public class FarmController extends RectangularMultiblockControllerBase
         return Collections.emptyList();
     }
 
-    private static Collection<ICrop> harvestTarget(
-            FarmTarget target, IFarmLogic logic, Iterable<IFarmListener> farmListeners) {
+    private static Collection<ICrop> harvestTarget(FarmTarget target, IFarmLogic logic,
+            Iterable<IFarmListener> farmListeners) {
         Collection<ICrop> harvested = logic.harvest(
                 target.getStart().x,
                 target.getStart().y + target.getYOffset(),

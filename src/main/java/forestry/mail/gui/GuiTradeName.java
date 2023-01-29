@@ -1,14 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.gui;
+
+import net.minecraft.client.gui.GuiTextField;
+
+import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 
 import forestry.core.config.Constants;
 import forestry.core.gui.GuiForestry;
@@ -16,9 +19,6 @@ import forestry.core.proxy.Proxies;
 import forestry.core.utils.StringUtil;
 import forestry.mail.network.packets.PacketTraderAddressRequest;
 import forestry.mail.tiles.TileTrader;
-import net.minecraft.client.gui.GuiTextField;
-import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.input.Keyboard;
 
 public class GuiTradeName extends GuiForestry<ContainerTradeName, TileTrader> {
 

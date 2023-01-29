@@ -1,17 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.plugins.compat;
 
+import java.util.Map;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -28,11 +34,6 @@ import forestry.farming.logic.FarmableGenericCrop;
 import forestry.farming.logic.FarmableReference;
 import forestry.plugins.ForestryPlugin;
 import forestry.plugins.Plugin;
-import java.util.Map;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Plugin(
         pluginID = "Witchery",
@@ -59,43 +60,39 @@ public class PluginWitchery extends ForestryPlugin {
 
         ImmutableList<String> flowersAccept = ImmutableList.of("bloodrose", "plantmine", "glintweed");
 
-        ImmutableMap<String, Integer> cropSeed = ImmutableMap.<String, Integer>builder()
-                .put("belladonna", 4)
-                .put("mandrake", 4)
-                .put("mindrake", 4)
-                .put("snowbell", 4)
-                .put("wolfsbane", 7)
-                .put("wormwood", 4)
+        ImmutableMap<String, Integer> cropSeed = ImmutableMap.<String, Integer>builder().put("belladonna", 4)
+                .put("mandrake", 4).put("mindrake", 4).put("snowbell", 4).put("wolfsbane", 7).put("wormwood", 4)
                 .build();
-        ImmutableList<String> cropDirect = ImmutableList.of(
-                "garlic" // meta 5
-                );
+        ImmutableList<String> cropDirect = ImmutableList.of("garlic" // meta 5
+        );
         int seedamount = ForestryAPI.activeMode.getIntegerSetting("squeezer.liquid.seed");
 
         Item saplingItem = GameRegistry.findItem(Witch, "witchsapling");
         ItemStack saplingStack = new ItemStack(saplingItem, 1, OreDictionary.WILDCARD_VALUE);
         RecipeUtil.addFermenterRecipes(
-                saplingStack, ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"), Fluids.BIOMASS);
+                saplingStack,
+                ForestryAPI.activeMode.getIntegerSetting("fermenter.yield.sapling"),
+                Fluids.BIOMASS);
         String saplingName = GameData.getItemRegistry().getNameForObject(saplingItem);
-        FMLInterModComms.sendMessage(
-                Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
+        FMLInterModComms
+                .sendMessage(Constants.MOD, "add-farmable-sapling", String.format("farmArboreal@%s.-1", saplingName));
 
         for (String flowerAcceptName : flowersAccept) {
             Block flowerBlock = GameRegistry.findBlock(Witch, flowerAcceptName);
             if (flowerBlock != null) {
                 FlowerManager.flowerRegistry.registerAcceptableFlower(
-                        flowerBlock, FlowerManager.FlowerTypeVanilla, FlowerManager.FlowerTypeSnow);
+                        flowerBlock,
+                        FlowerManager.FlowerTypeVanilla,
+                        FlowerManager.FlowerTypeSnow);
             }
         }
         for (String cropDirectName : cropDirect) {
             Block cropDirectBlock = GameRegistry.findBlock(Witch, cropDirectName + "plant");
             ItemStack cropDirectStack = GameRegistry.findItemStack(Witch, cropDirectName, 1);
             if (cropDirectStack != null && cropDirectBlock != null) {
-                Farmables.farmables
-                        .get(FarmableReference.Wheat.get())
+                Farmables.farmables.get(FarmableReference.Wheat.get())
                         .add(new FarmableGenericCrop(cropDirectStack, cropDirectBlock, 5));
-                Farmables.farmables
-                        .get(FarmableReference.Orchard.get())
+                Farmables.farmables.get(FarmableReference.Orchard.get())
                         .add(new FarmableBasicFruit(cropDirectBlock, 5));
             }
         }
@@ -103,13 +100,11 @@ public class PluginWitchery extends ForestryPlugin {
             Block cropSeedBlock = GameRegistry.findBlock(Witch, cropSeedName.getKey());
             ItemStack cropSeedStack = GameRegistry.findItemStack(Witch, "seeds" + cropSeedName.getKey(), 1);
             if (cropSeedStack != null && cropSeedBlock != null) {
-                RecipeManagers.squeezerManager.addRecipe(
-                        10, new ItemStack[] {cropSeedStack}, Fluids.SEEDOIL.getFluid(seedamount));
-                Farmables.farmables
-                        .get(FarmableReference.Wheat.get())
+                RecipeManagers.squeezerManager
+                        .addRecipe(10, new ItemStack[] { cropSeedStack }, Fluids.SEEDOIL.getFluid(seedamount));
+                Farmables.farmables.get(FarmableReference.Wheat.get())
                         .add(new FarmableGenericCrop(cropSeedStack, cropSeedBlock, cropSeedName.getValue()));
-                Farmables.farmables
-                        .get(FarmableReference.Orchard.get())
+                Farmables.farmables.get(FarmableReference.Orchard.get())
                         .add(new FarmableBasicFruit(cropSeedBlock, cropSeedName.getValue()));
             }
         }

@@ -1,17 +1,28 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.tiles;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import buildcraft.api.statements.ITriggerExternal;
+
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.common.Optional;
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -25,15 +36,6 @@ import forestry.mail.PostRegistry;
 import forestry.mail.gui.ContainerMailbox;
 import forestry.mail.gui.GuiMailbox;
 import forestry.mail.triggers.MailTriggers;
-import java.util.Collection;
-import java.util.LinkedList;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileMailbox extends TileBase implements IMailContainer {
 
@@ -102,8 +104,7 @@ public class TileMailbox extends TileBase implements IMailContainer {
     @Override
     public boolean hasMail() {
 
-        IInventory mailInventory =
-                getOrCreateMailInventory(worldObj, getAccessHandler().getOwner());
+        IInventory mailInventory = getOrCreateMailInventory(worldObj, getAccessHandler().getOwner());
         for (int i = 0; i < mailInventory.getSizeInventory(); i++) {
             if (mailInventory.getStackInSlot(i) != null) {
                 return true;

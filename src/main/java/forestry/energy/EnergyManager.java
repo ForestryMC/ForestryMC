@@ -1,5 +1,11 @@
 package forestry.energy;
 
+import java.io.IOException;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
@@ -9,12 +15,9 @@ import forestry.core.network.DataOutputStreamForestry;
 import forestry.core.network.IStreamable;
 import forestry.core.tiles.TileEngine;
 import forestry.core.utils.BlockUtil;
-import java.io.IOException;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class EnergyManager implements IEnergyHandler, IStreamable {
+
     private enum EnergyTransferMode {
         EXTRACT,
         RECEIVE,
@@ -26,7 +29,9 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
 
     public EnergyManager(int maxTransfer, int capacity) {
         this.energyStorage = new EnergyStorage(
-                scaleForDifficulty(capacity), scaleForDifficulty(maxTransfer), scaleForDifficulty(maxTransfer));
+                scaleForDifficulty(capacity),
+                scaleForDifficulty(maxTransfer),
+                scaleForDifficulty(maxTransfer));
     }
 
     public static int scaleForDifficulty(int energyPerUse) {
@@ -169,8 +174,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
     }
 
     /**
-     * Sends as much energy as it can to the tile at orientation.
-     * For power sources. Ignores canExtract()
+     * Sends as much energy as it can to the tile at orientation. For power sources. Ignores canExtract()
      *
      * @return amount sent
      */
@@ -179,8 +183,7 @@ public class EnergyManager implements IEnergyHandler, IStreamable {
     }
 
     /**
-     * Sends amount of energy to the tile at orientation.
-     * For power sources. Ignores canExtract()
+     * Sends amount of energy to the tile at orientation. For power sources. Ignores canExtract()
      *
      * @return amount sent
      */

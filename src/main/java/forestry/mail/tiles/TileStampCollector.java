@@ -1,14 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.mail.tiles;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 import forestry.api.mail.IStamps;
 import forestry.api.mail.PostManager;
@@ -18,11 +20,9 @@ import forestry.core.utils.InventoryUtil;
 import forestry.mail.gui.ContainerStampCollector;
 import forestry.mail.gui.GuiStampCollector;
 import forestry.mail.inventory.InventoryStampCollector;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
 public class TileStampCollector extends TileBase implements IInventory {
+
     public TileStampCollector() {
         super("philatelist");
         setInternalInventory(new InventoryStampCollector(this));
@@ -42,8 +42,7 @@ public class TileStampCollector extends TileBase implements IInventory {
         } else {
             ItemStack filter = inventory.getStackInSlot(InventoryStampCollector.SLOT_FILTER);
             if (filter.getItem() instanceof IStamps) {
-                stamp = PostManager.postRegistry
-                        .getPostOffice(worldObj)
+                stamp = PostManager.postRegistry.getPostOffice(worldObj)
                         .getAnyStamp(((IStamps) filter.getItem()).getPostage(filter), 1);
             }
         }

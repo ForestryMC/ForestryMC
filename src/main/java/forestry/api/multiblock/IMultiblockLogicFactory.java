@@ -6,10 +6,10 @@
 package forestry.api.multiblock;
 
 /**
- * Creates new instances of IMultiblockLogic.
- * Each IMultiblockComponent needs its own instance of IMultiblockLogic.
+ * Creates new instances of IMultiblockLogic. Each IMultiblockComponent needs its own instance of IMultiblockLogic.
  */
 public interface IMultiblockLogicFactory {
+
     IMultiblockLogicAlveary createAlvearyLogic();
 
     IMultiblockLogicFarm createFarmLogic();

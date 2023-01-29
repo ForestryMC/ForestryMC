@@ -6,10 +6,12 @@
 package forestry.api.fuels;
 
 import java.util.HashMap;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
 public class FuelManager {
+
     /**
      * Add new fuels for the fermenter here (i.e. fertilizer).
      */

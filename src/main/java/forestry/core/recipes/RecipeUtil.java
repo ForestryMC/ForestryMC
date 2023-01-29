@@ -1,26 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.recipes;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import forestry.api.recipes.IDescriptiveRecipe;
-import forestry.api.recipes.RecipeManagers;
-import forestry.core.config.Config;
-import forestry.core.fluids.Fluids;
-import forestry.core.utils.ItemStackUtil;
-import forestry.core.utils.Log;
-import forestry.factory.inventory.InventoryCraftingForestry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -32,7 +23,17 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import forestry.api.recipes.IDescriptiveRecipe;
+import forestry.api.recipes.RecipeManagers;
+import forestry.core.config.Config;
+import forestry.core.fluids.Fluids;
+import forestry.core.utils.ItemStackUtil;
+import forestry.core.utils.Log;
+import forestry.factory.inventory.InventoryCraftingForestry;
+
 public abstract class RecipeUtil {
+
     static List<Object> cachedRecipes = new ArrayList<Object>();
 
     public static void addFermenterRecipes(ItemStack resource, int fermentationValue, Fluids output) {
@@ -40,24 +41,24 @@ public abstract class RecipeUtil {
             return;
         }
 
-        RecipeManagers.fermenterManager.addRecipe(
-                resource, fermentationValue, 1.0f, output.getFluid(1), Fluids.WATER.getFluid(1));
+        RecipeManagers.fermenterManager
+                .addRecipe(resource, fermentationValue, 1.0f, output.getFluid(1), Fluids.WATER.getFluid(1));
 
         if (FluidRegistry.isFluidRegistered(Fluids.JUICE.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(
-                    resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
+            RecipeManagers.fermenterManager
+                    .addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.JUICE.getFluid(1));
         }
 
         if (FluidRegistry.isFluidRegistered(Fluids.HONEY.getFluid())) {
-            RecipeManagers.fermenterManager.addRecipe(
-                    resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.HONEY.getFluid(1));
+            RecipeManagers.fermenterManager
+                    .addRecipe(resource, fermentationValue, 1.5f, output.getFluid(1), Fluids.HONEY.getFluid(1));
         }
     }
 
     /**
-     * Returns a list of the ore dictionary names if they exist.
-     * Returns a list containing itemStack if there are no ore dictionary names.
-     * Used for creating recipes that should accept equivalent itemStacks, based on the ore dictionary.
+     * Returns a list of the ore dictionary names if they exist. Returns a list containing itemStack if there are no ore
+     * dictionary names. Used for creating recipes that should accept equivalent itemStacks, based on the ore
+     * dictionary.
      */
     public static List<?> getOreDictRecipeEquivalents(ItemStack itemStack) {
         int[] oreDictIds = OreDictionary.getOreIDs(itemStack);
@@ -76,7 +77,10 @@ public abstract class RecipeUtil {
 
         try {
             return getShapedRecipeAsArray(
-                    recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getRecipeOutput());
+                    recipe.getWidth(),
+                    recipe.getHeight(),
+                    recipe.getIngredients(),
+                    recipe.getRecipeOutput());
         } catch (Exception ex) {
             Log.warning("Exception while trying to parse an ItemStack[10] from an IRecipe:");
             Log.warning(ex.getMessage());
@@ -96,8 +100,8 @@ public abstract class RecipeUtil {
         return result;
     }
 
-    public static InventoryCraftingForestry getCraftRecipe(
-            ItemStack[] recipeItems, ItemStack[] availableItems, World world, ItemStack recipeOutput) {
+    public static InventoryCraftingForestry getCraftRecipe(ItemStack[] recipeItems, ItemStack[] availableItems,
+            World world, ItemStack recipeOutput) {
         // Need at least one matched set
         if (ItemStackUtil.containsSets(recipeItems, availableItems, true, true) == 0) {
             return null;
@@ -227,9 +231,8 @@ public abstract class RecipeUtil {
                     // System.out.println( "Highest recipe found at " + matchingIndex.get(matchingIndex.size()-1) + ",
                     // moving " + matchingIndex.size() + " to front" );
                     // System.out.println( "Size of recipe map " + recipeMap.size() );
-                    for (index = 0;
-                            index < matchingIndex.size();
-                            index++) { // index is reused here, it goes through the matching groups.
+                    for (index = 0; index < matchingIndex.size(); index++) { // index is reused here, it goes through
+                                                                             // the matching groups.
                         // Remove recipe and add back at the front
                         int target = matchingIndex.get(index); // remove requires int
                         // System.out.println("Removing recipe at " + target);
@@ -268,8 +271,7 @@ public abstract class RecipeUtil {
             }
         }
 
-        if (craftIngredientCount == 2
-                && itemstack0.getItem() == itemstack1.getItem()
+        if (craftIngredientCount == 2 && itemstack0.getItem() == itemstack1.getItem()
                 && itemstack0.stackSize == 1
                 && itemstack1.stackSize == 1
                 && itemstack0.getItem().isRepairable()) {
@@ -365,14 +367,8 @@ public abstract class RecipeUtil {
         return false;
     }
 
-    private static boolean checkMatch(
-            Object[] recipeIngredients,
-            int width,
-            int height,
-            ItemStack[][] resources,
-            int xInGrid,
-            int yInGrid,
-            boolean mirror) {
+    private static boolean checkMatch(Object[] recipeIngredients, int width, int height, ItemStack[][] resources,
+            int xInGrid, int yInGrid, boolean mirror) {
         for (int k = 0; k < 3; k++) {
             for (int l = 0; l < 3; l++) {
                 ItemStack resource = resources[k][l];

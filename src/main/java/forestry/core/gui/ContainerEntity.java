@@ -1,16 +1,20 @@
 /*******************************************************************************
- * Copyright (c) 2011-2014 SirSengir.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl-3.0.txt
+ * Copyright (c) 2011-2014 SirSengir. All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser Public License v3 which accompanies this distribution, and is available
+ * at http://www.gnu.org/licenses/lgpl-3.0.txt
  *
- * Various Contributors including, but not limited to:
- * SirSengir (original work), CovertJaguar, Player, Binnie, MysteriousAges
+ * Various Contributors including, but not limited to: SirSengir (original work), CovertJaguar, Player, Binnie,
+ * MysteriousAges
  ******************************************************************************/
 package forestry.core.gui;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+
 import com.google.common.collect.ImmutableSet;
+
 import forestry.api.core.IErrorLogicSource;
 import forestry.api.core.IErrorState;
 import forestry.core.access.EnumAccess;
@@ -20,12 +24,9 @@ import forestry.core.access.IRestrictedAccess;
 import forestry.core.network.IForestryPacketClient;
 import forestry.core.network.packets.PacketAccessUpdateEntity;
 import forestry.core.network.packets.PacketErrorUpdateEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 
 public class ContainerEntity<T extends Entity & IInventory> extends ContainerForestry {
+
     protected final T entity;
     private final IAccessHandler accessHandler;
 
@@ -63,8 +64,7 @@ public class ContainerEntity<T extends Entity & IInventory> extends ContainerFor
 
         if (entity instanceof IErrorLogicSource) {
             IErrorLogicSource errorLogicSource = (IErrorLogicSource) entity;
-            ImmutableSet<IErrorState> errorStates =
-                    errorLogicSource.getErrorLogic().getErrorStates();
+            ImmutableSet<IErrorState> errorStates = errorLogicSource.getErrorLogic().getErrorStates();
 
             if ((previousErrorStates == null) || !errorStates.equals(previousErrorStates)) {
                 PacketErrorUpdateEntity packet = new PacketErrorUpdateEntity(entity, errorLogicSource);
