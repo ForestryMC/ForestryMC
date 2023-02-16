@@ -524,7 +524,7 @@ public class Bee extends IndividualLiving implements IBee {
         // / Secondary Products
         for (Map.Entry<ItemStack, Float> entry : secondary.getProductChances().entrySet()) {
             if (housing.getWorld().rand.nextFloat()
-                    < getFinalChance(Math.round(entry.getValue() / 2), speed, prodModifier, 1f)) {
+                    < getFinalChance(entry.getValue() / 2, speed, prodModifier, 1f)) {
                 products.add(entry.getKey().copy());
             }
         }
