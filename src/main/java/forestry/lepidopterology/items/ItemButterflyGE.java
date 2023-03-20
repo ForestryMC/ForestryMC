@@ -21,6 +21,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.core.Tabs;
@@ -87,6 +89,12 @@ public class ItemButterflyGE extends ItemGE {
         return butterfly.getDisplayName();
     }
 
+    @Override
+    public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean flag) {
+        super.addInformation(itemstack, player, list, flag);
+        if (Config.disableButterfly && type == EnumFlutterType.BUTTERFLY) list.add(ChatFormatting.RED + "Disabled");
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
@@ -107,7 +115,7 @@ public class ItemButterflyGE extends ItemGE {
 
     @Override
     public boolean onEntityItemUpdate(EntityItem entityItem) {
-        if (type != EnumFlutterType.BUTTERFLY) {
+        if (type != EnumFlutterType.BUTTERFLY || Config.disableButterfly) {
             return false;
         }
         if (entityItem.worldObj.isRemote || entityItem.ticksExisted < 80) {

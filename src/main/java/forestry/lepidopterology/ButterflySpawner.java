@@ -14,6 +14,7 @@ import forestry.api.arboriculture.ILeafTickHandler;
 import forestry.api.arboriculture.ITree;
 import forestry.api.lepidopterology.ButterflyManager;
 import forestry.api.lepidopterology.IButterfly;
+import forestry.core.config.Config;
 import forestry.core.utils.Log;
 import forestry.lepidopterology.entities.EntityButterfly;
 import forestry.plugins.PluginLepidopterology;
@@ -22,6 +23,9 @@ public class ButterflySpawner implements ILeafTickHandler {
 
     @Override
     public boolean onRandomLeafTick(ITree tree, World world, int x, int y, int z, boolean isDestroyed) {
+        if (Config.disableButterfly) {
+            return false;
+        }
 
         if (world.rand.nextFloat() >= tree.getGenome().getSappiness() * tree.getGenome().getYield()) {
             return false;

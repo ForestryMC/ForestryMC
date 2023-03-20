@@ -48,6 +48,7 @@ import forestry.api.lepidopterology.IButterflyGenome;
 import forestry.api.lepidopterology.IButterflyRoot;
 import forestry.api.lepidopterology.IEntityButterfly;
 import forestry.api.lepidopterology.ILepidopteristTracker;
+import forestry.core.config.Config;
 import forestry.core.utils.ItemStackUtil;
 import forestry.lepidopterology.genetics.Butterfly;
 
@@ -369,6 +370,9 @@ public class EntityButterfly extends EntityCreature implements IEntityButterfly 
 
     @Override
     protected boolean canDespawn() {
+        if (Config.disableButterfly) {
+            this.setDead();
+        }
         return ticksExisted > MAX_LIFESPAN;
     }
 
