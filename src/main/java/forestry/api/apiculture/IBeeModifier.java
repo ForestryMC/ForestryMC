@@ -54,9 +54,16 @@ public interface IBeeModifier {
     boolean isSealed();
 
     /**
-     * @return Boolean indicating if housing can ignore darkness/night
+     * @return Boolean indicating if housing can ignore darkness/night. Cannot be used together with SelfUnlighted
      */
     boolean isSelfLighted();
+
+    /**
+     * @return Boolean indicating if housing can ignore lightness/day. Cannot be used together with SelfLighted
+     */
+    default boolean isSelfUnlighted() {
+        return false;
+    }
 
     /**
      * @return Boolean indicating if housing can ignore not seeing the sky

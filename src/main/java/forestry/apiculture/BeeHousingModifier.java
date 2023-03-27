@@ -95,6 +95,16 @@ public class BeeHousingModifier implements IBeeModifier {
     }
 
     @Override
+    public boolean isSelfUnlighted() {
+        for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
+            if (modifier.isSelfUnlighted()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean isSunlightSimulated() {
         for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
             if (modifier.isSunlightSimulated()) {

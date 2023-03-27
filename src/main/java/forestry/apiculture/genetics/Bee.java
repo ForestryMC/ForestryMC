@@ -248,7 +248,7 @@ public class Bee extends IndividualLiving implements IBee {
 
         // / Night or darkness requires nocturnal species
         if (world.isDaytime()) {
-            if (!canWorkDuringDay()) {
+            if (!canWorkDuringDay(beeModifier)) {
                 errorStates.add(EnumErrorCode.NOT_NIGHT);
             }
         } else {
@@ -258,7 +258,7 @@ public class Bee extends IndividualLiving implements IBee {
         }
 
         if (housing.getBlockLightValue() > Constants.APIARY_MIN_LEVEL_LIGHT) {
-            if (!canWorkDuringDay()) {
+            if (!canWorkDuringDay(beeModifier)) {
                 errorStates.add(EnumErrorCode.NOT_GLOOMY);
             }
         } else {
@@ -308,12 +308,16 @@ public class Bee extends IndividualLiving implements IBee {
         return errorStates;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean canWorkAtNight(IBeeModifier beeModifier) {
-        return genome.getPrimary().isNocturnal() || genome.getNocturnal() || beeModifier.isSelfLighted();
+        return (genome.getPrimary().isNocturnal() || genome.getNocturnal() || beeModifier.isSelfLighted())
+                && !(beeModifier.isSelfUnlighted() && beeModifier.isSelfLighted());
     }
 
-    private boolean canWorkDuringDay() {
-        return !genome.getPrimary().isNocturnal() || genome.getNocturnal();
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean canWorkDuringDay(IBeeModifier beeModifier) {
+        return (!genome.getPrimary().isNocturnal() || genome.getNocturnal() || beeModifier.isSelfUnlighted())
+                && !(beeModifier.isSelfUnlighted() && beeModifier.isSelfLighted());
     }
 
     private boolean canWorkUnderground(IBeeModifier beeModifier) {

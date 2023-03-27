@@ -43,6 +43,10 @@ public class DefaultBeeModifier implements IBeeModifier {
         return false;
     }
 
+    public boolean isSelfUnlighted() {
+        return false;
+    }
+
     public boolean isSunlightSimulated() {
         return false;
     }
