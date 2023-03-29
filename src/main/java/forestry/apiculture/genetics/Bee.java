@@ -455,12 +455,11 @@ public class Bee extends IndividualLiving implements IBee {
     // / PRODUCTION
     @Override
     public ItemStack[] getProduceList() {
-        ArrayList<ItemStack> products = new ArrayList<>();
 
         IAlleleBeeSpecies primary = genome.getPrimary();
         IAlleleBeeSpecies secondary = genome.getSecondary();
 
-        products.addAll(primary.getProductChances().keySet());
+        ArrayList<ItemStack> products = new ArrayList<>(primary.getProductChances().keySet());
 
         Set<ItemStack> secondaryProducts = secondary.getProductChances().keySet();
         // Remove duplicates
@@ -479,13 +478,13 @@ public class Bee extends IndividualLiving implements IBee {
             }
         }
 
-        return products.toArray(new ItemStack[products.size()]);
+        return products.toArray(new ItemStack[0]);
     }
 
     @Override
     public ItemStack[] getSpecialtyList() {
         Set<ItemStack> specialties = genome.getPrimary().getSpecialtyChances().keySet();
-        return specialties.toArray(new ItemStack[specialties.size()]);
+        return specialties.toArray(new ItemStack[0]);
     }
 
     @Override
@@ -517,7 +516,6 @@ public class Bee extends IndividualLiving implements IBee {
         float speed = genome.getSpeed();
         float prodModifier = beeHousingModifier.getProductionModifier(genome, 1f)
                 * beeModeModifier.getProductionModifier(genome, 1f);
-        prodModifier /= 4f;
 
         // / Primary Products
         for (Map.Entry<ItemStack, Float> entry : primary.getProductChances().entrySet()) {
@@ -541,7 +539,7 @@ public class Bee extends IndividualLiving implements IBee {
             }
         }
 
-        ItemStack[] productsArray = products.toArray(new ItemStack[products.size()]);
+        ItemStack[] productsArray = products.toArray(new ItemStack[0]);
         ChunkCoordinates housingCoordinates = housing.getCoordinates();
         return genome.getFlowerProvider().affectProducts(
                 housing.getWorld(),
@@ -554,9 +552,9 @@ public class Bee extends IndividualLiving implements IBee {
 
     public static float getFinalChance(float chance, float beeSpeed, float productionModifier, float t) {
         chance *= 100f;
-        return (float) (((1f + t / 6f) * Math.sqrt(chance) * 2f * (1f + beeSpeed)
-                + Math.pow(productionModifier, Math.cbrt(chance))
-                - 3f) / 100f);
+        return (float) (2.8 * Math.pow(chance, 0.52)
+                * Math.pow((productionModifier + t), 0.52)
+                * Math.pow(beeSpeed, 0.37)) / 100.f;
     }
 
     /* REPRODUCTION */
