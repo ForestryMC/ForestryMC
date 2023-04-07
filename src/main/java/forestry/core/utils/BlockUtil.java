@@ -231,14 +231,25 @@ public abstract class BlockUtil {
 
     private static Class<? extends Block> BW_MetaGenerated_WerkstoffBlocksClass;
     private static Block BWBlocks;
-    private static boolean bw = Loader.isModLoaded("bartworks");
+    private static Class<? extends Block> GTBlockMachines_Class;
+    private static Block GTBlockMachines;
+    private static final boolean bw = Loader.isModLoaded("bartworks");
+    private static final boolean gt = Loader.isModLoaded("gregtech");
 
     static {
         if (bw) try {
+            // noinspection unchecked
             BW_MetaGenerated_WerkstoffBlocksClass = (Class<? extends Block>) Class
                     .forName("com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_WerkstoffBlocks");
             BWBlocks = (Block) Class.forName("com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader")
                     .getField("BWBlocks").get(null);
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        if (gt) try {
+            // noinspection unchecked
+            GTBlockMachines_Class = (Class<? extends Block>) Class.forName("gregtech.common.blocks.GT_Block_Machines");
+            GTBlockMachines = (Block) Class.forName("gregtech.api.GregTech_API").getField("sBlockMachines").get(null);
         } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -258,6 +269,10 @@ public abstract class BlockUtil {
 
         if (bw && BW_MetaGenerated_WerkstoffBlocksClass.isInstance(block)) {
             return new ItemStack(BWBlocks, 1, block.getDamageValue(world, x, y - depth, z));
+        }
+
+        if (gt && GTBlockMachines_Class.isInstance(block)) {
+            return new ItemStack(GTBlockMachines, 1, block.getDamageValue(world, x, y - depth, z));
         }
 
         return new ItemStack(block, 1, world.getBlockMetadata(x, y - depth, z));
