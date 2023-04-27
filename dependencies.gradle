@@ -1,7 +1,7 @@
 // Add your dependencies here
 
 dependencies {
-    compile('com.github.GTNewHorizons:NotEnoughItems:2.2.7-GTNH:dev')
+    compile('com.github.GTNewHorizons:NotEnoughItems:2.3.45-GTNH:dev')
     compile('com.github.GTNewHorizons:inventory-tweaks:1.5.14:api')
     compile('com.github.GTNewHorizons:BuildCraft:7.1.27:api')
     compile('net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev')
