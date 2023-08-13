@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -32,7 +33,9 @@ import forestry.api.arboriculture.ICharcoalPileWall;
 import forestry.api.arboriculture.TreeManager;
 import forestry.arboriculture.features.CharcoalBlocks;
 import forestry.core.config.Config;
+import org.jetbrains.annotations.Nullable;
 
+// TODO: Fix propagation, aging
 public class BlockWoodPile extends Block {
 
 	public static final BooleanProperty IS_ACTIVE = BooleanProperty.create("active");
@@ -45,7 +48,9 @@ public class BlockWoodPile extends Block {
 				.strength(1.5f)
 				.sound(SoundType.WOOD)
 				.noOcclusion());
-		registerDefaultState(getStateDefinition().any().setValue(AGE, 0).setValue(IS_ACTIVE, false));
+		registerDefaultState(getStateDefinition().any()
+				.setValue(AGE, 0)
+				.setValue(IS_ACTIVE, false));
 	}
 
 	@Override
@@ -53,34 +58,34 @@ public class BlockWoodPile extends Block {
 		builder.add(IS_ACTIVE, AGE);
 	}
 
+	@Nullable
 	@Override
-	public void onPlace(BlockState state, Level world, BlockPos pos, BlockState p_220082_4_, boolean p_220082_5_) {
-		if (!state.getValue(IS_ACTIVE)) {
-			for (Direction facing : Direction.VALUES) {
-				BlockState facingState = world.getBlockState(pos.relative(facing));
-				if (facingState.getBlock() == this && facingState.getValue(IS_ACTIVE)) {
-					world.setBlockAndUpdate(pos, state.setValue(IS_ACTIVE, true));
-					break;
-				}
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		for (Direction facing : Direction.VALUES) {
+			BlockState facingState = context.getLevel().getBlockState(context.getClickedPos().relative(facing));
+
+			if (facingState.is(this) && facingState.getValue(IS_ACTIVE)) {
+				return defaultBlockState().setValue(IS_ACTIVE, true);
 			}
 		}
 
-		// world.getBlockTicks().scheduleTick(pos, this, TICK_RATE + world.random.nextInt(RANDOM_TICK));
+		return defaultBlockState();
 	}
 
 	@Override
 	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_220069_6_) {
-		boolean isActive = state.getValue(IS_ACTIVE);
 		BlockState neighborState = world.getBlockState(fromPos);
-		if (neighborState.getBlock() == Blocks.FIRE || neighborState.getBlock() == this) {
-			if (!isActive) {
+
+		if (neighborState.getBlock() == Blocks.FIRE || (neighborState.is(this) && neighborState.getValue(IS_ACTIVE))) {
+			if (!state.getValue(IS_ACTIVE)) {
 				activatePile(state, world, pos, true);
 			}
 		}
 	}
 
 	private void activatePile(BlockState state, Level world, BlockPos pos, boolean scheduleUpdate) {
-		world.setBlock(pos, state.setValue(IS_ACTIVE, true), 2);
+		world.setBlock(pos, state.setValue(IS_ACTIVE, true), Block.UPDATE_CLIENTS);
+
 		if (scheduleUpdate) {
 			// world.getBlockTicks().scheduleTick(pos, this, (TICK_RATE + world.random.nextInt(RANDOM_TICK)) / 4);
 		}
@@ -111,10 +116,10 @@ public class BlockWoodPile extends Block {
 			}
 			if (rand.nextFloat() < 0.5F) {
 				if (state.getValue(AGE) < 7) {
-					world.setBlock(pos, state.setValue(AGE, state.getValue(AGE) + 1), 2);
+					world.setBlock(pos, state.setValue(AGE, state.getValue(AGE) + 1), Block.UPDATE_CLIENTS);
 				} else {
 					BlockState ashState = CharcoalBlocks.ASH.with(BlockAsh.AMOUNT, Math.min(Math.round(Config.charcoalAmountBase + getCharcoalAmount(world, pos)), 63));
-					world.setBlock(pos, ashState, 2);
+					world.setBlock(pos, ashState, Block.UPDATE_CLIENTS);
 				}
 			}
 			// world.getBlockTicks().scheduleTick(pos, this, TICK_RATE + world.random.nextInt(RANDOM_TICK));

@@ -34,11 +34,6 @@ import forestry.api.modules.IModuleManager;
 public class ForestryAPI {
 
 	/**
-	 * The main mod instance for Forestry.
-	 */
-	public static Object instance;
-
-	/**
 	 * A {@link ITextureManager} needed for some things in the API.
 	 */
 	@OnlyIn(Dist.CLIENT)
@@ -54,11 +49,6 @@ public class ForestryAPI {
 	 * A registry for register fertilizers, {@link IFarmable}s.
 	 */
 	public static IFarmRegistry farmRegistry;
-
-	/**
-	 * Provides information on certain Forestry constants (Villager IDs, Chest gen keys, etc)
-	 */
-	public static IForestryConstants forestryConstants;
 
 	/**
 	 * Instance of the errorStateRegistry for registering errors.

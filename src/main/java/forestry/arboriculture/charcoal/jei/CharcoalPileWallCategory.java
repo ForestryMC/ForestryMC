@@ -84,7 +84,7 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<ICharcoalPi
 
 		int amount = 9 + recipe.getCharcoalAmount();
 
-		ItemStack coal = new ItemStack(Items.COAL, amount);
+		ItemStack coal = new ItemStack(Items.CHARCOAL, amount);
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 85, 17)
 				.setBackground(slot, -1, -1)
 				.addItemStack(coal);

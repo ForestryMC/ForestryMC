@@ -93,10 +93,6 @@ public class CommonModuleHandler {
 		registry.createObjects(filter);
 	}
 
-	public Collection<IModFeature> getFeatures(FeatureType type) {
-		return registry.getFeatures(type);
-	}
-
 	public Collection<IModFeature> getFeatures(Predicate<FeatureType> filter) {
 		return registry.getFeatures(filter);
 	}
@@ -188,14 +184,6 @@ public class CommonModuleHandler {
 
 	public void runRegisterBackpacksAndCrates() {
 		stage = Stage.BACKPACKS_CRATES;
-	}
-
-	public void runBookInit() {
-		for (IForestryModule module : modules) {
-			Log.debug("Book Entry Registration Start: {}", module);
-			//odule.registerBookEntries(ForesterBook.INSTANCE);
-			Log.debug("Book Entry Registration  Complete: {}", module);
-		}
 	}
 
 	public void processIMCMessages(Stream<InterModComms.IMCMessage> messages) {

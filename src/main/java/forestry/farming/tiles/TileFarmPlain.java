@@ -38,7 +38,7 @@ public class TileFarmPlain extends TileFarm {
 			if (block instanceof BlockFarm) {
 				material = ((BlockFarm) block).getFarmMaterial();
 			}
-			this.level.setBlock(getBlockPos(), state.setValue(BlockFarm.STATE, BlockFarm.State.BAND), 2);
+			this.level.setBlock(getBlockPos(), state.setValue(BlockFarm.STATE, BlockFarm.State.BAND), Block.UPDATE_CLIENTS);
 		}
 	}
 
@@ -53,6 +53,6 @@ public class TileFarmPlain extends TileFarm {
 		if (block instanceof BlockFarm) {
 			material = ((BlockFarm) block).getFarmMaterial();
 		}
-		this.level.setBlock(getBlockPos(), state.setValue(BlockFarm.STATE, State.PLAIN), 2);
+		this.level.setBlock(getBlockPos(), state.setValue(BlockFarm.STATE, State.PLAIN), Block.UPDATE_CLIENTS);
 	}
 }

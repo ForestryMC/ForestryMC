@@ -42,7 +42,6 @@ public class Drawable {
 		draw(transform, yOffset, uWidth, vHeight, xOffset);
 	}
 
-	@SuppressWarnings("deprecation")
 	public void draw(PoseStack transform, int yOffset, int width, int height, int xOffset) {
 		RenderSystem.setShaderTexture(0, textureLocation);
 

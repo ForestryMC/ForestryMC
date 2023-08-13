@@ -39,7 +39,7 @@ public class ModuleClimatology extends BlankForestryModule {
 	private final ProxyClimatology proxy;
 
 	public ModuleClimatology() {
-		proxy = DistExecutor.runForDist(() -> ProxyClimatologyClient::new, () -> ProxyClimatology::new);
+		proxy = DistExecutor.safeRunForDist(() -> ProxyClimatologyClient::new, () -> ProxyClimatology::new);
 	}
 
 	@Override

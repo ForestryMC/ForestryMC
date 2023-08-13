@@ -29,7 +29,6 @@ import forestry.core.tiles.IActivatable;
 import forestry.core.utils.NetworkUtil;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
-import forestry.energy.EnergyTransferMode;
 
 public abstract class TileAlvearyClimatiser extends TileAlveary implements IActivatable, IAlvearyComponent.Climatiser {
 
@@ -57,7 +56,7 @@ public abstract class TileAlvearyClimatiser extends TileAlveary implements IActi
 		this.definition = definition;
 
 		this.energyManager = new EnergyManager(1000, 2000);
-		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
+		this.energyManager.setReceiveOnly();
 	}
 
 	/* UPDATING */

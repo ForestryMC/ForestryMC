@@ -38,22 +38,7 @@ public class ModuleFluids extends BlankForestryModule {
 		ForgeUtils.registerSubscriber(this);
 	}
 
-	@Override
-	public void doInit() {
-		FluidStack ethanol = ForestryFluids.BIO_ETHANOL.getFluid(1);
-		if (!ethanol.isEmpty()) {
-			GeneratorFuel ethanolFuel = new GeneratorFuel(ethanol, (int) (32 * Preference.FUEL_MODIFIER), 4);
-			FuelManager.generatorFuel.put(ethanol.getFluid(), ethanolFuel);
-		}
-
-		FluidStack biomass = ForestryFluids.BIOMASS.getFluid(1);
-		if (!biomass.isEmpty()) {
-			GeneratorFuel biomassFuel = new GeneratorFuel(biomass, (int) (8 * Preference.FUEL_MODIFIER), 1);
-			FuelManager.generatorFuel.put(biomass.getFluid(), biomassFuel);
-		}
-	}
-
-	@SubscribeEvent
+    @SubscribeEvent
 	@OnlyIn(Dist.CLIENT)
 	public void handleTextureStitchPre(TextureStitchEvent.Pre event) {
 		if (event.getAtlas().location() != InventoryMenu.BLOCK_ATLAS) {

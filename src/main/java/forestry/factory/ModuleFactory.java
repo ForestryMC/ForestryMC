@@ -13,8 +13,6 @@ package forestry.factory;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,8 +22,6 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.circuits.ChipsetManager;
 import forestry.api.circuits.CircuitSocketType;
 import forestry.api.circuits.ICircuitLayout;
-import forestry.api.fuels.EngineBronzeFuel;
-import forestry.api.fuels.EngineCopperFuel;
 import forestry.api.fuels.FermenterFuel;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.MoistenerFuel;
@@ -43,7 +39,6 @@ import forestry.core.items.definitions.EnumElectronTube;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.utils.ForgeUtils;
 import forestry.core.utils.datastructures.DummyMap;
-import forestry.core.utils.datastructures.FluidMap;
 import forestry.core.utils.datastructures.ItemStackMap;
 import forestry.factory.circuits.CircuitSpeedUpgrade;
 import forestry.factory.features.FactoryContainers;
@@ -109,9 +104,6 @@ public class ModuleFactory extends BlankForestryModule {
 		FuelManager.fermenterFuel = machineEnabled() ? new ItemStackMap<>() : new DummyMap<>();
 		FuelManager.moistenerResource = machineEnabled() ? new ItemStackMap<>() : new DummyMap<>();
 		FuelManager.rainSubstrate = machineEnabled() ? new ItemStackMap<>() : new DummyMap<>();
-		FuelManager.bronzeEngineFuel = new FluidMap<>();
-		FuelManager.copperEngineFuel = new ItemStackMap<>();
-		FuelManager.generatorFuel = new FluidMap<>();
 	}
 
 	@Override
@@ -154,36 +146,6 @@ public class ModuleFactory extends BlankForestryModule {
 		FuelManager.moistenerResource.put(wheat, new MoistenerFuel(wheat, mouldyWheat, 0, 300));
 		FuelManager.moistenerResource.put(mouldyWheat, new MoistenerFuel(mouldyWheat, decayingWheat, 1, 600));
 		FuelManager.moistenerResource.put(decayingWheat, new MoistenerFuel(decayingWheat, mulch, 2, 900));
-
-		// Set fuels for our own engines
-		ItemStack peat = CoreItems.PEAT.stack();
-		FuelManager.copperEngineFuel.put(peat, new EngineCopperFuel(peat, Constants.ENGINE_COPPER_FUEL_VALUE_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_PEAT));
-
-		ItemStack bituminousPeat = CoreItems.BITUMINOUS_PEAT.stack();
-		FuelManager.copperEngineFuel.put(bituminousPeat, new EngineCopperFuel(bituminousPeat, Constants.ENGINE_COPPER_FUEL_VALUE_BITUMINOUS_PEAT, Constants.ENGINE_COPPER_CYCLE_DURATION_BITUMINOUS_PEAT));
-
-		Fluid biomass = ForestryFluids.BIOMASS.getFluid();
-		FuelManager.bronzeEngineFuel.put(biomass, new EngineBronzeFuel(biomass,
-				Constants.ENGINE_FUEL_VALUE_BIOMASS, (int) (Constants.ENGINE_CYCLE_DURATION_BIOMASS * Preference.FUEL_MODIFIER), 1));
-
-		FuelManager.bronzeEngineFuel.put(Fluids.WATER, new EngineBronzeFuel(Fluids.WATER,
-				Constants.ENGINE_FUEL_VALUE_WATER, Constants.ENGINE_CYCLE_DURATION_WATER, 3));
-
-		Fluid milk = ForestryFluids.MILK.getFluid();
-		FuelManager.bronzeEngineFuel.put(milk, new EngineBronzeFuel(milk,
-				Constants.ENGINE_FUEL_VALUE_MILK, Constants.ENGINE_CYCLE_DURATION_MILK, 3));
-
-		Fluid seedOil = ForestryFluids.SEED_OIL.getFluid();
-		FuelManager.bronzeEngineFuel.put(seedOil, new EngineBronzeFuel(seedOil,
-				Constants.ENGINE_FUEL_VALUE_SEED_OIL, Constants.ENGINE_CYCLE_DURATION_SEED_OIL, 1));
-
-		Fluid honey = ForestryFluids.HONEY.getFluid();
-		FuelManager.bronzeEngineFuel.put(honey, new EngineBronzeFuel(honey,
-				Constants.ENGINE_FUEL_VALUE_HONEY, Constants.ENGINE_CYCLE_DURATION_HONEY, 1));
-
-		Fluid juice = ForestryFluids.JUICE.getFluid();
-		FuelManager.bronzeEngineFuel.put(juice, new EngineBronzeFuel(juice,
-				Constants.ENGINE_FUEL_VALUE_JUICE, Constants.ENGINE_CYCLE_DURATION_JUICE, 1));
 
 		// Set rain substrates
 		ItemStack iodineCharge = CoreItems.IODINE_CHARGE.stack();

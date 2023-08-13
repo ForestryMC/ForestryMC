@@ -3,42 +3,37 @@ package forestry.energy.compat;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import forestry.energy.EnergyManager;
-import forestry.energy.EnergyTransferMode;
 
 /**
  * Wraps an {@link EnergyManager} to provide restrictions on extraction of receiving of energy.
  */
 public class EnergyStorageWrapper implements IEnergyStorage {
 	private final EnergyManager energyManager;
-	private final EnergyTransferMode mode;
+	private final boolean canExtract;
 
-	public EnergyStorageWrapper(EnergyManager energyManager, EnergyTransferMode mode) {
+	public EnergyStorageWrapper(EnergyManager energyManager, boolean canExtract) {
 		this.energyManager = energyManager;
-		this.mode = mode;
+		this.canExtract = canExtract;
 	}
 
 	@Override
 	public boolean canExtract() {
-		return mode.canExtract() && energyManager.canExtract();
+		return canExtract && energyManager.canExtract();
 	}
 
 	@Override
 	public boolean canReceive() {
-		return mode.canReceive() && energyManager.canReceive();
+		return energyManager.canReceive();
 	}
 
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
-		if (mode.canReceive()) {
-			return energyManager.receiveEnergy(maxReceive, simulate);
-		} else {
-			return 0;
-		}
+        return energyManager.receiveEnergy(maxReceive, simulate);
 	}
 
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
-		if (mode.canExtract()) {
+		if (canExtract) {
 			return energyManager.extractEnergy(maxExtract, simulate);
 		} else {
 			return 0;

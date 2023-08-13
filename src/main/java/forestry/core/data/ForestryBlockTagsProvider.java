@@ -26,7 +26,6 @@ import forestry.core.blocks.EnumResourceType;
 import forestry.core.config.Constants;
 import forestry.core.features.CoreBlocks;
 import forestry.database.features.DatabaseBlocks;
-import forestry.energy.features.EnergyBlocks;
 import forestry.factory.features.FactoryBlocks;
 import forestry.farming.blocks.BlockFarm;
 import forestry.farming.features.FarmingBlocks;
@@ -74,7 +73,7 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 				tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block);
 			}
 
-			for (Block block : union(CoreBlocks.RESOURCE_STORAGE, EnergyBlocks.ENGINES, FactoryBlocks.PLAIN, FactoryBlocks.TESR, MailBlocks.BASE)) {
+			for (Block block : union(CoreBlocks.RESOURCE_STORAGE, FactoryBlocks.PLAIN, FactoryBlocks.TESR, MailBlocks.BASE)) {
 				tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block);
 			}
 

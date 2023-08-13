@@ -7,7 +7,6 @@ package forestry.api.fuels;
 
 import java.util.Map;
 
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.ItemStack;
 
 public class FuelManager {
@@ -23,17 +22,5 @@ public class FuelManager {
 	 * Add new substrates for the rainmaker here
 	 */
 	public static Map<ItemStack, RainSubstrate> rainSubstrate;
-	/**
-	 * Add new fuels for EngineBronze (= biogas engine) here
-	 */
-	public static Map<Fluid, EngineBronzeFuel> bronzeEngineFuel;
-	/**
-	 * Add new fuels for EngineCopper (= peat-fired engine) here
-	 */
-	public static Map<ItemStack, EngineCopperFuel> copperEngineFuel;
-	/**
-	 * Add new fuels for Generator here
-	 */
-	public static Map<Fluid, GeneratorFuel> generatorFuel;
 
 }

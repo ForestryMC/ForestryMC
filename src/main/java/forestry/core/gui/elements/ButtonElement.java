@@ -39,7 +39,6 @@ public class ButtonElement extends GuiElement {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void drawElement(PoseStack transform, int mouseX, int mouseY) {
 		// RenderSystem.enableAlphaTest();
 		boolean mouseOver = isMouseOver();

@@ -132,13 +132,7 @@ import genetics.utils.AlleleUtils;
 @Mod("forestry")
 public class Forestry {
 
-	@SuppressWarnings("NullableProblems")
-	public static Forestry instance;
-
 	public Forestry() {
-		instance = this;
-		ForestryAPI.instance = this;
-		ForestryAPI.forestryConstants = new Constants();
 		ForestryAPI.errorStateRegistry = new ErrorStateRegistry();
 		ClimateManager.climateRoot = ClimateRoot.getInstance();
 		ClimateManager.climateFactory = ClimateFactory.INSTANCE;
@@ -158,14 +152,13 @@ public class Forestry {
 		modEventBus.addListener(this::processIMCMessages);
 		modEventBus.addListener(this::clientSetupRenderers);
 		modEventBus.addListener(this::gatherData);
-		EventHandlerCore eventHandlerCore = new EventHandlerCore();
-		MinecraftForge.EVENT_BUS.register(eventHandlerCore);
+		MinecraftForge.EVENT_BUS.register(EventHandlerCore.class);
 		MinecraftForge.EVENT_BUS.register(this);
-		Proxies.render = DistExecutor.runForDist(() -> ProxyRenderClient::new, () -> ProxyRender::new);
-		Proxies.common = DistExecutor.runForDist(() -> ProxyClient::new, () -> ProxyCommon::new);
+		Proxies.render = DistExecutor.safeRunForDist(() -> ProxyRenderClient::new, () -> ProxyRender::new);
+		Proxies.common = DistExecutor.safeRunForDist(() -> ProxyClient::new, () -> ProxyCommon::new);
 
 		ModuleManager.getModuleHandler().runSetup();
-		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> clientInit(modEventBus, networkHandler));
+		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new Client(modEventBus, networkHandler)::run);
 		modEventBus.addListener(EventPriority.NORMAL, false, FMLCommonSetupEvent.class, evt -> networkHandler.serverPacketHandler());
 	}
 
@@ -243,22 +236,26 @@ public class Forestry {
 		}
 	}
 
-	private void clientInit(IEventBus modEventBus, NetworkHandler networkHandler) {
-		modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
-			Minecraft minecraft = Minecraft.getInstance();
-			ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
-			TextureManagerForestry.getInstance().init(spriteUploader);
-			ResourceManager resourceManager = minecraft.getResourceManager();
-			if (resourceManager instanceof ReloadableResourceManager reloadableManager) {
-				reloadableManager.registerReloadListener(ColourProperties.INSTANCE);
-				reloadableManager.registerReloadListener(GuiElementFactory.INSTANCE);
-				reloadableManager.registerReloadListener(spriteUploader);
-			}
-			//EntriesCategory.registerSearchTree();
-			ModuleManager.getModuleHandler().runClientInit();
+	@OnlyIn(Dist.CLIENT)
+	private record Client(IEventBus modEventBus, NetworkHandler networkHandler) implements Runnable {
+		@Override
+		public void run() {
+			modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
+				Minecraft minecraft = Minecraft.getInstance();
+				ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
+				TextureManagerForestry.getInstance().init(spriteUploader);
+				ResourceManager resourceManager = minecraft.getResourceManager();
+				if (resourceManager instanceof ReloadableResourceManager reloadableManager) {
+					reloadableManager.registerReloadListener(ColourProperties.INSTANCE);
+					reloadableManager.registerReloadListener(GuiElementFactory.INSTANCE);
+					reloadableManager.registerReloadListener(spriteUploader);
+				}
+				//EntriesCategory.registerSearchTree();
+				ModuleManager.getModuleHandler().runClientInit();
 
-		});
-		modEventBus.addListener(EventPriority.NORMAL, false, FMLLoadCompleteEvent.class, fmlLoadCompleteEvent -> networkHandler.clientPacketHandler());
+			});
+			modEventBus.addListener(EventPriority.NORMAL, false, FMLLoadCompleteEvent.class, fmlLoadCompleteEvent -> networkHandler.clientPacketHandler());
+		}
 	}
 
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = Constants.MOD_ID)

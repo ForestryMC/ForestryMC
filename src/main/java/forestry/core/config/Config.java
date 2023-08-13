@@ -79,9 +79,6 @@ public class Config {
 	public static final boolean enableEnergyStat = true;
 
 	// Energy
-	public static final boolean enableRF = true;
-	public static final boolean enableMJ = true;
-	public static final boolean enableTesla = true;
 	public static final EnergyDisplayMode energyDisplayMode = EnergyDisplayMode.RF;
 
 	// Charcoal

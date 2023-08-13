@@ -55,10 +55,8 @@ public class TileFarmHatch extends TileFarm implements WorldlyContainer, IFarmCo
 			Container productInventory = getMultiblockLogic().getController().getFarmInventory().getProductInventory();
 			IItemHandler productItemHandler = new InvWrapper(productInventory);
 
-			if (!InventoryUtil.moveOneItemToPipe(productItemHandler, tileCache, dumpDirections)) {
-				InventoryUtil.moveItemStack(productItemHandler, inventoryCache.getAdjacentInventories());
-			}
-		}
+            InventoryUtil.moveItemStack(productItemHandler, inventoryCache.getAdjacentInventories());
+        }
 	}
 
 	@Override

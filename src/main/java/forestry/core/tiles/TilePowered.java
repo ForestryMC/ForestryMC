@@ -32,7 +32,6 @@ import forestry.core.network.PacketBufferForestry;
 import forestry.core.render.TankRenderInfo;
 import forestry.energy.EnergyHelper;
 import forestry.energy.EnergyManager;
-import forestry.energy.EnergyTransferMode;
 
 //import forestry.core.capabilities.HasWorkWrapper;
 
@@ -57,7 +56,7 @@ public abstract class TilePowered extends TileBase implements IRenderableTile, I
 	protected TilePowered(BlockEntityType<?> type, BlockPos pos, BlockState state, int maxTransfer, int capacity) {
 		super(type, pos, state);
 		this.energyManager = new EnergyManager(maxTransfer, capacity);
-		this.energyManager.setExternalMode(EnergyTransferMode.RECEIVE);
+		this.energyManager.setReceiveOnly();
 
 		this.ticksPerWorkCycle = 4;
 	}

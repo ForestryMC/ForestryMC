@@ -45,7 +45,7 @@ public class ItemWrench extends ItemForestry {
 		BlockState rotatedState = block.rotate(state, worldIn, pos, Rotation.CLOCKWISE_90);
 		if (rotatedState != state) {    //TODO - how to rotate based on a direction, might need helper method
 			player.swing(hand);
-			worldIn.setBlock(pos, rotatedState, 2);
+			worldIn.setBlock(pos, rotatedState, Block.UPDATE_CLIENTS);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.FAIL;

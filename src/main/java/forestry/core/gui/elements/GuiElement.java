@@ -111,7 +111,6 @@ public abstract class GuiElement extends GuiComponent {
 		return parent == null ? getY() : getY() + parent.getAbsoluteY();
 	}
 
-	@SuppressWarnings("deprecation")
 	public final void draw(PoseStack transform, int mouseX, int mouseY) {
 		if (!isVisible()) {
 			return;
