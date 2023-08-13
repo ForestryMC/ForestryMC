@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.factory.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -51,7 +49,7 @@ public class PacketRecipeTransferRequest extends ForestryPacket implements IFore
 
 	public static class Handler implements IForestryPacketHandlerServer {
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			NonNullList<ItemStack> craftingInventory = data.readItemStacks();
 

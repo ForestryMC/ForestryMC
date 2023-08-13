@@ -24,7 +24,7 @@ import forestry.core.config.Constants;
  * A global loot modifier used by forestry to inject the additional chest loot to the vanilla loot tables.
  */
 public class ConditionLootModifier extends LootModifier {
-	public static final Serializer SERIALIZER = new Serializer();
+	public static final GlobalLootModifierSerializer<ConditionLootModifier> SERIALIZER = new Serializer();
 
 	private final ResourceLocation tableLocation;
 	private final String[] extensions;

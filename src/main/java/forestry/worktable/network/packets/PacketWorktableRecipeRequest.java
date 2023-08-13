@@ -10,8 +10,6 @@
  ******************************************************************************/
 package forestry.worktable.network.packets;
 
-import java.io.IOException;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.BlockPos;
 
@@ -52,7 +50,7 @@ public class PacketWorktableRecipeRequest extends ForestryPacket implements IFor
 	public static class Handler implements IForestryPacketHandlerServer {
 
 		@Override
-		public void onPacketData(PacketBufferForestry data, ServerPlayer player) throws IOException {
+		public void onPacketData(PacketBufferForestry data, ServerPlayer player) {
 			BlockPos pos = data.readBlockPos();
 			MemorizedRecipe recipe = new MemorizedRecipe(data);
 

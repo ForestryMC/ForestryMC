@@ -44,7 +44,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	private long lastUsed;
 	private boolean locked;
 
-	public MemorizedRecipe(PacketBufferForestry data) throws IOException {
+	public MemorizedRecipe(PacketBufferForestry data) {
 		readData(data);
 	}
 
@@ -224,7 +224,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 	}
 
 	@Override
-	public void readData(PacketBufferForestry data) throws IOException {
+	public void readData(PacketBufferForestry data) {
 		data.readInventory(craftMatrix);
 		locked = data.readBoolean();
 		selectedRecipe = data.readVarInt();
