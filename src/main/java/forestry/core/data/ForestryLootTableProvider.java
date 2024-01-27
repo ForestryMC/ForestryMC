@@ -14,6 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import net.minecraft.data.CachedOutput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,7 +48,7 @@ public class ForestryLootTableProvider implements DataProvider {
 	 * Performs this provider's action.
 	 */
 	@Override
-	public void run(HashCache cache) {
+	public void run(CachedOutput cache) throws IOException {
 		Path path = this.dataGenerator.getOutputFolder();
 		Map<ResourceLocation, LootTable> map = Maps.newHashMap();
 		tables.forEach((entry) -> entry.getFirst().get().accept((location, builder) -> {

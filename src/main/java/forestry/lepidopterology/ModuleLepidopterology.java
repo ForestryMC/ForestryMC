@@ -74,7 +74,7 @@ public class ModuleLepidopterology extends BlankForestryModule {
 		if (generateCocoons) {
 			if (generateCocoonsAmount > 0.0) {
 				IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-				modEventBus.addGenericListener(Feature.class, LepidopterologyFeatures::registerFeatures);
+				modEventBus.addListener(LepidopterologyFeatures::registerFeatures);
 				MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, LepidopterologyFeatures::onBiomeLoad);
 			}
 		}

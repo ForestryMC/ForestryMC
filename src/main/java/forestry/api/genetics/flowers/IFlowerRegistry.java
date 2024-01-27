@@ -11,7 +11,6 @@ import java.util.Iterator;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.tags.Tag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 

@@ -12,10 +12,10 @@ package forestry.arboriculture.worldgen;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 
 import forestry.api.arboriculture.ITreeGenData;
@@ -40,13 +40,13 @@ public abstract class FeatureTree extends FeatureArboriculture {
 	}
 
 	@Override
-	public Set<BlockPos> generateTrunk(LevelAccessor world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+	public Set<BlockPos> generateTrunk(LevelAccessor world, RandomSource rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		FeatureHelper.generateTreeTrunk(world, rand, wood, startPos, height, girth, 0, 0, null, 0);
 		return Collections.emptySet();
 	}
 
 	@Override
-	protected void generateLeaves(LevelAccessor world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+	protected void generateLeaves(LevelAccessor world, RandomSource rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		int leafHeight = height + 1;
 		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafHeight--, 0), girth, girth, 1, FeatureHelper.EnumReplaceMode.AIR, contour);
 		FeatureHelper.generateCylinderFromTreeStartPos(world, leaf, startPos.offset(0, leafHeight--, 0), girth, 0.5f + girth, 1, FeatureHelper.EnumReplaceMode.AIR, contour);
@@ -55,7 +55,7 @@ public abstract class FeatureTree extends FeatureArboriculture {
 	}
 
 	@Override
-	protected void generateExtras(LevelAccessor world, Random rand, BlockPos startPos) {
+	protected void generateExtras(LevelAccessor world, RandomSource rand, BlockPos startPos) {
 		if (hasPods()) {
 			FeatureHelper.generatePods(tree, world, rand, startPos, height, minPodHeight, girth, FeatureHelper.EnumReplaceMode.AIR);
 		}
@@ -68,7 +68,7 @@ public abstract class FeatureTree extends FeatureArboriculture {
 	}
 
 	@Override
-	public final void preGenerate(LevelAccessor world, Random rand, BlockPos startPos) {
+	public final void preGenerate(LevelAccessor world, RandomSource rand, BlockPos startPos) {
 		super.preGenerate(world, rand, startPos);
 		height = determineHeight(world, rand, baseHeight, heightVariation);
 		girth = tree.getGirth();
@@ -80,7 +80,7 @@ public abstract class FeatureTree extends FeatureArboriculture {
 		return determined < min ? min : Math.min(determined, max);
 	}
 
-	private int determineHeight(LevelAccessor world, Random rand, int required, int variation) {
+	private int determineHeight(LevelAccessor world, RandomSource rand, int required, int variation) {
 		ITreeModifier treeModifier = TreeManager.treeRoot.getTreekeepingMode(world);
 		int baseHeight = required + rand.nextInt(variation);
 		int height = Math.round(baseHeight * tree.getHeightModifier() * treeModifier.getHeightModifier(tree.getGenome(), 1f));

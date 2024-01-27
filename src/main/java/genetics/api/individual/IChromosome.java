@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import genetics.api.IGeneticFactory;
 import genetics.api.IGeneticSaveHandler;
 import genetics.api.alleles.IAllele;
+import net.minecraft.util.RandomSource;
 
 
 /**
@@ -52,7 +53,7 @@ public interface IChromosome {
 	 *                        use.
 	 * @param otherChromosome The other chromosome that this chromosome uses to create the new one.
 	 */
-	IChromosome inheritChromosome(Random rand, IChromosome otherChromosome);
+	IChromosome inheritChromosome(RandomSource rand, IChromosome otherChromosome);
 
 	/**
 	 * @return true if this chromosome has the same active and inactive allele.

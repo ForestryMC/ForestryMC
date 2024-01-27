@@ -38,19 +38,6 @@ public class StillRecipeCategory extends ForestryRecipeCategory<IStillRecipe> {
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, still);
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.STILL.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends IStillRecipe> getRecipeClass() {
-		return IStillRecipe.class;
-	}
-
-
 	@Override
 	public RecipeType<IStillRecipe> getRecipeType() {
 		return ForestryRecipeType.STILL;

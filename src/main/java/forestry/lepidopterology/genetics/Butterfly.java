@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -55,7 +56,7 @@ import genetics.api.root.components.ComponentKeys;
 import genetics.individual.Genome;
 
 public class Butterfly extends IndividualLiving implements IButterfly {
-	private static final Random rand = new Random();
+	private static final RandomSource rand = RandomSource.create();
 
 	/* CONSTRUCTOR */
 	public Butterfly(CompoundTag nbt) {

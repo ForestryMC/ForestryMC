@@ -10,13 +10,12 @@
  ******************************************************************************/
 package forestry.apiculture.gui;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.biome.Biome;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -46,7 +45,7 @@ public class HabitatSlot extends Widget {
 	@Override
 	public ToolTip getToolTip(int mouseX, int mouseY) {
 		ToolTip tooltip = new ToolTip();
-		tooltip.add(new TextComponent(name));
+		tooltip.add(Component.literal(name));
 		return tooltip;
 	}
 

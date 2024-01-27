@@ -5,8 +5,9 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
+import net.minecraft.util.RandomSource;
+
 import java.util.Locale;
-import java.util.Random;
 
 public enum EnumForestryWoodType implements IWoodType {
 	LARCH,
@@ -60,7 +61,7 @@ public enum EnumForestryWoodType implements IWoodType {
 		return hardness;
 	}
 
-	public static EnumForestryWoodType getRandom(Random random) {
+	public static EnumForestryWoodType getRandom(RandomSource random) {
 		return VALUES[random.nextInt(VALUES.length)];
 	}
 

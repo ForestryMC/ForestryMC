@@ -5,10 +5,10 @@ import java.util.Optional;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -192,7 +192,7 @@ public class GeneticAnalyzer extends ContainerElement implements IGeneticAnalyze
 		//if(state == DatabaseScreenLogic.ScreenState.NO_PLUGIN){
 		//key = "for.gui.database.support";
 		//}
-		List<FormattedCharSequence> lines = fontRenderer.split(new TranslatableComponent(key), scrollable.getPreferredSize().width);
+		List<FormattedCharSequence> lines = fontRenderer.split(Component.translatable(key), scrollable.getPreferredSize().width);
 		for (FormattedCharSequence text : lines) {
 			scrollableContent.label(text);
 		}

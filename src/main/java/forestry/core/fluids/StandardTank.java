@@ -13,10 +13,10 @@ package forestry.core.fluids;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -204,10 +204,10 @@ public class StandardTank extends FluidTank implements IStreamable {
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.add(new TranslatableComponent(attributes.getTranslationKey(fluidStack)), rarity.color);
+			toolTip.add(Component.translatable(attributes.getTranslationKey(fluidStack)), rarity.color);
 			amount = getFluid().getAmount();
 		}
-		TranslatableComponent liquidAmount = new TranslatableComponent("for.gui.tooltip.liquid.amount", amount, getCapacity());
+		Component liquidAmount = Component.translatable("for.gui.tooltip.liquid.amount", amount, getCapacity());
 		toolTip.add(liquidAmount);
 	}
 

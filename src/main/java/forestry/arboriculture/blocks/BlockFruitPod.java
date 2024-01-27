@@ -18,6 +18,7 @@ import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -75,7 +76,7 @@ public class BlockFruitPod extends CocoaBlock implements EntityBlock {
 	}
 
 	@Override
-	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rand) {
 		if (!canSurvive(state, world, pos)) {
 			dropResources(state, world, pos);
 			world.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
@@ -127,7 +128,7 @@ public class BlockFruitPod extends CocoaBlock implements EntityBlock {
 	}
 
 	@Override
-	public void performBonemeal(ServerLevel world, Random rand, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state) {
 		TileFruitPod podTile = TileUtil.getTile(world, pos, TileFruitPod.class);
 		if (podTile != null) {
 			podTile.addRipeness(0.5f);

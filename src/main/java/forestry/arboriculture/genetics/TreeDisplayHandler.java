@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.arboriculture.genetics.ITree;
 import forestry.api.arboriculture.genetics.TreeChromosomes;
@@ -139,10 +138,10 @@ public enum TreeDisplayHandler implements IAlleleDisplayHandler<ITree> {
 			Object firstValue = genome.getActiveValue(first.type, Object.class);
 			Object secondValue = genome.getActiveValue(second.type, Object.class);
 			toolTip.singleLine()
-					.add(new TranslatableComponent(first.formattingText, firstValue
+					.add(Component.translatable(first.formattingText, firstValue
 					), first.color)
 					.text(" ")
-					.add(new TranslatableComponent(second.formattingText, secondValue
+					.add(Component.translatable(second.formattingText, secondValue
 					), second.color)
 					.create();
 			//toolTip.translated("%1$s %2$s", first.formattingText, second.formattingText)

@@ -27,7 +27,6 @@ import net.minecraft.Util;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import com.mojang.authlib.GameProfile;
@@ -123,10 +122,10 @@ public class ItemResearchNote extends ItemForestry {
 				String mutationChance = Translator.translateToLocal("for.researchNote.chance." + mutationChanceKey);
 				Component speciesResult = encoded.getResultingSpecies().getDisplayName();
 
-				tooltips.add(new TranslatableComponent("for.researchNote.discovery.0"));
-				tooltips.add(new TranslatableComponent("for.researchNote.discovery.1", species1, species2));
-				tooltips.add(new TranslatableComponent("for.researchNote.discovery.2", mutationChance));
-				tooltips.add(new TranslatableComponent("for.researchNote.discovery.3", speciesResult));
+				tooltips.add(Component.translatable("for.researchNote.discovery.0"));
+				tooltips.add(Component.translatable("for.researchNote.discovery.1", species1, species2));
+				tooltips.add(Component.translatable("for.researchNote.discovery.2", mutationChance));
+				tooltips.add(Component.translatable("for.researchNote.discovery.3", speciesResult));
 
 				if (!encoded.getSpecialConditions().isEmpty()) {
 					for (Component line : encoded.getSpecialConditions()) {
@@ -140,8 +139,8 @@ public class ItemResearchNote extends ItemForestry {
 				}
 				IRootDefinition<IIndividualRoot<IIndividual>> definition = GeneticsAPI.apiInstance.getRoot(compound.getString(NBT_ROOT));
 				definition.ifPresent(root -> {
-					tooltips.add(new TranslatableComponent("researchNote.discovered.0"));
-					tooltips.add(new TranslatableComponent("for.researchNote.discovered.1", alleleFirst.getDisplayName(), alleleFirst.getBinomial()));
+					tooltips.add(Component.translatable("researchNote.discovered.0"));
+					tooltips.add(Component.translatable("for.researchNote.discovered.1", alleleFirst.getDisplayName(), alleleFirst.getBinomial()));
 				});
 			}
 
@@ -167,7 +166,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
-					player.sendMessage(new TranslatableComponent("for.chat.cannotmemorizeagain"), Util.NIL_UUID);
+					player.sendMessage(Component.translatable("for.chat.cannotmemorizeagain"), Util.NIL_UUID);
 					return false;
 				}
 
@@ -180,9 +179,9 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.registerSpecies(speciesResult);
 
 				tracker.researchMutation(encoded);
-				player.sendMessage(new TranslatableComponent("for.chat.memorizednote"), Util.NIL_UUID);
+				player.sendMessage(Component.translatable("for.chat.memorizednote"), Util.NIL_UUID);
 
-				player.sendMessage(new TranslatableComponent("for.chat.memorizednote2",
+				player.sendMessage(Component.translatable("for.chat.memorizednote2",
 						((MutableComponent) speciesFirst.getDisplayName()).withStyle(ChatFormatting.GRAY),
 						((MutableComponent) speciesSecond.getDisplayName()).withStyle(ChatFormatting.GRAY),
 						((MutableComponent) speciesResult.getDisplayName()).withStyle(ChatFormatting.GREEN)), Util.NIL_UUID);
@@ -272,8 +271,8 @@ public class ItemResearchNote extends ItemForestry {
 		public void addTooltip(List<Component> list) {
 			List<Component> tooltips = type.getTooltip(inner);
 			if (tooltips.isEmpty()) {
-				list.add(new TranslatableComponent("for.researchNote.error.0").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
-				list.add(new TranslatableComponent("for.researchNote.error.1"));
+				list.add(Component.translatable("for.researchNote.error.0").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+				list.add(Component.translatable("for.researchNote.error.1"));
 				return;
 			}
 
@@ -298,7 +297,7 @@ public class ItemResearchNote extends ItemForestry {
 		} else {
 			researcherName = note.researcher.getName();
 		}
-		return new TranslatableComponent(getDescriptionId(itemstack), researcherName);
+		return Component.translatable(getDescriptionId(itemstack), researcherName);
 	}
 
 	@Override

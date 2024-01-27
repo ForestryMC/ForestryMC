@@ -12,10 +12,10 @@ package forestry.lepidopterology.worldgen;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -43,7 +43,7 @@ public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 		super(NoneFeatureConfiguration.CODEC);
 	}
 
-	public static boolean genCocoon(WorldGenLevel world, Random rand, BlockPos pos, IButterfly butterfly) {
+	public static boolean genCocoon(WorldGenLevel world, RandomSource rand, BlockPos pos, IButterfly butterfly) {
 		if (butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES).getRarity() * ModuleLepidopterology
 				.getGenerateCocoonsAmount() < rand.nextFloat() * 100.0f) {
 			return false;

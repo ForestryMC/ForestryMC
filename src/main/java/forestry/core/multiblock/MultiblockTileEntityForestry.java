@@ -49,7 +49,7 @@ public abstract class MultiblockTileEntityForestry<T extends IMultiblockLogic> e
 	 * Called by a structure block when it is right clicked by a player.
 	 */
 	public void openGui(ServerPlayer player, BlockPos pos) {
-		NetworkHooks.openGui(player, this, pos);
+		NetworkHooks.openScreen(player, this, pos);
 	}
 
 	@Override

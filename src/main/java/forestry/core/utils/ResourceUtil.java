@@ -80,24 +80,12 @@ public class ResourceUtil {
 		}
 	}
 
-	public static BufferedReader createReader(Resource resource) {
-		return new BufferedReader(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
-	}
-
 	@Nullable
 	public static Resource getResource(ResourceLocation location) {
 		try {
 			return resourceManager().getResource(location);
 		} catch (IOException e) {
 			return null;
-		}
-	}
-
-	public static List<Resource> getResources(ResourceLocation location) {
-		try {
-			return resourceManager().getResources(location);
-		} catch (IOException e) {
-			return Collections.emptyList();
 		}
 	}
 

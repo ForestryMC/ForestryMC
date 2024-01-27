@@ -16,11 +16,11 @@ import com.google.common.collect.Sets;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -50,7 +50,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 	}
 
 	@Override
-	public boolean place(LevelAccessor world, Random rand, BlockPos pos, boolean forced) {
+	public boolean place(LevelAccessor world, RandomSource rand, BlockPos pos, boolean forced) {
 		GameProfile owner = getOwner(world, pos);
 		TreeBlockTypeLeaf leaf = new TreeBlockTypeLeaf(tree, owner, rand);
 		TreeBlockTypeLog wood = new TreeBlockTypeLog(tree);
@@ -89,7 +89,7 @@ public abstract class FeatureArboriculture extends FeatureBase {
 		return tile.getOwnerHandler().getOwner();
 	}
 
-	public void preGenerate(LevelAccessor world, Random rand, BlockPos startPos) {
+	public void preGenerate(LevelAccessor world, RandomSource rand, BlockPos startPos) {
 
 	}
 
@@ -171,11 +171,11 @@ public abstract class FeatureArboriculture extends FeatureBase {
 	 * Generate the tree's trunk. Returns a list of positions of branch ends for leaves to generate at.
 	 */
 
-	protected abstract Set<BlockPos> generateTrunk(LevelAccessor world, Random rand, TreeBlockTypeLog wood, BlockPos startPos);
+	protected abstract Set<BlockPos> generateTrunk(LevelAccessor world, RandomSource rand, TreeBlockTypeLog wood, BlockPos startPos);
 
-	protected abstract void generateLeaves(LevelAccessor world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos);
+	protected abstract void generateLeaves(LevelAccessor world, RandomSource rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos);
 
-	protected abstract void generateExtras(LevelAccessor world, Random rand, BlockPos startPos);
+	protected abstract void generateExtras(LevelAccessor world, RandomSource rand, BlockPos startPos);
 
 	@Nullable
 	public abstract BlockPos getValidGrowthPos(LevelAccessor world, BlockPos pos);

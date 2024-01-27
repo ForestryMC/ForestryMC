@@ -11,11 +11,11 @@
 package forestry.core.gui.widgets;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -62,9 +62,9 @@ public class SocketWidget extends Widget {
 			ItemStack stack = tile.getSocket(slot);
 			if (!stack.isEmpty()) {
 				toolTip.addAll(ItemTooltipUtil.getInformation(stack));
-				toolTip.add(new TranslatableComponent("for.gui.socket.remove").withStyle(ChatFormatting.ITALIC));
+				toolTip.add(Component.translatable("for.gui.socket.remove").withStyle(ChatFormatting.ITALIC));
 			} else {
-				toolTip.add(new TranslatableComponent("for.gui.emptysocket"));
+				toolTip.add(Component.translatable("for.gui.emptysocket"));
 			}
 		}
 	};

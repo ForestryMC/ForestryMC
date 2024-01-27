@@ -50,7 +50,7 @@ public class ItemOverlay extends ItemForestry implements IColoredItem {
 
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-		if (this.allowdedIn(tab)) {
+		if (this.allowedIn(tab)) {
 			if (Config.isDebug || !overlay.isSecret()) {
 				subItems.add(new ItemStack(this));
 			}

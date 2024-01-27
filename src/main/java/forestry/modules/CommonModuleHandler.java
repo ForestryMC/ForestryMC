@@ -8,9 +8,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
 import net.minecraftforge.fml.InterModComms;
 
 import forestry.api.modules.IForestryModule;
@@ -24,6 +21,7 @@ import forestry.core.utils.Log;
 import forestry.modules.features.FeatureType;
 import forestry.modules.features.IModFeature;
 import forestry.modules.features.ModFeatureRegistry;
+import net.minecraftforge.registries.RegisterEvent;
 //import forestry.plugins.ForestryCompatPlugins;
 
 //TODO - most of this needs tearing up and replacing
@@ -97,7 +95,7 @@ public class CommonModuleHandler {
 		return registry.getFeatures(filter);
 	}
 
-	public <T extends IForgeRegistryEntry<T>> void registerObjects(RegistryEvent.Register<T> event) {
+	public void registerObjects(RegisterEvent event) {
 		registry.onRegister(event);
 		registerObjects();
 	}

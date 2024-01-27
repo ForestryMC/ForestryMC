@@ -13,6 +13,7 @@ package forestry.core.fluids;
 import java.awt.Color;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -54,7 +55,7 @@ public class BlockForestryFluid extends LiquidBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState blockState, ServerLevel world, BlockPos pos, Random rand) {
+	public void randomTick(BlockState blockState, ServerLevel world, BlockPos pos, RandomSource rand) {
 		double x = pos.getX();
 		double y = pos.getY();
 		double z = pos.getZ();
@@ -130,7 +131,7 @@ public class BlockForestryFluid extends LiquidBlock {
 	}
 
 	@Override
-	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rand) {
 		super.tick(state, world, pos, rand);
 
 		int x = pos.getX();

@@ -11,7 +11,6 @@
 package forestry.apiculture.worldgen;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -20,8 +19,8 @@ import forestry.core.utils.BlockUtil;
 
 public abstract class HiveGen implements IHiveGen {
 
-	public static boolean isTreeBlock(BlockState blockState, WorldGenLevel world, BlockPos pos) {
-		return blockState.is(BlockTags.LEAVES) || blockState.is(BlockTags.LOGS);
+	public static boolean isTreeBlock(BlockState blockState) {
+		return !blockState.isAir();
 	}
 
 	@Override

@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import forestry.apiculture.items.*;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import net.minecraft.data.DataGenerator;
@@ -62,7 +64,6 @@ import forestry.core.items.ItemFruit;
 import forestry.core.items.definitions.EnumContainerType;
 import forestry.core.items.definitions.EnumCraftingMaterial;
 import forestry.core.items.definitions.EnumElectronTube;
-import forestry.core.recipes.ComplexIngredient;
 import forestry.cultivation.blocks.BlockPlanter;
 import forestry.cultivation.blocks.BlockTypePlanter;
 import forestry.cultivation.features.CultivationBlocks;
@@ -726,7 +727,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 
 		TriConsumer<Integer, ItemStack, String> bogRecipe = (amount, container, name) -> ShapedRecipeBuilder.shaped(CoreBlocks.BOG_EARTH, amount)
 				.define('#', Blocks.DIRT)
-				.define('X', new ComplexIngredient(container))
+				.define('X', StrictNBTIngredient.of(container))
 				.define('Y', ItemTags.SAND)
 				.pattern("#Y#").pattern("YXY").pattern("#Y#")
 				.unlockedBy("has_sand", has(ItemTags.SAND))
@@ -951,7 +952,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 			}*/
 			ItemStack filled = FluidsItems.getContainer(containerType, milk);
 			ShapedRecipeBuilder.shaped(Items.CAKE)
-					.define('A', new ComplexIngredient(filled))
+					.define('A', StrictNBTIngredient.of(filled))
 					.define('B', Items.SUGAR)
 					.define('C', Items.WHEAT)
 					.define('E', Items.EGG)
@@ -1001,7 +1002,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.define('X', Tags.Items.CHESTS_WOODEN)
 				.define('Y', CoreItems.STURDY_CASING)
 				.define('Z', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.IRON))
-				.define('W', new ComplexIngredient(ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{})))
+				.define('W', StrictNBTIngredient.of(ItemCircuitBoard.createCircuitboard(EnumCircuitBoardType.REFINED, null, new ICircuit[]{})))
 				.pattern("Z#Z").pattern("#Y#").pattern("XWX")
 				.unlockedBy("has_casing", has(CoreItems.STURDY_CASING)).save(helper);
 
@@ -1040,7 +1041,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 	}
 
 	@Override
-	protected void saveAdvancement(HashCache cache, JsonObject advancementJson, Path pathIn) {
+	protected void saveAdvancement(CachedOutput cache, JsonObject advancementJson, Path pathIn) {
 		//NOOP - We dont replace any of the advancement things yet...
 	}
 

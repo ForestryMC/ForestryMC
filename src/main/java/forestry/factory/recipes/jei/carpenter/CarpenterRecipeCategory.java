@@ -38,24 +38,12 @@ public class CarpenterRecipeCategory extends ForestryRecipeCategory<ICarpenterRe
 	public CarpenterRecipeCategory(IGuiHelper guiHelper) {
 		super(guiHelper.createDrawable(guiTexture, 9, 16, 158, 61), "block.forestry.carpenter");
 
-		craftingGridHelper = guiHelper.createCraftingGridHelper(0);
+		craftingGridHelper = guiHelper.createCraftingGridHelper();
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(guiTexture, 176, 59, 4, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.BOTTOM, false);
 		this.tankOverlay = guiHelper.createDrawable(guiTexture, 176, 0, 16, 58);
 		ItemStack carpenter = new ItemStack(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CARPENTER).block());
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, carpenter);
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.CARPENTER.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends ICarpenterRecipe> getRecipeClass() {
-		return ICarpenterRecipe.class;
 	}
 
 	@Override

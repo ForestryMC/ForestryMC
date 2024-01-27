@@ -5,14 +5,14 @@ buildscript {
 	}
 
 	dependencies {
-		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
+		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "6.0.+", changing: true
 	}
 }
 
 plugins {
 	id "maven-publish"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
-	id "com.modrinth.minotaur" version "1.2.1"
+	id "com.modrinth.minotaur" version "2.8.7"
 }
 
 apply plugin: "net.minecraftforge.gradle"
@@ -36,8 +36,9 @@ repositories {
 dependencies {
 	minecraft "net.minecraftforge:forge:$minecraft_version-$forge_version"
 
-	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version:api")
-	runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version:$jei_version")
+	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version-common-api:$jei_version")
+	compileOnly fg.deobf("mezz.jei:jei-$minecraft_version-forge-api:$jei_version")
+	runtimeOnly fg.deobf("mezz.jei:jei-$minecraft_version-forge:$jei_version")
 
 	compileOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version:api")
 	runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$patchouli_version")
@@ -94,7 +95,6 @@ minecraft {
 
 		data {
 			with commonRunProperties
-			forceExit false
 			args "--mod", "forestry", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
 		}
 	}
@@ -248,31 +248,30 @@ if (System.getenv("CURSEFORGE")) {
 
 ////////////////
 // Modrinth
-import com.modrinth.minotaur.TaskModrinthUpload
-import com.modrinth.minotaur.request.VersionType
+modrinth {
+    token.set(System.getenv("MODRINTH"))
+    projectId.set(project.modrinth_project)
+    changelog.set("View changelog at [the release page](https://github.com/ForestryMC/ForestryMC/releases/tag/${version})")
+    versionNumber.set(project.version)
 
-task publishModrinth(type: TaskModrinthUpload) {
-	onlyIf {
-		System.getenv("MODRINTH")
-	}
+    if (version.contains("alpha")) {
+        versionType.set("alpha")
+    } else if (version.contains("beta")) {
+        versionType.set("beta")
+    } else {
+        versionType.set("release")
+    }
 
-	dependsOn jar
+    uploadFile.set(jar)
+    gameVersions.add(minecraft_version)
+	loaders.add("forge")
 
-	token = System.getenv("MODRINTH")
-	changelog = "View changelog at [the release page](https://github.com/ForestryMC/ForestryMC/releases/tag/${version})"
-	projectId = project.modrinth_project
-	versionName = project.version
-	versionNumber = project.version
+    dependencies {
+        optional.project("jei")
+		required.project("patchouli")
+    }
+}
 
-	if (version.contains("alpha")) {
-		versionType = VersionType.ALPHA
-	} else if (version.contains("beta")) {
-		versionType = VersionType.BETA
-	} else {
-		versionType = VersionType.RELEASE
-	}
-
-	uploadFile = jar
-	addGameVersion(project.minecraft_version)
-	addLoader("forge")
+tasks.modrinth.onlyIf {
+    System.getenv("MODRINTH")
 }

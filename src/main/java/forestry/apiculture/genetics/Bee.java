@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -29,7 +30,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -378,7 +378,7 @@ public class Bee extends IndividualLiving implements IBee {
 
 		IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
 
-		TranslatableComponent customSpeed = new TranslatableComponent("for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
+		Component customSpeed = Component.translatable("for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
 		if (Translator.canTranslate(customSpeed)) {
 			toolTip.singleLine()
 				.add(customSpeed)
@@ -629,7 +629,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		Level world = housing.getWorldObj();
-		Random random = world.random;
+		RandomSource random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {
@@ -670,7 +670,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = (int) (genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		Level world = housing.getWorldObj();
-		Random random = world.random;
+		RandomSource random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {
@@ -716,7 +716,7 @@ public class Bee extends IndividualLiving implements IBee {
 		int chance = Math.round(genome.getActiveValue(BeeChromosomes.FLOWERING) * beeModifier.getFloweringModifier(getGenome(), 1f));
 
 		Level world = housing.getWorldObj();
-		Random random = world.random;
+		RandomSource random = world.random;
 
 		// Correct speed
 		if (random.nextInt(100) >= chance) {

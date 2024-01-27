@@ -24,7 +24,7 @@ public interface ISolderRecipe extends IForestryRecipe {
 	RecipeType<ISolderRecipe> TYPE = RecipeManagers.create("forestry:solder");
 
 	class Companion {
-		@ObjectHolder("forestry:solder")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:solder")
 		public static final RecipeSerializer<ISolderRecipe> SERIALIZER = null;
 	}
 

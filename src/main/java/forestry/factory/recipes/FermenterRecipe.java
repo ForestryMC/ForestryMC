@@ -22,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.IFermenterRecipe;
 
@@ -99,7 +98,7 @@ public class FermenterRecipe implements IFermenterRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FermenterRecipe> {
+	public static class Serializer implements RecipeSerializer<FermenterRecipe> {
 
 		@Override
 		public FermenterRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

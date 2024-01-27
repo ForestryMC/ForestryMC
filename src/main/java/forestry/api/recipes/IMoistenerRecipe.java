@@ -17,7 +17,7 @@ public interface IMoistenerRecipe extends IForestryRecipe {
 	RecipeType<IMoistenerRecipe> TYPE = RecipeManagers.create("forestry:moistener");
 
 	class Companion {
-		@ObjectHolder("forestry:moistener")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:moistener")
 		public static final RecipeSerializer<IMoistenerRecipe> SERIALIZER = null;
 	}
 

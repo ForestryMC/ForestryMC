@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Random;
 import java.util.function.Function;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
@@ -30,7 +31,7 @@ public interface IDynamicProductList extends IProductList {
 	 * @param rand     The instance of {@link Random} that should be used. In the most cases this is
 	 *                 {@link net.minecraft.world.level.Level#random}.
 	 */
-	default void addProducts(BlockGetter reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+	default void addProducts(BlockGetter reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, RandomSource rand) {
 		addProducts(stacks, modifier, rand);
 	}
 }

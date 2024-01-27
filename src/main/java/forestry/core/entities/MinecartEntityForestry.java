@@ -22,7 +22,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 
@@ -100,7 +99,7 @@ public abstract class MinecartEntityForestry extends AbstractMinecart implements
 
 	@Override
 	public Component getName() {
-		return new TranslatableComponent(getUnlocalizedTitle());
+		return Component.translatable(getUnlocalizedTitle());
 	}
 
 	/* ITitled */

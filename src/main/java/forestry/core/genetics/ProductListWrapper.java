@@ -1,10 +1,10 @@
 package forestry.core.genetics;
 
 import java.util.Collection;
-import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
@@ -48,12 +48,12 @@ public abstract class ProductListWrapper implements IDynamicProductList, IMutabl
 		}
 
 		@Override
-		public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+		public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, RandomSource rand) {
 			list.addProducts(stacks, modifier, rand);
 		}
 
 		@Override
-		public void addProducts(BlockGetter reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+		public void addProducts(BlockGetter reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, RandomSource rand) {
 			list.addProducts(reader, pos, stacks, modifier, rand);
 		}
 
@@ -101,7 +101,7 @@ public abstract class ProductListWrapper implements IDynamicProductList, IMutabl
 		}
 
 		@Override
-		public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+		public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, RandomSource rand) {
 			throw new IllegalStateException("This product list is not baked yet, you can not get any product information from it.");
 		}
 

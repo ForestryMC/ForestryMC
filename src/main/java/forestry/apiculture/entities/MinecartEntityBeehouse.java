@@ -97,7 +97,7 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 
 	@Override
 	protected void openGui(ServerPlayer player) {
-		NetworkHooks.openGui(player, this, p -> {
+		NetworkHooks.openScreen(player, this, p -> {
 			PacketBufferForestry fP = new PacketBufferForestry(p);
 			fP.writeEntityById(this);
 			fP.writeBoolean(false);

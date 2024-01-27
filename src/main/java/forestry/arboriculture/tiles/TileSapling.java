@@ -12,11 +12,11 @@ package forestry.arboriculture.tiles;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
-import java.util.Random;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -24,9 +24,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 
 import forestry.api.arboriculture.ITreekeepingMode;
@@ -65,7 +63,7 @@ public class TileSapling extends TileTreeContainer {
 	}
 
 	@Override
-	public void onBlockTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
+	public void onBlockTick(Level worldIn, BlockPos pos, BlockState state, RandomSource rand) {
 		timesTicked++;
 		tryGrow(rand, false);
 	}
@@ -76,7 +74,7 @@ public class TileSapling extends TileTreeContainer {
 		return Math.round(tree.getRequiredMaturity() * maturationModifier);
 	}
 
-	public boolean canAcceptBoneMeal(Random rand) {
+	public boolean canAcceptBoneMeal(RandomSource rand) {
 		ITree tree = getTree();
 
 		if (tree == null) {
@@ -97,7 +95,7 @@ public class TileSapling extends TileTreeContainer {
 		}
 	}
 
-	public void tryGrow(Random random, boolean bonemealed) {
+	public void tryGrow(RandomSource random, boolean bonemealed) {
 		ITree tree = getTree();
 
 		if (tree == null) {
@@ -129,11 +127,11 @@ public class TileSapling extends TileTreeContainer {
 
 	@Nonnull
 	@Override
-	public IModelData getModelData() {
+	public ModelData getModelData() {
 		ITree tree = getTree();
 		if (tree == null) {
-			return EmptyModelData.INSTANCE;
+			return ModelData.EMPTY;
 		}
-		return new ModelDataMap.Builder().withInitial(TREE_SPECIES, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)).build();
+		return ModelData.builder().with(TREE_SPECIES, tree.getGenome().getActiveAllele(TreeChromosomes.SPECIES)).build();
 	}
 }

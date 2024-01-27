@@ -19,7 +19,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -206,9 +205,9 @@ public class ItemBackpack extends ItemWithGui implements IColoredItem {
 		BackpackMode mode = getMode(itemstack);
 		String infoKey = mode.getUnlocalizedInfo();
 		if (infoKey != null) {
-			list.add(new TranslatableComponent(infoKey).withStyle(ChatFormatting.GRAY));
+			list.add(Component.translatable(infoKey).withStyle(ChatFormatting.GRAY));
 		}
-		list.add(new TranslatableComponent("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).withStyle(ChatFormatting.GRAY));
+		list.add(Component.translatable("for.gui.slots", String.valueOf(occupied), String.valueOf(getBackpackSize())).withStyle(ChatFormatting.GRAY));
 	}
 
 	@Override

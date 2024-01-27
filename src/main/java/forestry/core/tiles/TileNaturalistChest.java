@@ -104,7 +104,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	@Override
 	public void flipPage(ServerPlayer player, short page) {
-		NetworkHooks.openGui(player, this, p -> {
+		NetworkHooks.openScreen(player, this, p -> {
 			p.writeBlockPos(this.worldPosition);
 			p.writeVarInt(page);
 		});
@@ -112,7 +112,7 @@ public abstract class TileNaturalistChest extends TileBase implements IPagedInve
 
 	@Override
 	public void openGui(ServerPlayer player, BlockPos pos) {
-		NetworkHooks.openGui(player, this, p -> {
+		NetworkHooks.openScreen(player, this, p -> {
 			p.writeBlockPos(this.worldPosition);
 			p.writeVarInt(0);
 		});

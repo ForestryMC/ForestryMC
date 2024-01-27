@@ -17,7 +17,6 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -251,7 +250,7 @@ public abstract class Ledger {
 	protected int drawSplitText(PoseStack transform, String string, int x, int y, int width, int color, boolean shadow) {
 		int originalY = y;
 		Minecraft minecraft = Minecraft.getInstance();
-		List<FormattedCharSequence> strings = minecraft.font.split(new TextComponent(string), width);
+		List<FormattedCharSequence> strings = minecraft.font.split(Component.literal(string), width);
 		for (FormattedCharSequence obj : strings) {
 			if (shadow) {
 				minecraft.font.drawShadow(transform, obj, x, y, color);

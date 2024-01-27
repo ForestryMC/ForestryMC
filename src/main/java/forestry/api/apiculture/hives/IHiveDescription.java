@@ -5,8 +5,7 @@
  ******************************************************************************/
 package forestry.api.apiculture.hives;
 
-import java.util.Random;
-
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -48,5 +47,5 @@ public interface IHiveDescription {
 	 * Called after successful hive generation.
 	 * world, x, y, z give the location of the new hive.
 	 **/
-	void postGen(WorldGenLevel world, Random rand, BlockPos pos);
+	void postGen(WorldGenLevel world, RandomSource rand, BlockPos pos);
 }

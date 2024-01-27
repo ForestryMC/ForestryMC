@@ -20,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 import forestry.api.storage.EnumBackpackType;
 import forestry.api.storage.IBackpackDefinition;
@@ -71,7 +70,7 @@ public class ItemBackpackNaturalist extends ItemBackpack {
 
 		@Override
 		public Component getDisplayName() {
-			return new TextComponent("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
+			return Component.literal("ITEM_GUI_TITLE");    //TODO needs to be overriden individually
 		}
 
 		@Nullable

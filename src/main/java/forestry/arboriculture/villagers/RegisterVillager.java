@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -92,7 +93,7 @@ public class RegisterVillager {
 
 		@Nullable
 		@Override
-		public MerchantOffer getOffer(Entity trader, Random rand) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 			EnumForestryWoodType woodType = EnumForestryWoodType.getRandom(rand);
 			ItemStack sellStack = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.PLANKS, false);
 			sellStack.setCount(sellingPriceInfo.getPrice(rand));
@@ -118,7 +119,7 @@ public class RegisterVillager {
 
 		@Nullable
 		@Override
-		public MerchantOffer getOffer(Entity trader, Random rand) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 			EnumForestryWoodType woodType = EnumForestryWoodType.getRandom(rand);
 			ItemStack sellStack = TreeManager.woodAccess.getStack(woodType, WoodBlockKind.LOG, false);
 			sellStack.setCount(sellingPriceInfo.getPrice(rand));
@@ -148,7 +149,7 @@ public class RegisterVillager {
 
 		@Nullable
 		@Override
-		public MerchantOffer getOffer(Entity trader, Random rand) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rand) {
 			IChromosomeType treeSpeciesType = TreeChromosomes.SPECIES;
 			Collection<IAllele> registeredSpecies = AlleleUtils.getAllelesByType(treeSpeciesType);
 			List<IAlleleSpecies> potentialSpecies = new ArrayList<>();

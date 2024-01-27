@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,7 +43,7 @@ public class BlockPlanter extends BlockBase<BlockTypePlanter> {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
 		if (blockType == BlockTypePlanter.FARM_ENDER) {
 			for (int i = 0; i < 3; ++i) {
 				ParticleRender.addPortalFx(worldIn, pos, rand);

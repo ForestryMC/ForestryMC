@@ -27,7 +27,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -100,7 +99,7 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 
 			if (!world.isClientSide) {
 				String text = !previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive";
-				player.displayClientMessage(new TranslatableComponent(text), true);
+				player.displayClientMessage(Component.translatable(text), true);
 			}
 		}
 
@@ -133,9 +132,9 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 				state = ClimateRoot.getInstance().getBiomeState(world, pos);
 			}
 			if (state.isPresent()) {
-				player.displayClientMessage(new TranslatableComponent("for.habitat_screen.status.state", ChatFormatting.GOLD.toString() + StringUtil.floatAsPercent(state.getTemperature()), ChatFormatting.BLUE.toString() + StringUtil.floatAsPercent(state.getHumidity())), true);
+				player.displayClientMessage(Component.translatable("for.habitat_screen.status.state", ChatFormatting.GOLD.toString() + StringUtil.floatAsPercent(state.getTemperature()), ChatFormatting.BLUE.toString() + StringUtil.floatAsPercent(state.getHumidity())), true);
 			} else {
-				player.displayClientMessage(new TranslatableComponent("for.habitat_screen.status.nostate"), true);
+				player.displayClientMessage(Component.translatable("for.habitat_screen.status.nostate"), true);
 			}
 		}
 		return InteractionResult.SUCCESS;
@@ -149,12 +148,12 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			return;
 		}
 		boolean previewModeActive = isPreviewModeActive(stack);
-		tooltip.add(new TranslatableComponent(previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive"));
+		tooltip.add(Component.translatable(previewModeActive ? "for.habitat_screen.mode.active" : "for.habitat_screen.mode.inactive"));
 		boolean isValid = isValid(stack, world);
 		BlockPos pos = getPosition(stack);
 		if (pos != null) {
 			int id = 0; //TODO: Fix dimension id
-			Component state = isValid ? new TranslatableComponent("for.habitat_screen.state.linked", pos.getX(), pos.getY(), pos.getZ(), id) : new TranslatableComponent("for.habitat_screen.state.fail");
+			Component state = isValid ? Component.translatable("for.habitat_screen.state.linked", pos.getX(), pos.getY(), pos.getZ(), id) : Component.translatable("for.habitat_screen.state.fail");
 			tooltip.add(state);
 		}
 		if (!isValid || pos == null) {
@@ -165,8 +164,8 @@ public class ItemHabitatScreen extends ItemForestry implements IColoredItem {
 			return;
 		}
 		IClimateState climateState = housing.getTransformer().getCurrent();
-		tooltip.add(new TranslatableComponent("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).withStyle(ChatFormatting.GOLD));
-		tooltip.add(new TranslatableComponent("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).withStyle(ChatFormatting.BLUE));
+		tooltip.add(Component.translatable("for.habitat_screen.temperature", StringUtil.floatAsPercent(climateState.getTemperature())).withStyle(ChatFormatting.GOLD));
+		tooltip.add(Component.translatable("for.habitat_screen.humidity", StringUtil.floatAsPercent(climateState.getHumidity())).withStyle(ChatFormatting.BLUE));
 	}
 
 	@Override

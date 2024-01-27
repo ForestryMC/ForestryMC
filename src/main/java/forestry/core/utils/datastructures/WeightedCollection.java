@@ -1,6 +1,7 @@
 package forestry.core.utils.datastructures;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.util.RandomSource;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -21,7 +22,7 @@ public class WeightedCollection<T> {
 	}
 
 	@Nullable
-	public T getRandom(Random random) {
+	public T getRandom(RandomSource random) {
 		double value = random.nextDouble() * total;
 		Map.Entry<Double, T> higherEntry = map.higherEntry(value);
 		if (higherEntry == null) {

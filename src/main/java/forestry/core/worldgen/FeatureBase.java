@@ -10,9 +10,8 @@
  ******************************************************************************/
 package forestry.core.worldgen;
 
-import java.util.Random;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -29,6 +28,6 @@ public abstract class FeatureBase extends Feature<NoneFeatureConfiguration> {
 		return place(context.level(), context.random(), context.origin(), false);
 	}
 
-	public abstract boolean place(LevelAccessor world, Random rand, BlockPos pos, boolean forced);
+	public abstract boolean place(LevelAccessor world, RandomSource rand, BlockPos pos, boolean forced);
 
 }

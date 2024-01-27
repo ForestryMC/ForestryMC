@@ -67,7 +67,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 				return;
 			}
 			//Get the max count of this stack
-			int maxItemCount = itemStack.getItem().getItemStackLimit(itemStack.copy());
+			int maxItemCount = itemStack.getItem().getMaxStackSize(itemStack.copy());
 			//Get the count of the stack
 			int itemCount = itemStack.getCount();
 

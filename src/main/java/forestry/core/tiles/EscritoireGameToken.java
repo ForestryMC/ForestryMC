@@ -16,7 +16,6 @@ import java.util.Optional;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.core.INbtWritable;
 import forestry.api.genetics.IForestrySpeciesRoot;
@@ -141,7 +140,7 @@ public class EscritoireGameToken implements INbtWritable, IStreamable {
 
 
 	public Component getTooltip() {
-		return !tokenStack.isEmpty() ? tokenStack.getHoverName() : new TranslatableComponent("for.gui.unknown");
+		return !tokenStack.isEmpty() ? tokenStack.getHoverName() : Component.translatable("for.gui.unknown");
 	}
 
 	public String[] getOverlayIcons() {

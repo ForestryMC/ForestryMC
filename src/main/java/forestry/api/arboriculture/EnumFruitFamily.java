@@ -5,11 +5,9 @@
  ******************************************************************************/
 package forestry.api.arboriculture;
 
-import net.minecraft.network.chat.BaseComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-
 import forestry.api.genetics.IFruitFamily;
 import forestry.api.genetics.alleles.AlleleManager;
+import net.minecraft.network.chat.Component;
 
 public enum EnumFruitFamily implements IFruitFamily {
 	PRUNES("prunes", "Prunus domestica"),
@@ -38,13 +36,13 @@ public enum EnumFruitFamily implements IFruitFamily {
 	}
 
 	@Override
-	public BaseComponent getName() {
-		return new TranslatableComponent("for.family." + uid);
+	public Component getName() {
+		return Component.translatable("for.family." + uid);
 	}
 
 	@Override
-	public BaseComponent getDescription() {
-		return new TranslatableComponent("for.family." + uid + ".description");
+	public Component getDescription() {
+		return Component.translatable("for.family." + uid + ".description");
 	}
 
 }

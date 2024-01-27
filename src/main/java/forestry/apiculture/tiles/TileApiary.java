@@ -88,7 +88,7 @@ public class TileApiary extends TileBeeHousingBase implements IApiary {
 
 	@Override
 	public void openGui(ServerPlayer player, BlockPos pos) {
-		NetworkHooks.openGui(player, this, p -> {
+		NetworkHooks.openScreen(player, this, p -> {
 			PacketBufferForestry forestryP = new PacketBufferForestry(p);
 			forestryP.writeBlockPos(pos);
 			forestryP.writeBoolean(true);

@@ -15,18 +15,15 @@ import javax.annotation.Nullable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.level.Level;
 
-import net.minecraftforge.registries.ForgeRegistries;
-
 public abstract class EntityUtil {
 	@Nullable
 	public static <T extends Mob> T spawnEntity(Level world, EntityType<T> type, double x, double y, double z) {
-		T entityLiving = createEntity(world, type);
+		T entityLiving = type.create(world);
 		if (entityLiving == null) {
 			return null;
 		}
@@ -44,14 +41,5 @@ public abstract class EntityUtil {
 		//TODO - right sound?
 		living.playAmbientSound();
 		return living;
-	}
-
-	@Nullable
-	private static <T extends Mob> T createEntity(Level world, EntityType<T> type) {
-		ResourceLocation name = ForgeRegistries.ENTITIES.getKey(type);
-		if (name == null) {
-			return null;
-		}
-		return type.create(world);
 	}
 }

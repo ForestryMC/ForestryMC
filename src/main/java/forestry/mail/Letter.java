@@ -22,7 +22,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.mail.ILetter;
 import forestry.api.mail.IMailAddress;
@@ -226,12 +225,12 @@ public class Letter implements ILetter {
 	@Override
 	public void addTooltip(List<Component> list) {
 		if (StringUtils.isNotBlank(this.sender.getName())) {
-			list.add(new TranslatableComponent("for.gui.mail.from")
+			list.add(Component.translatable("for.gui.mail.from")
 					.append(": " + this.sender.getName())
 					.withStyle(ChatFormatting.GRAY));
 		}
 		if (this.recipient != null) {
-			list.add(new TranslatableComponent("for.gui.mail.to")
+			list.add(Component.translatable("for.gui.mail.to")
 					.append(": " + this.getRecipientString())
 					.withStyle(ChatFormatting.GRAY));
 		}

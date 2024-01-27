@@ -19,6 +19,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CocoaBlock;
@@ -98,7 +99,7 @@ public class TileFruitPod extends BlockEntity implements IFruitBearer, IStreamab
 	}
 
 	/* UPDATING */
-	public void onBlockTick(Level world, BlockPos pos, BlockState state, Random rand) {
+	public void onBlockTick(Level world, BlockPos pos, BlockState state, RandomSource rand) {
 		if (canMature() && rand.nextFloat() <= yield) {
 			addRipeness(0.5f);
 		}

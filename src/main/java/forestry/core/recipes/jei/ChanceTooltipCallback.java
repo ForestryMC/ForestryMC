@@ -4,7 +4,6 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -27,6 +26,6 @@ public class ChanceTooltipCallback implements IRecipeSlotTooltipCallback {
 		percentFormat.setMaximumFractionDigits(2);
 		String chanceString = String.valueOf(percentFormat.format(chance));
 
-		tooltip.add(new TranslatableComponent("for.jei.chance", chanceString).withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.translatable("for.jei.chance", chanceString).withStyle(ChatFormatting.GRAY));
 	}
 }

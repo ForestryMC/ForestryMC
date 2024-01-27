@@ -1,6 +1,7 @@
 package forestry.core.data;
 
 import com.google.common.collect.Maps;
+import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import net.minecraft.data.CachedOutput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,7 +49,7 @@ public abstract class ModelProvider implements DataProvider {
 	}
 
 	@Override
-	public void run(HashCache cache) throws IOException {
+	public void run(CachedOutput cache) throws IOException {
 		this.pathToBuilder.clear();
 		this.registerModels();
 		pathToBuilder.forEach((key, builder) -> {
@@ -55,7 +57,7 @@ public abstract class ModelProvider implements DataProvider {
 			Path path = this.makePath(key);
 			try {
 				String s = GSON.toJson(jsonobject);
-				String s1 = SHA1.hashUnencodedChars(s).toString();
+				String s1 = Hashing.sha1().hashUnencodedChars(s).toString();
 				if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path)) {
 					Files.createDirectories(path.getParent());
 

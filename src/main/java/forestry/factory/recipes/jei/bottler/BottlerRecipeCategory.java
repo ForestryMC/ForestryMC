@@ -39,18 +39,6 @@ public class BottlerRecipeCategory extends ForestryRecipeCategory<BottlerRecipe>
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, bottler);
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.BOTTLER.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends BottlerRecipe> getRecipeClass() {
-		return ForestryRecipeType.BOTTLER.getRecipeClass();
-	}
-
 	@Override
 	public RecipeType<BottlerRecipe> getRecipeType() {
 		return ForestryRecipeType.BOTTLER;

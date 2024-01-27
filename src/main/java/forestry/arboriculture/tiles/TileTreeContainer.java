@@ -13,8 +13,8 @@ package forestry.arboriculture.tiles;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -126,7 +126,7 @@ public abstract class TileTreeContainer extends BlockEntity implements IStreamab
 	/**
 	 * Leaves and saplings will implement their logic here.
 	 */
-	public abstract void onBlockTick(Level worldIn, BlockPos pos, BlockState state, Random rand);
+	public abstract void onBlockTick(Level worldIn, BlockPos pos, BlockState state, RandomSource rand);
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {

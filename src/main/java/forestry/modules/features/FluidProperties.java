@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.Item;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -48,11 +47,6 @@ public class FluidProperties {
 		if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
 			return true;
 		}
-		Minecraft minecraft = Minecraft.getInstance();
-		if (minecraft == null) {
-			return false;
-		}
-		ResourceManager resourceManager = minecraft.getResourceManager();
-		return resourceManager.hasResource(location);
+        return Minecraft.getInstance().getResourceManager().getResource(location).isPresent();
 	}
 }

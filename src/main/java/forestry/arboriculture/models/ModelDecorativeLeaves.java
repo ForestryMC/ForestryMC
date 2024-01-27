@@ -23,7 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -79,7 +79,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected Key getWorldKey(BlockState state, IModelData extraData) {
+	protected Key getWorldKey(BlockState state, ModelData extraData) {
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDecorativeLeaves, "state must be for decorative leaves.");
 		BlockDecorativeLeaves bBlock = (BlockDecorativeLeaves) block;
@@ -87,7 +87,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected void bakeBlock(BlockDecorativeLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDecorativeLeaves block, ModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
 
 		IGenome genome = treeDefinition.getGenome();
@@ -112,7 +112,7 @@ public class ModelDecorativeLeaves extends ModelBlockCached<BlockDecorativeLeave
 	}
 
 	@Override
-	protected BakedModel bakeModel(BlockState state, Key key, BlockDecorativeLeaves block, IModelData extraData) {
+	protected BakedModel bakeModel(BlockState state, Key key, BlockDecorativeLeaves block, ModelData extraData) {
 		ModelBaker baker = new ModelBaker();
 
 		bakeBlock(block, extraData, key, baker, false);

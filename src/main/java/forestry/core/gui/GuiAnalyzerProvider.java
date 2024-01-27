@@ -3,11 +3,11 @@ package forestry.core.gui;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -60,7 +60,7 @@ public abstract class GuiAnalyzerProvider<C extends AbstractContainerMenu> exten
 	}
 
 	public GuiAnalyzerProvider(String texture, C container, Inventory inv, ITitled titled, int buttonX, int buttonY, int screenDistance, boolean hasBorder, int slots, int firstSlot) {
-		super(texture, container, inv, new TranslatableComponent(titled.getUnlocalizedTitle()));
+		super(texture, container, inv, Component.translatable(titled.getUnlocalizedTitle()));
 		this.buttonX = buttonX;
 		this.buttonY = buttonY;
 		this.screenDistance = screenDistance;

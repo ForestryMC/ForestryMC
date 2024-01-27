@@ -14,7 +14,6 @@ import java.util.Calendar;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
 
 import genetics.api.alleles.IAllele;
@@ -60,6 +59,6 @@ public class MutationConditionTimeLimited implements IMutationCondition {
 
 	@Override
 	public Component getDescription() {
-		return new TextComponent(Translator.translateToLocal("for.mutation.condition.date").replace("%START", start.toString()).replace("%END", end.toString()));
+		return Component.literal(Translator.translateToLocal("for.mutation.condition.date").replace("%START", start.toString()).replace("%END", end.toString()));
 	}
 }

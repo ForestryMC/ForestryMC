@@ -1,7 +1,6 @@
 package forestry.arboriculture;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.EnumVanillaWoodType;
@@ -20,9 +19,9 @@ public class WoodHelper {
 		if (woodType instanceof EnumForestryWoodType) {
 			String customUnlocalizedName = "block.forestry." + blockKind + "." + woodType;
 			if (Translator.canTranslateToLocal(customUnlocalizedName)) {
-				displayName = new TranslatableComponent(customUnlocalizedName);
+				displayName = Component.translatable(customUnlocalizedName);
 			} else {
-				displayName = new TranslatableComponent("for." + blockKind + ".grammar", new TranslatableComponent("for.trees.woodType." + woodType));
+				displayName = Component.translatable("for." + blockKind + ".grammar", Component.translatable("for.trees.woodType." + woodType));
 			}
 		} else if (woodType instanceof EnumVanillaWoodType) {
 			displayName = TreeManager.woodAccess.getStack(woodType, blockKind, false).getHoverName();
@@ -31,7 +30,7 @@ public class WoodHelper {
 		}
 
 		if (wood.isFireproof()) {
-			displayName = new TranslatableComponent("block.forestry.fireproof", displayName);
+			displayName = Component.translatable("block.forestry.fireproof", displayName);
 		}
 
 		return displayName;

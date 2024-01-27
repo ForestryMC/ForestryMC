@@ -5,8 +5,6 @@ import java.util.Locale;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -38,7 +36,7 @@ public class GhostItemStackWidget extends ItemStackWidget {
 		RenderSystem.enableBlend();
 
 		Component directionString = getDirectionString();
-		if (directionString == TextComponent.EMPTY) {
+		if (directionString == Component.empty()) {
 			Font fontRenderer = manager.minecraft.font;
 			fontRenderer.drawShadow(transform, getDirectionString(), xPos + startX + 5, yPos + startY + 4, ColourProperties.INSTANCE.get("gui.screen"));
 		}
@@ -56,12 +54,12 @@ public class GhostItemStackWidget extends ItemStackWidget {
 	private Component getDirectionString() {
 		if (slot.getSlotIndex() >= InventoryPlanter.CONFIG.productionStart
 				|| slot.getSlotIndex() < InventoryPlanter.CONFIG.productionStart + InventoryPlanter.CONFIG.productionCount) {
-			return TextComponent.EMPTY;
+			return Component.empty();
 		}
 		int index = slot.getSlotIndex() % 4;
 		FarmDirection direction = FarmDirection.values()[index];
 		String directionString = direction.toString().toLowerCase(Locale.ENGLISH);
-		return new TranslatableComponent("for.gui.planter." + directionString);
+		return Component.translatable("for.gui.planter." + directionString);
 	}
 
 	@Nullable

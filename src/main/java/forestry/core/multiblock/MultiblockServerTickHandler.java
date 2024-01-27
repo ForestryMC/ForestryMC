@@ -20,9 +20,9 @@ import forestry.core.config.Constants;
 public class MultiblockServerTickHandler {
 
 	@SubscribeEvent
-	public static void onWorldTick(TickEvent.WorldTickEvent event) {
+	public static void onWorldTick(TickEvent.LevelTickEvent event) {
 		if (event.phase == TickEvent.Phase.START) {
-			MultiblockRegistry.tickStart(event.world);
+			MultiblockRegistry.tickStart(event.level);
 		}
 	}
 }

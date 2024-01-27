@@ -21,12 +21,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import forestry.api.storage.IBackpackDefinition;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.network.IContainerFactory;
 
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
 import forestry.api.storage.EnumBackpackType;
+import net.minecraftforge.registries.RegisterEvent;
 
 public interface IFeatureRegistry {
 
@@ -68,7 +68,7 @@ public interface IFeatureRegistry {
 
 	FeatureFluid.Builder fluid(String identifier);
 
-	void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener);
+	void addRegistryListener(FeatureType type, Consumer<RegisterEvent> listener);
 
 	<F extends IModFeature> F register(F feature);
 

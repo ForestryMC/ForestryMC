@@ -11,7 +11,6 @@
 package forestry.core.gui.ledgers;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -58,7 +57,7 @@ public class PowerLedger extends Ledger {
 
 	@Override
 	public Component getTooltip() {
-		return new TextComponent(Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored()));
+		return Component.literal(Config.energyDisplayMode.formatEnergyValue(energyManager.getEnergyStored()));
 	}
 
 }

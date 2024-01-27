@@ -3,7 +3,6 @@ package genetics.individual;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import java.util.Optional;
-import java.util.Random;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +16,7 @@ import genetics.api.root.ITemplateContainer;
 
 import genetics.ApiInstance;
 import genetics.utils.AlleleUtils;
+import net.minecraft.util.RandomSource;
 
 @Immutable
 public class Chromosome implements IChromosome {
@@ -129,7 +129,7 @@ public class Chromosome implements IChromosome {
 	}
 
 	@Override
-	public IChromosome inheritChromosome(Random rand, IChromosome other) {
+	public IChromosome inheritChromosome(RandomSource rand, IChromosome other) {
 		IAllele firstChoice;
 		if (rand.nextBoolean()) {
 			firstChoice = getActiveAllele();

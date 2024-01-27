@@ -23,7 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 
 import forestry.api.arboriculture.ILeafSpriteProvider;
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -79,7 +79,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 	}
 
 	@Override
-	protected ModelDefaultLeaves.Key getWorldKey(BlockState state, IModelData extraData) {
+	protected ModelDefaultLeaves.Key getWorldKey(BlockState state, ModelData extraData) {
 		Block block = state.getBlock();
 		Preconditions.checkArgument(block instanceof BlockDefaultLeaves, "state must be for default leaves.");
 		BlockDefaultLeaves bBlock = (BlockDefaultLeaves) block;
@@ -89,7 +89,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 	}
 
 	@Override
-	protected void bakeBlock(BlockDefaultLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockDefaultLeaves block, ModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		TreeDefinition treeDefinition = key.definition;
 
 		IGenome genome = treeDefinition.getGenome();
@@ -108,7 +108,7 @@ public class ModelDefaultLeaves extends ModelBlockCached<BlockDefaultLeaves, Mod
 
 
 	@Override
-	protected BakedModel bakeModel(BlockState state, Key key, BlockDefaultLeaves block, IModelData extraData) {
+	protected BakedModel bakeModel(BlockState state, Key key, BlockDefaultLeaves block, ModelData extraData) {
 		ModelBaker baker = new ModelBaker();
 
 		bakeBlock(block, extraData, key, baker, false);

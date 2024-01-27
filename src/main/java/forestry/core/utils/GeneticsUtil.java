@@ -22,7 +22,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
 
@@ -92,8 +91,8 @@ public class GeneticsUtil {
 				allele.getSpeciesIdentifier();
 		return Translator.tryTranslate(customKey, () -> {
 			Component speciesName = allele.getDisplayName();
-			Component typeName = new TranslatableComponent(prefix + ".grammar." + type.getName() + ".type");
-			return new TranslatableComponent(prefix + ".grammar." + type.getName(), speciesName, typeName);
+			Component typeName = Component.translatable(prefix + ".grammar." + type.getName() + ".type");
+			return Component.translatable(prefix + ".grammar." + type.getName(), speciesName, typeName);
 		});
 	}
 

@@ -1,20 +1,20 @@
 package forestry.core.gui.buttons;
 
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TextComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import forestry.core.gui.Drawable;
 
 import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.network.chat.Component;
 
 public class GuiToggleButton extends Button {
 	/* attributes - Final */
 	private final Drawable[] textures = new Drawable[3];
 
 	public GuiToggleButton(int x, int y, int widthIn, int heightIn, Drawable drawable, OnPress handler) {
-		super(x, y, widthIn, heightIn, TextComponent.EMPTY, handler);
+		super(x, y, widthIn, heightIn, Component.empty(), handler);
 		for (int i = 0; i < 3; i++) {
 			textures[i] = new Drawable(drawable.textureLocation, drawable.u, drawable.v + drawable.vHeight * i, drawable.uWidth, drawable.vHeight);
 		}

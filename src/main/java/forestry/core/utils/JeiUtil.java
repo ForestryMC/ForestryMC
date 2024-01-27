@@ -12,7 +12,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -39,7 +39,7 @@ public class JeiUtil {
 			itemStacks.add(item.stack());
 		}
 
-		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM_STACK, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
+		registry.addIngredientInfo(itemStacks, VanillaTypes.ITEM_STACK, Component.translatable(DESCRIPTION_KEY + itemKey));
 	}
 
 	public static void addDescription(IRecipeRegistration registry, Block... blocks) {
@@ -73,7 +73,7 @@ public class JeiUtil {
 
 	public static void addDescription(IRecipeRegistration registry, Item item, String itemKey) {
 		ItemStack itemStack = new ItemStack(item);
-		registry.addIngredientInfo(itemStack, VanillaTypes.ITEM_STACK, new TranslatableComponent(DESCRIPTION_KEY + itemKey));
+		registry.addIngredientInfo(itemStack, VanillaTypes.ITEM_STACK, Component.translatable(DESCRIPTION_KEY + itemKey));
 	}
 
 	public static List<IRecipeSlotBuilder> layoutSlotGrid(IRecipeLayoutBuilder builder, RecipeIngredientRole role, int width, int height, int xOffset, int yOffset, int slotSpacing) {

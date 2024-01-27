@@ -2,9 +2,9 @@ package forestry.api.genetics.products;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Random;
 import java.util.function.Function;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
 
@@ -33,7 +33,7 @@ public final class EmptyProductList implements IDynamicProductList {
 	}
 
 	@Override
-	public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+	public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, RandomSource rand) {
 		//Empty implementation, nothing to add here
 	}
 }

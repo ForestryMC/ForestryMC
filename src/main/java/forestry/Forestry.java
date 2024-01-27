@@ -36,12 +36,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
@@ -123,6 +122,7 @@ import forestry.modules.features.ModFeatureRegistry;
 
 import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
+import net.minecraftforge.registries.RegisterEvent;
 
 /**
  * Forestry Minecraft Mod
@@ -214,27 +214,25 @@ public class Forestry {
 
 	private void gatherData(GatherDataEvent event) {
 		DataGenerator generator = event.getGenerator();
+        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-		if (event.includeServer()) {
-			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-			ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator, existingFileHelper);
-			generator.addProvider(blockTagsProvider);
-			generator.addProvider(new ForestryAdvancementProvider(generator));
-			generator.addProvider(new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
-			generator.addProvider(new ForestryBackpackTagProvider(generator, blockTagsProvider, existingFileHelper));
-			generator.addProvider(new ForestryFluidTagsProvider(generator, existingFileHelper));
-			generator.addProvider(new ForestryLootTableProvider(generator));
-			generator.addProvider(new WoodBlockStateProvider(generator));
-			generator.addProvider(new WoodBlockModelProvider(generator));
-			generator.addProvider(new WoodItemModelProvider(generator));
-			generator.addProvider(new ForestryBlockStateProvider(generator));
-			generator.addProvider(new ForestryBlockModelProvider(generator));
-			generator.addProvider(new ForestryItemModelProvider(generator));
-			generator.addProvider(new ForestryRecipeProvider(generator));
-			generator.addProvider(new ForestryMachineRecipeProvider(generator));
-			generator.addProvider(new ForestryLootModifierProvider(generator));
-		}
-	}
+        ForestryBlockTagsProvider blockTagsProvider = new ForestryBlockTagsProvider(generator, existingFileHelper);
+        generator.addProvider(event.includeServer(), blockTagsProvider);
+        generator.addProvider(event.includeServer(), new ForestryAdvancementProvider(generator));
+        generator.addProvider(event.includeServer(), new ForestryItemTagsProvider(generator, blockTagsProvider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ForestryBackpackTagProvider(generator, blockTagsProvider, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ForestryFluidTagsProvider(generator, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ForestryLootTableProvider(generator));
+        generator.addProvider(event.includeServer(), new WoodBlockStateProvider(generator));
+        generator.addProvider(event.includeServer(), new WoodBlockModelProvider(generator));
+        generator.addProvider(event.includeServer(), new WoodItemModelProvider(generator));
+        generator.addProvider(event.includeServer(), new ForestryBlockStateProvider(generator));
+        generator.addProvider(event.includeServer(), new ForestryBlockModelProvider(generator));
+        generator.addProvider(event.includeServer(), new ForestryItemModelProvider(generator));
+        generator.addProvider(event.includeServer(), new ForestryRecipeProvider(generator));
+        generator.addProvider(event.includeServer(), new ForestryMachineRecipeProvider(generator));
+        generator.addProvider(event.includeServer(), new ForestryLootModifierProvider(generator));
+    }
 
 	@OnlyIn(Dist.CLIENT)
 	private record Client(IEventBus modEventBus, NetworkHandler networkHandler) implements Runnable {
@@ -277,7 +275,7 @@ public class Forestry {
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
-		public static void registerObjects(RegistryEvent.Register<?> event) {
+		public static void registerObjects(RegisterEvent event) {
 			ModuleManager.getModuleHandler().registerObjects(event);
 		}
 

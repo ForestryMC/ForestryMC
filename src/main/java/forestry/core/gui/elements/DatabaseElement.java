@@ -8,8 +8,8 @@ import java.util.function.Function;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
 
 import forestry.api.genetics.EnumTolerance;
@@ -148,7 +148,7 @@ public class DatabaseElement extends ContainerElement {
 	private ContainerElement addSplitText(int width, String text, Style style) {
 		Font fontRenderer = Minecraft.getInstance().font;
 		ContainerElement vertical = GuiElementFactory.vertical(width, 0);
-		for (FormattedCharSequence splitText : fontRenderer.split(new TextComponent(text), width)) {
+		for (FormattedCharSequence splitText : fontRenderer.split(Component.literal(text), width)) {
 			vertical.label(splitText).setStyle(style);
 		}
 		return vertical;

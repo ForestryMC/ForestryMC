@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDefault<B, K> {
@@ -41,7 +41,7 @@ public abstract class ModelBlockCached<B extends Block, K> extends ModelBlockDef
 	}
 
 	@Override
-	protected BakedModel getModel(BlockState state, IModelData extraData) {
+	protected BakedModel getModel(BlockState state, ModelData extraData) {
 		K key = getWorldKey(state, extraData);
 
 		BakedModel model = worldCache.getIfPresent(key);

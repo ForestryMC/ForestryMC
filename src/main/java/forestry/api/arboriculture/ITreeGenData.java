@@ -6,10 +6,10 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 
 import com.mojang.authlib.GameProfile;
@@ -29,13 +29,13 @@ public interface ITreeGenData {
 	@Nullable
 	BlockPos canGrow(LevelAccessor world, BlockPos pos, int expectedGirth, int expectedHeight);
 
-	boolean setLeaves(LevelAccessor world, @Nullable GameProfile owner, BlockPos pos, Random random);
+	boolean setLeaves(LevelAccessor world, @Nullable GameProfile owner, BlockPos pos, RandomSource random);
 
 	boolean setLogBlock(LevelAccessor world, BlockPos pos, Direction facing);
 
 	boolean allowsFruitBlocks();
 
-	boolean trySpawnFruitBlock(LevelAccessor world, Random rand, BlockPos pos);
+	boolean trySpawnFruitBlock(LevelAccessor world, RandomSource rand, BlockPos pos);
 
 	IGenome getGenome();
 }

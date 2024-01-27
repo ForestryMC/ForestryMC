@@ -31,7 +31,7 @@ public class ItemInventoryBackpackPaged extends ItemInventoryBackpack implements
 	@Override
 	public void flipPage(ServerPlayer player, short page) {
 		ItemStack heldItem = player.getItemInHand(player.getUsedItemHand());
-		NetworkHooks.openGui(player, new ItemBackpackNaturalist.ContainerProvider(heldItem), b -> {
+		NetworkHooks.openScreen(player, new ItemBackpackNaturalist.ContainerProvider(heldItem), b -> {
 
 		});
 	}

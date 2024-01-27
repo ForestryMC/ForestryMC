@@ -6,17 +6,17 @@ import java.util.Collections;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import forestry.core.proxy.Proxies;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import forestry.api.core.IBlockProvider;
-import forestry.core.proxy.Proxies;
+import net.minecraftforge.registries.RegisterEvent;
 
 public interface IBlockFeature<B extends Block, I extends BlockItem> extends IItemFeature<I>, IBlockProvider<B, I> {
 
@@ -60,29 +60,24 @@ public interface IBlockFeature<B extends Block, I extends BlockItem> extends IIt
 
 	@Override
 	default void create() {
-		Supplier<B> blockConstructor = getBlockConstructor();
-		B block = blockConstructor.get();
-		block.setRegistryName(getModId(), getIdentifier());
+        B block = getBlockConstructor().get();
 		setBlock(block);
 		Function<B, I> constructor = getItemBlockConstructor();
 		if (constructor != null) {
-			I item = constructor.apply(block);
-			if (item.getRegistryName() == null && block.getRegistryName() != null) {
-				item.setRegistryName(block.getRegistryName());
-			}
-			setItem(item);
+            setItem(constructor.apply(block));
 		}
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
-		IItemFeature.super.register(event);
-		IForgeRegistry<T> registry = event.getRegistry();
-		Class<T> superType = registry.getRegistrySuperType();
-		if (Block.class.isAssignableFrom(superType) && hasBlock()) {
-			registry.register((T) block());
-			Proxies.common.registerBlock(block());
+	default void register(RegisterEvent event) {
+        IItemFeature.super.register(event);
+
+		if (hasBlock()) {
+            event.register(Registry.BLOCK_REGISTRY, helper -> {
+                helper.register(new ResourceLocation(getModId(), getIdentifier()), block());
+                Proxies.common.registerBlock(block());
+            });
 		}
 	}
 

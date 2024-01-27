@@ -6,18 +6,16 @@ import java.util.function.Consumer;
 
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public interface ITextInstance<I extends ITextInstance<?, ?, ?>, S, R> {
 	default I text(String text) {
-		return add(new TextComponent(text));
+		return add(Component.literal(text));
 	}
 
 	default I translated(String text, Object... args) {
-		return add(new TranslatableComponent(text, args));
+		return add(Component.translatable(text, args));
 	}
 
 	default I style(ChatFormatting... formatting) {

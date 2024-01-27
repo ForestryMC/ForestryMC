@@ -11,7 +11,6 @@
 package forestry.core.gui.ledgers;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -61,9 +60,9 @@ public class ClimateLedger extends Ledger {
 
 	@Override
 	public Component getTooltip() {
-		return new TextComponent("T: ")
+		return Component.literal("T: ")
 			.append(AlleleManager.climateHelper.toDisplay(tile.getTemperature()))
-			.append(new TextComponent(" / H: "))
+			.append(Component.literal(" / H: "))
 			.append(AlleleManager.climateHelper.toDisplay(tile.getHumidity()));
 	}
 

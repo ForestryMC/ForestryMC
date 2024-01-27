@@ -19,7 +19,7 @@ public interface ISqueezerRecipe extends IForestryRecipe {
 	RecipeType<ISqueezerRecipe> TYPE = RecipeManagers.create("forestry:squeezer");
 
 	class Companion {
-		@ObjectHolder("forestry:squeezer")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:squeezer")
 		public static final RecipeSerializer<ISqueezerRecipe> SERIALIZER = null;
 	}
 

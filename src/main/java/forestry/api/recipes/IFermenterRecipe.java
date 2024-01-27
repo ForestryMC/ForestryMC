@@ -18,7 +18,7 @@ public interface IFermenterRecipe extends IForestryRecipe, Comparable<IFermenter
 	RecipeType<IFermenterRecipe> TYPE = RecipeManagers.create("forestry:fermenter");
 
 	class Companion {
-		@ObjectHolder("forestry:fermenter")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:fermenter")
 		public static final RecipeSerializer<IFermenterRecipe> SERIALIZER = null;
 	}
 

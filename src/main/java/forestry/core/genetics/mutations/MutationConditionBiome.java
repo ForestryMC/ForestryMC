@@ -16,7 +16,6 @@ import java.util.Set;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -49,11 +48,11 @@ public class MutationConditionBiome implements IMutationCondition {
 	public Component getDescription() {
 		if (validBiomeTypes.size() > 1) {
 			String biomeTypes = Arrays.toString(validBiomeTypes.toArray()).toLowerCase(Locale.ENGLISH);
-			return new TranslatableComponent("for.mutation.condition.biome.multiple", biomeTypes);
+			return Component.translatable("for.mutation.condition.biome.multiple", biomeTypes);
 		} else {
 			Biome.BiomeCategory firstCategory = validBiomeTypes.iterator().next();
 			String biomeType = firstCategory.toString().toLowerCase(Locale.ENGLISH);
-			return new TranslatableComponent("for.mutation.condition.biome.single", biomeType);
+			return Component.translatable("for.mutation.condition.biome.single", biomeType);
 		}
 	}
 }

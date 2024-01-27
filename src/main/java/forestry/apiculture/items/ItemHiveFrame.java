@@ -17,7 +17,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,7 +64,7 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 		super.appendHoverText(stack, world, tooltip, advanced);
 		beeModifier.addInformation(stack, world, tooltip, advanced);
 		if (!stack.isDamaged()) {
-			tooltip.add(new TranslatableComponent("item.forestry.durability", stack.getMaxDamage()));
+			tooltip.add(Component.translatable("item.forestry.durability", stack.getMaxDamage()));
 		}
 	}
 
@@ -89,8 +88,8 @@ public class ItemHiveFrame extends ItemForestry implements IHiveFrame {
 
 		@OnlyIn(Dist.CLIENT)
 		public void addInformation(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag advanced) {
-			tooltip.add(new TranslatableComponent("item.forestry.bee.modifier.production", production));
-			tooltip.add(new TranslatableComponent("item.forestry.bee.modifier.genetic.decay", geneticDecay));
+			tooltip.add(Component.translatable("item.forestry.bee.modifier.production", production));
+			tooltip.add(Component.translatable("item.forestry.bee.modifier.genetic.decay", geneticDecay));
 		}
 	}
 }

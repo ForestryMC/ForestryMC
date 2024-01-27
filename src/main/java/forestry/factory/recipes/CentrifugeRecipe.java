@@ -14,8 +14,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.Random;
-
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -24,11 +23,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.registries.ForgeRegistryEntry;
-
 import forestry.api.recipes.ICentrifugeRecipe;
-
-import forestry.api.recipes.ICentrifugeRecipe.Product;
 
 public class CentrifugeRecipe implements ICentrifugeRecipe {
 
@@ -57,7 +52,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getProducts(Random random) {
+	public NonNullList<ItemStack> getProducts(RandomSource random) {
 		NonNullList<ItemStack> products = NonNullList.create();
 
 		for (Product entry : this.outputs) {
@@ -83,7 +78,7 @@ public class CentrifugeRecipe implements ICentrifugeRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CentrifugeRecipe> {
+	public static class Serializer implements RecipeSerializer<CentrifugeRecipe> {
 
 		@Override
 		public CentrifugeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

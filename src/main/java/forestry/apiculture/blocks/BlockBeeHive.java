@@ -19,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -98,13 +99,12 @@ public class BlockBeeHive extends BaseEntityBlock {
 		BlockPos pos = new BlockPos(builder.getParameter(LootContextParams.ORIGIN));
 		ItemStack tool = builder.getParameter(LootContextParams.TOOL);
 		int fortune = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
-		ServerLevel world = builder.getLevel();
-		return getDrops(world, pos, fortune);
+        return getDrops(builder.getLevel(), pos, fortune);
 	}
 
-	private NonNullList<ItemStack> getDrops(BlockGetter world, BlockPos pos, int fortune) {
+	private NonNullList<ItemStack> getDrops(ServerLevel world, BlockPos pos, int fortune) {
 		NonNullList<ItemStack> drops = NonNullList.create();
-		Random random = world instanceof Level ? ((Level) world).getRandom() : RANDOM;
+		RandomSource random = world.getRandom();
 
 		List<IHiveDrop> hiveDrops = getDropsForHive();
 		Collections.shuffle(hiveDrops);

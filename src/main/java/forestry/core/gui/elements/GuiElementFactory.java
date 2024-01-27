@@ -7,7 +7,6 @@ import java.util.Map;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -63,7 +62,7 @@ public class GuiElementFactory implements ResourceManagerReloadListener {
 		recessiveStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.recessive")));
 		guiStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.screen")));
 		guiTitleStyle = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.title")));
-		databaseTitle = Style.EMPTY.withColor(TextColor.fromRgb(0xcfb53b)).setUnderlined(true);
+		databaseTitle = Style.EMPTY.withColor(TextColor.fromRgb(0xcfb53b)).withUnderlined(true);
 		binomial = Style.EMPTY.withColor(TextColor.fromRgb(ColourProperties.INSTANCE.get("gui.beealyzer.binomial")));
 	}
 
@@ -153,11 +152,11 @@ public class GuiElementFactory implements ResourceManagerReloadListener {
 			case UP_1, UP_2, UP_3, UP_4, UP_5 -> layout.add(createUpSymbol(0, -1));
 			default -> {
 				layout.add(createNoneSymbol(0, -1));
-				component = new TextComponent("(0)");
+				component = Component.literal("(0)");
 			}
 		}
 		if (component == null) {
-			component = new TextComponent("(")
+			component = Component.literal("(")
 					.append(toleranceAllele.getDisplayName())
 					.append(")");
 		}

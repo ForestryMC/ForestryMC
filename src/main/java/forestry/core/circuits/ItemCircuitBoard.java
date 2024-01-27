@@ -46,7 +46,7 @@ public class ItemCircuitBoard extends ItemForestry implements IColoredItem {
 
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-		if (this.allowdedIn(tab)) {
+		if (this.allowedIn(tab)) {
 			subItems.add(createCircuitboard(type, null, new ICircuit[]{}));
 		}
 	}

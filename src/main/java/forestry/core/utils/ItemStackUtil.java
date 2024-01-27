@@ -11,7 +11,6 @@
 
 package forestry.core.utils;
 
-import java.util.Random;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
@@ -19,6 +18,7 @@ import javax.annotation.Nullable;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.Container;
@@ -240,7 +240,7 @@ public abstract class ItemStackUtil {
 	}
 
 
-	public static ItemStack copyWithRandomSize(ItemStack template, int max, Random rand) {
+	public static ItemStack copyWithRandomSize(ItemStack template, int max, RandomSource rand) {
 		int size = max <= 0 ? 1 : rand.nextInt(max);
 		ItemStack copy = template.copy();
 		copy.setCount(Math.min(size, template.getMaxStackSize()));

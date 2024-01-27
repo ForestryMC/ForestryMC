@@ -16,7 +16,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -56,7 +55,7 @@ public class GuiTextBox extends EditBox {
 	}
 
 	public boolean moreLinesAllowed() {
-		return fontRenderer.split(new TextComponent(getCursoredText()), width).size() * fontRenderer.lineHeight < height;
+		return fontRenderer.split(Component.literal(getCursoredText()), width).size() * fontRenderer.lineHeight < height;
 	}
 
 	private String getCursoredText() {

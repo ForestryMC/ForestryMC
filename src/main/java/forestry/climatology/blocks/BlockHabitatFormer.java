@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +38,7 @@ public class BlockHabitatFormer extends BlockBase<BlockTypeClimatology> implemen
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
+	public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, RandomSource rand) {
 		TileHabitatFormer former = TileUtil.getTile(worldIn, pos, TileHabitatFormer.class);
 		if (former != null) {
 			ParticleRender.addClimateParticles(worldIn, pos, rand, former.getTemperature(), former.getHumidity());

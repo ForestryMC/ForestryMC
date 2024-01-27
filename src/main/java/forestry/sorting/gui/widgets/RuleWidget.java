@@ -8,7 +8,6 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -65,7 +64,7 @@ public class RuleWidget extends Widget implements ISelectableProvider<IFilterRul
 
 	@Override
 	public Component getName(IFilterRuleType selectable) {
-		return new TranslatableComponent("for.gui.filter." + selectable.getUID());
+		return Component.translatable("for.gui.filter." + selectable.getUID());
 	}
 
 	@Override

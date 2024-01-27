@@ -21,7 +21,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.IFabricatorRecipe;
 
@@ -63,7 +62,7 @@ public class FabricatorRecipe implements IFabricatorRecipe {
 		return recipe;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FabricatorRecipe> {
+	public static class Serializer implements RecipeSerializer<FabricatorRecipe> {
 
 		@Override
 		public FabricatorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

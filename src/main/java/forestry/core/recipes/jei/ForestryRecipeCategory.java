@@ -5,7 +5,6 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public abstract class ForestryRecipeCategory<T> implements IRecipeCategory<T> {
 	private final IDrawable background;
@@ -13,12 +12,12 @@ public abstract class ForestryRecipeCategory<T> implements IRecipeCategory<T> {
 
 	public ForestryRecipeCategory(IDrawable background, String unlocalizedName) {
 		this.background = background;
-		this.localizedName = new TranslatableComponent(unlocalizedName).getString();
+		this.localizedName = Component.translatable(unlocalizedName).getString();
 	}
 
 	@Override
 	public Component getTitle() {
-		return new TranslatableComponent(localizedName);
+		return Component.translatable(localizedName);
 	}
 
 	@Override

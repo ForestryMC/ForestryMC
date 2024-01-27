@@ -7,6 +7,7 @@ import forestry.core.blocks.IBlockTypeTesr;
 import forestry.core.render.RenderForestryItemProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 public class ItemBlockBase<B extends Block> extends ItemBlockForestry<B> {
 	public final IBlockTypeTesr blockTypeTesr;

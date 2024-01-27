@@ -6,17 +6,16 @@
 package forestry.api.arboriculture;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.Level;
@@ -111,7 +110,7 @@ public interface IFruitProvider extends ISetupListener {
 	/**
 	 * @return Short, human-readable identifier used in the treealyzer.
 	 */
-	BaseComponent getDescription();
+	MutableComponent getDescription();
 
 	/**
 	 * @return The location of the pod model in the "modid:pods/" folder.
@@ -150,7 +149,7 @@ public interface IFruitProvider extends ISetupListener {
 	 *
 	 * @return true if a fruit block was spawned, false otherwise.
 	 */
-	boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, Random rand, BlockPos pos);
+	boolean trySpawnFruitBlock(IGenome genome, LevelAccessor world, RandomSource rand, BlockPos pos);
 
 	/**
 	 * Can be used to register the sprite/s that can be returned with

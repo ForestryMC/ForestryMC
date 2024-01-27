@@ -41,18 +41,6 @@ public class CentrifugeRecipeCategory extends ForestryRecipeCategory<ICentrifuge
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, centrifuge);
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.CENTRIFUGE.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends ICentrifugeRecipe> getRecipeClass() {
-		return ICentrifugeRecipe.class;
-	}
-
 	@Override
 	public RecipeType<ICentrifugeRecipe> getRecipeType() {
 		return ForestryRecipeType.CENTRIFUGE;

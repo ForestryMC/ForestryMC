@@ -19,7 +19,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.IHygroregulatorRecipe;
 import forestry.factory.recipes.RecipeSerializers;
@@ -68,7 +67,7 @@ public class HygroregulatorRecipe implements IHygroregulatorRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<HygroregulatorRecipe> {
+	public static class Serializer implements RecipeSerializer<HygroregulatorRecipe> {
 
 		@Override
 		public HygroregulatorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

@@ -17,6 +17,7 @@ import java.util.Random;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -140,7 +141,7 @@ public class BlockSapling extends BlockTreeContainer implements BonemealableBloc
 	}
 
 	@Override
-	public boolean isBonemealSuccess(Level world, Random rand, BlockPos pos, BlockState state) {
+	public boolean isBonemealSuccess(Level world, RandomSource rand, BlockPos pos, BlockState state) {
 		if (world.random.nextFloat() >= 0.45F) {
 			return false;
 		}
@@ -149,7 +150,7 @@ public class BlockSapling extends BlockTreeContainer implements BonemealableBloc
 	}
 
 	@Override
-	public void performBonemeal(ServerLevel world, Random rand, BlockPos pos, BlockState blockState) {
+	public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState blockState) {
 		TileSapling saplingTile = TileUtil.getTile(world, pos, TileSapling.class);
 		if (saplingTile != null) {
 			saplingTile.tryGrow(rand, true);

@@ -26,7 +26,6 @@ import net.minecraft.client.gui.chat.NarratorChatListener;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 public class MutationConditionRequiresResource implements IMutationCondition {
@@ -54,7 +53,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 		if (acceptedBlockStates.isEmpty()) {
 			return NarratorChatListener.NO_TITLE;
 		} else {
-			return new TranslatableComponent("for.mutation.condition.resource", acceptedBlockStates.get(0).getBlock().getName());
+			return Component.translatable("for.mutation.condition.resource", acceptedBlockStates.get(0).getBlock().getName());
 		}
 	}
 }

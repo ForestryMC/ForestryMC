@@ -52,7 +52,7 @@ public class HiveGenGround extends HiveGen {
 		pos.set(topPos);
 
 		BlockState blockState = world.getBlockState(pos);
-		while (isTreeBlock(blockState, world, pos) || canReplace(blockState, world, pos)) {
+		while (isTreeBlock(blockState) || canReplace(blockState, world, pos)) {
 			pos.move(Direction.DOWN);
 			if (pos.getY() <= 0) {
 				return null;

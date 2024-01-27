@@ -119,7 +119,7 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 
 	@Override
 	protected void openGui(ServerPlayer player) {
-		NetworkHooks.openGui(player, this, p -> {
+		NetworkHooks.openScreen(player, this, p -> {
 			PacketBufferForestry fP = new PacketBufferForestry(p);
 			fP.writeEntityById(this);
 			fP.writeBoolean(true);

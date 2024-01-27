@@ -22,8 +22,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
@@ -84,16 +82,16 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 			EnumTemperature temperature = EnumTemperature.getFromBiome(currentBiome, player.blockPosition());
 			EnumHumidity humidity = EnumHumidity.getFromValue(currentBiome.getDownfall());
 
-			list.add(new TranslatableComponent("for.gui.currentBiome")
-					.append(new TextComponent(": "))
-					.append(new TranslatableComponent("biome." + currentBiome.getRegistryName().toString().replace(":", "."))));
+			list.add(Component.translatable("for.gui.currentBiome")
+					.append(Component.literal(": "))
+					.append(Component.translatable("biome." + currentBiome.getRegistryName().toString().replace(":", "."))));
 
-			list.add(new TranslatableComponent("for.gui.temperature")
-					.append(new TextComponent(": "))
+			list.add(Component.translatable("for.gui.temperature")
+					.append(Component.literal(": "))
 					.append(AlleleManager.climateHelper.toDisplay(temperature)));
 
-			list.add(new TranslatableComponent("for.gui.humidity")
-				.append(new TextComponent(": "))
+			list.add(Component.translatable("for.gui.humidity")
+				.append(Component.literal(": "))
 				.append(AlleleManager.climateHelper.toDisplay(humidity)));
 		}
 	}

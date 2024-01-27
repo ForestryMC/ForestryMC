@@ -15,6 +15,7 @@ import java.util.Random;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 
 import com.mojang.authlib.GameProfile;
@@ -26,13 +27,13 @@ public class TreeBlockTypeLeaf implements ITreeBlockType {
 	@Nullable
 	private final GameProfile owner;
 	@Nullable
-	private final Random rand;
+	private final RandomSource rand;
 
 	public TreeBlockTypeLeaf(ITreeGenData tree, @Nullable GameProfile owner) {
 		this(tree, owner, null);
 	}
 
-	public TreeBlockTypeLeaf(ITreeGenData tree, @Nullable GameProfile owner, @Nullable Random rand) {
+	public TreeBlockTypeLeaf(ITreeGenData tree, @Nullable GameProfile owner, @Nullable RandomSource rand) {
 		this.tree = tree;
 		this.owner = owner;
 		this.rand = rand;

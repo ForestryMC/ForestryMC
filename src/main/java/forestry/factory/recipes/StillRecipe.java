@@ -19,7 +19,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.IStillRecipe;
 
@@ -61,7 +60,7 @@ public class StillRecipe implements IStillRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<StillRecipe> {
+	public static class Serializer implements RecipeSerializer<StillRecipe> {
 
 		@Override
 		public StillRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

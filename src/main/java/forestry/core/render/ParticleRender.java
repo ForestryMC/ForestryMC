@@ -1,13 +1,13 @@
 package forestry.core.render;
 
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.Direction;
@@ -53,7 +53,7 @@ public class ParticleRender {
 		}
 
 		Minecraft mc = Minecraft.getInstance();
-		ParticleStatus particleSetting = mc.options.particles;
+		ParticleStatus particleSetting = mc.options.particles().get();
 
 		if (particleSetting == ParticleStatus.MINIMAL) { // minimal
 			return world.random.nextInt(10) == 0;
@@ -124,7 +124,7 @@ public class ParticleRender {
 		//		effectRenderer.addEffect(new ParticleHoneydust(world, x, y, z, 0, 0, 0));
 	}
 
-	public static void addClimateParticles(Level worldIn, BlockPos pos, Random rand, EnumTemperature temperature, EnumHumidity humidity) {
+	public static void addClimateParticles(Level worldIn, BlockPos pos, RandomSource rand, EnumTemperature temperature, EnumHumidity humidity) {
 		if (!shouldSpawnParticle(worldIn)) {
 			return;
 		}
@@ -155,7 +155,7 @@ public class ParticleRender {
 		//TODO particles
 	}
 
-	public static void addTransformParticles(Level worldIn, BlockPos pos, Random rand) {
+	public static void addTransformParticles(Level worldIn, BlockPos pos, RandomSource rand) {
 		if (!shouldSpawnParticle(worldIn)) {
 			return;
 		}
@@ -239,7 +239,7 @@ public class ParticleRender {
 		}
 	}
 
-	public static void addPortalFx(Level world, BlockPos pos, Random rand) {
+	public static void addPortalFx(Level world, BlockPos pos, RandomSource rand) {
 		if (!shouldSpawnParticle(world)) {
 			return;
 		}

@@ -50,18 +50,6 @@ public class FermenterRecipeCategory extends ForestryRecipeCategory<IFermenterRe
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, fermenter);
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.FERMENTER.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends IFermenterRecipe> getRecipeClass() {
-		return IFermenterRecipe.class;
-	}
-
 	@Override
 	public RecipeType<IFermenterRecipe> getRecipeType() {
 		return ForestryRecipeType.FERMENTER;

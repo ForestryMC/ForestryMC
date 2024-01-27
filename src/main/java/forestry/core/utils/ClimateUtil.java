@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -198,12 +197,12 @@ public class ClimateUtil implements IClimateHelper {
 
 	@Override
 	public Component toDisplay(EnumTemperature temperature) {
-		return new TranslatableComponent("for.gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
+		return Component.translatable("for.gui." + temperature.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	@Override
 	public Component toDisplay(EnumHumidity humidity) {
-		return new TranslatableComponent("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
+		return Component.translatable("for.gui." + humidity.toString().toLowerCase(Locale.ENGLISH));
 	}
 
 	public static void addClimateErrorStates(EnumTemperature temperature, EnumHumidity humidity,

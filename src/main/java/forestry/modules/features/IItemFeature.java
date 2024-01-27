@@ -2,14 +2,14 @@ package forestry.modules.features;
 
 import java.util.function.Supplier;
 
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import forestry.api.core.IItemProvider;
 import forestry.core.proxy.Proxies;
+import net.minecraftforge.registries.RegisterEvent;
 
 public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider<I>, net.minecraft.world.level.ItemLike {
 
@@ -32,18 +32,16 @@ public interface IItemFeature<I extends Item> extends IModFeature, IItemProvider
 
 	@Override
 	default void create() {
-		I item = getItemConstructor().get();
-		item.setRegistryName(getModId(), getIdentifier());
-		setItem(item);
+        setItem(getItemConstructor().get());
 	}
 
 	@SuppressWarnings("unchecked")
-	default <T extends IForgeRegistryEntry<T>> void register(RegistryEvent.Register<T> event) {
-		IForgeRegistry<T> registry = event.getRegistry();
-		Class<T> superType = registry.getRegistrySuperType();
-		if (Item.class.isAssignableFrom(superType) && hasItem()) {
-			registry.register((T) item());
-			Proxies.common.registerItem(item());
-		}
+	default void register(RegisterEvent event) {
+		if (hasItem()) {
+			event.register(Registry.ITEM_REGISTRY, helper -> {
+				helper.register(new ResourceLocation(getModId(), getIdentifier()), item());
+				Proxies.common.registerItem(item());
+			});
+        }
 	}
 }

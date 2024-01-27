@@ -24,6 +24,7 @@ import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,7 +33,7 @@ import com.mojang.datafixers.util.Pair;
 
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
@@ -99,8 +100,8 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand, IModelData extraData) {
-			IAlleleTreeSpecies species = extraData.getData(TileSapling.TREE_SPECIES);
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData) {
+			IAlleleTreeSpecies species = extraData.get(TileSapling.TREE_SPECIES);
 			if (species == null) {
 				species = TreeDefinition.Oak.getSpecies();
 			}
@@ -108,8 +109,8 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
-			return getQuads(state, side, rand, EmptyModelData.INSTANCE);
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+			return getQuads(state, side, rand, ModelData.EMPTY);
 		}
 
 		@Override

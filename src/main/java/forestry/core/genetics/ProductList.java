@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.BlockPos;
@@ -43,7 +43,7 @@ public final class ProductList implements IDynamicProductList {
 	}
 
 	@Override
-	public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+	public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, RandomSource rand) {
 		constantProducts.forEach(product -> {
 			if (rand.nextFloat() < modifier.apply(product)) {
 				stacks.add(product.copyStack());
@@ -53,7 +53,7 @@ public final class ProductList implements IDynamicProductList {
 	}
 
 	@Override
-	public void addProducts(BlockGetter reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+	public void addProducts(BlockGetter reader, BlockPos pos, NonNullList<ItemStack> stacks, Function<Product, Float> modifier, RandomSource rand) {
 		constantProducts.forEach(product -> {
 			if (rand.nextFloat() < modifier.apply(product)) {
 				stacks.add(product.copyStack());
@@ -98,7 +98,7 @@ public final class ProductList implements IDynamicProductList {
 		}
 
 		@Override
-		public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, Random rand) {
+		public void addProducts(NonNullList<ItemStack> stacks, Function<Product, Float> modifier, RandomSource rand) {
 			//Add nothing because this is the unbaked version, only implemented so this and the baked version can be stored in one variable.
 		}
 

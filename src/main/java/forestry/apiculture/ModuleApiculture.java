@@ -136,7 +136,7 @@ public class ModuleApiculture extends BlankForestryModule {
 			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
 		}
 
-		modEventBus.addGenericListener(Feature.class, ApicultureFeatures::registerFeatures);
+		modEventBus.addListener(ApicultureFeatures::registerFeatures);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
 	}
 

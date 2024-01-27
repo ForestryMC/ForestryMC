@@ -33,7 +33,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -68,7 +67,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-		if (this.allowdedIn(tab)) {
+		if (this.allowedIn(tab)) {
 			// empty
 			subItems.add(new ItemStack(this));
 
@@ -109,11 +108,11 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				String exactTranslationKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + '.' + fluid.getFluid().getRegistryName();
 				return Translator.tryTranslate(exactTranslationKey, () -> {
 							String grammarKey = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".grammar";
-							return new TranslatableComponent(grammarKey, fluid.getDisplayName());
+							return Component.translatable(grammarKey, fluid.getDisplayName());
 						});
 			} else {
 				String unlocalizedname = Constants.TRANSLATION_KEY_ITEM + type.getSerializedName() + ".empty";
-				return new TranslatableComponent(unlocalizedname);
+				return Component.translatable(unlocalizedname);
 			}
 		}
 		return super.getName(stack);

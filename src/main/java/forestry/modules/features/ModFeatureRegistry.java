@@ -35,9 +35,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.network.IContainerFactory;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import forestry.api.core.IBlockSubtype;
 import forestry.api.core.IItemSubtype;
@@ -47,6 +45,7 @@ import forestry.api.storage.IBackpackDefinition;
 import forestry.core.config.Constants;
 import forestry.modules.ForestryModuleUids;
 import forestry.storage.ModuleBackpacks;
+import net.minecraftforge.registries.RegisterEvent;
 
 //TODO: Sort Registries and Features
 public class ModFeatureRegistry {
@@ -113,7 +112,7 @@ public class ModFeatureRegistry {
 				.collect(Collectors.toSet());
 	}
 
-	public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
+	public void onRegister(RegisterEvent event) {
 		for (ModuleFeatures features : modules.values()) {
 			features.onRegister(event);
 		}
@@ -129,7 +128,7 @@ public class ModFeatureRegistry {
 	private static class ModuleFeatures implements IFeatureRegistry {
 		private final HashMap<String, IModFeature> featureById = new LinkedHashMap<>();
 		private final Multimap<FeatureType, IModFeature> featureByType = LinkedListMultimap.create();
-		private final Multimap<FeatureType, Consumer<RegistryEvent>> registryListeners = LinkedListMultimap.create();
+		private final Multimap<FeatureType, Consumer<RegisterEvent>> registryListeners = LinkedListMultimap.create();
 		private final String moduleID;
 
 		public ModuleFeatures(String moduleID) {
@@ -207,7 +206,7 @@ public class ModFeatureRegistry {
 		}
 
 		@Override
-		public void addRegistryListener(FeatureType type, Consumer<RegistryEvent> listener) {
+		public void addRegistryListener(FeatureType type, Consumer<RegisterEvent> listener) {
 			registryListeners.put(type, listener);
 		}
 
@@ -266,15 +265,14 @@ public class ModFeatureRegistry {
 			feature.create();
 		}
 
-		public <T extends IForgeRegistryEntry<T>> void onRegister(RegistryEvent.Register<T> event) {
+		public void onRegister(RegisterEvent event) {
 			for (FeatureType type : FeatureType.values()) {
 				for (IModFeature feature : featureByType.get(type)) {
 					feature.register(event);
 				}
-				if (type.superType.isAssignableFrom(event.getRegistry().getRegistrySuperType())) {
-					registryListeners.get(type).forEach(listener -> listener.accept(event));
-				}
-			}
+
+                registryListeners.get(type).forEach(listener -> listener.accept(event));
+            }
 		}
 
 		@OnlyIn(Dist.CLIENT)

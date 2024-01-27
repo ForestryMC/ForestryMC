@@ -2,7 +2,6 @@ package forestry.api.genetics.gatgets;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -30,7 +29,7 @@ public interface IDatabaseTab<I extends IIndividual> {
 	 * Can be used to give the tab a custom tooltip.
 	 */
 	default Component getTooltip(I individual) {
-		return TextComponent.EMPTY;
+		return Component.empty();
 	}
 
 	default DatabaseMode getMode() {

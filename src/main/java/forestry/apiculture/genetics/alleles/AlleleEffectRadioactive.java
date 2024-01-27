@@ -13,6 +13,7 @@ package forestry.apiculture.genetics.alleles;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
@@ -67,7 +68,7 @@ public class AlleleEffectRadioactive extends AlleleEffectThrottled {
 
 	private static IEffectData destroyEnvironment(IGenome genome, IEffectData storedData, IBeeHousing housing) {
 		Level world = housing.getWorldObj();
-		Random rand = world.random;
+		RandomSource rand = world.random;
 
 		Vec3i area = VectUtil.scale(genome.getActiveValue(BeeChromosomes.TERRITORY), 2);
 		Vec3i offset = VectUtil.scale(area, -1 / 2.0f);

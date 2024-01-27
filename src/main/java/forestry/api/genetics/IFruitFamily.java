@@ -5,7 +5,7 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
-import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
 
 public interface IFruitFamily {
 
@@ -17,7 +17,7 @@ public interface IFruitFamily {
 	/**
 	 * @return Localized family name for user display.
 	 */
-	BaseComponent getName();
+	Component getName();
 
 	/**
 	 * A scientific-y name for this fruit family
@@ -29,6 +29,6 @@ public interface IFruitFamily {
 	/**
 	 * @return Localized description of this fruit family. (May be null.)
 	 */
-	BaseComponent getDescription();
+	Component getDescription();
 
 }

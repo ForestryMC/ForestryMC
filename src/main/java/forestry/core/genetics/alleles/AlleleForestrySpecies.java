@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -74,7 +73,7 @@ public abstract class AlleleForestrySpecies extends Allele implements IAlleleFor
 
 	@Override
 	public Component getDescription() {
-		return new TranslatableComponent(description);
+		return Component.translatable(description);
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public abstract class TileBase extends TileForestry {
 		if (!hasGui()) {
 			return;
 		}
-		NetworkHooks.openGui(player, this, pos);
+		NetworkHooks.openScreen(player, this, pos);
 	}
 
 	protected boolean hasGui() {

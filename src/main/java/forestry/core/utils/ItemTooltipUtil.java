@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 
@@ -25,8 +24,7 @@ public class ItemTooltipUtil {
 		String unlocalizedName = stack.getDescriptionId();
 		String tooltipKey = unlocalizedName + ".tooltip";
 		if (Translator.canTranslateToLocal(tooltipKey)) {
-			TranslatableComponent tooltipInfo = new TranslatableComponent(tooltipKey);
-			tooltip.add(tooltipInfo.withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable(tooltipKey).withStyle(ChatFormatting.GRAY));
 			/*Minecraft minecraft = Minecraft.getInstance();
 			List<ITextProperties> tooltipInfoWrapped = minecraft.fontRenderer.split(tooltipInfo, 150);
 			tooltipInfoWrapped.forEach(s -> {
@@ -41,7 +39,7 @@ public class ItemTooltipUtil {
 
 	@OnlyIn(Dist.CLIENT)
 	public static void addShiftInformation(ItemStack stack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(new TranslatableComponent("for.gui.tooltip.tmi", "< %s >").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
+		tooltip.add(Component.translatable("for.gui.tooltip.tmi", "< %s >").withStyle(ChatFormatting.ITALIC, ChatFormatting.GRAY));
 	}
 
 	@Nullable

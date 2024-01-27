@@ -26,7 +26,6 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import forestry.api.recipes.ICarpenterRecipe;
 
@@ -82,7 +81,7 @@ public class CarpenterRecipe implements ICarpenterRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CarpenterRecipe> {
+	public static class Serializer implements RecipeSerializer<CarpenterRecipe> {
 
 		@Override
 		public CarpenterRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

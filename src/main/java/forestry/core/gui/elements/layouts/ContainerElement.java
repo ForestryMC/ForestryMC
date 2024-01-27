@@ -12,9 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -219,7 +217,7 @@ public class ContainerElement extends GuiElement {
 	}
 
 	public LabelElement translated(String key, Object... args) {
-		return label(new TranslatableComponent(key, args));
+		return label(Component.translatable(key, args));
 	}
 
 	public LabelElement.Builder labelLine(MutableComponent component) {
@@ -227,11 +225,11 @@ public class ContainerElement extends GuiElement {
 	}
 
 	public LabelElement.Builder translatedLine(String key, Object... args) {
-		return labelLine(new TranslatableComponent(key, args));
+		return labelLine(Component.translatable(key, args));
 	}
 
 	public LabelElement.Builder labelLine(String text) {
-		return labelLine(new TextComponent(text));
+		return labelLine(Component.literal(text));
 	}
 
 	public LabelElement label(String text) {

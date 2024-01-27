@@ -69,7 +69,7 @@ public class TileBeeHouse extends TileBeeHousingBase {
 
 	@Override
 	public void openGui(ServerPlayer player, BlockPos pos) {
-		NetworkHooks.openGui(player, this, p -> {
+		NetworkHooks.openScreen(player, this, p -> {
 			PacketBufferForestry forestryP = new PacketBufferForestry(p);
 			forestryP.writeBlockPos(pos);
 			forestryP.writeBoolean(false);

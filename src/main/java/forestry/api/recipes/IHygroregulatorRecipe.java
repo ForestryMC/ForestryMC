@@ -16,7 +16,7 @@ public interface IHygroregulatorRecipe extends IForestryRecipe {
 	RecipeType<IHygroregulatorRecipe> TYPE = RecipeManagers.create("forestry:hygroregulator");
 
 	class Companion {
-		@ObjectHolder("forestry:hygroregulator")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:hygroregulator")
 		public static final RecipeSerializer<IHygroregulatorRecipe> SERIALIZER = null;
 	}
 

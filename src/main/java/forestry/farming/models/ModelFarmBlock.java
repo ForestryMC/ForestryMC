@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 
 import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
@@ -36,7 +36,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, Pair<BlockFarm, 
 	}
 
 	@Override
-	protected Pair<BlockFarm, State> getWorldKey(BlockState state, IModelData extraData) {
+	protected Pair<BlockFarm, State> getWorldKey(BlockState state, ModelData extraData) {
 		Block block = state.getBlock();
 		if (block instanceof BlockFarm) {
 			return Pair.of((BlockFarm) block, state.getValue(BlockFarm.STATE));
@@ -45,7 +45,7 @@ public class ModelFarmBlock extends ModelBlockCached<BlockFarm, Pair<BlockFarm, 
 	}
 
 	@Override
-	protected void bakeBlock(BlockFarm blockFarm, IModelData extraData, Pair<BlockFarm, State> key, ModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockFarm blockFarm, ModelData extraData, Pair<BlockFarm, State> key, ModelBaker baker, boolean inventory) {
 		EnumFarmBlockType type = key.getLeft().getType();
 		EnumFarmMaterial material = key.getLeft().getFarmMaterial();
 		TextureAtlasSprite[] textures = material.getSprites();

@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import forestry.api.apiculture.genetics.BeeChromosomes;
 import forestry.api.apiculture.genetics.IAlleleBeeSpecies;
@@ -51,7 +50,7 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
 			IAlleleValue<Integer> speedAllele = getActive(genome);
-			TranslatableComponent customSpeed = new TranslatableComponent("for.tooltip.worker." +
+			Component customSpeed = Component.translatable("for.tooltip.worker." +
 					speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
 			if (Translator.canTranslate(customSpeed)) {
 				toolTip.singleLine()

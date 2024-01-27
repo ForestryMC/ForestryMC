@@ -51,7 +51,7 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<IFabricator
 		ItemStack fabricator = new ItemStack(fabricatorFeatureBlock.block());
 		this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, fabricator);
 		this.manager = manager;
-		this.craftingGridHelper = guiHelper.createCraftingGridHelper(0);
+		this.craftingGridHelper = guiHelper.createCraftingGridHelper();
 	}
 
 	private static Map<Fluid, List<IFabricatorSmeltingRecipe>> getSmeltingInputs(@Nullable RecipeManager manager) {
@@ -67,18 +67,6 @@ public class FabricatorRecipeCategory extends ForestryRecipeCategory<IFabricator
 				});
 
 		return smeltingInputs;
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.FABRICATOR.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends IFabricatorRecipe> getRecipeClass() {
-		return ForestryRecipeType.FABRICATOR.getRecipeClass();
 	}
 
 	@Override

@@ -4,7 +4,6 @@ import java.util.function.Supplier;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.locale.Language;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class Translator {
 	private Translator() {}
@@ -18,15 +17,15 @@ public class Translator {
 	}
 
 	public static String translateToLocalFormatted(String key, Object... format) {
-		return new TranslatableComponent(key, format).getString();
+		return Component.translatable(key, format).getString();
 	}
 
 	public static Component tryTranslate(String optionalKey, String defaultKey) {
-		return tryTranslate(() -> new TranslatableComponent(optionalKey), () -> new TranslatableComponent(defaultKey));
+		return tryTranslate(() -> Component.translatable(optionalKey), () -> Component.translatable(defaultKey));
 	}
 
 	public static Component tryTranslate(String optionalKey, Supplier<Component> defaultKey) {
-		return tryTranslate(() -> new TranslatableComponent(optionalKey), defaultKey);
+		return tryTranslate(() -> Component.translatable(optionalKey), defaultKey);
 	}
 
 	/**

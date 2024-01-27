@@ -8,7 +8,6 @@ package forestry.api.circuits;
 import java.util.List;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public interface ICircuit {
 	String getUID();
@@ -16,7 +15,7 @@ public interface ICircuit {
 	String getTranslationKey();
 
 	default Component getDisplayName() {
-		return new TranslatableComponent(getTranslationKey());
+		return Component.translatable(getTranslationKey());
 	}
 
 	boolean isCircuitable(Object tile);

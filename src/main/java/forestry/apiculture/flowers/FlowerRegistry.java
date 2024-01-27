@@ -30,10 +30,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.tags.Tag;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
@@ -221,7 +221,7 @@ public final class FlowerRegistry implements IFlowerRegistry, IFlowerGrowthHelpe
 	}
 
 	@Nullable
-	public Flower getRandomPlantableFlower(String flowerType, Random rand) {
+	public Flower getRandomPlantableFlower(String flowerType, RandomSource rand) {
 		WeightedCollection<Flower> chancesMap = getFlowerChances(flowerType);
 		return chancesMap.getRandom(rand);
 	}

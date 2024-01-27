@@ -17,7 +17,7 @@ public interface IFabricatorSmeltingRecipe extends IForestryRecipe {
 	RecipeType<IFabricatorSmeltingRecipe> TYPE = RecipeManagers.create("forestry:fabricator_smelting");
 
 	class Companion {
-		@ObjectHolder("forestry:fabricator_smelting")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:fabricator_smelting")
 		public static final RecipeSerializer<IFabricatorSmeltingRecipe> SERIALIZER = null;
 	}
 

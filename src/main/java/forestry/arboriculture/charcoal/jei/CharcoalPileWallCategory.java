@@ -42,18 +42,6 @@ public class CharcoalPileWallCategory extends ForestryRecipeCategory<ICharcoalPi
 		this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CharcoalBlocks.WOOD_PILE.stack());
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return CharcoalJeiPlugin.RECIPE_TYPE.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends ICharcoalPileWall> getRecipeClass() {
-		return ICharcoalPileWall.class;
-	}
-
 	@Override
 	public RecipeType<ICharcoalPileWall> getRecipeType() {
 		return CharcoalJeiPlugin.RECIPE_TYPE;

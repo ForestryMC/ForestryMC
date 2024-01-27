@@ -5,8 +5,7 @@
  ******************************************************************************/
 package forestry.api.recipes;
 
-import java.util.Random;
-
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -20,7 +19,7 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
 	RecipeType<ICentrifugeRecipe> TYPE = RecipeManagers.create("forestry:centrifuge");
 
 	class Companion {
-		@ObjectHolder("forestry:centrifuge")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:centrifuge")
 		public static final RecipeSerializer<ICentrifugeRecipe> SERIALIZER = null;
 	}
 
@@ -37,7 +36,7 @@ public interface ICentrifugeRecipe extends IForestryRecipe {
 	/**
 	 * Returns the randomized products from processing one input item.
 	 **/
-	NonNullList<ItemStack> getProducts(Random random);
+	NonNullList<ItemStack> getProducts(RandomSource random);
 
 	/**
 	 * Returns a list of all possible products and their estimated probabilities (0.0 to 1.0],

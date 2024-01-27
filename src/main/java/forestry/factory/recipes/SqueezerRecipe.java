@@ -81,7 +81,7 @@ public class SqueezerRecipe implements ISqueezerRecipe {
 		return id;
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<SqueezerRecipe> {
+	public static class Serializer implements RecipeSerializer<SqueezerRecipe> {
 
 		@Override
 		public SqueezerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

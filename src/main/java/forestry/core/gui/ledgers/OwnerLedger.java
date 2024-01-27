@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -61,7 +60,7 @@ public class OwnerLedger extends Ledger {
 
 	@Override
 	public Component getTooltip() {
-		return new TranslatableComponent("for.gui.owner")
+		return Component.translatable("for.gui.owner")
 				.append(": " + PlayerUtil.getOwnerName(owner));
 	}
 }

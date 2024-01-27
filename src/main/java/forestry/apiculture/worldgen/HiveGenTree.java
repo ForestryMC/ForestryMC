@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 public class HiveGenTree extends HiveGen {
@@ -22,7 +23,7 @@ public class HiveGenTree extends HiveGen {
 	public boolean isValidLocation(WorldGenLevel world, BlockPos pos) {
 		BlockPos posAbove = pos.above();
 		BlockState blockStateAbove = world.getBlockState(posAbove);
-		if (!isTreeBlock(blockStateAbove, world, posAbove)) {
+		if (!isTreeBlock(blockStateAbove)) {
 			return false;
 		}
 
@@ -34,26 +35,28 @@ public class HiveGenTree extends HiveGen {
 
 	@Override
 	public BlockPos getPosForHive(WorldGenLevel world, int x, int z) {
+		ChunkAccess chunk = world.getChunk(x >> 4, z >> 4);
+
 		// get top leaf block
-		final BlockPos topPos = world.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, new BlockPos(x, 0, z)).below();
-		if (topPos.getY() <= 0) {
+		int height = chunk.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x & 0xFF, z & 0xFF);
+
+		if (height <= chunk.getMinBuildHeight()) {
 			return null;
 		}
 
-		BlockState blockState = world.getBlockState(topPos);
-		if (!isTreeBlock(blockState, world, topPos)) {
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, height, z);
+		BlockState blockState = chunk.getBlockState(pos);
+
+		if (!isTreeBlock(blockState)) {
 			return null;
 		}
 
 		// get to the bottom of the leaves
-		final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		pos.set(topPos);
 		do {
 			pos.move(Direction.DOWN);
-			blockState = world.getBlockState(pos);
-		} while (isTreeBlock(blockState, world, pos));
+			blockState = chunk.getBlockState(pos);
+		} while (isTreeBlock(blockState));
 
 		return pos.immutable();
 	}
-
 }

@@ -11,9 +11,9 @@
 package forestry.arboriculture.worldgen;
 
 import java.util.Collections;
-import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
@@ -28,7 +28,7 @@ public class FeatureEbony extends FeatureTree {
 	}
 
 	@Override
-	public Set<BlockPos> generateTrunk(LevelAccessor world, Random rand, TreeBlockTypeLog wood, BlockPos startPos) {
+	public Set<BlockPos> generateTrunk(LevelAccessor world, RandomSource rand, TreeBlockTypeLog wood, BlockPos startPos) {
 		int trunksGenerated = 0;
 
 		for (int x = 0; x < girth; x++) {
@@ -58,7 +58,7 @@ public class FeatureEbony extends FeatureTree {
 	}
 
 	@Override
-	protected void generateLeaves(LevelAccessor world, Random rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
+	protected void generateLeaves(LevelAccessor world, RandomSource rand, TreeBlockTypeLeaf leaf, TreeContour contour, BlockPos startPos) {
 		for (int times = 0; times < 2 * height; times++) {
 			int h = 2 * girth + rand.nextInt(height - girth);
 			if (rand.nextBoolean() && h < height / 2) {

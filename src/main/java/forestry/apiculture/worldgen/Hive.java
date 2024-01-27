@@ -13,9 +13,9 @@ package forestry.apiculture.worldgen;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,6 +29,10 @@ public final class Hive {
 
 	private final IHiveDescription hiveDescription;
 	private final List<IHiveDrop> drops = new ArrayList<>();
+
+	public IHiveDescription getHiveDescription() {
+		return hiveDescription;
+	}
 
 	public Hive(IHiveDescription hiveDescription) {
 		this.hiveDescription = hiveDescription;
@@ -50,7 +54,7 @@ public final class Hive {
 		return hiveDescription.getGenChance();
 	}
 
-	public void postGen(WorldGenLevel world, Random rand, BlockPos pos) {
+	public void postGen(WorldGenLevel world, RandomSource rand, BlockPos pos) {
 		hiveDescription.postGen(world, rand, pos);
 	}
 

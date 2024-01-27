@@ -10,19 +10,6 @@
  ******************************************************************************/
 package forestry.arboriculture.models;
 
-import javax.annotation.Nullable;
-import java.util.Objects;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
-
 import forestry.arboriculture.blocks.BlockAbstractLeaves;
 import forestry.arboriculture.blocks.BlockForestryLeaves;
 import forestry.arboriculture.features.ArboricultureBlocks;
@@ -32,6 +19,17 @@ import forestry.core.models.ModelBlockCached;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.proxy.Proxies;
 import forestry.core.utils.ResourceUtil;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.ModelData;
+
+import javax.annotation.Nullable;
+import java.util.Objects;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeaves.Key> {
@@ -76,11 +74,11 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	@Override
-	protected Key getWorldKey(BlockState state, IModelData extraData) {
+	protected Key getWorldKey(BlockState state, ModelData extraData) {
 		return getKey(extraData);
 	}
 
-	private Key getKey(IModelData extraData) {
+	private Key getKey(ModelData extraData) {
 		boolean fancy = Proxies.render.fancyGraphicsEnabled();
 
 		ResourceLocation leafLocation = TileLeaves.getLeaveSprite(extraData, fancy);
@@ -92,7 +90,7 @@ public class ModelLeaves extends ModelBlockCached<BlockForestryLeaves, ModelLeav
 	}
 
 	@Override
-	protected void bakeBlock(BlockForestryLeaves block, IModelData extraData, Key key, ModelBaker baker, boolean inventory) {
+	protected void bakeBlock(BlockForestryLeaves block, ModelData extraData, Key key, ModelBaker baker, boolean inventory) {
 		// Render the plain leaf block.
 		baker.addBlockModel(key.leafSprite, BlockAbstractLeaves.FOLIAGE_COLOR_INDEX);
 

@@ -20,6 +20,7 @@ import java.util.Random;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 
@@ -30,6 +31,13 @@ public final class VectUtil {
 	}
 
 	public static BlockPos getRandomPositionInArea(Random random, Vec3i area) {
+		int x = random.nextInt(area.getX());
+		int y = random.nextInt(area.getY());
+		int z = random.nextInt(area.getZ());
+		return new BlockPos(x, y, z);
+	}
+
+	public static BlockPos getRandomPositionInArea(RandomSource random, Vec3i area) {
 		int x = random.nextInt(area.getX());
 		int y = random.nextInt(area.getY());
 		int z = random.nextInt(area.getZ());

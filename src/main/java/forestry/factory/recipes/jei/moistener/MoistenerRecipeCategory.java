@@ -59,18 +59,6 @@ public class MoistenerRecipeCategory extends ForestryRecipeCategory<IMoistenerRe
 				.toList();
 	}
 
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid() {
-		return ForestryRecipeType.MOISTENER.getUid();
-	}
-
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends IMoistenerRecipe> getRecipeClass() {
-		return ForestryRecipeType.MOISTENER.getRecipeClass();
-	}
-
 	@Override
 	public RecipeType<IMoistenerRecipe> getRecipeType() {
 		return ForestryRecipeType.MOISTENER;

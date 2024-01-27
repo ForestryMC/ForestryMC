@@ -37,6 +37,7 @@ import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -91,7 +92,7 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 			BakedModel bakedModel = bakery.bake(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), transform, spriteGetter);
 			if (bakedModel != null) {
 				//Set the crate color index to 100
-				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L), EmptyModelData.INSTANCE)) {
+				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L), ModelData.EMPTY)) {
 					bakedQuads.add(new BakedQuad(quad.getVertices(), 100, quad.getDirection(), quad.getSprite(), quad.isShade()));
 				}
 			}
@@ -102,7 +103,7 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 		if (contentModel == null) {
 			model = new CrateBakedModel(quads, contained);
 		} else {
-			quads.addAll(contentModel.getQuads(null, null, new Random(0), EmptyModelData.INSTANCE));
+			quads.addAll(contentModel.getQuads(null, null, new Random(0), ModelData.EMPTY));
 			model = new CrateBakedModel(quads);
 		}
 		return new PerspectiveMapWrapper(model, ClientManager.getInstance().getDefaultItemState());

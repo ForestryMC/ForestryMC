@@ -80,7 +80,7 @@ public abstract class InventoryUtil {
 			ItemStack oldStack = inventory.getItem(i);
 			ItemStack removed = inventory.removeItem(i, count);
 
-			if (stowContainer && oldStack.getItem().hasContainerItem(oldStack)) {
+			if (stowContainer && oldStack.getItem().hasCraftingRemainingItem(oldStack)) {
 				stowContainerItem(removed, inventory, i, player);
 			}
 
@@ -147,7 +147,7 @@ public abstract class InventoryUtil {
 					ItemStack removed = inventory.removeItem(j, stackToRemove.getCount());
 					stackToRemove.shrink(removed.getCount());
 
-					if (stowContainer && stackToRemove.getItem().hasContainerItem(stackToRemove)) {
+					if (stowContainer && stackToRemove.getItem().hasCraftingRemainingItem(stackToRemove)) {
 						stowContainerItem(removed, inventory, j, player);
 					}
 
@@ -363,11 +363,11 @@ public abstract class InventoryUtil {
 	}
 
 	public static void stowContainerItem(ItemStack itemstack, Container stowing, int slotIndex, @Nullable Player player) {
-		if (!itemstack.getItem().hasContainerItem(itemstack)) {
+		if (!itemstack.getItem().hasCraftingRemainingItem(itemstack)) {
 			return;
 		}
 
-		ItemStack container = ForgeHooks.getContainerItem(itemstack);
+		ItemStack container = ForgeHooks.getCraftingRemainingItem(itemstack);
 		if (!container.isEmpty()) {
 			if (!tryAddStack(stowing, container, slotIndex, 1, true)) {
 				if (!tryAddStack(stowing, container, true) && player != null) {

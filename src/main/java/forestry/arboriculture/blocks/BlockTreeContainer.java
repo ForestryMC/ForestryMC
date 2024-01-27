@@ -12,6 +12,7 @@ package forestry.arboriculture.blocks;
 
 import java.util.Random;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -36,8 +37,7 @@ public abstract class BlockTreeContainer extends BaseEntityBlock {
 	}
 
 	@Override
-	public void tick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
-
+	public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource rand) {
 		if (rand.nextFloat() > 0.1) {
 			return;
 		}

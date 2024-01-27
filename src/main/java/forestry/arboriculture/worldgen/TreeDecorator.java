@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
@@ -24,6 +23,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -101,7 +101,7 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 		return SPECIES;
 	}
 
-	private static void generateBiomeCache(WorldGenLevel world, Random rand) {
+	private static void generateBiomeCache(WorldGenLevel world, RandomSource rand) {
 		for (IAlleleTreeSpecies species : getSpecies()) {
 			IAllele[] template = TreeManager.treeRoot.getTemplate(species.getRegistryName().toString());
 			IGenome genome = TreeManager.treeRoot.templateAsIndividual(template).getGenome();
@@ -120,7 +120,7 @@ public class TreeDecorator extends Feature<NoneFeatureConfiguration> {
 	@Override
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
 		WorldGenLevel level = context.level();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		BlockPos pos = context.origin();
 
 		float globalRarity = TreeConfig.getSpawnRarity();

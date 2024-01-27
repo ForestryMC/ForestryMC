@@ -80,7 +80,7 @@ public class BlockGeneticFilter extends BlockForestry implements EntityBlock {
 			if (TileUtil.isUsableByPlayer(playerIn, tile)) {
 				if (!worldIn.isClientSide) {
 					ServerPlayer sPlayer = (ServerPlayer) playerIn;
-					NetworkHooks.openGui(sPlayer, tile, pos);
+					NetworkHooks.openScreen(sPlayer, tile, pos);
 				}
 				return InteractionResult.SUCCESS;
 			}

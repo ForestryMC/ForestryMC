@@ -48,7 +48,7 @@ public abstract class ItemWithGui extends ItemForestry {
 	}
 
 	protected void openGui(ServerPlayer player, ItemStack stack) {
-		NetworkHooks.openGui(player, new ContainerProvider(stack), buffer -> writeContainerData(player, stack, new PacketBufferForestry(buffer)));
+		NetworkHooks.openScreen(player, new ContainerProvider(stack), buffer -> writeContainerData(player, stack, new PacketBufferForestry(buffer)));
 	}
 
 	protected void writeContainerData(ServerPlayer player, ItemStack stack, PacketBufferForestry buffer) {

@@ -19,7 +19,7 @@ public interface ICarpenterRecipe extends IForestryRecipe {
 	RecipeType<ICarpenterRecipe> TYPE = RecipeManagers.create("forestry:carpenter");
 
 	class Companion {
-		@ObjectHolder("forestry:carpenter")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:carpenter")
 		public static final RecipeSerializer<ICarpenterRecipe> SERIALIZER = null;
 	}
 

@@ -15,7 +15,6 @@ import java.util.Optional;
 
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
@@ -83,8 +82,8 @@ public class GuiSolderingIron extends GuiForestry<ContainerSolderingIron> {
 	public void init() {
 		super.init();
 
-		addRenderableWidget(new Button(leftPos + 12, topPos + 10, 12, 18, new TextComponent("<"), b -> ContainerSolderingIron.regressSelection(0)));
-		addRenderableWidget(new Button(leftPos + 130, topPos + 10, 12, 18, new TextComponent(">"), b -> ContainerSolderingIron.advanceSelection(0)));
+		addRenderableWidget(new Button(leftPos + 12, topPos + 10, 12, 18, Component.literal("<"), b -> ContainerSolderingIron.regressSelection(0)));
+		addRenderableWidget(new Button(leftPos + 130, topPos + 10, 12, 18, Component.literal(">"), b -> ContainerSolderingIron.advanceSelection(0)));
 	}
 
 	@Override

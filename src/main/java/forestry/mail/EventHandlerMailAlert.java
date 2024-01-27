@@ -42,7 +42,7 @@ public class EventHandlerMailAlert {
 
 	@SubscribeEvent
 	public void handlePlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 
 		IMailAddress address = PostManager.postRegistry.getMailAddress(player.getGameProfile());
 		POBox pobox = PostRegistry.getOrCreatePOBox(WorldUtils.asServer(player.level), address);

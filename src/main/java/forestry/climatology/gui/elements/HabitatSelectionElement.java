@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 
@@ -110,8 +110,8 @@ public class HabitatSelectionElement extends ContainerElement {
 				former.sendClimateUpdate();
 			});*/
 			addTooltip((tooltip, element, mouseX, mouseY) -> {
-				tooltip.add(new TextComponent("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature())));
-				tooltip.add(new TextComponent("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity())));
+				tooltip.add(Component.literal("T: " + StringUtil.floatAsPercent(climate.climateState.getTemperature())));
+				tooltip.add(Component.literal("H: " + StringUtil.floatAsPercent(climate.climateState.getHumidity())));
 			});
 		}
 

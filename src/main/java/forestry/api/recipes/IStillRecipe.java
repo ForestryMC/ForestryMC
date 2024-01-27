@@ -16,7 +16,7 @@ public interface IStillRecipe extends IForestryRecipe {
 	RecipeType<IStillRecipe> TYPE = RecipeManagers.create("forestry:still");
 
 	class Companion {
-		@ObjectHolder("forestry:still")
+		@ObjectHolder(registryName = "recipe_serializer", value = "forestry:still")
 		public static final RecipeSerializer<IStillRecipe> SERIALIZER = null;
 	}
 
