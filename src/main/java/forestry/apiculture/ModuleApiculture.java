@@ -29,7 +29,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.Feature;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -130,10 +129,11 @@ public class ModuleApiculture extends BlankForestryModule {
 		ApicultureParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
 		if (Config.enableVillagers) {
-			RegisterVillager.Registers.POINTS_OF_INTEREST.register(modEventBus);
-			RegisterVillager.Registers.PROFESSIONS.register(modEventBus);
-			MinecraftForge.EVENT_BUS.register(new RegisterVillager.Events());
+			RegisterVillager.POINTS_OF_INTEREST.register(modEventBus);
+			RegisterVillager.PROFESSIONS.register(modEventBus);
+			MinecraftForge.EVENT_BUS.addListener(RegisterVillager::villagerTrades);
 		}
 
 		modEventBus.addListener(ApicultureFeatures::registerFeatures);
@@ -209,53 +209,6 @@ public class ModuleApiculture extends BlankForestryModule {
 		BeeManager.uncommonVillageBees.add(BeeDefinition.FOREST.getRainResist().getGenome());
 		BeeManager.uncommonVillageBees.add(BeeDefinition.COMMON.getGenome());
 		BeeManager.uncommonVillageBees.add(BeeDefinition.VALIANT.getGenome());
-
-		/*if (Config.enableVillagers) {
-			// Register villager stuff
-			VillageCreationApiculture villageHandler = new VillageCreationApiculture();
-			VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-			villagerRegistry.registerVillageCreationHandler(villageHandler);
-
-			villagerApiarist = new VillagerProfession(Constants.ID_VILLAGER_APIARIST, Constants.TEXTURE_SKIN_BEEKPEEPER, Constants.TEXTURE_SKIN_ZOMBIE_BEEKPEEPER);
-			IForgeRegistry<VillagerProfession> villagerProfessions = ForgeRegistries.PROFESSIONS;
-			villagerProfessions.register(villagerApiarist);
-
-			ItemStack wildcardPrincess = ApicultureItems.BEE_PRINCESS.stack();
-			ItemStack wildcardDrone = ApicultureItems.BEE_DRONE.stack();
-			ItemStack apiary = ApicultureBlocks.BASE.stack(BlockTypeApiculture.APIARY);
-			ItemStack provenFrames = ApicultureItems.FRAME_PROVEN.stack();
-			ItemStack monasticDrone = BeeDefinition.MONASTIC.getMemberStack(EnumBeeType.DRONE);
-			ItemStack endDrone = BeeDefinition.ENDED.getMemberStack(EnumBeeType.DRONE);
-			ItemStack propolis = ApicultureItems.PROPOLIS.stack(EnumPropolis.NORMAL);
-
-			VillagerRegistry.VillagerCareer apiaristCareer = new VillagerRegistry.VillagerCareer(villagerApiarist, "apiarist");
-			VillagerTrades.VILLAGER_DEFAULT_TRADES.put(villagerApiarist, new Int2ObjectOpenHashMap<>(
-				ImmutableMap.of(
-					1,
-					new VillagerTrades.ITrade[]{
-						new VillagerApiaristTrades.GiveRandomCombsForItems(3, new ItemStack(Items.WHEAT, 10), 16, 2),
-						new VillagerApiaristTrades.GiveRandomCombsForItems(3, new ItemStack(Items.CARROT, 10), 16, 2),
-						new VillagerApiaristTrades.GiveRandomCombsForItems(3, new ItemStack(Items.POTATO, 10), 16, 2)
-					},
-					2,
-					new VillagerTrades.ITrade[]{
-						new VillagerTrades.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 4), new ItemStack(items.smoker), null),
-						new VillagerTrades.GiveItemForLogsAndEmeralds(apiary, new VillagerEntity.PriceInfo(1, 1), new VillagerEntity.PriceInfo(16, 32), new VillagerEntity.PriceInfo(1, 2)),
-						new VillagerApiaristTrades.GiveRandomHiveDroneForItems(propolis, null, wildcardDrone, new VillagerEntity.PriceInfo(2, 4))
-					},
-					3,
-					new VillagerTrades.ITrade[]{
-						new VillagerTrades.GiveEmeraldForItems(wildcardPrincess, null),
-						new VillagerTrades.GiveItemForEmeralds(new VillagerEntity.PriceInfo(1, 2), provenFrames, new VillagerEntity.PriceInfo(1, 6))
-					},
-					4,
-					new VillagerTrades.ITrade[]{
-						new VillagerTrades.GiveItemForItemAndEmerald(wildcardPrincess, null, new VillagerEntity.PriceInfo(10, 64), monasticDrone, null),
-						new VillagerTrades.GiveItemForTwoItems(wildcardPrincess, null, new ItemStack(Items.ENDER_EYE), new VillagerEntity.PriceInfo(12, 16), endDrone, null)
-					}
-				)
-			));
-		}*/
 	}
 
 	@Override
