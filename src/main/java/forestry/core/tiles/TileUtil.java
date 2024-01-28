@@ -26,8 +26,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
@@ -140,7 +140,7 @@ public abstract class TileUtil {
 		}
 
 
-		LazyOptional<IItemHandler> itemCap = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
+		LazyOptional<IItemHandler> itemCap = tile.getCapability(ForgeCapabilities.ITEM_HANDLER, side);
 		if (itemCap.isPresent()) {
 			return itemCap.orElse(null);
 		}

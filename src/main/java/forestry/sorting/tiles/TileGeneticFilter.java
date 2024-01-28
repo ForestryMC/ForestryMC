@@ -20,8 +20,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -189,7 +189,7 @@ public class TileGeneticFilter extends TileForestry implements IStreamableGui, I
 
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && facing != null) {
+		if (capability == ForgeCapabilities.ITEM_HANDLER && facing != null) {
 			return LazyOptional.of(() -> new ItemHandlerFilter(this, facing)).cast();
 		} else if (capability == GeneticCapabilities.FILTER_LOGIC) {
 			return LazyOptional.of(() -> logic).cast();

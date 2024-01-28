@@ -25,7 +25,7 @@ import net.minecraft.world.level.Level;
 
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
@@ -231,7 +231,7 @@ public final class FluidHelper {
 					FluidStack transfer = FluidUtil.tryFluidTransfer(fluidDestination, containerFluidHandler, maxAmount, true);
 					if (!transfer.isEmpty()) {
 						if (player != null) {
-							SoundEvent soundevent = transfer.getFluid().getAttributes().getEmptySound(transfer);
+							SoundEvent soundevent = transfer.getFluid().getFluidType().getEmptySound(transfer);
 							player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
 						}
 						ItemStack resultContainer = containerFluidHandler.getContainer();

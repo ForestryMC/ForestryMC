@@ -2,10 +2,10 @@ package forestry.core.render;
 
 import forestry.core.items.ItemBlockBase;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.util.NonNullLazy;
 
-public class RenderForestryItemProperties implements IItemRenderProperties {
+public class RenderForestryItemProperties implements IClientItemExtensions {
 	private final NonNullLazy<RenderForestryItem> renderItem;
 
 	// initializeClient is called during ItemBlockBase super
@@ -14,11 +14,11 @@ public class RenderForestryItemProperties implements IItemRenderProperties {
 	// - itemBlock.blockTypeTesr filled in after 
 	// - getEntityModels not available until later in loading
 	public RenderForestryItemProperties(ItemBlockBase<?> itemBlock) {
-		this.renderItem = NonNullLazy.of(() -> itemBlock.blockTypeTesr.initRenderItem());
+		this.renderItem = NonNullLazy.of(itemBlock.blockTypeTesr::initRenderItem);
 	}
 
 	@Override
-	public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+	public BlockEntityWithoutLevelRenderer getCustomRenderer() {
 		return renderItem.get();
 	}
 }

@@ -17,8 +17,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import forestry.core.fluids.ITankManager;
 import forestry.core.tiles.ILiquidTankTile;
@@ -40,7 +40,7 @@ public class TileFarmValve extends TileFarm implements ILiquidTankTile {
 		if (superCap.isPresent()) {
 			return superCap;
 		}
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		if (capability == ForgeCapabilities.FLUID_HANDLER) {
 			return LazyOptional.of(this::getTankManager).cast();
 		}
 		return LazyOptional.empty();

@@ -92,7 +92,7 @@ public class TankWidget extends Widget {
 			Fluid fluid = contents.getFluid();
 
 			if (fluid != null) {
-				ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
+				ResourceLocation fluidStill = fluid.getFluidType().getStillTexture(contents);
 				TextureAtlasSprite fluidStillSprite = null;
 				if (fluidStill != null) {
 					fluidStillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
@@ -101,7 +101,7 @@ public class TankWidget extends Widget {
 					fluidStillSprite = ResourceUtil.getMissingTexture();
 				}
 
-				int fluidColor = fluid.getAttributes().getColor(contents);
+				int fluidColor = fluid.getFluidType().getColor(contents);
 
 				int scaledAmount = contents.getAmount() * height / tank.getCapacity();
 				if (contents.getAmount() > 0 && scaledAmount < 1) {

@@ -28,13 +28,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import forestry.api.core.IErrorLogic;
@@ -213,7 +212,7 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 			if (currentRecipe == null || !currentRecipe.matchEmpty(emptyCan, resource)) {
 				currentRecipe = BottlerRecipe.createFillingRecipe(resource.getFluid(), emptyCan);
 				if (currentRecipe != null) {
-					float viscosityMultiplier = resource.getFluid().getAttributes().getViscosity(resource) / 1000.0f;
+					float viscosityMultiplier = resource.getFluid().getFluidType().getViscosity(resource) / 1000.0f;
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
 					int fillAmount = Math.min(currentRecipe.fluid.getAmount(), resource.getAmount());
@@ -235,7 +234,7 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 				currentRecipe = BottlerRecipe.createEmptyingRecipe(filledCan);
 				if (currentRecipe != null) {
 					FluidStack resource = currentRecipe.fluid;
-					float viscosityMultiplier = resource.getFluid().getAttributes().getViscosity(resource) / 1000.0f;
+					float viscosityMultiplier = resource.getFluid().getFluidType().getViscosity(resource) / 1000.0f;
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
 					int fillAmount = Math.min(currentRecipe.fluid.getAmount(), resource.getAmount());
@@ -351,7 +350,7 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 	//TODO - is this efficient? or even correct?
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+		if (capability == ForgeCapabilities.FLUID_HANDLER) {
 			return LazyOptional.of(() -> tankManager).cast();
 		}
 		return super.getCapability(capability, facing);

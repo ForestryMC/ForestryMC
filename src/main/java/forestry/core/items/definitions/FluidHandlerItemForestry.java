@@ -3,7 +3,7 @@ package forestry.core.items.definitions;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.ItemStack;
 
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
@@ -36,7 +36,7 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 		}
 
 		if (containerType == EnumContainerType.CAPSULE) {
-			return fluid.getAttributes().getTemperature(fluidStack) < 310.15; // melting point of wax in kelvin
+			return fluid.getFluidType().getTemperature(fluidStack) < 310.15; // melting point of wax in kelvin
 		}
 		return true;
 	}

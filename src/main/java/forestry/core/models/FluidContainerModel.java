@@ -25,8 +25,8 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class FluidContainerModel extends AbstractItemModel {
 	private final BakedModel emptyModel;
@@ -39,7 +39,7 @@ public class FluidContainerModel extends AbstractItemModel {
 
 	@Override
 	protected BakedModel getOverride(BakedModel model, ItemStack stack) {
-		return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).map((handler) -> {
+		return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null).map((handler) -> {
 			FluidStack fluid = handler.getFluidInTank(0);
 			return fluid.isEmpty() ? emptyModel : filledModel;
 		}).orElse(emptyModel);

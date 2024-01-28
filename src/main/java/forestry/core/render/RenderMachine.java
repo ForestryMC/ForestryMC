@@ -22,7 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 
 import java.awt.Color;
 import java.util.EnumMap;
@@ -148,7 +148,7 @@ public class RenderMachine implements IForestryRenderer<TileBase> {
 			return;
 		}
 
-		FluidAttributes attributes = renderInfo.getFluidStack().getFluid().getAttributes();
+		FluidType attributes = renderInfo.getFluidStack().getFluid().getFluidType();
 		int color = attributes.getColor();
 		ForestryFluids definition = ForestryFluids.getFluidDefinition(renderInfo.getFluidStack().getFluid());
 		if (color < 0) {

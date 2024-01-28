@@ -15,7 +15,7 @@ import net.minecraft.world.level.material.Fluid;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -43,7 +43,7 @@ public class FluidComponent implements ICustomComponent {
 	public void render(PoseStack ms, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
 		ms.pushPose();
 		Fluid _fluid = fluidStack.getFluid();
-		FluidAttributes fluidAttributes = _fluid.getAttributes();
+		FluidType fluidAttributes = _fluid.getFluidType();
 		ResourceLocation fluidStill = fluidAttributes.getStillTexture(fluidStack);
 		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
 		ResourceLocation spriteLocation = sprite.getName();

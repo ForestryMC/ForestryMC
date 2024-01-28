@@ -43,7 +43,7 @@ public class BlockForestryFluid extends LiquidBlock {
 	private final Color color;
 
 	public BlockForestryFluid(FeatureFluid feature) {
-		super(feature::fluid, Block.Properties.of(feature.fluid().getAttributes().getTemperature() > 505 ? Material.LAVA : Material.WATER)
+		super(feature::fluid, Block.Properties.of(feature.fluid().getFluidType().getTemperature() > 505 ? Material.LAVA : Material.WATER)
 				.noCollission()
 				.strength(100.0F).noDrops());
 		this.feature = feature;
@@ -64,7 +64,7 @@ public class BlockForestryFluid extends LiquidBlock {
 			int i = blockState.getValue(LEVEL);
 
 			if (i > 0 && i < 8) {
-				if (getFluid().getAttributes().getViscosity(world, pos) < 5000 && rand.nextInt(64) == 0) {
+				if (getFluid().getFluidType().getViscosity(blockState.getFluidState(), world, pos) < 5000 && rand.nextInt(64) == 0) {
 					world.playLocalSound(x + 0.5D, y + 0.5D, z + 0.5D, SoundEvents.WATER_AMBIENT, SoundSource.BLOCKS, rand.nextFloat() * 0.25F + 0.75F, rand.nextFloat() + 0.5F, false);
 				}
 			} else if (rand.nextInt(10) == 0) {

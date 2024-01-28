@@ -17,7 +17,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.api.core.tooltips.ToolTip;
@@ -51,7 +51,7 @@ public class TankElement extends GuiElement {
 			ToolTip toolTip = new ToolTip();
 			int amount = contents.getAmount();
 			Fluid fluidType = contents.getFluid();
-			FluidAttributes attributes = fluidType.getAttributes();
+			FluidType attributes = fluidType.getFluidType();
 			Rarity rarity = attributes.getRarity(contents);
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
@@ -76,8 +76,8 @@ public class TankElement extends GuiElement {
 
 		if (contents.getAmount() > 0 && contents.getFluid() != null) {
 			Fluid fluid = contents.getFluid();
-			FluidAttributes attributes = fluid.getAttributes();
-			ResourceLocation fluidStill = fluid.getAttributes().getStillTexture(contents);
+			FluidType attributes = fluid.getFluidType();
+			ResourceLocation fluidStill = fluid.getFluidType().getStillTexture(contents);
 			TextureAtlasSprite fluidStillSprite = null;
 			if (fluidStill != null) {
 				fluidStillSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);

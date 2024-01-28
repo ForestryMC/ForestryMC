@@ -4,7 +4,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -94,7 +94,7 @@ public class PacketExtractItem extends ForestryPacket implements IForestryPacket
 			ItemStack extracted = itemHandler.extractItem(invIndex, count, true);
 			if (!extracted.isEmpty()) {
 				if ((flags & SHIFT) == SHIFT) {
-					IItemHandler playerInv = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElse(null);    //TODO unwrap should be fine
+					IItemHandler playerInv = player.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);    //TODO unwrap should be fine
 					//Test if the player has enough space
 					ItemStack remaining = ItemHandlerHelper.insertItem(playerInv, extracted, true);
 					if (remaining.isEmpty()) {

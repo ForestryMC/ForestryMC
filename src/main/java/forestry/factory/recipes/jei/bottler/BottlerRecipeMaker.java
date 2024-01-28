@@ -8,8 +8,8 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,7 +22,7 @@ public class BottlerRecipeMaker {
 		List<BottlerRecipe> recipes = new ArrayList<>();
 		for (ItemStack stack : ingredientManager.getAllIngredients(VanillaTypes.ITEM_STACK)) {
 			Optional<IFluidHandlerItem> drainFluidHandler = stack.copy()
-					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+					.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null)
 					.resolve();
 			if (drainFluidHandler.isPresent()) {
 				addDrainRecipes(recipes, drainFluidHandler.get(), stack);
@@ -42,7 +42,7 @@ public class BottlerRecipeMaker {
 		if (drainedFluid.isEmpty()) {
 			for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
 				IFluidHandlerItem currentFluidHandler = stack.copy()
-						.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+						.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null)
 						.resolve()
 						.orElseThrow();
 
@@ -72,7 +72,7 @@ public class BottlerRecipeMaker {
 	private static void addFillRecipes(List<BottlerRecipe> recipes, ItemStack stack) {
 		for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
 			IFluidHandlerItem currentFluidHandler = stack.copy()
-					.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+					.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM, null)
 					.resolve()
 					.orElseThrow();
 

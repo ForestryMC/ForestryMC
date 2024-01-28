@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import forestry.core.config.Constants;
@@ -34,7 +34,7 @@ public class FeatureFluid implements IFluidFeature {
 		this.block = builder.registry.block(() -> new BlockForestryFluid(this), "fluid_" + builder.identifier);
 		this.properties = new FluidProperties(builder);
 		ResourceLocation[] resources = properties().resources;
-		FluidAttributes.Builder attributes = FluidAttributes.builder(resources[0], resources[1])
+		FluidType.Builder attributes = FluidType.builder(resources[0], resources[1])
 				.density(properties().density)
 				.viscosity(properties().viscosity)
 				.temperature(properties().temperature);

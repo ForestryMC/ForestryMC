@@ -47,7 +47,7 @@ public class PipetteContents {
 	}
 
 	public void addTooltip(List<Component> list) {
-		MutableComponent descr = Component.translatable(contents.getFluid().getAttributes().getTranslationKey(contents));
+		MutableComponent descr = Component.translatable(contents.getFluid().getFluidType().getTranslationKey(contents));
 		descr.append(" (" + contents.getAmount() + " mb)");
 
 		list.add(descr);
