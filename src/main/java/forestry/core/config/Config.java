@@ -42,10 +42,6 @@ public class Config {
 	public static final boolean logTreePlacement = false;
 	public static final boolean enableVillagers = true;
 
-	// Retrogen
-	public static final boolean doRetrogen = false;
-	public static final boolean forceRetrogen = false;
-
 	// Performance
 	public static final boolean enableBackpackResupply = true;
 
