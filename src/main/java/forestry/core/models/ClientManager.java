@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
@@ -139,7 +140,7 @@ public class ClientManager {
 	}
 
 	public void registerModel(BakedModel model, Item item) {
-		customModels.add(new ModelEntry(new ModelResourceLocation(item.getRegistryName(), "inventory"), model));
+		customModels.add(new ModelEntry(new ModelResourceLocation(RegistryNameFinder.getRegistryName(item), "inventory"), model));
 	}
 
 	public void onBakeModels(ModelBakeEvent event) {
@@ -150,7 +151,7 @@ public class ClientManager {
 				registry.put(BlockModelShaper.stateToModelLocation(state), entry.model);
 			}
 			if (entry.item != null) {
-				ResourceLocation registryName = entry.item.getRegistryName();
+				ResourceLocation registryName = RegistryNameFinder.getRegistryName(entry.item);
 				if (registryName == null) {
 					continue;
 				}

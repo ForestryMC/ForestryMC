@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -63,13 +64,13 @@ public class FilteredTank extends StandardTank {
 		Set<ResourceLocation> set = new HashSet<>();
 		this.filters = () -> set;
 		for (Fluid fluid : filters) {
-			set.add(fluid.getRegistryName());
+			set.add(RegistryNameFinder.getRegistryName(fluid));
 		}
 		return this;
 	}
 
 	private boolean fluidMatchesFilter(FluidStack resource) {
-		return resource.getFluid() != Fluids.EMPTY && filters.get().contains(resource.getFluid().getRegistryName());
+		return resource.getFluid() != Fluids.EMPTY && filters.get().contains(RegistryNameFinder.getRegistryName(resource.getFluid()));
 	}
 
 	@Override

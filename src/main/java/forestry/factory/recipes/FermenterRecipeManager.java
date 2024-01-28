@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -87,14 +88,14 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 	@Override
 	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getFluidResource().getFluid().getRegistryName())
+				.map(recipe -> RegistryNameFinder.getRegistryName(recipe.getFluidResource().getFluid()))
 				.collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getOutput().getRegistryName())
+				.map(recipe -> RegistryNameFinder.getRegistryName(recipe.getOutput()))
 				.collect(Collectors.toSet());
 	}
 }

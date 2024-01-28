@@ -13,6 +13,7 @@ package forestry.apiculture.particles;
 import javax.annotation.Nonnull;
 import java.util.Locale;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
@@ -23,11 +24,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.particles.ParticleOptions.Deserializer;
-
 public class BeeTargetParticleData implements ParticleOptions {
 
-	public static final Deserializer<BeeTargetParticleData> DESERIALIZER = new Deserializer<BeeTargetParticleData>() {
+	public static final Deserializer<BeeTargetParticleData> DESERIALIZER = new Deserializer<>() {
 		@Nonnull
 		@Override
 		public BeeTargetParticleData fromCommand(@Nonnull ParticleType<BeeTargetParticleData> type, @Nonnull StringReader reader) throws CommandSyntaxException {
@@ -44,7 +43,10 @@ public class BeeTargetParticleData implements ParticleOptions {
 		}
 	};
 
-	public static Codec<BeeTargetParticleData> CODEC = RecordCodecBuilder.create(val -> val.group(Codec.INT.fieldOf("entity").forGetter(data -> data.entity), Codec.INT.fieldOf("color").forGetter(data -> data.color)).apply(val, BeeTargetParticleData::new));
+	public static Codec<BeeTargetParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.INT.fieldOf("entity").forGetter(data -> data.entity),
+			Codec.INT.fieldOf("color").forGetter(data -> data.color)
+	).apply(instance, BeeTargetParticleData::new));
 
 	public final int entity;
 	public final int color;
@@ -74,6 +76,6 @@ public class BeeTargetParticleData implements ParticleOptions {
 	@Nonnull
 	@Override
 	public String writeToString() {
-		return String.format(Locale.ROOT, "%s %d %d", getType().getRegistryName(), entity, color);
+		return String.format(Locale.ROOT, "%s %d %d", RegistryNameFinder.getRegistryName(getType()), entity, color);
 	}
 }

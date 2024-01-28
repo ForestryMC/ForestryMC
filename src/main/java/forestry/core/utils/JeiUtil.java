@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import deleteme.RegistryNameFinder;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
@@ -66,7 +67,7 @@ public class JeiUtil {
 	}
 
 	public static void addDescription(IRecipeRegistration registry, Item item) {
-		ResourceLocation registryName = item.getRegistryName();
+		ResourceLocation registryName = RegistryNameFinder.getRegistryName(item);
 		String resourcePath = registryName.getPath();
 		addDescription(registry, item, resourcePath);
 	}

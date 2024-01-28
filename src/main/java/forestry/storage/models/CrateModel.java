@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -68,7 +69,7 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 
 	@Nullable
 	private BakedModel getCustomContentModel(ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform) {
-		ResourceLocation registryName = crated.getRegistryName();
+		ResourceLocation registryName = RegistryNameFinder.getRegistryName(crated);
 		if (registryName == null) {
 			return null;
 		}

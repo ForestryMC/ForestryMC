@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -75,7 +76,7 @@ public class FermenterRecipeBuilder {
 			json.add("resource", resource.toJson());
 			json.addProperty("fermentationValue", fermentationValue);
 			json.addProperty("modifier", modifier);
-			json.addProperty("output", output.getRegistryName().toString());
+			json.addProperty("output", RegistryNameFinder.getRegistryName(output).toString());
 			json.add("fluidResource", RecipeSerializers.serializeFluid(fluidResource));
 		}
 

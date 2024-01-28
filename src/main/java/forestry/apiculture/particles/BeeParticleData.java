@@ -13,6 +13,7 @@ package forestry.apiculture.particles;
 import javax.annotation.Nonnull;
 import java.util.Locale;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -25,11 +26,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import forestry.core.registration.ParticleTypeRegistryObject;
 
-import net.minecraft.core.particles.ParticleOptions.Deserializer;
-
 public class BeeParticleData implements ParticleOptions {
 
-	public static final Deserializer<BeeParticleData> DESERIALIZER = new Deserializer<BeeParticleData>() {
+	public static final Deserializer<BeeParticleData> DESERIALIZER = new Deserializer<>() {
 		@Nonnull
 		@Override
 		public BeeParticleData fromCommand(@Nonnull ParticleType<BeeParticleData> type, @Nonnull StringReader reader) throws CommandSyntaxException {
@@ -82,6 +81,6 @@ public class BeeParticleData implements ParticleOptions {
 	@Nonnull
 	@Override
 	public String writeToString() {
-		return String.format(Locale.ROOT, "%s %d %d %d %d", getType().getRegistryName(), destination.getX(), destination.getY(), destination.getZ(), color);
+		return String.format(Locale.ROOT, "%s %d %d %d %d", RegistryNameFinder.getRegistryName(getType()), destination.getX(), destination.getY(), destination.getZ(), color);
 	}
 }

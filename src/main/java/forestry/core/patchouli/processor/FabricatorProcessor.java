@@ -3,6 +3,7 @@ package forestry.core.patchouli.processor;
 import java.util.Arrays;
 
 import com.google.common.base.Preconditions;
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +43,7 @@ public class FabricatorProcessor implements IComponentProcessor {
 		if (key.equals("output")) {
 			return IVariable.from(this.recipe.getCraftingGridRecipe().getResultItem());
 		} else if (key.equals("fluid")) {
-			return IVariable.wrap(this.recipe.getLiquid().getFluid().getRegistryName().toString());
+			return IVariable.wrap(RegistryNameFinder.getRegistryName(this.recipe.getLiquid().getFluid()).toString());
 		} else if (key.equals("fluidAmount")) {
 			return IVariable.wrap(this.recipe.getLiquid().getAmount());
 		} else if (key.startsWith("ingredient")) {
@@ -61,7 +62,7 @@ public class FabricatorProcessor implements IComponentProcessor {
 		} else if (key.equals("plan")) {
 			return IVariable.from(this.recipe.getPlan());
 		} else if (key.equals("metal")) {
-			if (this.recipe.getLiquid().getFluid().getRegistryName().getPath().contains("glass")) {
+			if (RegistryNameFinder.getRegistryName(this.recipe.getLiquid().getFluid()).getPath().contains("glass")) {
 				return IVariable.from(new ItemStack(ForgeRegistries.ITEMS.getValue(
 						new ResourceLocation("minecraft:sand")
 				)));

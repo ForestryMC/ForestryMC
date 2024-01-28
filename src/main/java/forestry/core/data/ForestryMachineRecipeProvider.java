@@ -12,6 +12,7 @@ package forestry.core.data;
 
 import java.util.function.Consumer;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.Util;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.DataGenerator;
@@ -498,7 +499,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 
 	private void crate(Consumer<FinishedRecipe> consumer, ItemCrated crated, Ingredient ingredient) {
 		ItemStack contained = crated.getContained();
-		ResourceLocation name = contained.getItem().getRegistryName();
+		ResourceLocation name = RegistryNameFinder.getRegistryName(contained.getItem());
 
 		if (name == null) {
 			return;

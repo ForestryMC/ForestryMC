@@ -94,7 +94,7 @@ public class FakeAlvearyController extends FakeMultiblockController implements I
 
 	@Override
 	public Biome getBiome() {
-		return ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName());
+		return ForgeRegistries.BIOMES.getDelegateOrThrow(Biomes.PLAINS).value();
 	}
 
 	@Override

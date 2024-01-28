@@ -24,15 +24,13 @@ public class ApicultureParticles {
 
 	public static final ParticleTypeRegistryObject<BeeParticleData> BEE_ROUND_TRIP_PARTICLE = PARTICLE_TYPES.register("bee_round_trip_particle", BeeParticleType::new);
 
-	public static final ParticleTypeRegistryObject<BeeTargetParticleData> BEE_TARGET_ENTITY_PARTICLE = PARTICLE_TYPES.register("bee_target_entity_particle", () -> new ParticleType<BeeTargetParticleData>(false, BeeTargetParticleData.DESERIALIZER) {
-
+	public static final ParticleTypeRegistryObject<BeeTargetParticleData> BEE_TARGET_ENTITY_PARTICLE = PARTICLE_TYPES.register("bee_target_entity_particle", () -> new ParticleType<>(false, BeeTargetParticleData.DESERIALIZER) {
 		@Override
 		public Codec<BeeTargetParticleData> codec() {
 			return BeeTargetParticleData.CODEC;
 		}
 	});
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void registerParticleFactory(ParticleFactoryRegisterEvent event) {
 		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_EXPLORER_PARTICLE.getParticleType(), BeeExploreParticle.Factory::new);

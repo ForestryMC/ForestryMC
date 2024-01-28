@@ -1,5 +1,6 @@
 package forestry.factory.recipes.jei;
 
+import deleteme.RegistryNameFinder;
 import forestry.api.fuels.FuelManager;
 import forestry.api.fuels.RainSubstrate;
 import forestry.api.recipes.ICarpenterRecipe;
@@ -279,7 +280,7 @@ public class FactoryJeiPlugin implements IModPlugin {
 		IIngredientSubtypeInterpreter<ItemStack> subtypeInterpreter = (itemStack, context) -> {
 			LazyOptional<IFluidHandlerItem> fluidHandler = itemStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY);
 			return fluidHandler.map(handler -> handler.getFluidInTank(0))
-					.map(fluid -> fluid.getFluid().getRegistryName())
+					.map(fluid -> RegistryNameFinder.getRegistryName(fluid.getFluid()))
 					.map(ResourceLocation::toString)
 					.orElse(IIngredientSubtypeInterpreter.NONE);
 		};

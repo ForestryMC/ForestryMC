@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
@@ -331,7 +332,7 @@ public class Bee extends IndividualLiving implements IBee {
 		List<ResourceLocation> suitableBiomes = new ArrayList<>();
 		for (Biome biome : ForgeRegistries.BIOMES) {
 			if (isSuitableBiome(biome)) {
-				suitableBiomes.add(biome.getRegistryName());
+				suitableBiomes.add(RegistryNameFinder.getRegistryName(biome));
 			}
 		}
 

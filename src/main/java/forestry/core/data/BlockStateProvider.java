@@ -30,6 +30,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.data.CachedOutput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,11 +59,11 @@ public abstract class BlockStateProvider implements DataProvider {
 		this.blockToBuilder.clear();
 		this.registerStates();
 		blockToBuilder.forEach((key, builder) -> {
-			if (key.getRegistryName() == null) {
+			if (RegistryNameFinder.getRegistryName(key) == null) {
 				return;
 			}
 			JsonObject jsonobject = builder.serialize(key);
-			Path path = this.makePath(key.getRegistryName());
+			Path path = this.makePath(RegistryNameFinder.getRegistryName(key));
 			try {
 				String s = GSON.toJson(jsonobject);
 				String s1 = SHA1.hashUnencodedChars(s).toString();

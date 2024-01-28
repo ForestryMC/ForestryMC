@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.BucketItem;
@@ -187,7 +188,7 @@ public enum ForestryFluids {
 
 	@Nullable
 	public static ForestryFluids getFluidDefinition(Fluid fluid) {
-		return tagToFluid.get(fluid.getRegistryName());
+		return tagToFluid.get(RegistryNameFinder.getRegistryName(fluid));
 	}
 
 	@Nullable

@@ -1,6 +1,7 @@
 package forestry.core.patchouli.processor;
 
 import com.google.common.base.Preconditions;
+import deleteme.RegistryNameFinder;
 import forestry.api.recipes.ICarpenterRecipe;
 import forestry.api.recipes.RecipeManagers;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +33,7 @@ public class CarpenterProcessor implements IComponentProcessor {
 		if (key.equals("output")) {
 			return IVariable.from(this.recipe.getResult());
 		} else if (key.equals("fluid")) {
-			return IVariable.wrap(this.recipe.getFluidResource().getFluid().getRegistryName().toString());
+			return IVariable.wrap(RegistryNameFinder.getRegistryName(this.recipe.getFluidResource().getFluid()).toString());
 		} else if (key.equals("fluidAmount")) {
 			return IVariable.wrap(this.recipe.getFluidResource().getAmount());
 		} else if (key.startsWith("ingredient")) {

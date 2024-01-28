@@ -20,7 +20,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
@@ -331,7 +330,7 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	protected Biome getBiome() {
 		BlockPos coords = getReferenceCoord();
 		if (coords == null) {
-			return Objects.requireNonNull(ForgeRegistries.BIOMES.getValue(Biomes.PLAINS.getRegistryName()));
+			return ForgeRegistries.BIOMES.getDelegateOrThrow(Biomes.PLAINS).value();
 		}
 		return world.getBiome(coords).value();
 	}

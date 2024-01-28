@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.data.CachedOutput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,11 +78,11 @@ public abstract class ModelProvider implements DataProvider {
 	protected abstract void registerModels();
 
 	protected void registerModel(Item item, ModelBuilder builder) {
-		registerModel(item.getRegistryName().getPath(), builder);
+		registerModel(RegistryNameFinder.getRegistryName(item).getPath(), builder);
 	}
 
 	protected void registerModel(Block block, ModelBuilder builder) {
-		registerModel(block.getRegistryName().getPath(), builder);
+		registerModel(RegistryNameFinder.getRegistryName(block).getPath(), builder);
 	}
 
 	protected void registerModel(FeatureItem feature, ModelBuilder builder) {

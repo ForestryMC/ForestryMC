@@ -3,6 +3,7 @@ package forestry.core.data;
 import com.google.common.collect.Table;
 import com.google.gson.JsonPrimitive;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -65,7 +66,7 @@ public class ForestryItemModelProvider extends ModelProvider {
 			registerModel(item, new ModelBuilder()
 					.loader(new ResourceLocation("forge", "bucket"))
 					.parent("forge:item/bucket_drip")
-					.loaderData("fluid", new JsonPrimitive(fluid.getFluid().getRegistryName().toString()))
+					.loaderData("fluid", new JsonPrimitive(RegistryNameFinder.getRegistryName(fluid.getFluid()).toString()))
 			);
 		}
 

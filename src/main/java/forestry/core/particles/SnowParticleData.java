@@ -13,6 +13,7 @@ package forestry.core.particles;
 import javax.annotation.Nonnull;
 import java.util.Locale;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -70,6 +71,6 @@ public class SnowParticleData implements ParticleOptions {
 	@Nonnull
 	@Override
 	public String writeToString() {
-		return String.format(Locale.ROOT, "%s %2f %2f %2f", getType().getRegistryName(), particleStart.x(), particleStart.y(), particleStart.z());
+		return String.format(Locale.ROOT, "%s %2f %2f %2f", RegistryNameFinder.getRegistryName(getType()), particleStart.x(), particleStart.y(), particleStart.z());
 	}
 }

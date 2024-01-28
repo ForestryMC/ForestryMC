@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.resources.ResourceLocation;
 
@@ -43,7 +44,7 @@ public class HygroregulatorManager extends AbstractCraftingProvider<IHygroregula
 	@Override
 	public Set<ResourceLocation> getRecipeFluids(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getResource().getFluid().getRegistryName())
+				.map(recipe -> RegistryNameFinder.getRegistryName(recipe.getResource().getFluid()))
 				.collect(Collectors.toSet());
 	}
 }

@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.resources.ResourceLocation;
 
@@ -59,14 +60,14 @@ public class StillRecipeManager extends AbstractCraftingProvider<IStillRecipe> i
 	@Override
 	public Set<ResourceLocation> getRecipeFluidInputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getInput().getFluid().getRegistryName())
+				.map(recipe -> RegistryNameFinder.getRegistryName(recipe.getInput().getFluid()))
 				.collect(Collectors.toSet());
 	}
 
 	@Override
 	public Set<ResourceLocation> getRecipeFluidOutputs(@Nullable RecipeManager recipeManager) {
 		return getRecipes(recipeManager)
-				.map(recipe -> recipe.getOutput().getFluid().getRegistryName())
+				.map(recipe -> RegistryNameFinder.getRegistryName(recipe.getOutput().getFluid()))
 				.collect(Collectors.toSet());
 	}
 }

@@ -13,6 +13,7 @@ package forestry.core.fluids;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -165,7 +166,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	@Override
 	public String toString() {
-		return String.format("Tank: %s, %d/%d", !fluid.isEmpty() ? fluid.getFluid().getRegistryName() : "Empty", getFluidAmount(), getCapacity());
+		return String.format("Tank: %s, %d/%d", !fluid.isEmpty() ? RegistryNameFinder.getRegistryName(fluid.getFluid()) : "Empty", getFluidAmount(), getCapacity());
 	}
 
 	protected boolean hasFluid() {

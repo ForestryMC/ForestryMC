@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
 
+import deleteme.RegistryNameFinder;
 import forestry.apiculture.items.*;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.world.level.ItemLike;
@@ -814,7 +815,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 			ShapelessRecipeBuilder.shapeless(managed)
 					.requires(manual)
 					.unlockedBy("has_manual", has(manual))
-					.save(helper, new ResourceLocation(Constants.MOD_ID, managed.getRegistryName().getPath() + "_from_manual"));
+					.save(helper, new ResourceLocation(Constants.MOD_ID, RegistryNameFinder.getRegistryName(managed).getPath() + "_from_manual"));
 		}
 	}
 

@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
@@ -164,27 +165,27 @@ public class HabitatLocatorLogic {
 		Biome biome;
 
 		biome = world.getBiome(pos).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
 			return null;
 		}
 
 		biome = world.getBiome(pos.offset(-minBiomeRadius, 0, 0)).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
 			return null;
 		}
 
 		biome = world.getBiome(pos.offset(minBiomeRadius, 0, 0)).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
 			return null;
 		}
 
 		biome = world.getBiome(pos.offset(0, 0, -minBiomeRadius)).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
 			return null;
 		}
 
 		biome = world.getBiome(pos.offset(0, 0, minBiomeRadius)).value();
-		if (!biomesToSearch.contains(biome.getRegistryName())) {
+		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
 			return null;
 		}
 

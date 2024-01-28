@@ -13,6 +13,7 @@ package forestry.apiculture.items;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.TooltipFlag;
@@ -84,7 +85,7 @@ public class ItemHabitatLocator extends ItemWithGui implements ISpriteRegister {
 
 			list.add(Component.translatable("for.gui.currentBiome")
 					.append(Component.literal(": "))
-					.append(Component.translatable("biome." + currentBiome.getRegistryName().toString().replace(":", "."))));
+					.append(Component.translatable("biome." + RegistryNameFinder.getRegistryName(currentBiome).toString().replace(":", "."))));
 
 			list.add(Component.translatable("for.gui.temperature")
 					.append(Component.literal(": "))

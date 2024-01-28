@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import deleteme.RegistryNameFinder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -53,7 +54,7 @@ public class FabricatorSmeltingRecipeManager extends AbstractCraftingProvider<IF
 		return getRecipes(recipeManager)
 				.map(IFabricatorSmeltingRecipe::getProduct)
 				.filter(fluidStack -> !fluidStack.isEmpty())
-				.map(fluidStack -> fluidStack.getFluid().getRegistryName())
+				.map(fluidStack -> RegistryNameFinder.getRegistryName(fluidStack.getFluid()))
 				.collect(Collectors.toSet());
 	}
 }
