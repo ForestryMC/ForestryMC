@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.Component;
 
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 
 public class PipetteContents {
@@ -42,7 +43,7 @@ public class PipetteContents {
 	}
 
 	public boolean isFull() {
-		return contents.getAmount() >= FluidAttributes.BUCKET_VOLUME;
+		return contents.getAmount() >= FluidType.BUCKET_VOLUME;
 	}
 
 	public void addTooltip(List<Component> list) {

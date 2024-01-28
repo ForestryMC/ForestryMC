@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 
 import forestry.core.config.Config;
@@ -18,7 +19,7 @@ public class FluidHandlerItemForestry extends FluidHandlerItemStackSimple.Consum
 	private final EnumContainerType containerType;
 
 	public FluidHandlerItemForestry(ItemStack container, EnumContainerType containerType) {
-		super(container, FluidAttributes.BUCKET_VOLUME);
+		super(container, FluidType.BUCKET_VOLUME);
 		this.containerType = containerType;
 	}
 

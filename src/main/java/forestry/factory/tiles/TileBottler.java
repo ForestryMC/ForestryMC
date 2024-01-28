@@ -31,6 +31,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -165,7 +166,7 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 					LazyOptional<IFluidHandler> fluidDestination = FluidUtil.getFluidHandler(level, worldPosition.relative(facing), facing.getOpposite());
 
 					if (fluidDestination.isPresent()) {
-						fluidDestination.ifPresent(f -> FluidUtil.tryFluidTransfer(f, tankManager, FluidAttributes.BUCKET_VOLUME / 20, true));
+						fluidDestination.ifPresent(f -> FluidUtil.tryFluidTransfer(f, tankManager, FluidType.BUCKET_VOLUME / 20, true));
 						return true;
 					}
 				}
@@ -216,7 +217,7 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
 					int fillAmount = Math.min(currentRecipe.fluid.getAmount(), resource.getAmount());
-					float fillTime = fillAmount / (float) FluidAttributes.BUCKET_VOLUME;
+					float fillTime = fillAmount / (float) FluidType.BUCKET_VOLUME;
 					fillTime *= viscosityMultiplier;
 
 					setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));
@@ -238,7 +239,7 @@ public class TileBottler extends TilePowered implements WorldlyContainer, ILiqui
 					viscosityMultiplier = (viscosityMultiplier - 1f) / 20f + 1f; // scale down the effect
 
 					int fillAmount = Math.min(currentRecipe.fluid.getAmount(), resource.getAmount());
-					float fillTime = fillAmount / (float) FluidAttributes.BUCKET_VOLUME;
+					float fillTime = fillAmount / (float) FluidType.BUCKET_VOLUME;
 					fillTime *= viscosityMultiplier;
 
 					setTicksPerWorkCycle(Math.round(fillTime * TICKS_PER_RECIPE_TIME));

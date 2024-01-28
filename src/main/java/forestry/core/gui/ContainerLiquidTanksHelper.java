@@ -21,6 +21,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -65,13 +66,13 @@ public class ContainerLiquidTanksHelper<T extends BlockEntity & ILiquidTankTile>
 		fluidCap.ifPresent(fluidHandlerItem -> {
 			if (pipette.canPipette(itemstack) && liquidAmount > 0) {
 				if (tank instanceof StandardTank) {
-					FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+					FluidStack fillAmount = ((StandardTank) tank).drainInternal(FluidType.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
 					player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());
 					player.inventoryMenu.broadcastChanges();
 				} else {//TODO: Test if this works
-					FluidStack fillAmount = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+					FluidStack fillAmount = tank.drain(FluidType.BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
 					int filled = fluidHandlerItem.fill(fillAmount, IFluidHandler.FluidAction.EXECUTE);
 					tank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
 					player.inventoryMenu.setCarried(fluidHandlerItem.getContainer());

@@ -47,7 +47,7 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 
 	@Override
 	public boolean fancyGraphicsEnabled() {
-		return Minecraft.getInstance().options.graphicsMode == GraphicsStatus.FANCY;
+		return Minecraft.useFancyGraphics();
 	}
 
 	@Override

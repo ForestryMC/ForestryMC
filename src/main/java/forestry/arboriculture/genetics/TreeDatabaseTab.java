@@ -76,15 +76,15 @@ public class TreeDatabaseTab implements IDatabaseTab<ITree> {
 
 		container.translated("for.gui.fruits").setStyle(GuiConstants.UNDERLINED_STYLE).setAlign(Alignment.TOP_CENTER);
 		Style fruitStyle = textStyle;
-		String strike = "";
+
 		if (!species.getSuitableFruit().contains(fruit.getProvider().getFamily()) && fruit != AlleleFruits.fruitNone) {
-			fruitStyle = fruitStyle.setStrikethrough(true);
+			fruitStyle = fruitStyle.withStrikethrough(true);
 		}
 		container.label(fruit.getProvider().getDescription()).setStyle(fruitStyle).setAlign(Alignment.TOP_CENTER);
 
 		IFruitFamily family = fruit.getProvider().getFamily();
 
-		if (family != null && !family.getUID().equals(EnumFruitFamily.NONE.getUID())) {
+		if (!family.getUID().equals(EnumFruitFamily.NONE.getUID())) {
 			container.label(Translator.translateToLocal("for.gui.family"), Alignment.TOP_CENTER, GuiConstants.UNDERLINED_STYLE);
 			container.label(family.getName().getString(), Alignment.TOP_CENTER, textStyle);
 		}

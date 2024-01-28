@@ -73,6 +73,7 @@ import forestry.modules.features.FeatureItem;
 import forestry.storage.features.BackpackItems;
 import forestry.storage.features.CrateItems;
 import forestry.storage.items.ItemCrated;
+import net.minecraftforge.fluids.FluidType;
 
 public class ForestryMachineRecipeProvider extends RecipeProvider {
 
@@ -808,8 +809,8 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 	}
 
 	private void registerFabricatorSmelting(Consumer<FinishedRecipe> consumer) {
-		FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME);
-		FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidAttributes.BUCKET_VOLUME * 4);
+		FluidStack liquidGlassBucket = ForestryFluids.GLASS.getFluid(FluidType.BUCKET_VOLUME);
+		FluidStack liquidGlassX4 = ForestryFluids.GLASS.getFluid(FluidType.BUCKET_VOLUME * 4);
 		FluidStack liquidGlass375 = ForestryFluids.GLASS.getFluid(375);
 
 		new FabricatorSmeltingRecipeBuilder()

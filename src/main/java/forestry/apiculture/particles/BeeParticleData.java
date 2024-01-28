@@ -24,8 +24,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import forestry.core.registration.ParticleTypeRegistryObject;
-
 public class BeeParticleData implements ParticleOptions {
 
 	public static final Deserializer<BeeParticleData> DESERIALIZER = new Deserializer<>() {
@@ -59,8 +57,8 @@ public class BeeParticleData implements ParticleOptions {
 		this.color = color;
 	}
 
-	public BeeParticleData(ParticleTypeRegistryObject<BeeParticleData> type, BlockPos destination, int color) {
-		this.type = type.getParticleType();
+	public BeeParticleData(ParticleType<BeeParticleData> type, BlockPos destination, int color) {
+		this.type = type;
 		this.destination = destination;
 		this.color = color;
 	}

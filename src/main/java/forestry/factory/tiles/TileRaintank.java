@@ -33,6 +33,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -53,7 +54,7 @@ import forestry.factory.gui.ContainerRaintank;
 import forestry.factory.inventory.InventoryRaintank;
 
 public class TileRaintank extends TileBase implements WorldlyContainer, ILiquidTankTile {
-	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
+	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME);
 	private static final FluidStack WATER_PER_UPDATE = new FluidStack(Fluids.WATER, Constants.RAINTANK_AMOUNT_PER_UPDATE);
 
 	private final FilteredTank resourceTank;
@@ -141,7 +142,7 @@ public class TileRaintank extends TileBase implements WorldlyContainer, ILiquidT
 		if (!resourceTank.isEmpty()) {
 			LazyOptional<IFluidHandler> fluidCap = FluidUtil.getFluidHandler(level, worldPosition.below(), Direction.UP);
 			if (fluidCap.isPresent()) {
-				return !FluidUtil.tryFluidTransfer(fluidCap.orElse(null), tankManager, FluidAttributes.BUCKET_VOLUME / 20, true).isEmpty();
+				return !FluidUtil.tryFluidTransfer(fluidCap.orElse(null), tankManager, FluidType.BUCKET_VOLUME / 20, true).isEmpty();
 			}
 		}
 		return false;

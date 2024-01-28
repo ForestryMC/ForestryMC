@@ -13,18 +13,17 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 import forestry.core.config.Constants;
-import forestry.core.registration.ParticleTypeDeferredRegister;
-import forestry.core.registration.ParticleTypeRegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Bus.MOD, value = Dist.CLIENT)
 public class ApicultureParticles {
-	public static final ParticleTypeDeferredRegister PARTICLE_TYPES = new ParticleTypeDeferredRegister(Constants.MOD_ID);
+	public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Constants.MOD_ID);
 
-	public static final ParticleTypeRegistryObject<BeeParticleData> BEE_EXPLORER_PARTICLE = PARTICLE_TYPES.register("bee_explore_particle", BeeParticleType::new);
-
-	public static final ParticleTypeRegistryObject<BeeParticleData> BEE_ROUND_TRIP_PARTICLE = PARTICLE_TYPES.register("bee_round_trip_particle", BeeParticleType::new);
-
-	public static final ParticleTypeRegistryObject<BeeTargetParticleData> BEE_TARGET_ENTITY_PARTICLE = PARTICLE_TYPES.register("bee_target_entity_particle", () -> new ParticleType<>(false, BeeTargetParticleData.DESERIALIZER) {
+	public static final RegistryObject<ParticleType<BeeParticleData>> BEE_EXPLORER_PARTICLE = PARTICLE_TYPES.register("bee_explore_particle", BeeParticleType::new);
+	public static final RegistryObject<ParticleType<BeeParticleData>> BEE_ROUND_TRIP_PARTICLE = PARTICLE_TYPES.register("bee_round_trip_particle", BeeParticleType::new);
+	public static final RegistryObject<ParticleType<BeeTargetParticleData>> BEE_TARGET_ENTITY_PARTICLE = PARTICLE_TYPES.register("bee_target_entity_particle", () -> new ParticleType<>(false, BeeTargetParticleData.DESERIALIZER) {
 		@Override
 		public Codec<BeeTargetParticleData> codec() {
 			return BeeTargetParticleData.CODEC;
@@ -33,10 +32,10 @@ public class ApicultureParticles {
 
 	@SubscribeEvent
 	public static void registerParticleFactory(ParticleFactoryRegisterEvent event) {
-		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_EXPLORER_PARTICLE.getParticleType(), BeeExploreParticle.Factory::new);
+		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_EXPLORER_PARTICLE.get(), BeeExploreParticle.Factory::new);
 
-		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_ROUND_TRIP_PARTICLE.getParticleType(), BeeRoundTripParticle.Factory::new);
+		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_ROUND_TRIP_PARTICLE.get(), BeeRoundTripParticle.Factory::new);
 
-		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_TARGET_ENTITY_PARTICLE.getParticleType(), BeeTargetEntityParticle.Factory::new);
+		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_TARGET_ENTITY_PARTICLE.get(), BeeTargetEntityParticle.Factory::new);
 	}
 }

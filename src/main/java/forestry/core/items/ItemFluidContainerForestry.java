@@ -42,6 +42,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -79,7 +80,7 @@ public class ItemFluidContainerForestry extends ItemForestry {
 				}
 				ItemStack itemStack = new ItemStack(this);
 				IFluidHandlerItem fluidHandler = new FluidHandlerItemForestry(itemStack, type);
-				if (fluidHandler.fill(new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) == FluidAttributes.BUCKET_VOLUME) {
+				if (fluidHandler.fill(new FluidStack(fluid, FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) == FluidType.BUCKET_VOLUME) {
 					ItemStack filled = fluidHandler.getContainer();
 					subItems.add(filled);
 				}

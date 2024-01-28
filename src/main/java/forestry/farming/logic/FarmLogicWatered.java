@@ -10,6 +10,7 @@
  ******************************************************************************/
 package forestry.farming.logic;
 
+import net.minecraftforge.fluids.FluidType;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,7 +31,7 @@ import forestry.api.farming.Soil;
 import forestry.core.utils.BlockUtil;
 
 public abstract class FarmLogicWatered extends FarmLogicSoil {
-	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
+	private static final FluidStack STACK_WATER = new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME);
 
 	public FarmLogicWatered(IFarmProperties properties, boolean isManual) {
 		super(properties, isManual);

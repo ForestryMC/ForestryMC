@@ -28,6 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 import forestry.api.recipes.IFermenterManager;
 import forestry.api.recipes.IFermenterRecipe;
 import forestry.api.recipes.IForestryRecipe;
+import net.minecraftforge.fluids.FluidType;
 
 public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterRecipe> implements IFermenterManager {
 
@@ -42,7 +43,7 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 
 	@Override
 	public void addRecipe(ItemStack resource, int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(resource, fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
+		addRecipe(resource, fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME));
 	}
 
 	@Override
@@ -52,7 +53,7 @@ public class FermenterRecipeManager extends AbstractCraftingProvider<IFermenterR
 
 	@Override
 	public void addRecipe(int fermentationValue, float modifier, FluidStack output) {
-		addRecipe(fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME));
+		addRecipe(fermentationValue, modifier, output, new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME));
 	}
 
 	@Override

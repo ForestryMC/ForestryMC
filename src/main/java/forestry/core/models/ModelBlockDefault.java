@@ -19,6 +19,7 @@ import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -39,6 +40,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import forestry.core.models.baker.ModelBaker;
 import forestry.core.models.baker.ModelBakerModel;
 import forestry.core.utils.ResourceUtil;
+import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ModelBlockDefault<B extends Block, K> implements BakedModel {
@@ -90,10 +92,10 @@ public abstract class ModelBlockDefault<B extends Block, K> implements BakedMode
 
 	@Nonnull
 	@Override
-	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData) {
+	public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData, @Nullable RenderType renderType) {
 		Preconditions.checkNotNull(state);
 		BakedModel model = getModel(state, extraData);
-		return model.getQuads(state, side, rand, extraData);
+		return model.getQuads(state, side, rand, extraData, renderType);
 	}
 
 	@Override

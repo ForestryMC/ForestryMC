@@ -12,6 +12,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraftforge.fluids.FluidStack;
 
 import forestry.core.fluids.BlockForestryFluid;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.RegisterEvent;
 
 public interface IFluidFeature extends IModFeature {
@@ -64,7 +65,7 @@ public interface IFluidFeature extends IModFeature {
 	}
 
 	default FluidStack fluidStack() {
-		return fluidStack(FluidAttributes.BUCKET_VOLUME);
+		return fluidStack(FluidType.BUCKET_VOLUME);
 	}
 
 	@Override

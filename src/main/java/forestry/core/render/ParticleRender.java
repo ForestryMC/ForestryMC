@@ -104,12 +104,12 @@ public class ParticleRender {
 			BlockPos destination = flowerPositions.get(world.random.nextInt(flowerPositions.size()));
 			//Particle particle = new ParticleBeeRoundTrip(world, particleStart, destination, color);
 			//effectRenderer.add(particle);
-			world.addParticle(new BeeParticleData(ApicultureParticles.BEE_ROUND_TRIP_PARTICLE, destination, color), particleStart.x, particleStart.y, particleStart.z, 0, 0, 0);
+			world.addParticle(new BeeParticleData(ApicultureParticles.BEE_ROUND_TRIP_PARTICLE.get(), destination, color), particleStart.x, particleStart.y, particleStart.z, 0, 0, 0);
 		} else {
 			Vec3i area = AlleleEffect.getModifiedArea(genome, housing);
 			Vec3i offset = housing.getCoordinates().offset(-area.getX() / 2, -area.getY() / 4, -area.getZ() / 2);
 			BlockPos destination = VectUtil.getRandomPositionInArea(world.random, area).offset(offset);
-			world.addParticle(new BeeParticleData(ApicultureParticles.BEE_EXPLORER_PARTICLE, destination, color), particleStart.x, particleStart.y, particleStart.z, 0, 0, 0);
+			world.addParticle(new BeeParticleData(ApicultureParticles.BEE_EXPLORER_PARTICLE.get(), destination, color), particleStart.x, particleStart.y, particleStart.z, 0, 0, 0);
 			//Particle particle = new ParticleBeeExplore(world, particleStart, destination, color);
 			//effectRenderer.add(particle);
 		}

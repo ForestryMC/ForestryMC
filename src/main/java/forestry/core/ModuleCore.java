@@ -47,7 +47,6 @@ import forestry.core.multiblock.MultiblockLogicFactory;
 import forestry.core.network.IPacketRegistry;
 import forestry.core.network.PacketRegistryCore;
 import forestry.core.owner.GameProfileDataSerializer;
-import forestry.core.particles.CoreParticles;
 import forestry.core.proxy.Proxies;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.utils.ClimateUtil;
@@ -61,7 +60,6 @@ public class ModuleCore extends BlankForestryModule {
 	public static final LiteralArgumentBuilder<CommandSourceStack> rootCommand = LiteralArgumentBuilder.literal("forestry");
 
 	public ModuleCore() {
-		CoreParticles.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 	@Override

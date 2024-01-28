@@ -25,6 +25,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
@@ -94,6 +95,6 @@ public class ItemPipette extends ItemForestry implements IToolPipette {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-		return new FluidHandlerItemStack(stack, FluidAttributes.BUCKET_VOLUME);
+		return new FluidHandlerItemStack(stack, FluidType.BUCKET_VOLUME);
 	}
 }
