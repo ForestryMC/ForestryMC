@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import deleteme.BiomeCategory;
 import deleteme.RegistryNameFinder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -195,13 +196,13 @@ public class HabitatLocatorLogic {
 	private static void removeInvalidBiomes(Biome currentBiome, Set<ResourceLocation> biomesToSearch) {
 		biomesToSearch.removeAll(waterBiomes);
 
-		if (currentBiome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
+		if (BiomeCategory.NETHER.is(currentBiome)) {
 			biomesToSearch.retainAll(netherBiomes);
 		} else {
 			biomesToSearch.removeAll(netherBiomes);
 		}
 
-		if (currentBiome.getBiomeCategory() == Biome.BiomeCategory.THEEND) {
+		if (BiomeCategory.THEEND.is(currentBiome)) {
 			biomesToSearch.retainAll(endBiomes);
 		} else {
 			biomesToSearch.removeAll(endBiomes);

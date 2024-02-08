@@ -1,5 +1,6 @@
 package forestry.core.features;
 
+import deleteme.BiomeCategory;
 import forestry.core.config.Constants;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.FeatureUtils;
@@ -7,7 +8,6 @@ import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -46,7 +46,7 @@ public class CoreFeatures {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void gen(BiomeLoadingEvent event) {
-		if (event.getCategory() == Biome.BiomeCategory.NETHER || event.getCategory() == Biome.BiomeCategory.THEEND) {
+		if (event.getCategory() == BiomeCategory.NETHER || event.getCategory() == BiomeCategory.THEEND) {
 			return;
 		}
 

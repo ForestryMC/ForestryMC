@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import deleteme.BiomeCategory;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -456,7 +457,7 @@ public class ModuleApiculture extends BlankForestryModule {
 		@Override
 		public boolean isAcceptableFlower(BlockState blockState, Level world, BlockPos pos, String flowerType) {
 			Biome biomeGenForCoords = world.getBiome(pos).value();
-			return Biome.BiomeCategory.THEEND == biomeGenForCoords.getBiomeCategory();
+			return BiomeCategory.THEEND.is(biomeGenForCoords);
 		}
 	}
 }

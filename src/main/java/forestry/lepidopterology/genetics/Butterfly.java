@@ -13,9 +13,9 @@ package forestry.lepidopterology.genetics;
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
+import deleteme.BiomeCategory;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
@@ -173,13 +173,15 @@ public class Butterfly extends IndividualLiving implements IButterfly {
 			boolean noneMatched = true;
 
 			if (species.strictSpawnMatch()) {
-				Biome.BiomeCategory category = biome.getBiomeCategory();
-				if (species.getSpawnBiomes().contains(category)) {
+				var categories = BiomeCategory.getCategoriesFor(biome);
+				categories.retainAll(species.getSpawnBiomes());
+
+				if (!categories.isEmpty()) {
 					noneMatched = false;
 				}
 			} else {
-				for (Biome.BiomeCategory type : species.getSpawnBiomes()) {
-					if (type == biome.getBiomeCategory()) {
+				for (BiomeCategory type : species.getSpawnBiomes()) {
+					if (type.is(biome)) {
 						noneMatched = false;
 						break;
 					}

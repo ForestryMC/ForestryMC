@@ -5,8 +5,8 @@
  ******************************************************************************/
 package forestry.api.genetics;
 
+import deleteme.BiomeCategory;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.biome.Biome;
 
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -44,7 +44,7 @@ public interface IMutationBuilder {
 	 *
 	 * @param types The types of biomes this mutation can occur.
 	 */
-	IMutationBuilder restrictBiomeType(Biome.BiomeCategory... types);
+	IMutationBuilder restrictBiomeType(BiomeCategory... types);
 
 	/**
 	 * Restrict the days of the year that this mutation can occur

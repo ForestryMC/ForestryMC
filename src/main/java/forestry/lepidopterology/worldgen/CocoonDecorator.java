@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
+import deleteme.BiomeCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -51,12 +52,12 @@ public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 
 		Biome biome = world.getBiome(new BlockPos(pos.getX(), 0, pos.getZ())).value();
 
-		Set<Biome.BiomeCategory> speciesCategories = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES)
+		Set<BiomeCategory> speciesCategories = butterfly.getGenome().getActiveAllele(ButterflyChromosomes.SPECIES)
 				.getSpawnBiomes();
 
 		boolean biomeTypesGood = false;
-		for (Biome.BiomeCategory category : speciesCategories) {
-			if (category == biome.getBiomeCategory()) {
+		for (BiomeCategory category : speciesCategories) {
+			if (category.is(biome)) {
 				biomeTypesGood = true;
 				break;
 			}

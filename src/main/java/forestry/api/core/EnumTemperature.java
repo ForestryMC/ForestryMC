@@ -5,6 +5,7 @@
  ******************************************************************************/
 package forestry.api.core;
 
+import deleteme.BiomeCategory;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.biome.Biome;
@@ -65,7 +66,7 @@ public enum EnumTemperature {
 	}
 
 	public static EnumTemperature getFromBiome(Biome biome) {
-		if (biome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
+		if (BiomeCategory.NETHER.is(biome)) {
 			return HELLISH;
 		}
 
@@ -73,7 +74,7 @@ public enum EnumTemperature {
 	}
 
 	public static EnumTemperature getFromBiome(Biome biome, BlockPos pos) {
-		if (biome.getBiomeCategory() == Biome.BiomeCategory.NETHER) {
+		if (BiomeCategory.NETHER.is(biome)) {
 			return HELLISH;
 		}
 

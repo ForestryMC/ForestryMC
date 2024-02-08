@@ -2,6 +2,7 @@ package forestry.core.climate;
 
 import javax.annotation.Nullable;
 
+import deleteme.BiomeCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -125,7 +126,7 @@ public class ClimateListener implements IClimateListener {
 
 	@Override
 	public EnumTemperature getTemperature() {
-		if (getBiome().getBiomeCategory() == Biome.BiomeCategory.NETHER) {
+		if (BiomeCategory.NETHER.is(getBiome())) {
 			return EnumTemperature.HELLISH;
 		}
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import deleteme.BiomeCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -63,7 +64,7 @@ public enum HiveDescription implements IHiveDescription {
 	END(IHiveRegistry.HiveType.END, 2.0f, BeeDefinition.ENDED, HiveManager.genHelper.ground(Blocks.END_STONE, Blocks.END_STONE_BRICKS)) {
 		@Override
 		public boolean isGoodBiome(Biome biome) {
-			return biome.getBiomeCategory() == Biome.BiomeCategory.THEEND;
+			return BiomeCategory.THEEND.is(biome);
 		}
 	},
 	SNOW(IHiveRegistry.HiveType.SNOW, 2.0f, BeeDefinition.WINTRY, HiveManager.genHelper.ground(Blocks.DIRT, Blocks.SNOW, Blocks.GRASS_BLOCK)) {
@@ -124,7 +125,7 @@ public enum HiveDescription implements IHiveDescription {
 
 	@Override
 	public boolean isGoodBiome(Biome biome) {
-		return biome.getBiomeCategory() != Biome.BiomeCategory.NETHER;
+		return !BiomeCategory.NETHER.is(biome);
 	}
 
 	@Override
