@@ -69,14 +69,14 @@ public abstract class BlockStructure extends BlockForestry {
 					if (validationError != null) {
 						long tick = worldIn.getGameTime();
 						if (tick > previousMessageTick + 20) {
-							playerIn.sendMessage(Component.literal(validationError), Util.NIL_UUID);
+							playerIn.sendSystemMessage(Component.literal(validationError));
 							previousMessageTick = tick;
 						}
 						return InteractionResult.SUCCESS;
 					}
 				}
 			} else {
-				playerIn.sendMessage(Component.translatable("for.multiblock.error.notConnected"), Util.NIL_UUID);
+				playerIn.sendSystemMessage(Component.translatable("for.multiblock.error.notConnected"));
 				return InteractionResult.SUCCESS;
 			}
 		}

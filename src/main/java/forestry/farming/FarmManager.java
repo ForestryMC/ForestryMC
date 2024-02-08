@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import deleteme.Shuffler;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -137,7 +138,7 @@ public class FarmManager implements INbtReadable, INbtWritable, IStreamable, IEx
 
 		Level world = housing.getWorldObj();
 		List<FarmDirection> farmDirections = Arrays.asList(FarmDirection.values());
-		Collections.shuffle(farmDirections, world.random);
+		Shuffler.shuffle(farmDirections, world.random);
 		for (FarmDirection farmSide : farmDirections) {
 			IFarmLogic logic = housing.getFarmLogic(farmSide);
 			List<FarmTarget> farmTargets = targets.get(farmSide);

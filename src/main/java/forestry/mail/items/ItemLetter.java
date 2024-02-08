@@ -90,7 +90,7 @@ public class ItemLetter extends ItemWithGui {
 		if (heldItem.getCount() == 1) {
 			return super.use(worldIn, playerIn, handIn);
 		} else {
-			playerIn.sendMessage(Component.translatable("for.chat.mail.wrongstacksize"), Util.NIL_UUID);
+			playerIn.sendSystemMessage(Component.translatable("for.chat.mail.wrongstacksize"));
 			return InteractionResultHolder.fail(heldItem);
 		}
 	}

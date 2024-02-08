@@ -26,6 +26,6 @@ public enum EnumBackpackType implements StringRepresentable {
 		if (this == NATURALIST) {
 			typeName = NORMAL.getSerializedName();
 		}
-		return new ModelResourceLocation(Constants.MOD_ID + ":backpacks/" + typeName + "_" + mode.getSerializedName(), "inventory");
+		return new ModelResourceLocation(Constants.MOD_ID, "backpacks/" + typeName + "_" + mode.getSerializedName(), "inventory");
 	}
 }

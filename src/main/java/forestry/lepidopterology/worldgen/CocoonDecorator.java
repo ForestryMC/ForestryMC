@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import deleteme.BiomeCategory;
+import deleteme.Shuffler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
@@ -155,7 +156,7 @@ public class CocoonDecorator extends Feature<NoneFeatureConfiguration> {
 		ArrayList<IButterfly> butterflys = new ArrayList<>(ButterflyManager.butterflyRoot
 				.getIndividualTemplates());
 
-		Collections.shuffle(butterflys, context.random());
+		Shuffler.shuffle(butterflys, context.random());
 
 		for (IButterfly butterfly : butterflys) {
 			if (genCocoon(context.level(), context.random(), context.origin(), butterfly)) {

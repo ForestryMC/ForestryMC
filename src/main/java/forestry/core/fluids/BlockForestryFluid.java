@@ -45,7 +45,7 @@ public class BlockForestryFluid extends LiquidBlock {
 	public BlockForestryFluid(FeatureFluid feature) {
 		super(feature::fluid, Block.Properties.of(feature.fluid().getFluidType().getTemperature() > 505 ? Material.LAVA : Material.WATER)
 				.noCollission()
-				.strength(100.0F).noDrops());
+				.strength(100.0F).noLootTable());
 		this.feature = feature;
 		FluidProperties properties = feature.properties();
 		this.flammability = properties.flammability;

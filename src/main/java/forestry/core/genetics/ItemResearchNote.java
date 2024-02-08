@@ -166,7 +166,7 @@ public class ItemResearchNote extends ItemForestry {
 
 				IBreedingTracker tracker = ((IForestrySpeciesRoot) encoded.getRoot()).getBreedingTracker(world, player.getGameProfile());
 				if (tracker.isResearched(encoded)) {
-					player.sendMessage(Component.translatable("for.chat.cannotmemorizeagain"), Util.NIL_UUID);
+					player.sendSystemMessage(Component.translatable("for.chat.cannotmemorizeagain"));
 					return false;
 				}
 
@@ -179,12 +179,12 @@ public class ItemResearchNote extends ItemForestry {
 				tracker.registerSpecies(speciesResult);
 
 				tracker.researchMutation(encoded);
-				player.sendMessage(Component.translatable("for.chat.memorizednote"), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable("for.chat.memorizednote"));
 
-				player.sendMessage(Component.translatable("for.chat.memorizednote2",
+				player.sendSystemMessage(Component.translatable("for.chat.memorizednote2",
 						((MutableComponent) speciesFirst.getDisplayName()).withStyle(ChatFormatting.GRAY),
 						((MutableComponent) speciesSecond.getDisplayName()).withStyle(ChatFormatting.GRAY),
-						((MutableComponent) speciesResult.getDisplayName()).withStyle(ChatFormatting.GREEN)), Util.NIL_UUID);
+						((MutableComponent) speciesResult.getDisplayName()).withStyle(ChatFormatting.GREEN)));
 
 				return true;
 			}

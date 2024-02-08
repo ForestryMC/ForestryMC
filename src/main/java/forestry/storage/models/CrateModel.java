@@ -90,7 +90,7 @@ public class CrateModel implements IModelGeometry<CrateModel> {
 	@Override
 	public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ItemOverrides overrides, ResourceLocation modelLocation) {
 		if (bakedQuads.isEmpty()) {
-			BakedModel bakedModel = bakery.bake(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"), transform, spriteGetter);
+			BakedModel bakedModel = bakery.bake(new ModelResourceLocation(Constants.MOD_ID, "crate-filled", "inventory"), transform, spriteGetter);
 			if (bakedModel != null) {
 				//Set the crate color index to 100
 				for (BakedQuad quad : bakedModel.getQuads(null, null, new Random(0L), ModelData.EMPTY)) {

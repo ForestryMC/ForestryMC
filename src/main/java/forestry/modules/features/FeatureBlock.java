@@ -67,7 +67,7 @@ public class FeatureBlock<B extends Block, I extends BlockItem> implements IBloc
 	}
 
 	public String getTranslationKey() {
-		return block == null ? "block." + Constants.MOD_ID + ":" + identifier : block.getDescriptionId();
+		return block != null ? block.getDescriptionId() : "block" + "." + Constants.MOD_ID + "." + identifier.replace('/', '.');
 	}
 
 	@Override

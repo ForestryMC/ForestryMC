@@ -38,7 +38,7 @@ public class Genetics {
 	/**
 	 * Capability for {@link IOrganism}.
 	 */
-	public static Capability<IOrganism> ORGANISM = CapabilityManager.get(new CapabilityToken<>() {
+	public static Capability<IOrganism<?>> ORGANISM = CapabilityManager.get(new CapabilityToken<>() {
 	});
 	public static Capability<IGeneTemplate> GENE_TEMPLATE = CapabilityManager.get(new CapabilityToken<>() {
 	});
@@ -66,7 +66,7 @@ public class Genetics {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void registerFinished(RegistryEvent.Register<Item> event) {
-		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+		for (IRootDefinition<?> definition : GeneticsAPI.apiInstance.getRoots().values()) {
 			if (!definition.isPresent()) {
 				continue;
 			}
@@ -75,7 +75,7 @@ public class Genetics {
 	}
 
 	private void setupCommon(FMLCommonSetupEvent event) {
-		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+		for (IRootDefinition<?> definition : GeneticsAPI.apiInstance.getRoots().values()) {
 			if (!definition.isPresent()) {
 				continue;
 			}
@@ -84,7 +84,7 @@ public class Genetics {
 	}
 
 	private void loadComplete(FMLLoadCompleteEvent event) {
-		for (IRootDefinition definition : GeneticsAPI.apiInstance.getRoots().values()) {
+		for (IRootDefinition<?> definition : GeneticsAPI.apiInstance.getRoots().values()) {
 			if (!definition.isPresent()) {
 				continue;
 			}

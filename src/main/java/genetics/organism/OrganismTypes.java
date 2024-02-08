@@ -95,7 +95,7 @@ public class OrganismTypes<I extends IIndividual> implements IOrganismTypes<I> {
 		if (itemStack.isEmpty()) {
 			return Optional.empty();
 		}
-		IOrganism organism = itemStack.getCapability(Genetics.ORGANISM).orElse(GeneticHelper.EMPTY);
+		IOrganism<?> organism = itemStack.getCapability(Genetics.ORGANISM).orElse(GeneticHelper.EMPTY);
 		IOrganismType type = organism.getType();
 		return type.isEmpty() ? Optional.empty() : getHandler(type).map((handler) -> type);
 	}

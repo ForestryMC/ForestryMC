@@ -34,7 +34,7 @@ public class ProxyCratesClient extends ProxyCrates implements IClientModuleHandl
 			}
 		}
 
-		ForgeModelBakery.addSpecialModel(new ModelResourceLocation(Constants.MOD_ID + ":crate-filled", "inventory"));
+		ForgeModelBakery.addSpecialModel(new ModelResourceLocation(Constants.MOD_ID, "crate-filled", "inventory"));
 	}
 
 	@Override

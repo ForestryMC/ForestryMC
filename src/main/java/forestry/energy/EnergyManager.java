@@ -3,8 +3,8 @@ package forestry.energy;
 import net.minecraft.nbt.CompoundTag;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -68,7 +68,7 @@ public class EnergyManager extends EnergyStorage implements IStreamable, INbtRea
 	}
 
 	public <T> LazyOptional<T> getCapability(Capability<T> capability) {
-		if (capability == CapabilityEnergy.ENERGY) {
+		if (capability == ForgeCapabilities.ENERGY) {
             IEnergyStorage energyStorage = new EnergyStorageWrapper(this, canExtract);
             return LazyOptional.of(() -> energyStorage).cast();
         }

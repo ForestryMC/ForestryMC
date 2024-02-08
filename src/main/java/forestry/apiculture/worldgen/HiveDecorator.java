@@ -10,10 +10,9 @@
  ******************************************************************************/
 package forestry.apiculture.worldgen;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
+import deleteme.Shuffler;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,7 +44,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 
 		for (int x = 0; x < 16; x++) {
 			for (int z = 0; z < 16; z++) {
-				Collections.shuffle(hives, rand);
+				Shuffler.shuffle(hives, rand);
 				for (Hive hive : hives) {
 					if (!hive.isGoodBiome(biome) || !hive.isGoodHumidity(humidity)) {
 						continue;
@@ -127,7 +126,7 @@ public class HiveDecorator extends Feature<NoneFeatureConfiguration> {
 		hives.removeIf(hive -> {
 			return !(hive.getHiveDescription() == HiveDescription.FOREST || hive.getHiveDescription() == HiveDescription.MEADOWS);
 		});
-		Collections.shuffle(hives, rand);
+		Shuffler.shuffle(hives, rand);
 
 		for (int tries = 0; tries < 10; tries++) {
 			Biome biome = level.getBiome(pos).value();

@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import deleteme.Todos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -132,7 +133,7 @@ public class DatabaseElement extends ContainerElement {
 	}
 
 	public void addLine(String firstText, String secondText, String thirdText, boolean secondDominant, boolean thirdDominant) {
-
+		Todos.todo();
 	}
 
 	public final void addLine(String chromosomeName, IChromosomeType chromosome) {

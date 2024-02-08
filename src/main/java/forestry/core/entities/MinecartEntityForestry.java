@@ -91,12 +91,6 @@ public abstract class MinecartEntityForestry extends AbstractMinecart implements
 		}
 	}
 
-	// fix cart contents rendering as black in the End dimension
-	@Override
-	public float getBrightness() {
-		return 1.0f;
-	}
-
 	@Override
 	public Component getName() {
 		return Component.translatable(getUnlocalizedTitle());
