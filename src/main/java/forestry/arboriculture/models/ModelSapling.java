@@ -34,7 +34,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 
 import forestry.api.arboriculture.genetics.IAlleleTreeSpecies;
 import forestry.api.arboriculture.genetics.ITree;
@@ -45,8 +45,9 @@ import forestry.arboriculture.tiles.TileSapling;
 import genetics.api.GeneticHelper;
 import genetics.api.organism.IOrganism;
 import genetics.utils.AlleleUtils;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 
-public class ModelSapling implements IModelGeometry<ModelSapling> {
+public class ModelSapling implements IUnbakedGeometry<ModelSapling> {
 
 	private final Map<IAlleleTreeSpecies, Pair<ResourceLocation, ResourceLocation>> modelsBySpecies;
 
@@ -56,7 +57,7 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 	}
 
 	@Override
-	public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+	public BakedModel bake(IGeometryBakingContext context, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
 		ImmutableMap.Builder<IAlleleTreeSpecies, BakedModel> itemModels = new ImmutableMap.Builder<>();
 		ImmutableMap.Builder<IAlleleTreeSpecies, BakedModel> blockModels = new ImmutableMap.Builder<>();
 		for (Map.Entry<IAlleleTreeSpecies, Pair<ResourceLocation, ResourceLocation>> entry : modelsBySpecies.entrySet()) {
@@ -78,7 +79,7 @@ public class ModelSapling implements IModelGeometry<ModelSapling> {
 	}
 
 	@Override
-	public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+	public Collection<Material> getMaterials(IGeometryBakingContext context, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 		return getDependencies().stream()
 				.flatMap(location -> modelGetter.apply(location).getMaterials(modelGetter, missingTextureErrors).stream())
 				.collect(Collectors.toSet());

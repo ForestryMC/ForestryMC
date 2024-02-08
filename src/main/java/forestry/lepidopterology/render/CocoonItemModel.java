@@ -4,39 +4,29 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-
-import java.util.Collection;
-import java.util.Set;
-import java.util.function.Function;
-
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.client.resources.model.UnbakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-
+import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
-
-import net.minecraftforge.client.model.IModelConfiguration;
-import net.minecraftforge.client.model.IModelLoader;
-import net.minecraftforge.client.model.geometry.IModelGeometry;
-
-import genetics.api.GeneticHelper;
-import genetics.api.organism.IOrganism;
-
-import genetics.utils.AlleleUtils;
-
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflyCocoon;
 import forestry.api.lepidopterology.genetics.IButterfly;
 import forestry.core.models.AbstractItemModel;
 import forestry.lepidopterology.items.ItemButterflyGE;
+import genetics.api.GeneticHelper;
+import genetics.api.organism.IOrganism;
+import genetics.utils.AlleleUtils;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.function.Function;
 
 public class CocoonItemModel extends AbstractItemModel {
 	private final ImmutableMap<String, ImmutableList<BakedModel>> bakedModel;
@@ -53,15 +43,15 @@ public class CocoonItemModel extends AbstractItemModel {
 		return bakedModel.getOrDefault(alleleCocoon.getCocoonName(), ImmutableList.of()).get(age);
 	}
 
-	private static class Geometry implements IModelGeometry<CocoonItemModel.Geometry> {
+	private static class Geometry implements IUnbakedGeometry<Geometry> {
 
 		@Override
-		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+		public BakedModel bake(IGeometryBakingContext context, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
 			ImmutableMap.Builder<String, ImmutableList<BakedModel>> bakedModels = new ImmutableMap.Builder<>();
 			AlleleUtils.forEach(ButterflyChromosomes.COCOON, (allele) -> {
 				ImmutableList.Builder<BakedModel> models = new ImmutableList.Builder<>();
 				for (int age = 0; age < ItemButterflyGE.MAX_AGE; age++) {
-					models.add(bakery.bake(allele.getCocoonItemModel(age), modelTransform, spriteGetter));
+					models.add(bakery.bake(allele.getCocoonItemModel(age), modelState, spriteGetter));
 				}
 				bakedModels.put(allele.getCocoonName(), models.build());
 			});
@@ -69,18 +59,15 @@ public class CocoonItemModel extends AbstractItemModel {
 		}
 
 		@Override
-		public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+		public Collection<Material> getMaterials(IGeometryBakingContext context, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 			return ImmutableList.of();
 		}
 	}
 
-	public static class Loader implements IModelLoader<Geometry> {
-		@Override
-		public void onResourceManagerReload(ResourceManager resourceManager) {
-		}
+	public static class Loader implements IGeometryLoader<CocoonItemModel.Geometry> {
 
 		@Override
-		public CocoonItemModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+		public CocoonItemModel.Geometry read(JsonObject modelContents, JsonDeserializationContext context) throws JsonParseException {
 			return new CocoonItemModel.Geometry();
 		}
 	}

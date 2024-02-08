@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.google.gson.JsonParseException;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelState;
@@ -50,10 +51,10 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.IModelConfiguration;
-import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.SimpleModelState;
-import net.minecraftforge.client.model.geometry.IModelGeometry;
+import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
+import net.minecraftforge.client.model.geometry.IGeometryLoader;
 
 import forestry.api.lepidopterology.genetics.ButterflyChromosomes;
 import forestry.api.lepidopterology.genetics.IAlleleButterflySpecies;
@@ -67,6 +68,7 @@ import genetics.api.GeneticHelper;
 import genetics.api.alleles.IAlleleValue;
 import genetics.api.organism.IOrganism;
 import genetics.utils.AlleleUtils;
+import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 
 @OnlyIn(Dist.CLIENT)
 public class ButterflyItemModel extends AbstractBakedModel {
@@ -128,7 +130,7 @@ public class ButterflyItemModel extends AbstractBakedModel {
 		}
 	}
 
-	private static class Geometry implements IModelGeometry<Geometry> {
+	private static class Geometry implements IUnbakedGeometry<Geometry> {
 
 		public final ImmutableMap<String, String> subModels;
 
@@ -137,7 +139,7 @@ public class ButterflyItemModel extends AbstractBakedModel {
 		}
 
 		@Override
-		public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation) {
+		public BakedModel bake(IGeometryBakingContext context, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
 			UnbakedModel modelButterfly = bakery.getModel(new ResourceLocation(Constants.MOD_ID, "item/butterfly"));
 			if (!(modelButterfly instanceof BlockModel modelBlock)) {
 				return null;
@@ -156,19 +158,15 @@ public class ButterflyItemModel extends AbstractBakedModel {
 		}
 
 		@Override
-		public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
+		public Collection<Material> getMaterials(IGeometryBakingContext context, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors) {
 			return subModels.values().stream().map((location) -> new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(location))).collect(Collectors.toSet());
 		}
 	}
 
-	public static class Loader implements IModelLoader<Geometry> {
+	public static class Loader implements IGeometryLoader<ButterflyItemModel.Geometry> {
 
 		@Override
-		public void onResourceManagerReload(ResourceManager resourceManager) {
-		}
-
-		@Override
-		public ButterflyItemModel.Geometry read(JsonDeserializationContext deserializationContext, JsonObject modelContents) {
+		public ButterflyItemModel.Geometry read(JsonObject modelContents, JsonDeserializationContext context) throws JsonParseException {
 			ImmutableMap.Builder<String, String> subModels = new ImmutableMap.Builder<>();
 			AlleleUtils.forEach(ButterflyChromosomes.SPECIES, (butterfly) -> {
 				ResourceLocation registryName = butterfly.getRegistryName();

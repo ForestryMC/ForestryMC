@@ -10,7 +10,6 @@
  ******************************************************************************/
 package forestry.core.proxy;
 
-import net.minecraft.client.GraphicsStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -18,6 +17,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -66,8 +66,8 @@ public class ProxyRenderClient extends ProxyRender implements IClientModuleHandl
 	}
 
 	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "fluid_container"), new FluidContainerModel.Loader());
+	public void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event) {
+		event.register("fluid_container", new FluidContainerModel.Loader());
 	}
 
 	@Override

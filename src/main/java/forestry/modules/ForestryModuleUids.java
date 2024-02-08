@@ -7,7 +7,6 @@ public class ForestryModuleUids {
 	public static final String CHARCOAL = "charcoal";
 	public static final String CORE = "core";
 	public static final String FACTORY = "factory";
-	public static final String WORKTABLE = "worktable";
 	public static final String FARMING = "farming";
 	public static final String CLIMATOLOGY = "climatology";
 	public static final String FLUIDS = "fluids";
@@ -18,7 +17,6 @@ public class ForestryModuleUids {
 	public static final String BACKPACKS = "backpacks";
 	public static final String DATABASE = "database";
 	public static final String SORTING = "sorting";
-	public static final String BOOK = "book";
 	public static final String CULTIVATION = "cultivation";
 	public static final String RESEARCH = "research";
 }

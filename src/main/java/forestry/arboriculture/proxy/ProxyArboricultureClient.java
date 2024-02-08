@@ -18,6 +18,7 @@ import net.minecraft.world.level.FoliageColor;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ForgeModelBakery;
@@ -96,7 +97,7 @@ public class ProxyArboricultureClient extends ProxyArboriculture implements ICli
 	}
 
 	@Override
-	public void registerModels(ModelRegistryEvent event) {
-		ModelLoaderRegistry.registerLoader(new ResourceLocation(Constants.MOD_ID, "sapling_ge"), SaplingModelLoader.INSTANCE);
+	public void registerModelLoaders(ModelEvent.RegisterGeometryLoaders event) {
+		event.register("sapling_ge", SaplingModelLoader.INSTANCE);
 	}
 }

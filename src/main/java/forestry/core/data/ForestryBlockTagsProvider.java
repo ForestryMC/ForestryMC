@@ -32,7 +32,6 @@ import forestry.farming.features.FarmingBlocks;
 import forestry.lepidopterology.features.LepidopterologyBlocks;
 import forestry.mail.features.MailBlocks;
 import forestry.modules.features.FeatureBlockGroup;
-import forestry.worktable.features.WorktableBlocks;
 
 //TODO: Split up ?
 public final class ForestryBlockTagsProvider extends BlockTagsProvider {
@@ -67,7 +66,6 @@ public final class ForestryBlockTagsProvider extends BlockTagsProvider {
 
 			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(CharcoalBlocks.CHARCOAL.block());
 			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(DatabaseBlocks.DATABASE.block());
-			tag(BlockTags.MINEABLE_WITH_PICKAXE).add(WorktableBlocks.WORKTABLE.block());
 
 			for (BlockFarm block : FarmingBlocks.FARM.getBlocks()) {
 				tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block);

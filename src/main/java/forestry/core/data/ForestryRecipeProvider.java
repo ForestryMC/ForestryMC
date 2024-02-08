@@ -15,7 +15,6 @@ import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import org.apache.logging.log4j.util.TriConsumer;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.HashCache;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
@@ -87,7 +86,6 @@ import forestry.modules.features.FeatureBlock;
 import forestry.modules.features.FeatureItem;
 import forestry.sorting.features.SortingBlocks;
 import forestry.storage.features.BackpackItems;
-import forestry.worktable.features.WorktableBlocks;
 
 public class ForestryRecipeProvider extends RecipeProvider {
 
@@ -113,7 +111,6 @@ public class ForestryRecipeProvider extends RecipeProvider {
 		registerLepidopterologyRecipes(consumer);
 		registerMailRecipes(consumer);
 		registerSortingRecipes(consumer);
-		registerWorktableRecipes(consumer);
 	}
 
 	private void registerApicultureRecipes(Consumer<FinishedRecipe> helper) {
@@ -1030,15 +1027,6 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.define('G', Tags.Items.GLASS)
 				.pattern("WDW").pattern("FGF").pattern("BDB")
 				.unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND)).save(helper);
-	}
-
-	private void registerWorktableRecipes(Consumer<FinishedRecipe> helper) {
-		ShapedRecipeBuilder.shaped(WorktableBlocks.WORKTABLE.block())
-				.define('B', Items.BOOK)
-				.define('C', Tags.Items.CHESTS_WOODEN)
-				.define('W', Items.CRAFTING_TABLE)
-				.pattern("B").pattern("W").pattern("C")
-				.unlockedBy("has_crafting_table", has(Items.CRAFTING_TABLE)).save(helper);
 	}
 
 	@Override
