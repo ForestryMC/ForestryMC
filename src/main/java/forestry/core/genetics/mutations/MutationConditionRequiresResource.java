@@ -21,8 +21,8 @@ import forestry.core.tiles.TileUtil;
 import genetics.api.alleles.IAllele;
 import genetics.api.individual.IGenome;
 
+import net.minecraft.client.GameNarrator;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.gui.chat.NarratorChatListener;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -51,7 +51,7 @@ public class MutationConditionRequiresResource implements IMutationCondition {
 	@Override
 	public Component getDescription() {
 		if (acceptedBlockStates.isEmpty()) {
-			return NarratorChatListener.NO_TITLE;
+			return GameNarrator.NO_TITLE;
 		} else {
 			return Component.translatable("for.mutation.condition.resource", acceptedBlockStates.get(0).getBlock().getName());
 		}

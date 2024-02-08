@@ -56,7 +56,7 @@ public class TankElement extends GuiElement {
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.translated(attributes.getTranslationKey(contents)).style(rarity.color);
+			toolTip.add(contents.getDisplayName().copy().withStyle(rarity.getStyleModifier()));
 			toolTip.translated("for.gui.tooltip.liquid.amount", amount, capacity);
 		}));
 	}

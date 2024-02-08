@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -30,11 +32,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import forestry.api.climate.ClimateCapabilities;
@@ -85,7 +87,7 @@ public class PreviewHandlerClient {
 	}
 
 	@SubscribeEvent
-	public void worldUnloaded(WorldEvent.Unload event) {
+	public void worldUnloaded(LevelEvent.Unload event) {
 		renderer.clearPreview();
 	}
 
@@ -150,7 +152,11 @@ public class PreviewHandlerClient {
 		}
 
 		@SubscribeEvent
-		public void onWorldRenderLast(RenderLevelLastEvent event) {
+		public void onWorldRenderLast(RenderLevelStageEvent event) {
+			if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+				return;
+			}
+
 			if (previewPositions.isEmpty()) {
 				return;
 			}
@@ -172,9 +178,10 @@ public class PreviewHandlerClient {
 
 			for (BlockPos position : previewPositions) {
 				AABB boundingBox = this.boundingBox.move(position);
-				//				WorldRenderer.renderFilledBox(boundingBox, 0.75F, 0.5F, 0.0F, 0.45F);
 				//TODO rendering
+				LevelRenderer.renderLineBox(pose, Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.LINES), boundingBox, 0.75F, 0.5F, 0.0F, 0.45F);
 			}
+
 			RenderSystem.enableDepthTest();
 			RenderSystem.disableBlend();
 			pose.popPose();

@@ -15,6 +15,7 @@ import net.minecraft.world.level.material.Fluid;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,19 +44,19 @@ public class FluidComponent implements ICustomComponent {
 	public void render(PoseStack ms, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
 		ms.pushPose();
 		Fluid _fluid = fluidStack.getFluid();
-		FluidType fluidAttributes = _fluid.getFluidType();
+		IClientFluidTypeExtensions fluidAttributes = IClientFluidTypeExtensions.of(_fluid);
 		ResourceLocation fluidStill = fluidAttributes.getStillTexture(fluidStack);
 		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
 		ResourceLocation spriteLocation = sprite.getName();
 		RenderSystem.setShaderTexture(0, new ResourceLocation(spriteLocation.getNamespace(), "textures/" + spriteLocation.getPath() + ".png"));
-		setGLColorFromInt(fluidAttributes.getColor(fluidStack));
+		setGLColorFromInt(fluidAttributes.getTintColor(fluidStack));
 
 		// MatrixStack transform, int x, int y, float u, float v, int width, int height, int ?, int ?
 		GuiComponent.blit(ms, x, (int) (y + h - Math.floor(h * ((float) level / maxLevel))), sprite.getU0(), sprite.getV0(), w, h * level / maxLevel, 8, 8);
 
 		if (context.isAreaHovered(mouseX, mouseY, x, y, w, h)) {
 			List<Component> toolTips = new ArrayList<>();
-			toolTips.add(Component.translatable(fluidAttributes.getTranslationKey(fluidStack)));
+			toolTips.add(fluidStack.getDisplayName());
             toolTips.add(Component.translatable("for.gui.tooltip.liquid.amount", level, maxLevel));
 
 			context.setHoverTooltipComponents(toolTips);

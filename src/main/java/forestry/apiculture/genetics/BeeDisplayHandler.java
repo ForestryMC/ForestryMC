@@ -50,11 +50,10 @@ public enum BeeDisplayHandler implements IAlleleDisplayHandler<IBee> {
 		@Override
 		public void addTooltip(ToolTip toolTip, IGenome genome, IBee individual) {
 			IAlleleValue<Integer> speedAllele = getActive(genome);
-			Component customSpeed = Component.translatable("for.tooltip.worker." +
-					speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
-			if (Translator.canTranslate(customSpeed)) {
+			String customSpeedKey = "for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", "");
+			if (Translator.canTranslateToLocal(customSpeedKey)) {
 				toolTip.singleLine()
-						.add(customSpeed)
+						.add(Component.translatable(customSpeedKey))
 						.style(ChatFormatting.GRAY)
 						.create();
 			} else {

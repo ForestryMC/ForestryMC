@@ -1,12 +1,11 @@
 package forestry.apiculture.particles;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleType;
 
 import com.mojang.serialization.Codec;
 
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.common.Mod;
@@ -31,11 +30,9 @@ public class ApicultureParticles {
 	});
 
 	@SubscribeEvent
-	public static void registerParticleFactory(ParticleFactoryRegisterEvent event) {
-		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_EXPLORER_PARTICLE.get(), BeeExploreParticle.Factory::new);
-
-		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_ROUND_TRIP_PARTICLE.get(), BeeRoundTripParticle.Factory::new);
-
-		Minecraft.getInstance().particleEngine.register(ApicultureParticles.BEE_TARGET_ENTITY_PARTICLE.get(), BeeTargetEntityParticle.Factory::new);
+	public static void registerParticleFactory(RegisterParticleProvidersEvent event) {
+		event.register(ApicultureParticles.BEE_EXPLORER_PARTICLE.get(), BeeExploreParticle.Factory::new);
+		event.register(ApicultureParticles.BEE_ROUND_TRIP_PARTICLE.get(), BeeRoundTripParticle.Factory::new);
+		event.register(ApicultureParticles.BEE_TARGET_ENTITY_PARTICLE.get(), BeeTargetEntityParticle.Factory::new);
 	}
 }

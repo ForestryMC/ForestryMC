@@ -29,13 +29,10 @@ import forestry.api.core.tooltips.ToolTip;
 import forestry.core.network.IStreamable;
 import forestry.core.network.PacketBufferForestry;
 
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class StandardTank extends FluidTank implements IStreamable {
-	private static final int DEFAULT_COLOR = 0xFFFFFF;
 
 	private ITankUpdateHandler tankUpdateHandler = FakeTankUpdateHandler.instance;
 	private int tankIndex;
@@ -70,14 +67,6 @@ public class StandardTank extends FluidTank implements IStreamable {
 
 	public int getTankIndex() {
 		return tankIndex;
-	}
-
-	public int getColor() {
-		Fluid f = getFluidType();
-		if (f == null) {
-			return DEFAULT_COLOR;
-		}
-		return f.getFluidType().getColor(getFluid());
 	}
 
 	public boolean isEmpty() {
@@ -205,7 +194,7 @@ public class StandardTank extends FluidTank implements IStreamable {
 			if (rarity == null) {
 				rarity = Rarity.COMMON;
 			}
-			toolTip.add(Component.translatable(attributes.getTranslationKey(fluidStack)), rarity.color);
+			toolTip.add(fluidStack.getDisplayName(), rarity.color);
 			amount = getFluid().getAmount();
 		}
 		Component liquidAmount = Component.translatable("for.gui.tooltip.liquid.amount", amount, getCapacity());

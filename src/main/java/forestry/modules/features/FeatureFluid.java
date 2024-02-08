@@ -33,12 +33,11 @@ public class FeatureFluid implements IFluidFeature {
 		this.identifier = builder.identifier;
 		this.block = builder.registry.block(() -> new BlockForestryFluid(this), "fluid_" + builder.identifier);
 		this.properties = new FluidProperties(builder);
-		ResourceLocation[] resources = properties().resources;
-		FluidType.Builder attributes = FluidType.builder(resources[0], resources[1])
+		FluidType attributes = new FluidType(FluidType.Properties.create()
 				.density(properties().density)
 				.viscosity(properties().viscosity)
-				.temperature(properties().temperature);
-		this.internal = new ForgeFlowingFluid.Properties(this::getFluid, this::getFlowing, attributes).block(block::getBlock).bucket(properties().bucket);
+				.temperature(properties().temperature));
+		this.internal = new ForgeFlowingFluid.Properties(() -> attributes, this::getFluid, this::getFlowing).block(block::getBlock).bucket(properties().bucket);
 	}
 
 	@Override

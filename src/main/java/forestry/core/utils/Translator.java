@@ -1,9 +1,12 @@
 package forestry.core.utils;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.locale.Language;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 public class Translator {
 	private Translator() {}
@@ -21,29 +24,17 @@ public class Translator {
 	}
 
 	public static Component tryTranslate(String optionalKey, String defaultKey) {
-		return tryTranslate(() -> Component.translatable(optionalKey), () -> Component.translatable(defaultKey));
+		return tryTranslate(optionalKey, () -> Component.translatable(defaultKey));
 	}
 
 	public static Component tryTranslate(String optionalKey, Supplier<Component> defaultKey) {
-		return tryTranslate(() -> Component.translatable(optionalKey), defaultKey);
-	}
+		TranslatableContents contents = new TranslatableContents(optionalKey);
+		boolean translationFailed = contents.visit(s -> Optional.of(optionalKey.equals(s))).orElse(false);
 
-	/**
-	 * Tries to translate the optional key component. Returns the default key component if the first can't be translated.
-	 *
-	 * @return The optional component if it can be translated the other component otherwise.
-	 */
-	private static Component tryTranslate(Supplier<TranslatableComponent> optionalKey, Supplier<Component> defaultKey) {
-		TranslatableComponent component = optionalKey.get();
-		if (canTranslate(component)) {
-			return component;
-		} else {
+		if (translationFailed) {
 			return defaultKey.get();
+		} else {
+			return MutableComponent.create(contents);
 		}
-	}
-
-	public static boolean canTranslate(TranslatableComponent component) {
-		String translatedText = component.getString();
-		return !translatedText.startsWith(component.getKey());
 	}
 }

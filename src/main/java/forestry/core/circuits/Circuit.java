@@ -45,11 +45,10 @@ public abstract class Circuit implements ICircuit {
 		int i = 1;
 		while (true) {
 			String unlocalizedDescription = getTranslationKey() + ".description." + i;
-			Component component = Component.translatable(unlocalizedDescription);
-			if (!Translator.canTranslate(component)) {
+			if (!Translator.canTranslateToLocal(unlocalizedDescription)) {
 				break;
 			}
-			list.add(Component.literal(" - ").append(component).withStyle(ChatFormatting.GRAY));
+			list.add(Component.literal(" - ").append(Component.translatable(unlocalizedDescription)).withStyle(ChatFormatting.GRAY));
 			i++;
 		}
 	}

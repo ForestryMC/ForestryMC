@@ -3,8 +3,8 @@ package forestry.core.multiblock;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
 
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.ChunkEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import net.minecraftforge.fml.common.Mod;
@@ -22,13 +22,13 @@ public class MultiblockEventHandler {
 	@SubscribeEvent
 	public static void onChunkLoad(ChunkEvent.Load loadEvent) {
 		ChunkAccess chunk = loadEvent.getChunk();
-		LevelAccessor world = loadEvent.getWorld();
+		LevelAccessor world = loadEvent.getLevel();
 		MultiblockRegistry.onChunkLoaded(world, chunk.getPos().getRegionX(), chunk.getPos().getRegionZ());
 	}
 
 	// Cleanup, for nice memory usageness
 	@SubscribeEvent
-	public static void onWorldUnload(WorldEvent.Unload unloadWorldEvent) {
-		MultiblockRegistry.onWorldUnloaded(unloadWorldEvent.getWorld());
+	public static void onWorldUnload(LevelEvent.Unload unloadEvent) {
+		MultiblockRegistry.onWorldUnloaded(unloadEvent.getLevel());
 	}
 }

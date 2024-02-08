@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
@@ -40,10 +41,7 @@ import forestry.core.render.EnumTankLevel;
 import forestry.core.tiles.ILiquidTankTile;
 import forestry.core.tiles.IRenderableTile;
 import forestry.core.utils.NBTUtilForestry;
-import forestry.core.utils.NBTUtilForestry.NBTList;
 import forestry.core.utils.NetworkUtil;
-
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -105,12 +103,12 @@ public class TankManager implements ITankManager, ITankUpdateHandler, IStreamabl
 
 	@Override
 	public void read(CompoundTag data) {
-		NBTList<CompoundTag> tagList = NBTUtilForestry.getNBTList(data, "tanks", NBTUtilForestry.EnumNBTType.COMPOUND);
-		for (CompoundTag tag : tagList) {
-			int slot = tag.getByte("tank");
+		for (Tag tag : data.getList("tanks", Tag.TAG_COMPOUND)) {
+			CompoundTag compound = (CompoundTag) tag;
+			int slot = compound.getByte("tank");
 			if (slot >= 0 && slot < tanks.size()) {
 				StandardTank tank = tanks.get(slot);
-				tank.readFromNBT(tag);
+				tank.readFromNBT(compound);
 				updateTankLevels(tank, false);
 			}
 		}

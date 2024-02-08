@@ -29,19 +29,17 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -122,6 +120,7 @@ import forestry.modules.features.ModFeatureRegistry;
 
 import genetics.api.alleles.IAllele;
 import genetics.utils.AlleleUtils;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 
 /**
@@ -238,7 +237,7 @@ public class Forestry {
 	private record Client(IEventBus modEventBus, NetworkHandler networkHandler) implements Runnable {
 		@Override
 		public void run() {
-			modEventBus.addListener(EventPriority.NORMAL, false, ColorHandlerEvent.Block.class, x -> {
+			modEventBus.addListener((RegisterColorHandlersEvent.Block x) -> {
 				Minecraft minecraft = Minecraft.getInstance();
 				ForestrySpriteUploader spriteUploader = new ForestrySpriteUploader(minecraft.textureManager, TextureManagerForestry.LOCATION_FORESTRY_TEXTURE, "gui");
 				TextureManagerForestry.getInstance().init(spriteUploader);
@@ -263,12 +262,20 @@ public class Forestry {
 		}
 
 		@SubscribeEvent(priority = EventPriority.HIGH)
-		public static void createFeatures(RegistryEvent.Register<Block> event) {
+		public static void createFeatures(RegisterEvent event) {
+			if (event.getRegistryKey() == Registry.BLOCK_REGISTRY) {
+				return;
+			}
+
 			ModuleManager.getModuleHandler().createFeatures();
 		}
 
 		@SubscribeEvent(priority = EventPriority.LOW)
-		public static void createObjects(RegistryEvent.Register<Block> event) {
+		public static void createObjects(RegisterEvent event) {
+			if (event.getRegistryKey() == Registry.BLOCK_REGISTRY) {
+				return;
+			}
+
 			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> !moduleID.equals(ForestryModuleUids.CRATE));
 			ModuleManager.getModuleHandler().runRegisterBackpacksAndCrates();
 			ModuleManager.getModuleHandler().createObjects((type, moduleID) -> moduleID.equals(ForestryModuleUids.CRATE));
@@ -280,37 +287,29 @@ public class Forestry {
 		}
 
 		@SubscribeEvent
-		public static void registerRecipeSerialziers(RegistryEvent.Register<RecipeSerializer<?>> event) {
-			IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
+		public static void register(RegisterEvent event) {
+			event.register(Registry.RECIPE_SERIALIZER_REGISTRY, helper -> {
+				helper.register(ICarpenterRecipe.TYPE.toString(), new CarpenterRecipe.Serializer());
+				helper.register(ICentrifugeRecipe.TYPE.toString(), new CentrifugeRecipe.Serializer());
+				helper.register(IFabricatorRecipe.TYPE.toString(), new FabricatorRecipe.Serializer());
+				helper.register(IFabricatorSmeltingRecipe.TYPE.toString(), new FabricatorSmeltingRecipe.Serializer());
+				helper.register(IFermenterRecipe.TYPE.toString(), new FermenterRecipe.Serializer());
+				helper.register(IHygroregulatorRecipe.TYPE.toString(), new HygroregulatorRecipe.Serializer());
+				helper.register(IMoistenerRecipe.TYPE.toString(), new MoistenerRecipe.Serializer());
+				helper.register(ISqueezerRecipe.TYPE.toString(), new SqueezerRecipe.Serializer());
+				helper.register(ISqueezerContainerRecipe.TYPE.toString(), new SqueezerContainerRecipe.Serializer());
+				helper.register(IStillRecipe.TYPE.toString(), new StillRecipe.Serializer());
+				helper.register(ISolderRecipe.TYPE.toString(), new CircuitRecipe.Serializer());
+			});
 
-			register(registry, ICarpenterRecipe.TYPE, new CarpenterRecipe.Serializer());
-			register(registry, ICentrifugeRecipe.TYPE, new CentrifugeRecipe.Serializer());
-			register(registry, IFabricatorRecipe.TYPE, new FabricatorRecipe.Serializer());
-			register(registry, IFabricatorSmeltingRecipe.TYPE, new FabricatorSmeltingRecipe.Serializer());
-			register(registry, IFermenterRecipe.TYPE, new FermenterRecipe.Serializer());
-			register(registry, IHygroregulatorRecipe.TYPE, new HygroregulatorRecipe.Serializer());
-			register(registry, IMoistenerRecipe.TYPE, new MoistenerRecipe.Serializer());
-			register(registry, ISqueezerRecipe.TYPE, new SqueezerRecipe.Serializer());
-			register(registry, ISqueezerContainerRecipe.TYPE, new SqueezerContainerRecipe.Serializer());
-			register(registry, IStillRecipe.TYPE, new StillRecipe.Serializer());
-			register(registry, ISolderRecipe.TYPE, new CircuitRecipe.Serializer());
+			event.register(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, helper -> {
+				helper.register(new ResourceLocation(Constants.MOD_ID, "condition_modifier"), ConditionLootModifier.CODEC);
+				helper.register(new ResourceLocation(Constants.MOD_ID, "grafter_modifier"), GrafterLootModifier.CODEC);
+
+				OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootItemFunctionType(new OrganismFunction.Serializer()));
+				CountBlockFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "count_from_block"), new LootItemFunctionType(new CountBlockFunction.Serializer()));
+			});
 		}
-
-		private static void register(IForgeRegistry<RecipeSerializer<?>> registry, RecipeType<?> type, RecipeSerializer<?> serializer) {
-			Registry.register(Registry.RECIPE_TYPE, type.toString(), type);
-			registry.register(serializer.setRegistryName(new ResourceLocation(type.toString())));
-		}
-
-		@SubscribeEvent
-		public static void registerLootModifiers(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-			IForgeRegistry<GlobalLootModifierSerializer<?>> registry = event.getRegistry();
-			registry.register(ConditionLootModifier.SERIALIZER);
-			registry.register(GrafterLootModifier.SERIALIZER);
-
-			OrganismFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "set_species_nbt"), new LootItemFunctionType(new OrganismFunction.Serializer()));
-			CountBlockFunction.type = Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Constants.MOD_ID, "count_from_block"), new LootItemFunctionType(new CountBlockFunction.Serializer()));
-		}
-
 
 		@SubscribeEvent
 		@OnlyIn(Dist.CLIENT)

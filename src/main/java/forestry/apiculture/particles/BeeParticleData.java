@@ -23,6 +23,8 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistry;
 
 public class BeeParticleData implements ParticleOptions {
 
@@ -71,7 +73,7 @@ public class BeeParticleData implements ParticleOptions {
 
 	@Override
 	public void writeToNetwork(@Nonnull FriendlyByteBuf buffer) {
-		buffer.writeRegistryId(type);
+		buffer.writeRegistryId(ForgeRegistries.PARTICLE_TYPES, type);
 		buffer.writeLong(destination.asLong());
 		buffer.writeInt(color);
 	}

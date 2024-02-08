@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -183,7 +184,7 @@ public final class MemorizedRecipe implements INbtWritable, INbtReadable, IStrea
 
 		recipes.clear();
 		recipeNames.clear();
-		ListTag recipesNbt = compoundNBT.getList("Recipes", NBTUtilForestry.EnumNBTType.STRING.ordinal());
+		ListTag recipesNbt = compoundNBT.getList("Recipes", Tag.TAG_STRING);
 		for (int i = 0; i < recipesNbt.size(); i++) {
 			String recipeKey = recipesNbt.getString(i);
 			recipeNames.add(recipeKey);

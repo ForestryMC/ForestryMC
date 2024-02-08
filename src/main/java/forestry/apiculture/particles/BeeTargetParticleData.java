@@ -64,7 +64,7 @@ public class BeeTargetParticleData implements ParticleOptions {
 	@Nonnull
 	@Override
 	public ParticleType<?> getType() {
-		return ApicultureParticles.BEE_TARGET_ENTITY_PARTICLE.getParticleType();
+		return ApicultureParticles.BEE_TARGET_ENTITY_PARTICLE.get();
 	}
 
 	@Override

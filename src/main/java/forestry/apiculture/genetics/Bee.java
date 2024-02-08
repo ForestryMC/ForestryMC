@@ -379,10 +379,10 @@ public class Bee extends IndividualLiving implements IBee {
 
 		IAllele speedAllele = genome.getActiveAllele(BeeChromosomes.SPEED);
 
-		Component customSpeed = Component.translatable("for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", ""));
-		if (Translator.canTranslate(customSpeed)) {
+		String customSpeedKey = "for.tooltip.worker." + speedAllele.getLocalisationKey().replaceAll("(.*)\\.", "");
+		if (Translator.canTranslateToLocal(customSpeedKey)) {
 			toolTip.singleLine()
-				.add(customSpeed)
+				.add(Component.translatable(customSpeedKey))
 				.style(ChatFormatting.GRAY)
 				.create();
 		} else {
