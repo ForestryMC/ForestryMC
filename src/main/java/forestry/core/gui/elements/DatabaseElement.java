@@ -133,6 +133,7 @@ public class DatabaseElement extends ContainerElement {
 	}
 
 	public void addLine(String firstText, String secondText, String thirdText, boolean secondDominant, boolean thirdDominant) {
+		// todo: why aren't we rendering this?
 		Todos.todo();
 	}
 

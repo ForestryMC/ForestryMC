@@ -40,7 +40,6 @@ public class Config {
 	public static final boolean logHivePlacement = false;
 	public static final boolean logCocoonPlacement = false;
 	public static final boolean logTreePlacement = false;
-	public static final boolean enableVillagers = true;
 
 	// Performance
 	public static final boolean enableBackpackResupply = true;

@@ -14,10 +14,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 class FakeCraftingInventory {
 
 	private static final AbstractContainerMenu EMPTY_CONTAINER = new AbstractContainerMenu(null, -1) {
+		@Override
+		public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
+			return ItemStack.EMPTY;
+		}
+
 		@Override
 		public boolean stillValid(Player playerIn) {
 			return true;

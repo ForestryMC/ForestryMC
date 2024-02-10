@@ -51,7 +51,6 @@ public class ForestryTags {
 		public static final TagKey<Item> DROP_HONEY = tag("drop_honey");
 
 		public static final TagKey<Item> INGOTS_BRONZE = forgeTag("ingots/bronze");
-		public static final TagKey<Item> INGOTS_COPPER = forgeTag("ingots/copper");
 		public static final TagKey<Item> INGOTS_TIN = forgeTag("ingots/tin");
 
 		public static final TagKey<Item> GEARS = forgeTag("gears");

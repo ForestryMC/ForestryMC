@@ -12,6 +12,7 @@ package forestry.arboriculture;
 
 import java.util.function.Consumer;
 
+import forestry.apiculture.features.ApicultureFeatures;
 import net.minecraft.world.level.levelgen.feature.Feature;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -54,18 +55,15 @@ public class ModuleArboriculture extends BlankForestryModule {
 	public ModuleArboriculture() {
 		proxy = DistExecutor.safeRunForDist(() -> ProxyArboricultureClient::new, () -> ProxyArboriculture::new);
 		ForgeUtils.registerSubscriber(this);
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		if (Config.enableVillagers) {
-			RegisterVillager.POINTS_OF_INTEREST.register(FMLJavaModLoadingContext.get().getModEventBus());
-			RegisterVillager.PROFESSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
-			MinecraftForge.EVENT_BUS.addListener(RegisterVillager::villagerTrades);
-		}
+		RegisterVillager.POINTS_OF_INTEREST.register(modEventBus);
+		RegisterVillager.PROFESSIONS.register(modEventBus);
+		MinecraftForge.EVENT_BUS.addListener(RegisterVillager::villagerTrades);
 
-		if (TreeConfig.getSpawnRarity() > 0.0F) {
-			IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-			modEventBus.addListener(ArboricultureFeatures::registerFeatures);
-			MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ArboricultureFeatures::onBiomeLoad);
-		}
+		ApicultureFeatures.FEATURES.register(modEventBus);
+		ApicultureFeatures.CONFIGURED_FEATURES.register(modEventBus);
+		ApicultureFeatures.PLACED_FEATURES.register(modEventBus);
 	}
 
 	@Override

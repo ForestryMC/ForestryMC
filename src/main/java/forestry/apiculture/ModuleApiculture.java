@@ -131,14 +131,13 @@ public class ModuleApiculture extends BlankForestryModule {
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		if (Config.enableVillagers) {
-			RegisterVillager.POINTS_OF_INTEREST.register(modEventBus);
-			RegisterVillager.PROFESSIONS.register(modEventBus);
-			MinecraftForge.EVENT_BUS.addListener(RegisterVillager::villagerTrades);
-		}
+		RegisterVillager.POINTS_OF_INTEREST.register(modEventBus);
+		RegisterVillager.PROFESSIONS.register(modEventBus);
+		MinecraftForge.EVENT_BUS.addListener(RegisterVillager::villagerTrades);
 
-		modEventBus.addListener(ApicultureFeatures::registerFeatures);
-		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, ApicultureFeatures::onBiomeLoad);
+		ApicultureFeatures.FEATURES.register(modEventBus);
+		ApicultureFeatures.CONFIGURED_FEATURES.register(modEventBus);
+		ApicultureFeatures.PLACED_FEATURES.register(modEventBus);
 	}
 
 	@Override

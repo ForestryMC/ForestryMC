@@ -51,7 +51,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 		tag(ForestryTags.Items.GEARS_COPPER).add(CoreItems.GEAR_COPPER.item());
 		tag(ForestryTags.Items.GEARS_STONE);
 
-		addToTag(Tags.Items.INGOTS, ForestryTags.Items.INGOTS_BRONZE, ForestryTags.Items.INGOTS_COPPER, ForestryTags.Items.INGOTS_TIN);
+		addToTag(Tags.Items.INGOTS, ForestryTags.Items.INGOTS_BRONZE, ForestryTags.Items.INGOTS_TIN);
 		tag(ForestryTags.Items.INGOTS_BRONZE).add(CoreItems.INGOT_BRONZE.item());
 		tag(ForestryTags.Items.INGOTS_TIN).add(CoreItems.INGOT_TIN.item());
 
@@ -93,7 +93,7 @@ public final class ForestryItemTagsProvider extends ItemTagsProvider {
 	}
 
 	@SafeVarargs
-	protected final void addToTag(TagKey<Item> tag, TagKey<Item>... providers) {
+	private void addToTag(TagKey<Item> tag, TagKey<Item>... providers) {
 		TagsProvider.TagAppender<Item> builder = tag(tag);
 		for (TagKey<Item> provider : providers) {
 			builder.addTag(provider);

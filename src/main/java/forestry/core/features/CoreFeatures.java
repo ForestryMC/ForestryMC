@@ -1,63 +1,45 @@
 package forestry.core.features;
 
-import deleteme.BiomeCategory;
 import forestry.core.config.Constants;
-import net.minecraft.core.Holder;
-import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.OrePlacements;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CoreFeatures {
-	private static List<Holder<PlacedFeature>> OVERWORLD_ORES = List.of();
 
-	public static void registerOres() {
-		var apatite = OrePlacements.commonOrePlacement(3, HeightRangePlacement.triangle(VerticalAnchor.absolute(48), VerticalAnchor.absolute(112)));
-		var tin = OrePlacements.commonOrePlacement(16, HeightRangePlacement.triangle(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)));
+	public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES = DeferredRegister.create(Registry.CONFIGURED_FEATURE_REGISTRY, Constants.MOD_ID);
+	public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, Constants.MOD_ID);
 
-		OreConfiguration apatiteOre = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.APATITE_ORE.defaultState(), 3);
-		OreConfiguration deepslateApatiteOre = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_APATITE_ORE.defaultState(), 3);
-		OreConfiguration tinOre = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.TIN_ORE.defaultState(), 9);
-		OreConfiguration deepslateTinOre = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_TIN_ORE.defaultState(), 9);
+	public static final RegistryObject<ConfiguredFeature<?, ?>> ORE_APATITE = CONFIGURED_FEATURES.register("ore_apatite",
+			() -> new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(List.of(
+					OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.APATITE_ORE.defaultState()),
+					OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_APATITE_ORE.defaultState())
+			), 9)));
 
-		OVERWORLD_ORES = List.of(
-				registerOre("apatite_ore", apatiteOre, apatite),
-				registerOre("deepslate_apatite_ore", deepslateApatiteOre, apatite),
-				registerOre("tin_ore", tinOre, tin),
-				registerOre("deepslate_tin_ore",deepslateTinOre, tin)
-		);
-	}
+	public static final RegistryObject<ConfiguredFeature<?, ?>> ORE_TIN = CONFIGURED_FEATURES.register("ore_tin",
+			() -> new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(List.of(
+					OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, CoreBlocks.TIN_ORE.defaultState()),
+					OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, CoreBlocks.DEEPSLATE_TIN_ORE.defaultState())
+			), 9)));
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void gen(BiomeLoadingEvent event) {
-		if (event.getCategory() == BiomeCategory.NETHER || event.getCategory() == BiomeCategory.THEEND) {
-			return;
-		}
+	public static final RegistryObject<PlacedFeature> PLACED_APATITE = PLACED_FEATURES.register("ore_apatite",
+			() -> new PlacedFeature(ORE_APATITE.getHolder().get(), OrePlacements.commonOrePlacement(3, HeightRangePlacement.triangle(
+					VerticalAnchor.absolute(48),
+					VerticalAnchor.absolute(112)
+			))));
 
-		for (Holder<PlacedFeature> feature : OVERWORLD_ORES) {
-			event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature);
-		}
-	}
-
-	private static Holder<PlacedFeature> registerOre(String registryName, OreConfiguration oreConfiguration, List<PlacementModifier> placementModifiers) {
-		String identifier = new ResourceLocation(Constants.MOD_ID, registryName).toString();
-		Holder<ConfiguredFeature<OreConfiguration, ?>> oreFeature = FeatureUtils.register(identifier, Feature.ORE, oreConfiguration);
-		return PlacementUtils.register(identifier, oreFeature, placementModifiers);
-	}
+	public static final RegistryObject<PlacedFeature> PLACED_TIN = PLACED_FEATURES.register("ore_tin",
+			() -> new PlacedFeature(ORE_TIN.getHolder().get(), OrePlacements.commonOrePlacement(16, HeightRangePlacement.triangle(
+					VerticalAnchor.bottom(), VerticalAnchor.absolute(64)
+			))));
 }

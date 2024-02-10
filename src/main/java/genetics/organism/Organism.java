@@ -25,7 +25,7 @@ import genetics.api.root.IRootDefinition;
 import genetics.individual.GeneticSaveHandler;
 
 public class Organism<I extends IIndividual> implements IOrganism<I> {
-	private final LazyOptional<IOrganism> holder = LazyOptional.of(() -> this);
+	private final LazyOptional<IOrganism<?>> holder = LazyOptional.of(() -> this);
 	private final ItemStack container;
 	private final IRootDefinition<? extends IIndividualRoot<I>> definition;
 	private final Supplier<IOrganismType> typeSupplier;

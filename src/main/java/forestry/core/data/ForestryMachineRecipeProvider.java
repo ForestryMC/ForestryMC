@@ -396,7 +396,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 		crate(consumer, CrateItems.CRATED_PHOSPHOR.get(), Ingredient.of(CoreItems.PHOSPHOR));
 		crate(consumer, CrateItems.CRATED_ASH.get(), Ingredient.of(CoreItems.ASH));
 		crate(consumer, CrateItems.CRATED_TIN.get(), Ingredient.of(ForestryTags.Items.INGOTS_TIN));
-		crate(consumer, CrateItems.CRATED_COPPER.get(), Ingredient.of(ForestryTags.Items.INGOTS_COPPER));
+		crate(consumer, CrateItems.CRATED_COPPER.get(), Ingredient.of(Items.COPPER_INGOT));
 		crate(consumer, CrateItems.CRATED_BRONZE.get(), Ingredient.of(ForestryTags.Items.INGOTS_BRONZE));
 
 		crate(consumer, CrateItems.CRATED_HUMUS.get(), Ingredient.of(CoreBlocks.HUMUS));
@@ -729,7 +729,7 @@ public class ForestryMachineRecipeProvider extends RecipeProvider {
 						.pattern("#X#")
 						.pattern("XXX")
 						.define('#', Tags.Items.DUSTS_REDSTONE)
-						.define('X', ForestryTags.Items.INGOTS_COPPER))
+						.define('X', Items.COPPER_INGOT))
 				.build(consumer, id("fabricator", "electron_tubes", "copper"));
 		new FabricatorRecipeBuilder()
 				.setPlan(Ingredient.EMPTY)

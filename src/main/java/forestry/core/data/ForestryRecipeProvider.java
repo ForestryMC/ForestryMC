@@ -583,7 +583,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.addCondition(new TagEmptyCondition("forge", "gears/stone"))    //TODO can this be replaced with true since the array is scanned in order?
 				.addRecipe(ShapedRecipeBuilder.shaped(CoreItems.GEAR_BRONZE)
 						.define('#', ForestryTags.Items.INGOTS_BRONZE)
-						.define('X', ForestryTags.Items.INGOTS_COPPER)
+						.define('X', Items.COPPER_INGOT)
 						.pattern(" # ").pattern("#X#").pattern(" # ")
 						.unlockedBy("has_bronze", has(ForestryTags.Items.INGOTS_BRONZE))::save)
 				.build(helper, new ResourceLocation(Constants.MOD_ID, "gear_bronze"));
@@ -591,16 +591,16 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.addCondition(new NotCondition(new TagEmptyCondition("forge", "gears/stone")))
 				.addRecipe(
 						ShapedRecipeBuilder.shaped(CoreItems.GEAR_COPPER)
-								.define('#', ForestryTags.Items.INGOTS_COPPER)
+								.define('#', Items.COPPER_INGOT)
 								.define('X', ForestryTags.Items.GEARS_STONE)
 								.pattern(" # ").pattern("#X#").pattern(" # ")
-								.unlockedBy("has_copper", has(ForestryTags.Items.INGOTS_COPPER))::save)
+								.unlockedBy("has_copper", has(Items.COPPER_INGOT))::save)
 				.addCondition(new TagEmptyCondition("forge", "gears/stone"))    //TODO can this be replaced with true since the array is scanned in order?
 				.addRecipe(ShapedRecipeBuilder.shaped(CoreItems.GEAR_COPPER)
-						.define('#', ForestryTags.Items.INGOTS_COPPER)
-						.define('X', ForestryTags.Items.INGOTS_COPPER)
+						.define('#', Items.COPPER_INGOT)
+						.define('X', Items.COPPER_INGOT)
 						.pattern(" # ").pattern("#X#").pattern(" # ")
-						.unlockedBy("has_copper", has(ForestryTags.Items.INGOTS_COPPER))::save)
+						.unlockedBy("has_copper", has(Items.COPPER_INGOT))::save)
 				.build(helper, new ResourceLocation(Constants.MOD_ID, "gear_copper"));
 		ConditionalRecipe.builder()
 				.addCondition(new NotCondition(new TagEmptyCondition("forge", "gears/stone")))
@@ -613,16 +613,16 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.addCondition(new TagEmptyCondition("forge", "gears/stone"))    //TODO can this be replaced with true since the array is scanned in order?
 				.addRecipe(ShapedRecipeBuilder.shaped(CoreItems.GEAR_TIN)
 						.define('#', ForestryTags.Items.INGOTS_TIN)
-						.define('X', ForestryTags.Items.INGOTS_COPPER)
+						.define('X', Items.COPPER_INGOT)
 						.pattern(" # ").pattern("#X#").pattern(" # ")
 						.unlockedBy("has_tin", has(ForestryTags.Items.INGOTS_TIN))::save)
 				.build(helper, new ResourceLocation(Constants.MOD_ID, "gear_tin"));
 
 		ShapelessRecipeBuilder.shapeless(CoreItems.INGOT_BRONZE)
 				.requires(ForestryTags.Items.INGOTS_TIN)
-				.requires(ForestryTags.Items.INGOTS_COPPER)
-				.requires(ForestryTags.Items.INGOTS_COPPER)
-				.requires(ForestryTags.Items.INGOTS_COPPER)
+				.requires(Items.COPPER_INGOT)
+				.requires(Items.COPPER_INGOT)
+				.requires(Items.COPPER_INGOT)
 				.unlockedBy("has_tin", has(ForestryTags.Items.INGOTS_TIN))
 				.save(helper, new ResourceLocation(Constants.MOD_ID, "ingot_bronze_alloying"));
 
@@ -857,7 +857,7 @@ public class ForestryRecipeProvider extends RecipeProvider {
 				.unlockedBy("has_casing", has(CoreItems.STURDY_CASING)).save(helper);
 		ShapedRecipeBuilder.shaped(FactoryBlocks.TESR.get(BlockTypeFactoryTesr.CENTRIFUGE).block())
 				.define('#', Tags.Items.GLASS)
-				.define('X', ForestryTags.Items.INGOTS_COPPER)
+				.define('X', Items.COPPER_INGOT)
 				.define('Y', CoreItems.STURDY_CASING)
 				.pattern("X#X").pattern("XYX").pattern("X#X")
 				.unlockedBy("has_casing", has(CoreItems.STURDY_CASING)).save(helper);
@@ -913,9 +913,9 @@ public class ForestryRecipeProvider extends RecipeProvider {
 					.define('#', base)
 					.define('C', CoreItems.ELECTRON_TUBES.get(EnumElectronTube.TIN))
 					.define('W', ItemTags.WOODEN_SLABS)
-					.define('I', ForestryTags.Items.INGOTS_COPPER)
+					.define('I', Items.COPPER_INGOT)
 					.pattern("I#I").pattern("WCW")
-					.unlockedBy("has_copper", has(ForestryTags.Items.INGOTS_COPPER)).save(helper);
+					.unlockedBy("has_copper", has(Items.COPPER_INGOT)).save(helper);
 			ShapedRecipeBuilder.shaped(FarmingBlocks.FARM.get(EnumFarmBlockType.GEARBOX, material).block())
 					.define('#', base)
 					.define('T', ForestryTags.Items.GEARS_TIN)
