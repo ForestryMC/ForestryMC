@@ -35,7 +35,6 @@ import genetics.api.GeneticHelper;
 public class ForestryAdvancementProvider implements DataProvider {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 
 	private final DataGenerator generator;
 
@@ -44,7 +43,7 @@ public class ForestryAdvancementProvider implements DataProvider {
 	}
 
 	@Override
-	public void run(HashCache cache) throws IOException {
+	public void run(CachedOutput cache) throws IOException {
 		Path outputFolder = this.generator.getOutputFolder();
 		Set<ResourceLocation> set = Sets.newHashSet();
 
@@ -55,7 +54,7 @@ public class ForestryAdvancementProvider implements DataProvider {
 				Path path = createPath(outputFolder, advancement);
 
 				try {
-					DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), path);
+					DataProvider.saveStable(cache, advancement.deconstruct().serializeToJson(), path);
 				} catch (IOException ioexception) {
 					LOGGER.error("Couldn't save advancement {}", path, ioexception);
 				}

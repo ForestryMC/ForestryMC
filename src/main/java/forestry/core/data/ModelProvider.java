@@ -39,7 +39,6 @@ import forestry.modules.features.FeatureItem;
 //TODO: Migrate to forge system
 public abstract class ModelProvider implements DataProvider {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 	protected final String folder;
 	protected final Map<String, ModelBuilder> pathToBuilder = Maps.newLinkedHashMap();
 	protected final DataGenerator generator;
@@ -53,25 +52,16 @@ public abstract class ModelProvider implements DataProvider {
 	public void run(CachedOutput cache) throws IOException {
 		this.pathToBuilder.clear();
 		this.registerModels();
+
 		pathToBuilder.forEach((key, builder) -> {
 			JsonObject jsonobject = builder.serialize();
 			Path path = this.makePath(key);
+
 			try {
-				String s = GSON.toJson(jsonobject);
-				String s1 = Hashing.sha1().hashUnencodedChars(s).toString();
-				if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path)) {
-					Files.createDirectories(path.getParent());
-
-					try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
-						bufferedwriter.write(s);
-					}
-				}
-
-				cache.putNew(path, s1);
+				DataProvider.saveStable(cache, jsonobject, path);
 			} catch (IOException ioexception) {
 				LOGGER.error("Couldn't save models to {}", path, ioexception);
 			}
-
 		});
 	}
 
