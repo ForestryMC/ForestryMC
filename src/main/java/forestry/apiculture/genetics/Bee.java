@@ -328,11 +328,12 @@ public class Bee extends IndividualLiving implements IBee {
 	}
 
 	@Override
-	public List<ResourceLocation> getSuitableBiomes() {
-		List<ResourceLocation> suitableBiomes = new ArrayList<>();
+	public List<Biome> getSuitableBiomes() {
+		List<Biome> suitableBiomes = new ArrayList<>();
+
 		for (Biome biome : ForgeRegistries.BIOMES) {
 			if (isSuitableBiome(biome)) {
-				suitableBiomes.add(RegistryNameFinder.getRegistryName(biome));
+				suitableBiomes.add(biome);
 			}
 		}
 

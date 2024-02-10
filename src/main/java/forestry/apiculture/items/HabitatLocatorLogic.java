@@ -10,51 +10,27 @@
  ******************************************************************************/
 package forestry.apiculture.items;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
-import deleteme.BiomeCategory;
-import deleteme.RegistryNameFinder;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
-
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
+import com.mojang.datafixers.util.Pair;
 import forestry.api.apiculture.genetics.IBee;
 import forestry.apiculture.network.packets.PacketHabitatBiomePointer;
 import forestry.core.utils.NetworkUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class HabitatLocatorLogic {
-	private static final int maxChecksPerTick = 100;
-	private static final int maxSearchRadiusIterations = 500;
-	private static final int spacing = 20;
-	private static final int minBiomeRadius = 8;
 
-	private static final Set<ResourceLocation> waterBiomes = new HashSet<>();
-	private static final Set<ResourceLocation> netherBiomes = new HashSet<>();
-	private static final Set<ResourceLocation> endBiomes = new HashSet<>();
-
-	@SubscribeEvent
-	static void onBiomeLoaded(BiomeLoadingEvent event) {
-		switch (event.getCategory()) {
-			case BEACH, RIVER, OCEAN -> waterBiomes.add(event.getName());
-			case NETHER -> netherBiomes.add(event.getName());
-			case THEEND -> endBiomes.add(event.getName());
-		}
-	}
-
-	private Set<ResourceLocation> targetBiomes = new HashSet<>();
+	private Set<Biome> targetBiomes = new HashSet<>();
 	private boolean biomeFound = false;
-	private int searchRadiusIteration = 0;
-	private int searchAngleIteration = 0;
 	@Nullable
 	private BlockPos searchCenter;
 
@@ -62,19 +38,14 @@ public class HabitatLocatorLogic {
 		return biomeFound;
 	}
 
-	public Set<ResourceLocation> getTargetBiomes() {
+	public Set<Biome> getTargetBiomes() {
 		return targetBiomes;
 	}
 
 	public void startBiomeSearch(IBee bee, Player player) {
 		this.targetBiomes = new HashSet<>(bee.getSuitableBiomes());
-		this.searchAngleIteration = 0;
-		this.searchRadiusIteration = 0;
 		this.biomeFound = false;
 		this.searchCenter = player.blockPosition();
-
-		Biome currentBiome = player.level.getBiome(searchCenter).value();
-		removeInvalidBiomes(currentBiome, targetBiomes);
 
 		// reset the locator coordinates
 		if (player.level.isClientSide) {
@@ -83,129 +54,21 @@ public class HabitatLocatorLogic {
 	}
 
 	public void onUpdate(Level world, Entity player) {
-		if (world.isClientSide) {
+		if (!(player instanceof ServerPlayer serverPlayer) || targetBiomes.isEmpty() || searchCenter == null) {
 			return;
 		}
 
-		if (targetBiomes.isEmpty()) {
+		// once we've found the biome, slow down
+		if (biomeFound && world.getGameTime() % 50 != 0) {
 			return;
 		}
 
-		// once we've found the biome, slow down to conserve cpu and network data
-		if (biomeFound && world.getGameTime() % 20 != 0) {
-			return;
-		}
-
-		BlockPos target = findNearestBiome(player, targetBiomes);
+		Pair<BlockPos, Holder<Biome>> pair = ((ServerLevel) player.getLevel()).findClosestBiome3d(biome -> targetBiomes.contains(biome.get()), searchCenter, 4096, 32, 64);
 
 		// send an update if we find the biome
-		if (target != null && player instanceof ServerPlayer) {
-			NetworkUtil.sendToPlayer(new PacketHabitatBiomePointer(target), (ServerPlayer) player);
+		if (pair != null) {
+			NetworkUtil.sendToPlayer(new PacketHabitatBiomePointer(pair.getFirst()), serverPlayer);
 			biomeFound = true;
-		}
-	}
-
-	@Nullable
-	private BlockPos findNearestBiome(Entity player, Collection<ResourceLocation> biomesToSearch) {
-		if (searchCenter == null) {
-			return null;
-		}
-
-		BlockPos playerPos = player.blockPosition();
-
-		// If we are in a valid spot, we point to ourselves.
-		BlockPos coordinates = getChunkCoordinates(playerPos, player.level, biomesToSearch);
-		if (coordinates != null) {
-			searchAngleIteration = 0;
-			searchRadiusIteration = 0;
-			return playerPos;
-		}
-
-		// check in a circular pattern, starting at the center and increasing radius each step
-		final int radius = spacing * (searchRadiusIteration + 1);
-
-		double angleSpacing = 2.0f * Math.asin(spacing / (2.0 * radius));
-
-		// round to nearest divisible angle, for an even distribution
-		angleSpacing = 2.0 * Math.PI / Math.round(2.0 * Math.PI / angleSpacing);
-
-		// do a limited number of checks per tick
-		for (int i = 0; i < maxChecksPerTick; i++) {
-
-			double angle = angleSpacing * searchAngleIteration;
-			if (angle > 2.0 * Math.PI) {
-				searchAngleIteration = 0;
-				searchRadiusIteration++;
-				if (searchRadiusIteration > maxSearchRadiusIterations) {
-					searchAngleIteration = 0;
-					searchRadiusIteration = 0;
-					searchCenter = playerPos;
-				}
-				return null;
-			} else {
-				searchAngleIteration++;
-			}
-
-			int xOffset = Math.round((float) (radius * Math.cos(angle)));
-			int zOffset = Math.round((float) (radius * Math.sin(angle)));
-			BlockPos pos = searchCenter.offset(xOffset, 0, zOffset);
-
-			coordinates = getChunkCoordinates(pos, player.level, biomesToSearch);
-			if (coordinates != null) {
-				searchAngleIteration = 0;
-				searchRadiusIteration = 0;
-				return coordinates;
-			}
-		}
-
-		return null;
-	}
-
-	@Nullable
-	private static BlockPos getChunkCoordinates(BlockPos pos, Level world, Collection<ResourceLocation> biomesToSearch) {
-		Biome biome;
-
-		biome = world.getBiome(pos).value();
-		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
-			return null;
-		}
-
-		biome = world.getBiome(pos.offset(-minBiomeRadius, 0, 0)).value();
-		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
-			return null;
-		}
-
-		biome = world.getBiome(pos.offset(minBiomeRadius, 0, 0)).value();
-		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
-			return null;
-		}
-
-		biome = world.getBiome(pos.offset(0, 0, -minBiomeRadius)).value();
-		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
-			return null;
-		}
-
-		biome = world.getBiome(pos.offset(0, 0, minBiomeRadius)).value();
-		if (!biomesToSearch.contains(RegistryNameFinder.getRegistryName(biome))) {
-			return null;
-		}
-
-		return pos;
-	}
-
-	private static void removeInvalidBiomes(Biome currentBiome, Set<ResourceLocation> biomesToSearch) {
-		biomesToSearch.removeAll(waterBiomes);
-
-		if (BiomeCategory.NETHER.is(currentBiome)) {
-			biomesToSearch.retainAll(netherBiomes);
-		} else {
-			biomesToSearch.removeAll(netherBiomes);
-		}
-
-		if (BiomeCategory.THEEND.is(currentBiome)) {
-			biomesToSearch.retainAll(endBiomes);
-		} else {
-			biomesToSearch.removeAll(endBiomes);
 		}
 	}
 }

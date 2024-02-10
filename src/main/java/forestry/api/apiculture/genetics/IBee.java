@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,7 +65,7 @@ public interface IBee extends IIndividualLiving {
 	 */
 	Set<IErrorState> getCanWork(IBeeHousing housing);
 
-	List<ResourceLocation> getSuitableBiomes();
+	List<Biome> getSuitableBiomes();
 
 	NonNullList<ItemStack> getProduceList();
 

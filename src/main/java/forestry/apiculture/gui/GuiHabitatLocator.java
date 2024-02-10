@@ -97,11 +97,8 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 
 		// Set active according to valid biomes.
 		Set<BiomeCategory> activeBiomeTypes = new HashSet<>();
-		for (ResourceLocation biomeLocation : itemInventory.getBiomesToSearch()) {
-			Biome biome = ForgeRegistries.BIOMES.getValue(biomeLocation);
-			if (biome == null) {
-				continue;
-			}
+
+		for (Biome biome : itemInventory.getBiomesToSearch()) {
 			activeBiomeTypes.addAll(BiomeCategory.getCategoriesFor(biome));
 		}
 
@@ -112,6 +109,7 @@ public class GuiHabitatLocator extends GuiForestry<ContainerHabitatLocator> {
 		for (HabitatSlot slot : habitatSlots) {
 			slot.draw(transform, startY, startX);
 		}
+
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f); // Reset afterwards.
 	}
 

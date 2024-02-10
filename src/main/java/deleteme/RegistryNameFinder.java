@@ -14,10 +14,6 @@ public class RegistryNameFinder {
 		return ForgeRegistries.FLUIDS.getKey(o);
 	}
 
-	public static ResourceLocation getRegistryName(Biome o) {
-		return ForgeRegistries.BIOMES.getKey(o);
-	}
-
 	public static ResourceLocation getRegistryName(Block o) {
 		return ForgeRegistries.BLOCKS.getKey(o);
 	}

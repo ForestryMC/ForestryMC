@@ -8,8 +8,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
@@ -17,19 +17,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.GsonHelper;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import genetics.api.GeneticsResourceType;
 import genetics.api.alleles.AlleleInfo;
 import genetics.api.alleles.IAllele;
 import genetics.api.alleles.IAlleleType;
@@ -38,8 +34,8 @@ import io.netty.util.internal.StringUtil;
 
 public class GeneticParser implements ResourceManagerReloadListener {
 	public final Map<ResourceLocation, IAlleleType> types = new HashMap<>();
-	public static final int PATH_PREFIX_LENGTH = "genetics/alleles/".length();
-	public static final int PATH_SUFFIX_LENGTH = ".json".length();
+	private static final String PREFIX = "genetics/alleles";
+	private static final String SUFFIX = ".json";
 	public static final Gson GSON = (new GsonBuilder()).disableHtmlEscaping().create();
 	private static final Deque<ResourceLocation> loadingAlleles = Queues.newArrayDeque();
 
@@ -51,17 +47,18 @@ public class GeneticParser implements ResourceManagerReloadListener {
 
 		Multimap<ResourceLocation, CompoundTag> alleleData = HashMultimap.create();
 
-		for (ResourceLocation location : manager.listResources("genetics/alleles", filename -> filename.endsWith(".json"))) {
+		for (var entry : manager.listResources(PREFIX, filename -> filename.getPath().endsWith(SUFFIX)).entrySet()) {
+			var location = entry.getKey();
 			String path = location.getPath();
-			ResourceLocation readableLocation = new ResourceLocation(location.getNamespace(), path.substring(PATH_PREFIX_LENGTH, path.length() - PATH_SUFFIX_LENGTH));
-			try (Resource resource = manager.getResource(location)) {
+			ResourceLocation readableLocation = new ResourceLocation(location.getNamespace(), path.substring(PREFIX.length() + 1, path.length() - SUFFIX.length()));
+			try (BufferedReader resource = entry.getValue().openAsReader()) {
 				for (ResourceLocation loading : loadingAlleles) {
 					if (location.getClass() == loading.getClass() && location.equals(loading)) {
 						//LOGGER.error("Circular allele dependencies, stack: [" + Joiner.on(", ").join(loadingAlleles) + "]");
 					}
 				}
 				loadingAlleles.addLast(location);
-				JsonObject object = GsonHelper.fromJson(GSON, IOUtils.toString(resource.getInputStream(), StandardCharsets.UTF_8), JsonObject.class);
+				JsonObject object = GsonHelper.fromJson(GSON, resource, JsonObject.class);
 				if (object == null) {
 					//LOGGER.error("Couldn't load allele {} as it's null or empty", readableLocation);
 				} else {

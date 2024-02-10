@@ -28,6 +28,7 @@ import forestry.apiculture.items.HabitatLocatorLogic;
 import forestry.apiculture.items.ItemHabitatLocator;
 import forestry.core.errors.EnumErrorCode;
 import forestry.core.inventory.ItemInventory;
+import net.minecraft.world.level.biome.Biome;
 
 public class ItemInventoryHabitatLocator extends ItemInventory implements IErrorSource {
 
@@ -74,7 +75,7 @@ public class ItemInventoryHabitatLocator extends ItemInventory implements IError
 		}
 	}
 
-	public Set<ResourceLocation> getBiomesToSearch() {
+	public Set<Biome> getBiomesToSearch() {
 		return locatorLogic.getTargetBiomes();
 	}
 
