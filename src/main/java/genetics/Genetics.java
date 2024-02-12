@@ -1,8 +1,7 @@
 package genetics;
 
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.core.Registry;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -13,7 +12,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,6 +28,7 @@ import genetics.api.root.IRootDefinition;
 import genetics.api.root.components.DefaultStage;
 import genetics.commands.CommandListAlleles;
 import genetics.plugins.PluginManager;
+import net.minecraftforge.registries.RegisterEvent;
 
 @Mod(Genetics.MOD_ID)
 public class Genetics {
@@ -59,18 +58,19 @@ public class Genetics {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void registerBlocks(RegistryEvent.Register<Block> event) {
-		PluginManager.create();
-		PluginManager.initPlugins();
-	}
+	public void registerBlocks(RegisterEvent event) {
+		if (Registry.BLOCK_REGISTRY.equals(event.getRegistryKey())) {
+			PluginManager.create();
+			PluginManager.initPlugins();
+		}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void registerFinished(RegistryEvent.Register<Item> event) {
-		for (IRootDefinition<?> definition : GeneticsAPI.apiInstance.getRoots().values()) {
-			if (!definition.isPresent()) {
-				continue;
+		if (Registry.ITEM_REGISTRY.equals(event.getRegistryKey())) {
+			for (IRootDefinition<?> definition : GeneticsAPI.apiInstance.getRoots().values()) {
+				if (!definition.isPresent()) {
+					continue;
+				}
+				definition.get().getComponentContainer().onStage(DefaultStage.REGISTRATION);
 			}
-			definition.get().getComponentContainer().onStage(DefaultStage.REGISTRATION);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package forestry.core.data;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -30,10 +31,10 @@ public class ForestryLootModifierProvider extends GlobalLootModifierProvider {
 	@Override
 	protected void start() {
 		for (Map.Entry<ResourceLocation, Collection<LootTableHelper.Entry>> mapEntry : LootTableHelper.getInstance().entries.asMap().entrySet()) {
-			String[] extensions = mapEntry.getValue().stream().map(entry -> entry.extension).toArray(String[]::new);
-			add(mapEntry.getKey().getPath(), ConditionLootModifier.SERIALIZER, new ConditionLootModifier(mapEntry.getKey(), extensions));
+			List<String> extensions = mapEntry.getValue().stream().map(entry -> entry.extension).toList();
+			add(mapEntry.getKey().getPath(), new ConditionLootModifier(mapEntry.getKey(), extensions));
 		}
-		add("grafter", GrafterLootModifier.SERIALIZER, new GrafterLootModifier(new LootItemCondition[]{
+		add("grafter", new GrafterLootModifier(new LootItemCondition[]{
 				AlternativeLootItemCondition.alternative(
 						MatchTool.toolMatches(ItemPredicate.Builder.item().of(ArboricultureItems.GRAFTER.item())),
 						MatchTool.toolMatches(ItemPredicate.Builder.item().of(ArboricultureItems.GRAFTER_PROVEN.item()))

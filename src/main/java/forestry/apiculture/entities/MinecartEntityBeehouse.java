@@ -12,6 +12,7 @@ package forestry.apiculture.entities;
 
 import java.util.Collections;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -60,13 +61,18 @@ public class MinecartEntityBeehouse extends MinecartEntityBeeHousingBase {
 	}
 
 	@Override
+	protected Item getDropItem() {
+		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.BEE_HOUSE).get();
+	}
+
+	@Override
 	public BlockState getDisplayBlockState() {
 		return ApicultureBlocks.BASE.get(BlockTypeApiculture.BEE_HOUSE).defaultState();
 	}
 
 	@Override
 	public ItemStack getPickResult() {
-		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.BEE_HOUSE).stack();
+		return new ItemStack(getDropItem());
 	}
 
 	/* IBeeHousing */

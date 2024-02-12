@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -82,13 +83,18 @@ public class MinecartEntityApiary extends MinecartEntityBeeHousingBase implement
 	}
 
 	@Override
+	protected Item getDropItem() {
+		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.APIARY).get();
+	}
+
+	@Override
 	public BlockState getDisplayBlockState() {
 		return ApicultureBlocks.BASE.get(BlockTypeApiculture.APIARY).defaultState();
 	}
 
 	@Override
 	public ItemStack getPickResult() {
-		return ApicultureItems.MINECART_BEEHOUSING.get(ItemMinecartBeehousing.Type.APIARY).stack();
+		return new ItemStack(getDropItem());
 	}
 
 	@Override
