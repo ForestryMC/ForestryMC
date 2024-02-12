@@ -1,132 +1,60 @@
 package forestry.core.data;
 
-import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
-
 import forestry.api.arboriculture.EnumForestryWoodType;
 import forestry.api.arboriculture.IWoodType;
 import forestry.core.config.Constants;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.model.generators.BlockModelProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class WoodBlockModelProvider extends ModelProvider {
+public class WoodBlockModelProvider extends BlockModelProvider {
 
-	public WoodBlockModelProvider(DataGenerator generator) {
-		super(generator, "block");
+	public WoodBlockModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+		super(generator, Constants.MOD_ID, existingFileHelper);
 	}
 
 	@Override
 	protected void registerModels() {
 		for (EnumForestryWoodType type : EnumForestryWoodType.VALUES) {
-			addPlank(type);
-			addLog(type);
-			addStair(type);
-			addSlab(type);
-			addFence(type);
-			addFenceGate(type);
-			addDoor(type);
+			add(type);
 		}
-		registerModel("leaves", new ModelBuilder()
-			.parent("block/cube_all")
-			.texture("all", new ResourceLocation(Constants.MOD_ID, "block/leaves/deciduous.plain")));
+
+		cubeAll("leaves", new ResourceLocation(Constants.MOD_ID, "block/leaves/deciduous.plain"));
 	}
 
-	private void addPlank(IWoodType type) {
-		registerModel("arboriculture/planks/" + type.getSerializedName(), new ModelBuilder()
-				.parent("block/cube_all")
-				.texture("all", new ResourceLocation(Constants.MOD_ID, "block/wood/planks." + type.getSerializedName())));
-	}
+	private void add(IWoodType type) {
+		String name = type.getSerializedName();
+		ResourceLocation texture = new ResourceLocation(Constants.MOD_ID, "block/wood/planks." + name);
+		ResourceLocation bark = new ResourceLocation(Constants.MOD_ID, "block/wood/bark." + name);
+		ResourceLocation heart = new ResourceLocation(Constants.MOD_ID, "block/wood/heart." + name);
 
-	private void addLog(IWoodType type) {
-		registerModel("arboriculture/logs/" + type.getSerializedName(), new ModelBuilder()
-				.parent("block/cube_column")
-				.texture("side", new ResourceLocation(Constants.MOD_ID, "block/wood/bark." + type.getSerializedName()))
-				.texture("end", new ResourceLocation(Constants.MOD_ID, "block/wood/heart." + type.getSerializedName())));
-	}
+		cubeColumn("arboriculture/logs/" + name, bark, heart);
+		cubeAll("arboriculture/planks/" + name, texture);
+		stairs("arboriculture/stairs/" + name, texture, texture, texture).texture("particle", texture);
+		stairsInner("arboriculture/stairs/" + name + "_inner", texture, texture, texture).texture("particle", texture);
+		stairsOuter("arboriculture/stairs/" + name + "_outer", texture, texture, texture).texture("particle", texture);
+		slab("arboriculture/slabs/" + name, texture, texture, texture).texture("particle", texture);
+		slabTop("arboriculture/slabs/" + name + "_top", texture, texture, texture).texture("particle", texture);
+		fencePost("arboriculture/fences/" + name, texture);
+		fenceInventory("arboriculture/fences/" + name + "_inventory", texture);
+		fenceSide("arboriculture/fences/" + name + "_side", texture);
+		fenceGate("arboriculture/fence_gates/" + name, texture);
+		fenceGateOpen("arboriculture/fence_gates/" + name + "_open", texture);
+		fenceGateWall("arboriculture/fence_gates/" + name + "_wall", texture);
+		fenceGateWallOpen("arboriculture/fence_gates/" + name + "_wall_open", texture);
 
-	private void addStair(IWoodType type) {
-		ResourceLocation texture = new ResourceLocation(Constants.MOD_ID, "block/wood/planks." + type.getSerializedName());
-		registerModel("arboriculture/stairs/" + type.getSerializedName(), new ModelBuilder()
-				.parent("block/stairs")
-				.texture("side", texture)
-				.texture("top", texture)
-				.texture("bottom", texture)
-				.particle(texture));
-		registerModel("arboriculture/stairs/" + type.getSerializedName() + "_inner", new ModelBuilder()
-				.parent("block/inner_stairs")
-				.texture("side", texture)
-				.texture("top", texture)
-				.texture("bottom", texture)
-				.particle(texture));
-		registerModel("arboriculture/stairs/" + type.getSerializedName() + "_outer", new ModelBuilder()
-				.parent("block/outer_stairs")
-				.texture("side", texture)
-				.texture("top", texture)
-				.texture("bottom", texture)
-				.particle(texture));
-	}
+		ResourceLocation top = new ResourceLocation(Constants.MOD_ID, "block/doors/" + name + "_upper");
+		ResourceLocation bottom = new ResourceLocation(Constants.MOD_ID, "block/doors/" + name + "_lower");
 
-	private void addSlab(IWoodType type) {
-		ResourceLocation texture = new ResourceLocation(Constants.MOD_ID, "block/wood/planks." + type.getSerializedName());
-		registerModel("arboriculture/slabs/" + type.getSerializedName() + "_top", new ModelBuilder()
-				.parent("block/slab_top")
-				.texture("side", texture)
-				.texture("top", texture)
-				.texture("bottom", texture)
-				.particle(texture));
-		registerModel("arboriculture/slabs/" + type.getSerializedName(), new ModelBuilder()
-				.parent("block/slab")
-				.texture("side", texture)
-				.texture("top", texture)
-				.texture("bottom", texture)
-				.particle(texture));
-	}
+		doorBottomLeft("arboriculture/doors/" + name + "_bottom_left", bottom, top);
+		doorBottomRight("arboriculture/doors/" + name + "_bottom_right", bottom, top);
+		doorBottomLeftOpen("arboriculture/doors/" + name + "_bottom_left_open", bottom, top);
+		doorBottomRightOpen("arboriculture/doors/" + name + "_bottom_right_open", bottom, top);
 
-	private void addFence(IWoodType type) {
-		ResourceLocation texture = new ResourceLocation(Constants.MOD_ID, "block/wood/planks." + type.getSerializedName());
-		registerModel("arboriculture/fences/" + type.getSerializedName() + "_side", new ModelBuilder()
-				.parent("block/fence_side")
-				.texture("texture", texture));
-		registerModel("arboriculture/fences/" + type.getSerializedName(), new ModelBuilder()
-				.parent("block/fence_post")
-				.texture("texture", texture));
-		registerModel("arboriculture/fences/" + type.getSerializedName() + "_inventory", new ModelBuilder()
-				.parent("block/fence_inventory")
-				.texture("texture", texture));
-	}
-
-	private void addFenceGate(IWoodType type) {
-		ResourceLocation texture = new ResourceLocation(Constants.MOD_ID, "block/wood/planks." + type.getSerializedName());
-		registerModel("arboriculture/fence_gates/" + type.getSerializedName() + "_wall_open", new ModelBuilder()
-				.parent("block/template_fence_gate_wall_open")
-				.texture("texture", texture));
-		registerModel("arboriculture/fence_gates/" + type.getSerializedName() + "_wall", new ModelBuilder()
-				.parent("block/template_fence_gate_wall")
-				.texture("texture", texture));
-		registerModel("arboriculture/fence_gates/" + type.getSerializedName() + "_open", new ModelBuilder()
-				.parent("block/template_fence_gate_open")
-				.texture("texture", texture));
-		registerModel("arboriculture/fence_gates/" + type.getSerializedName(), new ModelBuilder()
-				.parent("block/template_fence_gate")
-				.texture("texture", texture));
-	}
-
-	private void addDoor(IWoodType type) {
-		ResourceLocation top = new ResourceLocation(Constants.MOD_ID, "block/doors/" + type.getSerializedName() + "_upper");
-		ResourceLocation bottom = new ResourceLocation(Constants.MOD_ID, "block/doors/" + type.getSerializedName() + "_lower");
-		registerModel("arboriculture/doors/" + type.getSerializedName() + "_bottom", new ModelBuilder()
-				.parent("block/door_bottom")
-				.texture("top", top)
-				.texture("bottom", bottom));
-		registerModel("arboriculture/doors/" + type.getSerializedName() + "_bottom_hinge", new ModelBuilder()
-				.parent("block/door_bottom_rh")
-				.texture("top", top)
-				.texture("bottom", bottom));
-		registerModel("arboriculture/doors/" + type.getSerializedName() + "_top", new ModelBuilder()
-				.parent("block/door_top")
-				.texture("top", top)
-				.texture("bottom", bottom));
-		registerModel("arboriculture/doors/" + type.getSerializedName() + "_top_hinge", new ModelBuilder()
-				.parent("block/door_top_rh")
-				.texture("top", top)
-				.texture("bottom", bottom));
+		doorTopLeft("arboriculture/doors/" + name + "_top_left", bottom, top);
+		doorTopRight("arboriculture/doors/" + name + "_top_right", bottom, top);
+		doorTopLeftOpen("arboriculture/doors/" + name + "_top_left_open", bottom, top);
+		doorTopRightOpen("arboriculture/doors/" + name + "_top_right_open", bottom, top);
 	}
 }

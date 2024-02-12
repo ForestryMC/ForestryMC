@@ -2,6 +2,8 @@ package forestry.core.data;
 
 import java.util.Map;
 
+import deleteme.RegistryNameFinder;
+import forestry.core.config.Constants;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.resources.ResourceLocation;
@@ -19,11 +21,13 @@ import forestry.arboriculture.blocks.BlockForestrySlab;
 import forestry.arboriculture.blocks.BlockForestryStairs;
 import forestry.arboriculture.features.ArboricultureBlocks;
 import forestry.modules.features.FeatureBlock;
+import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class WoodItemModelProvider extends ModelProvider {
+public class WoodItemModelProvider extends ItemModelProvider {
 
-	public WoodItemModelProvider(DataGenerator generator) {
-		super(generator, "item");
+	public WoodItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+		super(generator, Constants.MOD_ID, existingFileHelper);
 	}
 
 	@Override
@@ -85,15 +89,18 @@ public class WoodItemModelProvider extends ModelProvider {
 		for (Map.Entry<EnumForestryWoodType, FeatureBlock<BlockForestryDoor, BlockItem>> stair : ArboricultureBlocks.DOORS.getFeatureByType().entrySet()) {
 			addDoor(stair.getValue().item(), stair.getKey());
 		}
-		//Replaced by the model loader later
+
+		// Replaced by the model loader later
 		for (BlockItem leaves : ArboricultureBlocks.LEAVES_DECORATIVE.getItems()) {
-			registerModel(leaves, new ModelBuilder().parent(new ResourceLocation("forestry:block/leaves")));
+			withExistingParent(RegistryNameFinder.getRegistryName(leaves).getPath(), new ResourceLocation(Constants.MOD_ID, "block/leaves"));
 		}
+
 		for (BlockItem leaves : ArboricultureBlocks.LEAVES_DEFAULT_FRUIT.getItems()) {
-			registerModel(leaves, new ModelBuilder().parent(new ResourceLocation("forestry:block/leaves")));
+			withExistingParent(RegistryNameFinder.getRegistryName(leaves).getPath(), new ResourceLocation(Constants.MOD_ID, "block/leaves"));
 		}
+
 		for (BlockItem leaves : ArboricultureBlocks.LEAVES_DEFAULT.getItems()) {
-			registerModel(leaves, new ModelBuilder().parent(new ResourceLocation("forestry:block/leaves")));
+			withExistingParent(RegistryNameFinder.getRegistryName(leaves).getPath(), new ResourceLocation(Constants.MOD_ID, "block/leaves"));
 		}
 	}
 
@@ -114,30 +121,30 @@ public class WoodItemModelProvider extends ModelProvider {
 	}
 
 	private void addPlank(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.PLANKS))));
+		withExistingParent(RegistryNameFinder.getRegistryName(item).getPath(), new ResourceLocation(getLocation(type, WoodBlockKind.PLANKS)));
 	}
 
 	private void addLog(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.LOG))));
+		withExistingParent(RegistryNameFinder.getRegistryName(item).getPath(), new ResourceLocation(getLocation(type, WoodBlockKind.LOG)));
 	}
 
 	private void addStair(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.STAIRS))));
+		withExistingParent(RegistryNameFinder.getRegistryName(item).getPath(), new ResourceLocation(getLocation(type, WoodBlockKind.STAIRS)));
 	}
 
 	private void addSlab(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.SLAB))));
+		withExistingParent(RegistryNameFinder.getRegistryName(item).getPath(), new ResourceLocation(getLocation(type, WoodBlockKind.SLAB)));
 	}
 
 	private void addFence(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.FENCE) + "_inventory")));
+		withExistingParent(RegistryNameFinder.getRegistryName(item).getPath(), new ResourceLocation(getLocation(type, WoodBlockKind.FENCE) + "_inventory"));
 	}
 
 	private void addFenceGate(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().parent(new ResourceLocation(getLocation(type, WoodBlockKind.FENCE_GATE))));
+		withExistingParent(RegistryNameFinder.getRegistryName(item).getPath(), new ResourceLocation(getLocation(type, WoodBlockKind.FENCE_GATE)));
 	}
 
 	private void addDoor(BlockItem item, IWoodType type) {
-		registerModel(item, new ModelBuilder().item().layer(0, new ResourceLocation(getLocation(type, WoodBlockKind.DOOR))));
+		singleTexture(RegistryNameFinder.getRegistryName(item).getPath(), mcLoc("item/generated"), "layer0", new ResourceLocation(getLocation(type, WoodBlockKind.DOOR)));
 	}
 }

@@ -69,7 +69,7 @@ public class ForestryLootTableProvider implements DataProvider {
 				Path path1 = getPath(path, location);
 
 				try {
-					DataProvider.save(GSON, cache, LootTables.serialize(table), path1);
+					DataProvider.saveStable(cache, LootTables.serialize(table), path1);
 				} catch (IOException ioexception) {
 					LOGGER.error("Couldn't save loot table {}", path1, ioexception);
 				}

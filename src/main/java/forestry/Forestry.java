@@ -223,11 +223,11 @@ public class Forestry {
         generator.addProvider(event.includeServer(), new ForestryFluidTagsProvider(generator, existingFileHelper));
         generator.addProvider(event.includeServer(), new ForestryLootTableProvider(generator));
         generator.addProvider(event.includeServer(), new WoodBlockStateProvider(generator));
-        generator.addProvider(event.includeServer(), new WoodBlockModelProvider(generator));
-        generator.addProvider(event.includeServer(), new WoodItemModelProvider(generator));
+        generator.addProvider(event.includeServer(), new WoodBlockModelProvider(generator, existingFileHelper));
+        generator.addProvider(event.includeServer(), new WoodItemModelProvider(generator, existingFileHelper));
         generator.addProvider(event.includeServer(), new ForestryBlockStateProvider(generator));
-        generator.addProvider(event.includeServer(), new ForestryBlockModelProvider(generator));
-        generator.addProvider(event.includeServer(), new ForestryItemModelProvider(generator));
+        generator.addProvider(event.includeServer(), new ForestryBlockModelProvider(generator, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ForestryItemModelProvider(generator, existingFileHelper));
         generator.addProvider(event.includeServer(), new ForestryRecipeProvider(generator));
         generator.addProvider(event.includeServer(), new ForestryMachineRecipeProvider(generator));
         generator.addProvider(event.includeServer(), new ForestryLootModifierProvider(generator));
