@@ -8,6 +8,13 @@ package forestry.api.apiculture;
 import javax.annotation.Nullable;
 
 public interface IBeeModifier {
+
+	enum ProductionType {
+		FRAME,
+		OTHER
+	}
+
+	ProductionType TypeDefault = ProductionType.FRAME;
 	/**
 	 * @param genome          Genome of the bee this modifier is called for.
 	 * @param currentModifier Current modifier.

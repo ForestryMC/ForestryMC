@@ -470,35 +470,58 @@ public class Bee extends IndividualLiving implements IBee {
 		IBeekeepingMode mode = BeeManager.beeRoot.getBeekeepingMode(world);
 
 		NonNullList<ItemStack> products = NonNullList.create();
+		ItemStack singleProduct;
+		int productCount;
 
 		IAlleleBeeSpecies primary = genome.getPrimary();
 		IAlleleBeeSpecies secondary = genome.getSecondary();
 
 		IBeeModifier beeHousingModifier = BeeManager.beeRoot.createBeeHousingModifier(housing);
-		IBeeModifier beeModeModifier = mode.getBeeModifier();
 
-		// Bee genetic speed * beehousing * beekeeping mode
-		float speed = genome.getSpeed() * beeHousingModifier.getProductionModifier(genome, 1f) * beeModeModifier.getProductionModifier(genome, 1f);
+		// Old formula is this: Bee genetic speed * beehousing * beekeeping mode
+		// Goal is to have one that follows a better progression if we consider a maximum of 4 frames
+		float prodHousing = beeHousingModifier.getProductionModifier(genome, 1.0f);
+		float speedBee = genome.getSpeed();
 
+		// Taking inspiration from GTNH, though we skip the ProductChance ^ 0.52 from their formula
+		// https://gtnh.miraheze.org/wiki/Bees
+		float chance = (float)Math.pow(prodHousing, 0.52f) * (float)Math.pow(speedBee, 0.37f);
+		float lineChance;
+
+		// The idea of the 2 blocks below are to allow more than 1 output for the same Product. If you have a total chance of 350%, this should be 3 guaranteed of this product + 50% chance of a 4th one
 		// / Primary Products
 		for (Map.Entry<ItemStack, Float> entry : primary.getProductChances().entrySet()) {
-			if (world.rand.nextFloat() < entry.getValue() * speed) {
-				products.add(entry.getKey().copy());
+			float productChance = entry.getValue();
+			lineChance = chance * productChance;
+			productCount = (int) lineChance;
+			if (world.rand.nextFloat() < (lineChance - (float) productCount)) {
+				productCount++;
 			}
+			singleProduct = entry.getKey().copy();
+			singleProduct.setCount(productCount);
+			products.add(singleProduct);
 		}
-		// / Secondary Products
-		for (Map.Entry<ItemStack, Float> entry : secondary.getProductChances().entrySet()) {
-			if (world.rand.nextFloat() < Math.round(entry.getValue() / 2) * speed) {
-				products.add(entry.getKey().copy());
-			}
-		}
+
+		/*
+		Correction from last commit: This block is for the second genome's produce. However in practice, the first row can drop from the "Primary Products"
+		Also, relying on a non pure-breed bee is more of a pain (for the player) than anything, so this can be safely ignored in my opinion
+
+		 // Secondary Products
+		 for (Map.Entry<ItemStack, Float> entry : secondary.getProductChances().entrySet()) {}
+		 */
 
 		// / Specialty products
 		if (primary.isJubilant(genome, housing) && secondary.isJubilant(genome, housing)) {
 			for (Map.Entry<ItemStack, Float> entry : primary.getSpecialtyChances().entrySet()) {
-				if (world.rand.nextFloat() < entry.getValue() * speed) {
-					products.add(entry.getKey().copy());
+				float productChance = entry.getValue();
+				lineChance = chance * productChance;
+				productCount = (int) lineChance;
+				if (world.rand.nextFloat() < (lineChance - (float) productCount)) {
+					productCount++;
 				}
+				singleProduct = entry.getKey().copy();
+				singleProduct.setCount(productCount);
+				products.add(singleProduct);
 			}
 		}
 

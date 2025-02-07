@@ -15,9 +15,11 @@ import javax.annotation.Nullable;
 import forestry.api.apiculture.IBeeGenome;
 import forestry.api.apiculture.IBeeHousing;
 import forestry.api.apiculture.IBeeModifier;
+import scala.Product;
 
 public class BeeHousingModifier implements IBeeModifier {
 	private final IBeeHousing beeHousing;
+	private final ProductionType type = TypeDefault;
 
 	public BeeHousingModifier(IBeeHousing beeHousing) {
 		this.beeHousing = beeHousing;
@@ -53,8 +55,16 @@ public class BeeHousingModifier implements IBeeModifier {
 	@Override
 	public float getProductionModifier(IBeeGenome genome, final float currentModifier) {
 		float modifierValue = 1.0f;
+		int count = 0;
+
 		for (IBeeModifier modifier : beeHousing.getBeeModifiers()) {
 			modifierValue *= modifier.getProductionModifier(genome, modifierValue * currentModifier);
+			if (this.type == TypeDefault) {
+				count++;
+				if (count == 4) {
+					break;
+				}
+			}
 		}
 		return modifierValue;
 	}
