@@ -156,63 +156,62 @@ public abstract class ItemStackUtil {
 	public static NonNullList<ItemStack> condenseStacks(NonNullList<ItemStack> stacks) {
 		NonNullList<ItemStack> condensed = NonNullList.create();
 
+		nextItem:
 		for (ItemStack stack : stacks) {
 			if (stack.isEmpty()) {
 				continue;
 			}
 
-			boolean matched = false;
 			for (ItemStack cached : condensed) {
 				if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
 					cached.grow(stack.getCount());
-					matched = true;
+					continue nextItem;
 				}
 			}
 
-			if (!matched) {
-				ItemStack cached = stack.copy();
-				condensed.add(cached);
-			}
-
+			ItemStack cached = stack.copy();
+			condensed.add(cached);
 		}
 
 		return condensed;
 	}
 
+	// Better name is "condenseIngredients"
 	public static Pair<NonNullList<ItemStack>, NonNullList<String>> condenseStacks(NonNullList<ItemStack> stacks, NonNullList<String> dicts) {
 		NonNullList<ItemStack> condensed = NonNullList.create();
 		NonNullList<String> condensedDicts = NonNullList.create();
 
+		nextItem:
 		for (int i = 0; i < stacks.size(); i++) {
 			ItemStack stack = stacks.get(i);
 			if (stack.isEmpty()) {
 				continue;
 			}
 
-			boolean matched = false;
+			// Condense already seen items
 			for (ItemStack cached : condensed) {
 				if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
 					cached.grow(stack.getCount());
-					matched = true;
+					continue nextItem;
 				}
 			}
 
-			if (!matched) {
-				boolean dictMatched = false;
-				String dict = dicts.get(i);
+			String dict = dicts.get(i);
+
+			// Condense items that match already seen ore dict
+			if (!dict.isEmpty()) {
 				for (int j = 0; j < condensedDicts.size(); j++) {
 					if (dict.equals(condensedDicts.get(j))) {
 						condensed.get(j).grow(stack.getCount());
-						dictMatched = true;
+						continue nextItem;
 					}
-				}
-				if (!dictMatched) {
-					ItemStack cached = stack.copy();
-					condensed.add(cached);
-					condensedDicts.add(dicts.get(i));
 				}
 			}
 
+			// Add first occurrence of item and its associated dict
+			ItemStack cached = stack.copy();
+			condensed.add(cached);
+			condensedDicts.add(dicts.get(i));
 		}
 
 		return Pair.of(condensed, condensedDicts);
@@ -266,33 +265,36 @@ public abstract class ItemStackUtil {
 	}
 
 	/**
-	 * Counts how many full sets are contained in the passed stock
+	 * Counts how many full sets of crafting resources are contained in the passed stock.
 	 */
 	public static int containsSets(NonNullList<ItemStack> set, NonNullList<ItemStack> stock, NonNullList<String> oreDicts, boolean craftingTools) {
 		int totalSets = 0;
 
 		Pair<NonNullList<ItemStack>, NonNullList<String>> condensedRequired = ItemStackUtil.condenseStacks(set, oreDicts);
-		NonNullList<String> condensedRequiredDicts = condensedRequired.getRight();
 		NonNullList<ItemStack> condensedRequiredStacks = condensedRequired.getLeft();
-		NonNullList<ItemStack> condensedOfferedStacks = ItemStackUtil.condenseStacks(stock);
+		NonNullList<String> condensedRequiredDicts = condensedRequired.getRight();
+		NonNullList<ItemStack> condensedStock = ItemStackUtil.condenseStacks(stock);
 
 		for (int y = 0; y < condensedRequiredStacks.size(); y++) {
 			ItemStack req = condensedRequiredStacks.get(y);
-			String offerDict = condensedRequiredDicts.get(y);
-			int reqCount = 0;
-			for (ItemStack offer : condensedOfferedStacks) {
-				if (isCraftingEquivalent(req, offer, offerDict, craftingTools)) {
-					int stackCount = (int) Math.floor(offer.getCount() / req.getCount());
-					reqCount = Math.max(reqCount, stackCount);
+			String reqDict = condensedRequiredDicts.get(y);
+			int foundCount = 0;
+
+			// condenseStacks doesn't merge equivalent items according to ore dict, so tally it ourselves
+			for (ItemStack offer : condensedStock) {
+				if (isCraftingEquivalent(req, offer, reqDict, craftingTools)) {
+					foundCount += offer.getCount();
 				}
 			}
 
-			if (reqCount == 0) {
+			foundCount /= req.getCount();
+
+			if (foundCount == 0) {
 				return 0;
 			} else if (totalSets == 0) {
-				totalSets = reqCount;
-			} else if (totalSets > reqCount) {
-				totalSets = reqCount;
+				totalSets = foundCount;
+			} else if (totalSets > foundCount) {
+				totalSets = foundCount;
 			}
 		}
 
