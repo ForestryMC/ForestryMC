@@ -28,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import forestry.api.climate.IClimateControlled;
 import forestry.api.multiblock.IAlvearyComponent;
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.api.recipes.IHygroregulatorRecipe;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearyHygroregulator;
@@ -41,7 +42,7 @@ import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.recipes.HygroregulatorManager;
 import forestry.core.tiles.ILiquidTankTile;
 
-public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IAlvearyComponent.Climatiser {
+public class TileAlvearyHygroregulator extends TileAlveary implements IInventory, ILiquidTankTile, IAlvearyComponent.Climatiser, IMultiblockComponent.HasInventory {
 	private final TankManager tankManager;
 	private final FilteredTank liquidTank;
 	private final IInventoryAdapter inventory;
@@ -141,7 +142,7 @@ public class TileAlvearyHygroregulator extends TileAlveary implements IInventory
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
-			super.hasCapability(capability, facing);
+				super.hasCapability(capability, facing);
 	}
 
 	@Override

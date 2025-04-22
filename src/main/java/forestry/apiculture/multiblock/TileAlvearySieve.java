@@ -25,6 +25,7 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import forestry.api.genetics.ISpeciesRoot;
 import forestry.api.multiblock.IAlvearyComponent;
+import forestry.api.multiblock.IMultiblockComponent;
 import forestry.apiculture.blocks.BlockAlvearyType;
 import forestry.apiculture.gui.ContainerAlvearySieve;
 import forestry.apiculture.gui.GuiAlvearySieve;
@@ -32,8 +33,7 @@ import forestry.apiculture.inventory.InventoryAlvearySieve;
 import forestry.core.inventory.IInventoryAdapter;
 import forestry.core.inventory.watchers.ISlotPickupWatcher;
 
-public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.BeeListener {
-
+public class TileAlvearySieve extends TileAlveary implements IAlvearyComponent.BeeListener, IMultiblockComponent.HasInventory {
 	private final IBeeListener beeListener;
 	private final InventoryAlvearySieve inventory;
 
