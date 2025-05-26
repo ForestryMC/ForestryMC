@@ -474,7 +474,7 @@ item.for.bee_combs.parched.name=Vyschlá plástev
 item.for.bee_combs.powdery.name=Prášková plástev
 item.for.bee_combs.reddened.name=Zrudlá plástev
 item.for.bee_combs.silky.name=Hedvábná plástev
-item.for.bee_combs.simmering.name=Dušená plástev
+item.for.bee_combs.simmering.name=Doutnající plástev
 item.for.bee_combs.stringy.name=Vláknitá plástev
 item.for.bee_combs.wheaten.name=Pšeničná plástev
 
@@ -592,7 +592,7 @@ item.for.refractory_wax.tooltip=Vosk s vysokým bodem tavby.
 item.for.research_note.name=Poznámka %s 
 item.for.research_note.tooltip=Použij tuto poznámku aby jsi získal její vědomosti.
 item.for.royal_jelly.name=Mateří kašička
-item.for.scoop.name=Lžíce
+item.for.scoop.name=Síťka
 item.for.scoop.tooltip=Rozbij úly pro získání včel
 item.for.soldering_iron.name=Pájka
 item.for.soldering_iron.tooltip=Použita přo připájení elektronových trubic k obvodům.
@@ -706,7 +706,7 @@ tile.for.bee_combs.parched.name=Blok vyschlé plástve
 tile.for.bee_combs.powdery.name=Blok práškové plástve
 tile.for.bee_combs.reddened.name=Blok zrudlé plástve
 tile.for.bee_combs.silky.name=Blok nežné plástve
-tile.for.bee_combs.simmering.name=Blok dušené plástve
+tile.for.bee_combs.simmering.name=Blok doutnající plástve
 tile.for.bee_combs.stringy.name=Blok vláknité plástve
 tile.for.bee_combs.wheaten.name=Blok pšeničné plástve
 
