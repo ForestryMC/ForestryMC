@@ -657,6 +657,11 @@ public class FarmController extends RectangularMultiblockControllerBase implemen
 	}
 
 	@Override
+	public void addPendingProduce(ItemStack stack) {
+		pendingProduce.push(stack);
+	}
+
+	@Override
 	public int getSocketCount() {
 		return sockets.getSizeInventory();
 	}
