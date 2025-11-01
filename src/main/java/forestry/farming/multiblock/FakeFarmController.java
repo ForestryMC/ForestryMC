@@ -101,12 +101,7 @@ public class FakeFarmController extends FakeMultiblockController implements IFar
 		return 0;
 	}
 
-	@Override
-	public void addPendingProduce(ItemStack stack) {
-
-	}
-
-	@Override
+    @Override
 	public int getSocketCount() {
 		return 0;
 	}
