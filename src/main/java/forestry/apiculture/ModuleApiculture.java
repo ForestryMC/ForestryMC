@@ -769,6 +769,8 @@ public class ModuleApiculture extends BlankForestryModule {
 
 			// Irradiated combs
 			RecipeManagers.centrifugeManager.addRecipe(20, items.beeComb.get(EnumHoneyComb.IRRADIATED, 1), ImmutableMap.of(
+				coreItems.beeswax.getItemStack(), 1.0f,
+				items.honeyDrop.getItemStack(), 0.9f
 			));
 
 			// Powdery combs
