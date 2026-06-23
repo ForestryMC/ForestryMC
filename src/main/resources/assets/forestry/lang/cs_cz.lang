@@ -136,7 +136,7 @@ for.gui.database.mutations.resultant=Výsledné mutace
 for.gui.database.support=Tento jedinec nemá zatím žádnou integraci pro databázi.
 
 for.gui.blank=Prázdné
-for.gui.cave=Jeskyňář
+for.gui.cave=Jeskyňářka
 for.gui.climate=Klima
 for.gui.cold=Studené
 for.gui.crop=Plodina
@@ -474,7 +474,7 @@ item.for.bee_combs.parched.name=Vyschlá plástev
 item.for.bee_combs.powdery.name=Prášková plástev
 item.for.bee_combs.reddened.name=Zrudlá plástev
 item.for.bee_combs.silky.name=Hedvábná plástev
-item.for.bee_combs.simmering.name=Dušená plástev
+item.for.bee_combs.simmering.name=Doutnající plástev
 item.for.bee_combs.stringy.name=Vláknitá plástev
 item.for.bee_combs.wheaten.name=Pšeničná plástev
 
@@ -592,7 +592,7 @@ item.for.refractory_wax.tooltip=Vosk s vysokým bodem tavby.
 item.for.research_note.name=Poznámka %s 
 item.for.research_note.tooltip=Použij tuto poznámku aby jsi získal její vědomosti.
 item.for.royal_jelly.name=Mateří kašička
-item.for.scoop.name=Lžíce
+item.for.scoop.name=Síťka
 item.for.scoop.tooltip=Rozbij úly pro získání včel
 item.for.soldering_iron.name=Pájka
 item.for.soldering_iron.tooltip=Použita přo připájení elektronových trubic k obvodům.
@@ -706,7 +706,7 @@ tile.for.bee_combs.parched.name=Blok vyschlé plástve
 tile.for.bee_combs.powdery.name=Blok práškové plástve
 tile.for.bee_combs.reddened.name=Blok zrudlé plástve
 tile.for.bee_combs.silky.name=Blok nežné plástve
-tile.for.bee_combs.simmering.name=Blok dušené plástve
+tile.for.bee_combs.simmering.name=Blok doutnající plástve
 tile.for.bee_combs.stringy.name=Blok vláknité plástve
 tile.for.bee_combs.wheaten.name=Blok pšeničné plástve
 
@@ -1969,11 +1969,11 @@ for.config.machines.enabled.comment=Seznam povolených strojů. Pamatuj si že t
 ###################################
 #
 # Příklady:
-# tile.for.stairs.4.name=Schody z kaštavoníku
-# tile.for.planks.8.name=Prkna z kapoku
-# tile.for.slab.5.name=Půlblok z wenge
-# tile.for.log.10.name=Dřevo z mahagonu
-# tile.for.fences.0.name=Plot z modřínu
+# tile.for.stairs.4.name=Kaštanovníkové schody
+# tile.for.planks.8.name=Kapoková prkna
+# tile.for.slab.5.name=Wengový půlblok
+# tile.for.log.10.name=Mahagonové dřevo
+# tile.for.fences.0.name=Modřínový plot
 
 ####################
 # JEI Descriptions
