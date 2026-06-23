@@ -136,7 +136,7 @@ for.gui.database.mutations.resultant=Výsledné mutace
 for.gui.database.support=Tento jedinec nemá zatím žádnou integraci pro databázi.
 
 for.gui.blank=Prázdné
-for.gui.cave=Jeskyňář
+for.gui.cave=Jeskyňářka
 for.gui.climate=Klima
 for.gui.cold=Studené
 for.gui.crop=Plodina
@@ -1969,11 +1969,11 @@ for.config.machines.enabled.comment=Seznam povolených strojů. Pamatuj si že t
 ###################################
 #
 # Příklady:
-# tile.for.stairs.4.name=Schody z kaštavoníku
-# tile.for.planks.8.name=Prkna z kapoku
-# tile.for.slab.5.name=Půlblok z wenge
-# tile.for.log.10.name=Dřevo z mahagonu
-# tile.for.fences.0.name=Plot z modřínu
+# tile.for.stairs.4.name=Kaštanovníkové schody
+# tile.for.planks.8.name=Kapoková prkna
+# tile.for.slab.5.name=Wengový půlblok
+# tile.for.log.10.name=Mahagonové dřevo
+# tile.for.fences.0.name=Modřínový plot
 
 ####################
 # JEI Descriptions
