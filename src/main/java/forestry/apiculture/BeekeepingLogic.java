@@ -528,21 +528,28 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 
 		private Set<IErrorState> queenCanWorkCached = Collections.emptySet();
 		private int queenCanWorkCooldown = 0;
+		private long queenCanWorkLastWorldTick = Long.MIN_VALUE;
 
 		public Set<IErrorState> queenCanWork(IBee queen, IBeeHousing beeHousing) {
+			long worldTick = beeHousing.getWorldObj().getTotalWorldTime();
+			if (worldTick == queenCanWorkLastWorldTick) {
+				return queenCanWorkCached;
+			}
+
 			if (queenCanWorkCooldown <= 0) {
 				queenCanWorkCached = queen.getCanWork(beeHousing);
 				queenCanWorkCooldown = ticksPerCheckQueenCanWork;
 			} else {
 				queenCanWorkCooldown--;
 			}
-
+			queenCanWorkLastWorldTick = worldTick;
 			return queenCanWorkCached;
 		}
 
 		public void clear() {
 			queenCanWorkCached.clear();
 			queenCanWorkCooldown = 0;
+			queenCanWorkLastWorldTick = Long.MIN_VALUE;
 		}
 	}
 
