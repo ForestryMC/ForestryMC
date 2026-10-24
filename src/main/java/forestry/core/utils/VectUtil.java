@@ -74,6 +74,7 @@ public final class VectUtil {
 		private int spiralLayer;
 		private final int maxSpiralLayers;
 		private int direction;
+		private boolean columnInBounds;
 
 		@Nullable
 		private BlockPos.MutableBlockPos theBlockPos;
@@ -84,9 +85,9 @@ public final class VectUtil {
 			this.maxPos = maxPos;
 			this.minPos = minPos;
 
-			int xDiameter = maxPos.getX() - minPos.getX();
-			int zDiameter = maxPos.getZ() - minPos.getZ();
-			this.maxSpiralLayers = Math.max(xDiameter, zDiameter) / 2;
+			int xRadius = Math.max(maxPos.getX() - center.getX(), center.getX() - minPos.getX());
+			int zRadius = Math.max(maxPos.getZ() - center.getZ(), center.getZ() - minPos.getZ());
+			this.maxSpiralLayers = Math.max(xRadius, zRadius);
 			this.spiralLayer = 1;
 		}
 
@@ -98,7 +99,7 @@ public final class VectUtil {
 			do {
 				pos = nextPos();
 			}
-			while (pos != null && (pos.getX() > maxPos.getX() || pos.getY() > maxPos.getY() || pos.getZ() > maxPos.getZ() || pos.getX() < minPos.getX() || pos.getY() < minPos.getY() || pos.getZ() < minPos.getZ()));
+			while (pos != null && (!columnInBounds || pos.getY() < minPos.getY()));
 
 			return pos;
 		}
@@ -107,10 +108,10 @@ public final class VectUtil {
 		protected BlockPos.MutableBlockPos nextPos() {
 			if (this.theBlockPos == null) {
 				this.theBlockPos = new BlockPos.MutableBlockPos(center.getX(), maxPos.getY(), center.getZ());
-				int y = Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY());
+				int y = getColumnHeight();
 				this.theBlockPos.setY(y);
 				return this.theBlockPos;
-			} else if (spiralLayer > maxSpiralLayers) {
+			} else if (spiralLayer > maxSpiralLayers && this.theBlockPos.getX() >= center.getX() + maxSpiralLayers && (this.theBlockPos.getY() <= minPos.getY() || this.theBlockPos.getY() <= 0)) {
 				return this.endOfData();
 			} else {
 				int x = this.theBlockPos.getX();
@@ -149,11 +150,16 @@ public final class VectUtil {
 					}
 
 					this.theBlockPos.setPos(x, y, z);
-					y = Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY());
+					y = getColumnHeight();
 				}
 
 				return this.theBlockPos.setPos(x, y, z);
 			}
+		}
+
+		private int getColumnHeight() {
+			this.columnInBounds = this.theBlockPos.getX() >= minPos.getX() && this.theBlockPos.getX() <= maxPos.getX() && this.theBlockPos.getZ() >= minPos.getZ() && this.theBlockPos.getZ() <= maxPos.getZ();
+			return this.columnInBounds ? Math.min(this.maxPos.getY(), this.world.getHeight(this.theBlockPos).getY()) : this.minPos.getY();
 		}
 	}
 }
