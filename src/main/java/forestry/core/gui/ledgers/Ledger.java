@@ -85,7 +85,7 @@ public abstract class Ledger {
 
 	public Rectangle getArea() {
 		GuiForestry gui = manager.gui;
-		return new Rectangle(gui.getGuiLeft() + x, gui.getGuiTop() + y, (int) currentWidth, (int) currentHeight);
+		return new Rectangle(gui.getGuiLeft() + x, gui.getGuiTop() + y, getWidth(), getHeight());
 	}
 
 	// adjust the update's move amount to match the look of 60 fps (16.67 ms per update)

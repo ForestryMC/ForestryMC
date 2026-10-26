@@ -57,6 +57,8 @@ public class LedgerManager {
 
 	public void clear() {
 		this.ledgers.clear();
+		this.errorLedgers.clear();
+		this.errorSource = FakeErrorSource.instance;
 	}
 
 	public void add(Ledger ledger) {
@@ -128,10 +130,15 @@ public class LedgerManager {
 				areas.add(area);
 			}
 		}
+		for (ErrorLedger errorLedger : errorLedgers) {
+			if (errorLedger.isVisible()) {
+				areas.add(errorLedger.getArea());
+			}
+		}
 		return areas;
 	}
 
-	public void drawLedgers() {
+	public void updateLedgers() {
 		int yPos = 8;
 		for (Ledger ledger : ledgers) {
 
@@ -140,9 +147,7 @@ public class LedgerManager {
 				continue;
 			}
 
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			ledger.setPosition(gui.getSizeX(), yPos);
-			ledger.draw();
 			yPos += ledger.getHeight();
 		}
 
@@ -163,11 +168,24 @@ public class LedgerManager {
 				continue;
 			}
 
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			errorLedger.draw(-errorLedger.getWidth(), yPos);
+			errorLedger.setPosition(-errorLedger.getWidth(), yPos);
 			yPos += errorLedger.getHeight();
 		}
+	}
+
+	public void drawLedgers() {
+		drawLedgers(ledgers);
+		drawLedgers(errorLedgers);
 		GlStateManager.color(1, 1, 1, 1);
+	}
+
+	private void drawLedgers(List<? extends Ledger> ledgers) {
+		for (Ledger ledger : ledgers) {
+			if (ledger.isVisible()) {
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				ledger.draw();
+			}
+		}
 	}
 
 	public void drawTooltips(int mouseX, int mouseY) {

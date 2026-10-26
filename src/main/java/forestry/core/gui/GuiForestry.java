@@ -105,6 +105,7 @@ public abstract class GuiForestry<C extends Container> extends GuiContainer impl
 
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		window.setMousePosition(mouseX, mouseY);
+		ledgerManager.updateLedgers();
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);

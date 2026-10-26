@@ -113,10 +113,11 @@ public class FactoryJeiPlugin implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
+		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
+
 		if (!ModuleHelper.isEnabled(ForestryModuleUids.FACTORY)) {
 			return;
 		}
-		registry.addAdvancedGuiHandlers(new ForestryAdvancedGuiHandler());
 
 
 		jeiHelpers = registry.getJeiHelpers();

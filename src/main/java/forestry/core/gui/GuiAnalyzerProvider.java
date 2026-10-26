@@ -1,7 +1,9 @@
 package forestry.core.gui;
 
 import javax.annotation.Nullable;
+import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -147,6 +149,15 @@ public abstract class GuiAnalyzerProvider<C extends Container> extends GuiForest
 				drawSelectedSlot(selectedSlot);
 			}
 		}
+	}
+
+	@Override
+	public List<Rectangle> getExtraGuiAreas() {
+		List<Rectangle> areas = super.getExtraGuiAreas();
+		if (analyzer.isVisible()) {
+			areas.add(new Rectangle(analyzer.getAbsoluteX(), analyzer.getAbsoluteY(), analyzer.getWidth(), analyzer.getHeight()));
+		}
+		return areas;
 	}
 
 	/* Methods - Implement ISlotChangeWatcher*/

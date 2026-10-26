@@ -1,6 +1,7 @@
 package forestry.database.gui;
 
 import javax.annotation.Nullable;
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,6 +41,8 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 	/* Attributes - Gui Elements */
 	@Nullable
 	private GuiTextField searchField;
+	@Nullable
+	private GuiButton sortDirectionButton;
 	private WidgetScrollBar scrollBar;
 	/* Attributes - State */
 	private boolean markedForSorting;
@@ -197,7 +200,7 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 		this.searchField.setEnableBackgroundDrawing(false);
 		this.searchField.setTextColor(16777215);
 
-		addButton(new GuiDatabaseButton<>(0, guiLeft - 18, guiTop, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON));
+		sortDirectionButton = addButton(new GuiDatabaseButton<>(0, guiLeft - 18, guiTop, DatabaseHelper.ascending, this, DatabaseButton.SORT_DIRECTION_BUTTON));
 
 		updateViewedItems();
 	}
@@ -262,6 +265,15 @@ public class GuiDatabase extends GuiAnalyzerProvider<ContainerDatabase> implemen
 
 	@Override
 	protected void addLedgers() {
+	}
+
+	@Override
+	public List<Rectangle> getExtraGuiAreas() {
+		List<Rectangle> areas = super.getExtraGuiAreas();
+		if (sortDirectionButton != null && sortDirectionButton.visible) {
+			areas.add(new Rectangle(sortDirectionButton.x, sortDirectionButton.y, sortDirectionButton.width, sortDirectionButton.height));
+		}
+		return areas;
 	}
 
 	/* Methods - Implement GuiForestryTitled */
