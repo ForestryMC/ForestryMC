@@ -396,6 +396,9 @@ public class BeekeepingLogic implements IBeekeepingLogic {
 		queen = princess;
 		beeProgress = princess.getHealth();
 		beeProgressMax = princess.getMaxHealth();
+
+		// Refresh the flower cache just as when a queen is inserted directly
+		hasFlowersCache.onNewQueen(queen, housing);
 	}
 
 	private static Collection<ItemStack> killQueen(IBee queen, IBeeHousing beeHousing, IBeeListener beeListener) {
