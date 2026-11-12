@@ -223,8 +223,8 @@ for.gui.mail.nothing.to.trade=Obchodní stanice nemá nic k prodeji.
 for.gui.mail.no.trader=Neexistuje žádná obchodní stanice s tímto jménem.
 for.gui.mail.pleasesend=Prosím odeslat
 for.gui.mail.order.attached=Prosím najdi svoji přiloženou žádost.
-for.gui.mail.order.filled.one=1 žádost od %SENDER byla naplněna.
-for.gui.mail.order.filled.multiple=%COUNT žádostí od %SENDER bylo naplněno.
+for.gui.mail.order.filled.one=1 žádost od odesílatele %SENDER byla naplněna.
+for.gui.mail.order.filled.multiple=%COUNT žádostí od odesílatele %SENDER bylo naplněno.
 for.gui.mail.to=Pro
 for.gui.mail.receive=Přijmout
 for.gui.mail.send=Odeslat
@@ -240,8 +240,8 @@ for.gui.owner=Vlastník
 for.gui.page=Stránka
 
 for.gui.plains=Pláně
-for.gui.princesses=Princ.
-for.gui.produce=Výrobky
+for.gui.princesses=Dělnice
+for.gui.produce=Produkty
 for.gui.queens=Královny
 
 for.gui.solder.north=S
@@ -510,7 +510,7 @@ item.for.crafting_material.silk_wisp.name=Hedvábný pramínek
 item.for.crafting_material.woven_silk.name=Tkané hedvábí
 
 item.for.crate.name=Bedna
-item.for.decaying_wheat.name= Usychající obilí
+item.for.decaying_wheat.name= Usychající pšenice
 
 item.for.fertilizer_bio.name=Kompost
 item.for.fertilizer_compound.name=Hnojivo
@@ -566,7 +566,7 @@ item.for.kit_pickaxe.name=Krumpáčová sada
 item.for.kit_shovel.name=Lopatová sada
 item.for.letters.name=Psaní
 
-item.for.mouldy_wheat.name=Shnilé obilí
+item.for.mouldy_wheat.name=Shnilá pšenice
 item.for.mulch.name=Mulč
 item.for.naturalist_helmet.name=Brýle
 item.for.naturalist_helmet.tooltip=Nasaď si tyto brýle aby jsi viděl opylené listy a chyby na multiblocích.
@@ -580,17 +580,17 @@ item.for.pollen.normal.name=Chomáč pylu
 
 item.for.propolis.normal.name=Propolis
 item.for.propolis.pulsating.name=Pulzující propolis
-item.for.propolis.silky.name=Hedvábná propolis
-item.for.propolis.sticky.name=Lepivá propolis
+item.for.propolis.silky.name=Hedvábný propolis
+item.for.propolis.sticky.name=Lepivý propolis
 
 item.for.refractory.empty.name=Žáruvzdorná kapsle
 item.for.refractory.grammar=%s v kapsli
 
 item.for.refractory_wax.name=Žáruvzdorný vosk
-item.for.refractory_wax.tooltip=Vosk s vysokým bodem tavby.
+item.for.refractory_wax.tooltip=Vosk s vysokým bodem roztavení.
 
 item.for.research_note.name=Poznámka %s 
-item.for.research_note.tooltip=Použij tuto poznámku aby jsi získal její vědomosti.
+item.for.research_note.tooltip=Použij tuto poznámku, aby jsi získal její vědomosti.
 item.for.royal_jelly.name=Mateří kašička
 item.for.scoop.name=Síťka
 item.for.scoop.tooltip=Rozbij úly pro získání včel
@@ -1969,11 +1969,11 @@ for.config.machines.enabled.comment=Seznam povolených strojů. Pamatuj si že t
 ###################################
 #
 # Příklady:
-# tile.for.stairs.4.name=Kaštanovníkové schody
-# tile.for.planks.8.name=Kapoková prkna
-# tile.for.slab.5.name=Wengový půlblok
-# tile.for.log.10.name=Mahagonové dřevo
-# tile.for.fences.0.name=Modřínový plot
+tile.for.stairs.4.name=Kaštanovníkové schody
+tile.for.planks.8.name=Kapoková prkna
+tile.for.slab.5.name=Wengový půlblok
+ tile.for.log.10.name=Mahagonové dřevo
+ tile.for.fences.0.name=Modřínový plot
 tile.for.stairs.0.name=Modřínové schody
 tile.for.slab.0.name=Modřínový půlblok
 tile.for.slab.double.0.name=Modřínový půlblok
@@ -1984,6 +1984,7 @@ tile.for.fence_gate.0.name=Modřínová branka
 tile.for.door.0.name=Modřínové dveře
 tile.for.stairs.4.name=Kaštanovníkové schody
 tile.for.slab.4.name=Kaštanovníkový půlblok
+tile.for.slab.double.4.name=Kaštanovníkový půlblok
 tile.for.log.4.name=Kaštanovníkové dřevo
 tile.for.fences.4.name=Kaštanovníkový plot
 tile.for.fence_gate.4.name=Kaštanovníková branka
